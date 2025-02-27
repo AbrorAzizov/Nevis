@@ -1,0 +1,115 @@
+name: nevis
+description: 'A new Flutter project.'
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.6
+  flutter_bloc: ^8.1.6
+  bloc: ^8.1.4
+  equatable: ^2.0.5
+  permission_handler: ^11.3.1
+  shared_preferences: ^2.3.2
+  cached_network_image: ^3.4.1
+  flutter_dotenv: ^5.1.0
+  flutter_custom_tabs: ^2.1.0
+  flutter_cache_manager: ^3.4.1
+  dartz: ^0.10.1
+  get_it: ^8.0.0
+  internet_connection_checker: ^1.0.0+1
+  file_picker: ^8.1.2
+  geolocator: ^13.0.1
+  device_info_plus: ^11.0.0
+  flutter_native_splash: ^2.4.2
+  collection: ^1.18.0
+  flutter_dismissible_tile: ^1.0.3
+  flutter_svg: ^2.0.10+1
+  flutter_screenutil: ^5.9.3
+  connectivity_plus: ^6.0.5
+  change_app_package_name: ^1.4.0
+  intl: ^0.19.0
+  http: ^1.2.2
+  pinput: ^5.0.0
+  mask_text_input_formatter: ^2.9.0
+  getwidget: ^5.0.0
+  skeletonizer: ^1.4.2
+  smooth_page_indicator: ^1.2.0+3
+  blurrycontainer: ^2.1.0
+  flutter_html: ^3.0.0-beta.2
+  yandex_mapkit_lite: ^2.0.2
+  image: ^4.5.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.14.1
+  flutter_lints: ^5.0.0
+
+flutter_native_splash:
+  # flutter clean
+  # flutter pub get
+  # flutter pub run flutter_native_splash:create
+  android: true
+  ios: true
+  web: false
+
+  color: '#ed1f94'
+  image: assets/images/logo_pink.png
+  android_12:
+    color: '#ed1f94'
+    image: assets/images/logo_pink.png
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/html/
+    - .env
+
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito/Nunito-Regular.ttf
+        - asset: assets/fonts/Nunito/Nunito-Black.ttf
+        - asset: assets/fonts/Nunito/Nunito-BlackItalic.ttf
+        - asset: assets/fonts/Nunito/Nunito-Bold.ttf
+        - asset: assets/fonts/Nunito/Nunito-BoldItalic.ttf
+        - asset: assets/fonts/Nunito/Nunito-ExtraBold.ttf
+        - asset: assets/fonts/Nunito/Nunito-ExtraBoldItalic.ttf
+        - asset: assets/fonts/Nunito/Nunito-ExtraLight.ttf
+        - asset: assets/fonts/Nunito/Nunito-ExtraLightItalic.ttf
+        - asset: assets/fonts/Nunito/Nunito-Italic.ttf
+        - asset: assets/fonts/Nunito/Nunito-Light.ttf
+        - asset: assets/fonts/Nunito/Nunito-LightItalic.ttf
+        - asset: assets/fonts/Nunito/Nunito-Medium.ttf
+        - asset: assets/fonts/Nunito/Nunito-MediumItalic.ttf
+        - asset: assets/fonts/Nunito/Nunito-SemiBold.ttf
+        - asset: assets/fonts/Nunito/Nunito-SemiBoldItalic.ttf
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/Rubik/Rubik-Regular.ttf
+        - asset: assets/fonts/Rubik/Rubik-Black.ttf
+        - asset: assets/fonts/Rubik/Rubik-BlackItalic.ttf
+        - asset: assets/fonts/Rubik/Rubik-Bold.ttf
+        - asset: assets/fonts/Rubik/Rubik-BoldItalic.ttf
+        - asset: assets/fonts/Rubik/Rubik-ExtraBold.ttf
+        - asset: assets/fonts/Rubik/Rubik-ExtraBoldItalic.ttf
+        - asset: assets/fonts/Rubik/Rubik-Italic.ttf
+        - asset: assets/fonts/Rubik/Rubik-Light.ttf
+        - asset: assets/fonts/Rubik/Rubik-LightItalic.ttf
+        - asset: assets/fonts/Rubik/Rubik-Medium.ttf
+        - asset: assets/fonts/Rubik/Rubik-MediumItalic.ttf
+        - asset: assets/fonts/Rubik/Rubik-SemiBold.ttf
+        - asset: assets/fonts/Rubik/Rubik-SemiBoldItalic.ttf
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/Montserrat/Montserrat-Bold.ttf
