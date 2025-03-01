@@ -17,11 +17,11 @@ class SignUpScreenBloc extends Bloc<SignUpScreenEvent, SignUpScreenState> {
 
   final TextEditingController phoneController = TextEditingController();
 
-  PasswordScreenType? _passwordScreenType;
+  CodeScreenType? _passwordScreenType;
 
   SignUpScreenBloc({
     required this.isPhoneExistsUC,
-    PasswordScreenType? passwordScreenType,
+    CodeScreenType? passwordScreenType,
     String? phone,
   }) : super(const SignUpScreenState()) {
     _passwordScreenType = passwordScreenType;
@@ -69,7 +69,7 @@ class SignUpScreenBloc extends Bloc<SignUpScreenEvent, SignUpScreenState> {
             },
             (isExists) {
               // регистрация
-              if (_passwordScreenType == PasswordScreenType.signUp) {
+              if (_passwordScreenType == CodeScreenType.signUp) {
                 // номер телефона уже зарегистрирован
                 if (isExists!) {
                   emit(state.copyWith(showError: false));

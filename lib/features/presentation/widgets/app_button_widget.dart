@@ -43,7 +43,7 @@ class AppButtonWidget extends StatelessWidget {
             disabledBackgroundColor:
                 UiConstants.oliveGreenColor.withOpacity(.05),
             backgroundColor: isFilled
-                ? backgroundColor ?? UiConstants.purpleColor
+                ? backgroundColor ?? UiConstants.blueColor
                 : UiConstants.whiteColor,
             fixedSize: Size(double.infinity, double.infinity),
             shape: RoundedRectangleBorder(

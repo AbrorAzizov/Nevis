@@ -24,7 +24,7 @@ class PasswordScreenBloc
   final TextEditingController password1Controller = TextEditingController();
   final TextEditingController password2Controller = TextEditingController();
 
-  PasswordScreenType? _passwordScreenType;
+  CodeScreenType? _passwordScreenType;
 
   PasswordScreenBloc(
       {required this.updatePasswordUC,
@@ -32,7 +32,7 @@ class PasswordScreenBloc
       required this.loginUC,
       String? phone,
       String? code,
-      PasswordScreenType? passwordScreenType})
+      CodeScreenType? passwordScreenType})
       : super(PasswordScreenState(phone: phone, code: code)) {
     _passwordScreenType = passwordScreenType;
 
@@ -66,9 +66,9 @@ class PasswordScreenBloc
 
         // Флаг для регистрации или сброса
         bool successSignUpOrResetScreen =
-            _passwordScreenType == PasswordScreenType.reset;
+            _passwordScreenType == CodeScreenType.reset;
 
-        if (_passwordScreenType == PasswordScreenType.signUp) {
+        if (_passwordScreenType == CodeScreenType.signUp) {
           final failureOrLoads = await registrationUC(
             AuthenticationParams(
               phone: Utils.formatPhoneNumber(state.phone!),

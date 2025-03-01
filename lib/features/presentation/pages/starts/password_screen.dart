@@ -5,7 +5,7 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/passwrod_screen/password_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/starts/login_screen.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/pages/starts/select_region_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/app_template.dart';
@@ -21,7 +21,7 @@ class PasswordScreen extends StatelessWidget {
     Map<String, dynamic>? args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
 
-    PasswordScreenType passwordScreenType = args!['redirect_type'];
+    CodeScreenType passwordScreenType = args!['redirect_type'];
 
     return BlocProvider(
       create: (context) => PasswordScreenBloc(
@@ -43,7 +43,7 @@ class PasswordScreen extends StatelessWidget {
           } else if (state is NavigateLoginState) {
             Navigator.of(context).pushAndRemoveUntil(
                 Routes.createRoute(
-                  const LoginScreen(),
+                  const LoginScreenWithPhoneCall(),
                 ),
                 (route) => route.isFirst);
           }
@@ -53,10 +53,10 @@ class PasswordScreen extends StatelessWidget {
 
           return AppTemplate(
             canBack: true,
-            title: passwordScreenType == PasswordScreenType.signUp
+            title: passwordScreenType == CodeScreenType.signUp
                 ? 'Придумайте пароль'
                 : 'Восстановление пароля',
-            subTitleText: passwordScreenType == PasswordScreenType.reset
+            subTitleText: passwordScreenType == CodeScreenType.reset
                 ? 'Придумайте новый пароль:'
                 : null,
             bodyPadding:

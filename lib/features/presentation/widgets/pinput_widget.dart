@@ -38,10 +38,10 @@ class _PinputWidgetState extends State<PinputWidget> {
       height: 64.w,
       textStyle: UiConstants.textStyle4.copyWith(
         color:
-            widget.showError ? UiConstants.redColor : UiConstants.darkBlueColor,
+           UiConstants.darkBlueColor,
       ),
       decoration: BoxDecoration(
-        color: UiConstants.white2Color,
+        color: UiConstants.blue2Color,
         borderRadius: BorderRadius.circular(8.r),
         border: Border.all(width: 3, color: Colors.transparent),
       ),
@@ -72,11 +72,12 @@ class _PinputWidgetState extends State<PinputWidget> {
           //  });
           //}
         },
+        
         focusedPinTheme: defaultPinTheme.copyWith(
           height: 68.h,
           width: 60.h,
           decoration: defaultPinTheme.decoration!.copyWith(
-            border: Border.all(color: UiConstants.purple2Color.withOpacity(.2)),
+            border: Border.all(color: UiConstants.blueColor.withOpacity(.6)),
           ),
         ),
         submittedPinTheme: defaultPinTheme.copyWith(
@@ -84,17 +85,20 @@ class _PinputWidgetState extends State<PinputWidget> {
             border: Border.all(
               width: 3,
               color: widget.controller.text.isNotEmpty
-                  ? UiConstants.purple2Color.withOpacity(.2)
+                  ? UiConstants.blueColor.withOpacity(.6)
                   : Colors.transparent,
             ),
           ),
         ),
         errorPinTheme: defaultPinTheme.copyWith(
           decoration: defaultPinTheme.decoration!.copyWith(
+            color: UiConstants.red2Color,
             border: Border.all(
               width: 3,
               color: UiConstants.redColor.withOpacity(.5),
+              
             ),
+
           ),
         ),
         onTapOutside: (event) =>

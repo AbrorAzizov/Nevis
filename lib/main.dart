@@ -29,10 +29,11 @@ import 'package:nevis/features/presentation/pages/profile/profile_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/sales_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/account_not_found_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/code_screen.dart';
-import 'package:nevis/features/presentation/pages/starts/login_screen.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_message.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_yandex.dart';
 import 'package:nevis/features/presentation/pages/starts/password_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/select_region_screen.dart';
-import 'package:nevis/features/presentation/pages/starts/sign_up_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/splash_screen.dart';
 import 'locator_service.dart' as di;
 
@@ -48,6 +49,7 @@ Future main() async {
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 class MyApp extends StatelessWidget {
+  
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
@@ -74,8 +76,7 @@ class MyApp extends StatelessWidget {
             routes: {
               Routes.splashScreen: (context) => const SplashScreen(),
               Routes.codeScreen: (context) => const CodeScreen(),
-              Routes.loginScreen: (context) => const LoginScreen(),
-              Routes.signUpScreen: (context) => const SignUpScreen(),
+              Routes.loginScreenPhoneCall: (context) => const LoginScreenWithPhoneCall(),
               Routes.passwordScreen: (context) => const PasswordScreen(),
               Routes.accountNotFoundScreen: (context) =>
                   const AccountNotFoundScreen(),
@@ -107,6 +108,9 @@ class MyApp extends StatelessWidget {
                   const InfoAboutOrderScreen(),
               Routes.selectRegionScreen: (context) =>
                   const SelectRegionScreen(),
+              Routes.loginScreenWithMessage :(context)=> const LoginScreenWithMessage(),
+              Routes.loginScreenWithYandex :(context)=> const LoginScreenWithYandex(),
+              
             },
             initialRoute: Routes.splashScreen,
             navigatorObservers: [routeObserver],

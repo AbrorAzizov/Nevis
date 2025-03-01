@@ -8,7 +8,6 @@ class LoginScreenState extends Equatable {
 
   // New properties for validation
   final bool isValidPhone;
-  final bool isValidPassword;
 
   const LoginScreenState({
     this.isButtonActive = false,
@@ -16,7 +15,6 @@ class LoginScreenState extends Equatable {
     this.passwordErrorText,
     this.showError = false,
     this.isValidPhone = false,
-    this.isValidPassword = false,
   });
 
   LoginScreenState copyWith({
@@ -38,7 +36,6 @@ class LoginScreenState extends Equatable {
           : passwordErrorText ?? this.passwordErrorText,
       showError: showError ?? this.showError,
       isValidPhone: isValidPhone ?? this.isValidPhone,
-      isValidPassword: isValidPassword ?? this.isValidPassword,
     );
   }
 
@@ -49,7 +46,6 @@ class LoginScreenState extends Equatable {
         passwordErrorText,
         showError,
         isValidPhone,
-        isValidPassword,
       ];
 }
 

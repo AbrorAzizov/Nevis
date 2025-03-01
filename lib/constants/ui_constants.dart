@@ -9,6 +9,7 @@ class UiConstants {
   static const Color white5Color = Color(0xFFF3F4F4);
   static const Color backgroundColor = Color(0xFFFAFAFA);
   static const Color blackColor = Color(0xFF000000);
+  static const Color black2Color = Color(0xFF4E4E4E);
   static const Color darkBlueColor = Color(0xFF19232B);
   static const Color darkBlue2Color = Color(0xFF19232A);
   static const Color purpleColor = Color(0xFF5324B2);
@@ -28,7 +29,11 @@ class UiConstants {
   static const Color limeColor = Color(0xFFE7FFC9);
   static const Color lime2Color = Color(0xFFD3F3CF);
   static const Color gradientFirstColor = Color(0xFF50B1D7);
-    static const Color gradientSecondColor = Color(0xFFB0E1F8);
+  static const Color gradientSecondColor = Color(0xFFB0E1F8);
+  static  Color defaultBorderColor = Color(0xFF222222).withOpacity(0.05);
+  static const Color blueColor = Color(0xFF009FE3);
+  static const Color blue2Color = Color(0xFFE5F5FC);
+  static const Color red2Color = Color(0xFFFFE8E8);
 
   static TextStyle textStyle1 = TextStyle(
     fontSize: 28.sp,
@@ -37,8 +42,8 @@ class UiConstants {
   );
 
   static TextStyle textStyle2 = TextStyle(
-    fontSize: 14.sp,
-    height: 18.2.sp / 14.sp,
+    fontSize: 16.sp,
+    height: 18.2.sp / 16.sp,
     fontWeight: FontWeight.w400,
   );
 

@@ -1,8 +1,8 @@
-enum LoginScreenType { login, accountExists }
+enum LoginScreenType { login, accountExists ,logInWithMessage, logInWithCalls,logInWithYandex}
 
 enum SelectRegionScreenType { signUp, main }
 
-enum PasswordScreenType { signUp, reset }
+enum CodeScreenType {signUp, reset,logInWithMessage, logInWithCall }
 
 enum ProductChipType { hit, seasonalOffer, stock, nova }
 
