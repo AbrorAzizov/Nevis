@@ -6,7 +6,6 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
-import 'package:nevis/features/presentation/pages/starts/sign_up_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 
 class AccountNotFoundScreen extends StatelessWidget {
@@ -71,28 +70,28 @@ class AccountNotFoundScreen extends StatelessWidget {
                   Image.asset(Paths.noFoundAccountIconPath,
                       width: MediaQuery.of(context).size.width),
                   Spacer(),
-                  AppButtonWidget(
-                    isActive: true,
-                    text: 'Зарегистироваться',
-                    onTap: () => Navigator.of(context).pushAndRemoveUntil(
-                      Routes.createRoute(
-                        const SignUpScreen(),
-                        settings: RouteSettings(
-                          name: Routes.signUpScreen,
-                          arguments: {
-                            'redirect_type': PasswordScreenType.signUp,
-                            'phone': args!['phone'],
-                          },
-                        ),
-                      ),
-                      (route) {
-                        return route.settings.name == "/login_screen" &&
-                            (route.settings.arguments as Map<String,
-                                    dynamic>?)?['redirect_type'] ==
-                                LoginScreenType.login;
-                      },
-                    ),
-                  )
+                  // AppButtonWidget(
+                  //   isActive: true,
+                  //   text: 'Зарегистироваться',
+                  //   onTap: () => Navigator.of(context).pushAndRemoveUntil(
+                  //     Routes.createRoute(
+                  //       const SignUpScreen(),
+                  //       settings: RouteSettings(
+                  //         name: Routes.signUpScreen,
+                  //         arguments: {
+                  //           'redirect_type': CodeScreenType.signUp,
+                  //           'phone': args!['phone'],
+                  //         },
+                  //       ),
+                  //     ),
+                  //     (route) {
+                  //       return route.settings.name == "/login_screen" &&
+                  //           (route.settings.arguments as Map<String,
+                  //                   dynamic>?)?['redirect_type'] ==
+                  //               LoginScreenType.login;
+                  //     },
+                  //   ),
+                  // )
                 ],
               ),
             ),

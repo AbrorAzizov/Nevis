@@ -10,15 +10,37 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/splash_screen/splash_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/home_screen.dart';
-import 'package:nevis/features/presentation/pages/starts/login_screen.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/locator_service.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  bool _isLogoVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        setState(() {
+          _isLogoVisible = true;
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(  
+    precacheImage(AssetImage(Paths.logoIconPath), context);
+    ImageProvider logo = AssetImage(Paths.logoIconPath);
+
+    return BlocProvider(
       create: (_) => SplashScreenBloc(
         sharedPreferences: sl(),
         getMeUC: sl(),
@@ -28,9 +50,9 @@ class SplashScreen extends StatelessWidget {
           if (state is SplashScreenNavigateLogin) {
             Navigator.of(context).pushReplacement(
               Routes.createRoute(
-                const LoginScreen(),
+                const LoginScreenWithPhoneCall(),
                 settings: RouteSettings(
-                  name: Routes.loginScreen,
+                  name: Routes.loginScreenPhoneCall,
                   arguments: {'redirect_type': LoginScreenType.login},
                 ),
               ),
@@ -46,40 +68,42 @@ class SplashScreen extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
-              toolbarHeight: 0,
+            toolbarHeight: 0,
             backgroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent),
+            surfaceTintColor: Colors.transparent,
+          ),
           body: Container(
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topLeft, 
-                end: Alignment.bottomRight, 
-                colors: 
-                [
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
                   UiConstants.gradientFirstColor,
-                  UiConstants.gradientSecondColor 
-                ]
-              )
+                  UiConstants.gradientSecondColor,
+                ],
+              ),
             ),
-            child: 
-               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    Paths.logoIconPath, 
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AnimatedOpacity(
+                  opacity: _isLogoVisible ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 500),
+                  child: Image(
+                    image: logo,
                     width: 136,
                     height: 136,
                   ),
-                  SizedBox(height: 16,),
-                  Row(
-                    children: [
-                      Expanded(child: Text('АПТЕКА НЕВИС',style: UiConstants.splashTextStyle,textAlign: TextAlign.center,)),
-                    ],
-                  )
-                ],
-              
+                ),
+                const SizedBox(height: 16),
+               Row(
+                      children: [
+                        Expanded(child: Text('АПТЕКА НЕВИС',style: UiConstants.splashTextStyle,textAlign: TextAlign.center,)),
+                      ],
+                    )
+              ],
             ),
           ),
         ),
@@ -87,3 +111,7 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+ 

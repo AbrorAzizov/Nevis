@@ -104,7 +104,8 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
     // Вызываем функцию, если она предоставлена, иначе используем _requestCode
     String? codeOrMsg = requestCodeFun != null
         ? await requestCodeFun() // Вызов функции
-        : await _requestCode(); // Вызов метода _requestCode
+        : null;
+        //await _requestCode(); // Вызов метода _requestCode
 
     if (double.tryParse(codeOrMsg!) != null ||
         (phone == state.phone && state.correctCode != null)) {

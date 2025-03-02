@@ -2,7 +2,7 @@ class Paths {
   static const String _rootPath = 'assets/';
   static const String _imagesPath = '${_rootPath}images/';
 
-  static const String logoIconPath = '${_imagesPath}logo.svg';
+  static const String logoIconPath = '${_imagesPath}logo.png';
   static const String arrowBackIconPath = '${_imagesPath}arrow_back.svg';
   static const String cartIconPath = '${_imagesPath}cart.svg';
   static const String catalogIconPath = '${_imagesPath}catalog.svg';
@@ -84,4 +84,8 @@ class Paths {
       '${_imagesPath}how_place_order_background.png';
   static const String dropdownArrowIconPath =
       '${_imagesPath}dropdown_arrow.svg';
+  static const String vkLogInIconPath = 
+      '${_imagesPath}VK.svg';
+  static const String yandexLogInIconPath = 
+      '${_imagesPath}yandex.svg';
 }

@@ -15,7 +15,6 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
   final LoginUC loginUC;
 
   final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
   LoginScreenBloc({required this.loginUC, Map<String, dynamic>? args})
       : super(const LoginScreenState()) {
@@ -27,19 +26,14 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
       add(PhoneChangedEvent(phoneController.text));
     });
 
-    passwordController.addListener(() {
-      add(PasswordChangedEvent(passwordController.text));
-    });
-
     // Регистрация обработчиков событий
     on<PhoneChangedEvent>((event, emit) {
       final isValidPhone = Utils.phoneRegexp.hasMatch(event.phone);
-
-      if (event.phone.length == 19 && !isValidPhone) {
+      if (event.phone.length == 18 && !isValidPhone) {
         emit(
           state.copyWith(
               isValidPhone: isValidPhone,
-              isButtonActive: isValidPhone && state.isValidPassword,
+              isButtonActive: isValidPhone,
               phoneErrorText: 'Неверный формат телефона',
               resetPasswordErrorText: true,
               showError: true,
@@ -48,29 +42,18 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
       } else {
         emit(state.copyWith(
             isValidPhone: isValidPhone,
-            isButtonActive: isValidPhone && state.isValidPassword,
+            isButtonActive: isValidPhone,
             resetPasswordErrorText: true,
             phoneErrorText: null,
             resetPhoneErrorText: true));
       }
     });
 
-    on<PasswordChangedEvent>((event, emit) {
-      final isValidPassword = event.password.isNotEmpty;
-
-      emit(state.copyWith(
-        isValidPassword: isValidPassword,
-        isButtonActive: state.isValidPhone && isValidPassword,
-        passwordErrorText: null,
-        showError: false,
-      ));
-    });
-
     on<SubmitLoginEvent>(
       (event, emit) async {
         final failureOrLoads = await loginUC(AuthenticationParams(
             phone: Utils.formatPhoneNumber(phoneController.text),
-            password: passwordController.text));
+           ));
 
         failureOrLoads.fold(
           (failure) => switch (failure) {
@@ -97,7 +80,6 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
   @override
   Future<void> close() {
     phoneController.dispose();
-    passwordController.dispose();
     return super.close();
   }
 }

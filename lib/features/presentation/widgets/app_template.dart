@@ -15,7 +15,9 @@ class AppTemplate extends StatelessWidget {
       this.subTitleWidget,
       required this.body,
       this.canBack = false,
-      this.bodyPadding});
+      this.bodyPadding, 
+      this.heightOfTopBar = 231
+    });
 
   final String title;
   final String? subTitleText;
@@ -23,6 +25,7 @@ class AppTemplate extends StatelessWidget {
   final Widget body;
   final bool canBack;
   final EdgeInsetsGeometry? bodyPadding;
+  final int heightOfTopBar;
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +40,12 @@ class AppTemplate extends StatelessWidget {
                 image: AssetImage(Paths.backgroundGradientIconPath),
                 fit: BoxFit.cover),
           ),
-          child: Column(
+          child: Column(  
             children: [
               Container(
                 padding: getMarginOrPadding(
-                    left: 20, right: 20, top: kTextTabBarHeight, bottom: 16),
-                height: 230.w,
+                    left: 20, right: 20, top: kTextTabBarHeight, bottom:  16),
+                height: heightOfTopBar.h,
                 width: double.infinity,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,15 +61,21 @@ class AppTemplate extends StatelessWidget {
                     Text(
                       title,
                       style: UiConstants.textStyle1
-                          .copyWith(color: UiConstants.whiteColor),
+                          .copyWith(color: UiConstants.whiteColor,
+                          fontFamily: 'Rubik',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 32.sp),
                     ),
                     if (subTitleText != null)
                       Padding(
-                        padding: getMarginOrPadding(bottom: 8),
+                        padding: getMarginOrPadding(top: 16),
                         child: Text(
                           subTitleText ?? '',
                           style: UiConstants.textStyle2
-                              .copyWith(color: UiConstants.whiteColor),
+                              .copyWith(color: UiConstants.whiteColor).copyWith(
+                                fontSize: 16.sp,
+                                letterSpacing: 0, 
+                              ),
                         ),
                       )
                     else if (subTitleWidget != null)

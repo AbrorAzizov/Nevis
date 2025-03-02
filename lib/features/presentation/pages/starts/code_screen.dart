@@ -6,6 +6,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_message.dart';
 import 'package:nevis/features/presentation/pages/starts/password_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/app_template.dart';
@@ -19,15 +20,17 @@ class CodeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, dynamic>? args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-
-    PasswordScreenType passwordScreenType = args!['redirect_type'];
+    CodeScreenType codeScreenType = args!['redirect_type'];
+    final bool logInWithMessage =
+        codeScreenType == CodeScreenType.logInWithMessage;
 
     return BlocProvider(
       create: (context) => CodeScreenBloc(
         context: context,
         requestCodeUC: sl(),
         phone: args['phone'],
-      )..startTimer(context),
+      ),
+      // )..startTimer(context),
       child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
         listener: (context, state) {
           if (state is SuccessPasteState) {
@@ -37,7 +40,7 @@ class CodeScreen extends StatelessWidget {
                 settings: RouteSettings(
                   name: Routes.passwordScreen,
                   arguments: {
-                    'redirect_type': passwordScreenType,
+                    'redirect_type': codeScreenType,
                     'phone': state.phone,
                     'code': state.correctCode
                   },
@@ -52,59 +55,153 @@ class CodeScreen extends StatelessWidget {
             canBack: true,
             title: 'Введите код',
             subTitleWidget: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Мы отправили СМС с кодом на номер ',
-                    style: UiConstants.textStyle2
-                        .copyWith(color: UiConstants.whiteColor),
-                  ),
-                  TextSpan(
-                    text: state.phone,
-                    style: UiConstants.textStyle2.copyWith(
-                        color: UiConstants.whiteColor,
-                        fontWeight: FontWeight.w800),
-                  ),
-                  TextSpan(
-                    text: '. Введите его здесь:',
-                    style: UiConstants.textStyle2
-                        .copyWith(color: UiConstants.whiteColor),
-                  ),
-                ],
-              ),
-            ),
-            body: Column(
-              children: [
-                PinputWidget(
-                    controller: bloc.codeController,
-                    focusNode: bloc.codeFocusNode,
-                    showError: state.showError),
-                SizedBox(height: 32.h),
-                AppButtonWidget(
-                  isActive: state.isButtonActive,
-                  text: 'Войти',
-                  onTap: () => bloc.add(
-                    SubmitCodeEvent(),
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                if (state.canRequestNewCode)
-                  GestureDetector(
-                    onTap: () => bloc.add(RequestNewCodeEvent()),
-                    child: Text(
-                      'Запросить код снова',
-                      style: UiConstants.textStyle3
-                          .copyWith(color: UiConstants.purpleColor),
+              text: logInWithMessage
+                  ? TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: SizedBox(height: 30.h),
+                        ),
+                        TextSpan(
+                          text: 'Вам поступит смс с кодом на номер\n',
+                          style: UiConstants.textStyle2
+                              .copyWith(color: UiConstants.whiteColor),
+                        ),
+                        TextSpan(
+                          text: state.phone,
+                          style: UiConstants.textStyle2.copyWith(
+                              color: UiConstants.whiteColor,
+                              fontWeight: FontWeight.w800),
+                        ),
+                        TextSpan(
+                          text: '. \nВведите код в поле ниже',
+                          style: UiConstants.textStyle2
+                              .copyWith(color: UiConstants.whiteColor),
+                        ),
+                      ],
+                    )
+                  : TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: SizedBox(height: 30.h),
+                        ),
+                        TextSpan(
+                          text: 'Вам поступит звонок от робота на номер\n',
+                          style: UiConstants.textStyle2
+                              .copyWith(color: UiConstants.whiteColor),
+                        ),
+                        TextSpan(
+                          text: state.phone,
+                          style: UiConstants.textStyle2.copyWith(
+                              color: UiConstants.whiteColor,
+                              fontWeight: FontWeight.w800),
+                        ),
+                        TextSpan(
+                          text:
+                              '. \nВведите последние 4 цифры входяшего номера.',
+                          style: UiConstants.textStyle2
+                              .copyWith(color: UiConstants.whiteColor),
+                        ),
+                      ],
                     ),
-                  )
-                else
-                  Text(
-                    'Запросить код ещё раз через ${Utils.formatSecondToMMSS(state.secondsLeft)}',
-                    style: UiConstants.textStyle3
-                        .copyWith(color: UiConstants.mutedVioletColor),
-                  ),
-              ],
             ),
+            body: logInWithMessage
+                ? Column(
+                    children: [
+                      PinputWidget(
+                          controller: bloc.codeController,
+                          focusNode: bloc.codeFocusNode,
+                          showError: state.showError),
+                      SizedBox(height: 32.h),
+                      AppButtonWidget(
+                        isActive: state.isButtonActive,
+                        text: 'Войти',
+                        onTap: () => bloc.add(
+                          SubmitCodeEvent(),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      if (state.canRequestNewCode)
+                        GestureDetector(
+                          onTap: () => bloc.add(RequestNewCodeEvent()),
+                          child: Text(
+                            'Запросить звонок снова',
+                            style: UiConstants.textStyle3
+                                .copyWith(color: UiConstants.purpleColor),
+                          ),
+                        )
+                      else
+                        Text(
+                          'Запрос нового кода доступен через ${Utils.formatSecondToMMSS(state.secondsLeft)}',
+                          style: UiConstants.textStyle3
+                              .copyWith(color: UiConstants.mutedVioletColor),
+                        ),
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Text(
+                        'Запросить новый код',
+                        style: UiConstants.textStyle3
+                            .copyWith(color: UiConstants.blueColor),
+                      ),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      PinputWidget(
+                          controller: bloc.codeController,
+                          focusNode: bloc.codeFocusNode,
+                          showError: state.showError),
+                      SizedBox(height: 32.h),
+                      AppButtonWidget(
+                        isActive: state.isButtonActive,
+                        text: 'Войти',
+                        onTap: () => bloc.add(
+                          SubmitCodeEvent(),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      if (state.canRequestNewCode)
+                        GestureDetector(
+                          onTap: () => bloc.add(RequestNewCodeEvent()),
+                          child: Text(
+                            'Запросить звонок снова',
+                            style: UiConstants.textStyle3
+                                .copyWith(color: UiConstants.purpleColor),
+                          ),
+                        )
+                      else
+                        Text(
+                          'Запрос нового звонка доступен через ${Utils.formatSecondToMMSS(state.secondsLeft)}',
+                          style: UiConstants.textStyle3
+                              .copyWith(color: UiConstants.mutedVioletColor),
+                        ),
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            Routes.createRoute(
+                              const LoginScreenWithMessage(),
+                              settings: RouteSettings(
+                                name: Routes.loginScreenWithMessage,
+                                arguments: {
+                                  'redirect_type':
+                                      LoginScreenType.logInWithMessage,
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Не поступает звонок?',
+                          style: UiConstants.textStyle3
+                              .copyWith(color: UiConstants.blueColor),
+                        ),
+                      )
+                    ],
+                  ),
           );
         },
       ),

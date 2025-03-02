@@ -9,7 +9,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/profile_screen/profile_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/starts/login_screen.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/profile_screen/profile_categories_list.dart';
@@ -33,9 +33,9 @@ class ProfileScreen extends StatelessWidget {
               NavigateLoginState _ =>
                 Navigator.of(homeBloc.context).pushAndRemoveUntil(
                     Routes.createRoute(
-                      const LoginScreen(),
+                      const LoginScreenWithPhoneCall(),
                       settings: RouteSettings(
-                        name: Routes.loginScreen,
+                        name: Routes.loginScreenPhoneCall,
                         arguments: {'redirect_type': LoginScreenType.login},
                       ),
                     ),

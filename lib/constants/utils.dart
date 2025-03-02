@@ -15,7 +15,7 @@ import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
 import 'dart:ui' as ui;
 
 class Utils {
-  static RegExp phoneRegexp = RegExp(r'^\+375 \(\d{2}\) \d{3}-\d{2}-\d{2}$');
+  static RegExp phoneRegexp = RegExp(r'^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$');
 
   static TextStyle htmlTextStyle = UiConstants.textStyle2;
 
@@ -188,27 +188,25 @@ class Utils {
     return Map.from(map)..removeWhere((key, value) => value == null);
   }
 
-  static String formatPhoneNumber(String? phoneNumber,
-      {bool toServerFormat = true}) {
-    if (phoneNumber == null || phoneNumber == '') return '';
-    if (toServerFormat) {
-      // Преобразование из клиентского формата в серверный
-      final RegExp regex =
-          RegExp(r'^\+375 \((\d{2})\) (\d{3})-(\d{2})-(\d{2})$');
-      return phoneNumber.replaceAllMapped(
-        regex,
-        (match) => '+375${match[1]}-${match[2]}-${match[3]}-${match[4]}',
-      );
-    } else {
-      // Преобразование из серверного формата в клиентский (учитываем дефисы)
-      final RegExp regex = RegExp(r'^\+375(\d{2})-?(\d{3})-?(\d{2})-?(\d{2})$');
-
-      return phoneNumber.replaceAllMapped(
-        regex,
-        (match) => '+375 (${match[1]}) ${match[2]}-${match[3]}-${match[4]}',
-      );
-    }
+  static String formatPhoneNumber(String? phoneNumber, {bool toServerFormat = true}) {
+  if (phoneNumber == null || phoneNumber == '') return '';
+  
+  if (toServerFormat) {
+    // Преобразование из клиентского формата в серверный
+    final RegExp regex = RegExp(r'^\+7 \((\d{3})\) (\d{3})-(\d{2})-(\d{2})$');
+    return phoneNumber.replaceAllMapped(
+      regex,
+      (match) => '+7${match[1]}-${match[2]}-${match[3]}-${match[4]}',
+    );
+  } else {
+    // Преобразование из серверного формата в клиентский
+    final RegExp regex = RegExp(r'^\+7(\d{3})-?(\d{3})-?(\d{2})-?(\d{2})$');
+    return phoneNumber.replaceAllMapped(
+      regex,
+      (match) => '+7 (${match[1]}) ${match[2]}-${match[3]}-${match[4]}',
+    );
   }
+}
 
   static void showCustomDialog(
       {required BuildContext screenContext,

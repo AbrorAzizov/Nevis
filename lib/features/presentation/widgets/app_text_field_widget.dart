@@ -160,26 +160,26 @@ class _GidTextFieldState extends State<AppTextFieldWidget> {
             decoration: InputDecoration(
               hintMaxLines: widget.hintMaxLines ?? 500,
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16.r),
-                borderSide: const BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(12.r),
+                borderSide:  BorderSide(color: UiConstants.defaultBorderColor),
               ),
               disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(12.r),
                 borderSide:
                     const BorderSide(width: 3, color: Colors.transparent),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(12.r),
                 borderSide: BorderSide(
-                    width: 3, color: UiConstants.purple2Color.withOpacity(.2)),
+                    width: 3, color: UiConstants.blueColor.withOpacity(.6)),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(12.r),
                 borderSide:
                     const BorderSide(width: 3, color: UiConstants.pinkColor),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(12.r),
                 borderSide:
                     const BorderSide(width: 3, color: UiConstants.pinkColor),
               ),

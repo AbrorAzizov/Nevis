@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class Routes {
   static const String splashScreen = '/';
-  static const String loginScreen = '/login_screen';
+  static const String loginScreenPhoneCall = '/login_screen_with_phone_call';
+  static const String loginScreenWithMessage = '/login_screen_with_message';
+  static const String loginScreenWithYandex= '/login_screen_with_yandex';
   static const String signUpScreen = '/sign_up_screen';
   static const String codeScreen = '/code_screen';
   static const String passwordScreen = '/password_screen';
@@ -32,7 +34,9 @@ class Routes {
 
   static List<String> get allRoutes => [
         splashScreen,
-        loginScreen,
+        loginScreenPhoneCall,
+        loginScreenWithMessage,
+        loginScreenWithYandex,
         signUpScreen,
         codeScreen,
         passwordScreen,
@@ -58,7 +62,8 @@ class Routes {
         aboutUsScreen,
         howPlaceOrderScreen,
         infoAboutOrderScreen,
-        selectRegionScreen
+        selectRegionScreen,
+       
       ];
 
   // Метод для создания анимированного перехода
