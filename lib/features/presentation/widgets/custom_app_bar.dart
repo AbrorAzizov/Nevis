@@ -45,7 +45,7 @@ class CustomAppBar extends StatelessWidget {
     return Container(
       color: backgroundColor ?? UiConstants.whiteColor,
       padding: contentPadding ??
-          getMarginOrPadding(top: 8, bottom: 8, right: 20, left: 20),
+          getMarginOrPadding(top: 16, bottom: 8, right: 20, left: 20),
       child: Column(
         children: [
           if (title != null || action != null || controller == null)
@@ -54,24 +54,25 @@ class CustomAppBar extends StatelessWidget {
               child: Row(
                 children: [
                   if (showBack)
-                    Padding(
-                      padding: getMarginOrPadding(right: 4),
-                      child: GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: SvgPicture.asset(Paths.arrowBackIconPath,
-                            color: UiConstants.darkBlue2Color.withOpacity(.6),
-                            width: 24.w,
-                            height: 24.w),
-                      ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: SvgPicture.asset(Paths.arrowBackIconPath,
+                          color: UiConstants.black3Color.withOpacity(.6),
+                          width: 24.w,
+                          height: 24.w),
                     ),
                   Expanded(
                     child: Skeleton.keep(
-                      child: Text(
-                        title ?? '',
-                        style: showBack
-                            ? UiConstants.textStyle5
-                            : UiConstants.textStyle1
-                                .copyWith(color: UiConstants.darkBlueColor),
+                      child: Center(
+                        child: Text(
+                          
+                          title ?? '',
+                          style: showBack
+                              ? UiConstants.textStyle5
+                              : UiConstants.textStyle1
+                                  .copyWith(color: UiConstants.darkBlueColor),
+                                 
+                        ),
                       ),
                     ),
                   ),

@@ -46,6 +46,7 @@ dependencies:
   flutter_html: ^3.0.0-beta.2
   yandex_mapkit_lite: ^2.0.2
   image: ^4.5.2
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

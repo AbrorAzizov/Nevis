@@ -5,9 +5,7 @@ class Routes {
   static const String loginScreenPhoneCall = '/login_screen_with_phone_call';
   static const String loginScreenWithMessage = '/login_screen_with_message';
   static const String loginScreenWithYandex= '/login_screen_with_yandex';
-  static const String signUpScreen = '/sign_up_screen';
   static const String codeScreen = '/code_screen';
-  static const String passwordScreen = '/password_screen';
   static const String accountNotFoundScreen = '/account_not_found_screen';
   static const String homeScreen = '/home_screen';
   static const String categoryScreen = '/category_screen';
@@ -37,9 +35,7 @@ class Routes {
         loginScreenPhoneCall,
         loginScreenWithMessage,
         loginScreenWithYandex,
-        signUpScreen,
         codeScreen,
-        passwordScreen,
         accountNotFoundScreen,
         homeScreen,
         categoryScreen,

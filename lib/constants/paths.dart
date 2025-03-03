@@ -88,4 +88,6 @@ class Paths {
       '${_imagesPath}VK.svg';
   static const String yandexLogInIconPath = 
       '${_imagesPath}yandex.svg';
+   static const String personalDataIconPath = 
+      '${_imagesPath}personalData.svg';    
 }

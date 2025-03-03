@@ -48,13 +48,19 @@ class _SplashScreenState extends State<SplashScreen> {
       child: BlocListener<SplashScreenBloc, SplashScreenState>(
         listener: (context, state) {
           if (state is SplashScreenNavigateLogin) {
-            Navigator.of(context).pushReplacement(
+            // Navigator.of(context).pushReplacement(
+            //   Routes.createRoute(
+            //     const LoginScreenWithPhoneCall(),
+            //     settings: RouteSettings(
+            //       name: Routes.loginScreenPhoneCall,
+            //       arguments: {'redirect_type': LoginScreenType.login},
+            //     ),
+            //   ),
+            // );
+             Navigator.of(context).pushReplacement(
               Routes.createRoute(
-                const LoginScreenWithPhoneCall(),
-                settings: RouteSettings(
-                  name: Routes.loginScreenPhoneCall,
-                  arguments: {'redirect_type': LoginScreenType.login},
-                ),
+                const HomeScreen(),
+                settings: RouteSettings(name: Routes.homeScreen),
               ),
             );
           } else if (state is SplashScreenNavigateHome) {

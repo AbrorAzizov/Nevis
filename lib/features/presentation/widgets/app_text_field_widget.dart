@@ -116,7 +116,7 @@ class _GidTextFieldState extends State<AppTextFieldWidget> {
                   Text(
                     widget.title ?? '',
                     style: UiConstants.textStyle2
-                        .copyWith(color: UiConstants.darkBlueColor),
+                        .copyWith(color: UiConstants.black3Color),
                   ),
                 if (widget.actionTitle != null)
                   GestureDetector(

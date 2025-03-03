@@ -31,6 +31,14 @@ class SubcategoryItem extends StatelessWidget {
         padding: getMarginOrPadding(all: 8),
         decoration: BoxDecoration(
           color: UiConstants.whiteColor,
+           boxShadow: [
+      BoxShadow(
+        color: Color(0x19144B63), // #144B63 с 10% прозрачности
+        offset: Offset(-1, 4), // Смещение
+        blurRadius: 50, // Размытие
+        spreadRadius: -4, // Распространение
+      ),
+    ],
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Row(
@@ -39,12 +47,13 @@ class SubcategoryItem extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8.r),
                 child: Container(
-                  height: 40.w,
-                  width: 40.w,
+                  height: 32.w,
+                  width: 32.w,
                   //padding: getMarginOrPadding(all: 12),
                   decoration: BoxDecoration(
-                    color: UiConstants.purple3Color,
+                    color: UiConstants.blue2Color,
                     borderRadius: BorderRadius.circular(8.r),
+                    
                   ),
                   child: imagePath.contains('http')
                       ? CachedNetworkImage(
@@ -79,9 +88,9 @@ class SubcategoryItem extends StatelessWidget {
                           ),
                         )
                       : Container(
-                          margin: getMarginOrPadding(all: 12),
+                          margin: getMarginOrPadding(all: 6),
                           child: SvgPicture.asset(imagePath,
-                              color: UiConstants.purpleColor),
+                              color: UiConstants.blueColor),
                         ),
                 ),
               ),
@@ -99,8 +108,9 @@ class SubcategoryItem extends StatelessWidget {
                 flipX: true,
                 child: SvgPicture.asset(Paths.arrowBackIconPath,
                     color: UiConstants.darkBlue2Color.withOpacity(.6),
-                    width: 24.w,
-                    height: 24.w),
+                    width: 20.w,
+                    height: 20.w,
+                    fit: BoxFit.contain,),
               ),
             )
           ],

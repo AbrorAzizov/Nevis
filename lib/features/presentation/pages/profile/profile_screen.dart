@@ -45,14 +45,14 @@ class ProfileScreen extends StatelessWidget {
             builder: (context, state) {
               final bloc = context.read<ProfileScreenBloc>();
               return Scaffold(
-                backgroundColor: UiConstants.backgroundColor,
+                backgroundColor: UiConstants.whiteColor,
                 body: SafeArea(
                   child: Builder(
                     builder: (context) {
                       return Column(
                         children: [
                           CustomAppBar(
-                            backgroundColor: UiConstants.backgroundColor,
+                            backgroundColor: UiConstants.whiteColor,
                             title: 'Профиль',
                             action: GestureDetector(
                               onTap: () => bloc.add(LogoutEvent()),

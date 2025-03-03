@@ -29,7 +29,7 @@ class ProfileCategoriesList extends StatelessWidget {
           SubcategoryItem(
             title: 'Личные данные',
             titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.profileIconPath,
+            imagePath: Paths.personalDataIconPath,
             onTap: () => Navigator.of(context).push(
               Routes.createRoute(
                 const PersonalDataScreen(),
@@ -39,7 +39,7 @@ class ProfileCategoriesList extends StatelessWidget {
           ),
           SizedBox(height: 8.h),
           SubcategoryItem(
-            title: 'История заказов',
+            title: 'Список заказов',
             titleStyle: UiConstants.textStyle3,
             imagePath: Paths.boxIconPath,
             onTap: () => Navigator.of(context).push(
@@ -74,60 +74,7 @@ class ProfileCategoriesList extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8.h),
-          SubcategoryItem(
-            title: 'Информация о получении заказа',
-            titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.infoIconPath,
-            onTap: () => Navigator.of(context).push(
-              Routes.createRoute(
-                const InfoAboutOrderScreen(),
-                settings: RouteSettings(name: Routes.infoAboutOrderScreen),
-              ),
-            ),
-          ),
-          SizedBox(height: 8.h),
-          SubcategoryItem(
-            title: 'Полезные статьи',
-            titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.articleIconPath,
-            onTap: () => Navigator.of(context).push(
-              Routes.createRoute(
-                const ArticlesScreen(),
-                settings: RouteSettings(name: Routes.articlesScreen),
-              ),
-            ),
-          ),
-          SizedBox(height: 8.h),
-          SubcategoryItem(
-            title: 'Новости',
-            titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.newsIconPath,
-            onTap: () => Navigator.of(context).push(
-              Routes.createRoute(
-                const NewsScreen(),
-                settings: RouteSettings(name: Routes.newsScreen),
-              ),
-            ),
-          ),
-          SizedBox(height: 8.h),
-          SubcategoryItem(
-            title: 'Акции',
-            titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.discountIconPath,
-            onTap: () => Navigator.of(context).push(
-              Routes.createRoute(
-                const SalesScreen(),
-                settings: RouteSettings(name: Routes.salesScreen),
-              ),
-            ),
-          ),
-          SizedBox(height: 8.h),
-          SubcategoryItem(
-            title: 'Напоминания',
-            titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.bellIconPath,
-            onTap: () {},
-          ),
+          
         ],
       ),
     );

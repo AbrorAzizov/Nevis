@@ -6,8 +6,8 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/home_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_message.dart';
-import 'package:nevis/features/presentation/pages/starts/password_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/app_template.dart';
 import 'package:nevis/features/presentation/widgets/pinput_widget.dart';
@@ -32,23 +32,7 @@ class CodeScreen extends StatelessWidget {
       ),
       // )..startTimer(context),
       child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
-        listener: (context, state) {
-          if (state is SuccessPasteState) {
-            Navigator.of(context).pushReplacement(
-              Routes.createRoute(
-                const PasswordScreen(),
-                settings: RouteSettings(
-                  name: Routes.passwordScreen,
-                  arguments: {
-                    'redirect_type': codeScreenType,
-                    'phone': state.phone,
-                    'code': state.correctCode
-                  },
-                ),
-              ),
-            );
-          }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           final bloc = context.read<CodeScreenBloc>();
           return AppTemplate(
@@ -113,12 +97,13 @@ class CodeScreen extends StatelessWidget {
                           showError: state.showError),
                       SizedBox(height: 32.h),
                       AppButtonWidget(
-                        isActive: state.isButtonActive,
-                        text: 'Войти',
-                        onTap: () => bloc.add(
-                          SubmitCodeEvent(),
-                        ),
-                      ),
+                          isActive: state.isButtonActive,
+                          text: 'Войти',
+                          onTap: () => Navigator.of(context).pushAndRemoveUntil(
+                              Routes.createRoute(
+                                const HomeScreen(),
+                              ),
+                              (route) => false)),
                       SizedBox(height: 16.h),
                       if (state.canRequestNewCode)
                         GestureDetector(
@@ -153,12 +138,13 @@ class CodeScreen extends StatelessWidget {
                           showError: state.showError),
                       SizedBox(height: 32.h),
                       AppButtonWidget(
-                        isActive: state.isButtonActive,
-                        text: 'Войти',
-                        onTap: () => bloc.add(
-                          SubmitCodeEvent(),
-                        ),
-                      ),
+                          isActive: state.isButtonActive,
+                          text: 'Войти',
+                          onTap: () => Navigator.of(context).pushAndRemoveUntil(
+                              Routes.createRoute(
+                                const HomeScreen(),
+                              ),
+                              (route) => false)),
                       SizedBox(height: 16.h),
                       if (state.canRequestNewCode)
                         GestureDetector(

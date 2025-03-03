@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
+import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
 
 class CheckboxesBlock extends StatefulWidget {
@@ -21,11 +22,18 @@ class _CheckboxesBlockState extends State<CheckboxesBlock> {
         widget.screenContext.read<PersonalDataScreenBloc>();
     return Column(
       children: [
+          AppTextFieldWidget(
+              textStyle: UiConstants.textStyle11,
+               fillColor: UiConstants.whiteColor,
+                  title: 'Email',
+                  hintText: 'Не указано',
+                  controller: personalDataBloc.emailController),
+                  SizedBox(height: 16.h,),
         CustomCheckbox(
           title: Text(
-            'Хочу получать уведомления о статусе заказов и акциях',
-            style: UiConstants.textStyle3.copyWith(
-              color: UiConstants.darkBlue2Color.withOpacity(.6),
+            'Хочу получать рекламные рассылки по email, смс и пуш-уведомления',
+            style: UiConstants.textStyle11.copyWith(
+              color: UiConstants.darkBlue2Color.withOpacity(.8),
             ),
           ),
           spacing: 16,
@@ -41,16 +49,12 @@ class _CheckboxesBlockState extends State<CheckboxesBlock> {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: 'Принимаю условия ',
-                  style: UiConstants.textStyle3.copyWith(
-                    color: UiConstants.darkBlue2Color.withOpacity(.6),
+                  text: 'Хочу получать сервисные пуш-уведомления (о работе приложения)',
+                  style: UiConstants.textStyle11.copyWith(
+                    color: UiConstants.black3Color.withOpacity(.8),
                   ),
                 ),
-                TextSpan(
-                  text: 'Политики обработки персональных данных',
-                  style: UiConstants.textStyle3
-                      .copyWith(color: UiConstants.darkBlueColor),
-                ),
+                
               ],
             ),
           ),

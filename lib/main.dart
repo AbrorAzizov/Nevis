@@ -32,8 +32,6 @@ import 'package:nevis/features/presentation/pages/starts/code_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_message.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_yandex.dart';
-import 'package:nevis/features/presentation/pages/starts/password_screen.dart';
-import 'package:nevis/features/presentation/pages/starts/select_region_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/splash_screen.dart';
 import 'locator_service.dart' as di;
 
@@ -77,7 +75,6 @@ class MyApp extends StatelessWidget {
               Routes.splashScreen: (context) => const SplashScreen(),
               Routes.codeScreen: (context) => const CodeScreen(),
               Routes.loginScreenPhoneCall: (context) => const LoginScreenWithPhoneCall(),
-              Routes.passwordScreen: (context) => const PasswordScreen(),
               Routes.accountNotFoundScreen: (context) =>
                   const AccountNotFoundScreen(),
               Routes.homeScreen: (context) => const HomeScreen(),
@@ -106,8 +103,6 @@ class MyApp extends StatelessWidget {
                   const HowPlaceOrderScreen(),
               Routes.infoAboutOrderScreen: (context) =>
                   const InfoAboutOrderScreen(),
-              Routes.selectRegionScreen: (context) =>
-                  const SelectRegionScreen(),
               Routes.loginScreenWithMessage :(context)=> const LoginScreenWithMessage(),
               Routes.loginScreenWithYandex :(context)=> const LoginScreenWithYandex(),
               
