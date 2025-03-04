@@ -95,4 +95,9 @@ class Paths {
    static const String privacyPolicyIconPath = '${_imagesPath}protection.svg';
    static const String instructionIconPath = '${_imagesPath}box2.svg';
    static const String bonusIconPath = '${_imagesPath}bonus.svg';
+   static const String visaIconPath  = '${_imagesPath}visa.png';
+   static const String mastercardIconPath  = '${_imagesPath}mastercard.png';
+   static const String jcbIconPath  = '${_imagesPath}jcb.png';
+   static const String mirIconPath  = '${_imagesPath}mir.png';
 }
+

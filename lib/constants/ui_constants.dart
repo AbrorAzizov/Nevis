@@ -118,7 +118,22 @@ class UiConstants {
     fontWeight: FontWeight.w500,
     fontFamily: 'Rubik',
   );
-  
+
+  static TextStyle textStyle13 = TextStyle(
+    color: UiConstants.black3Color,
+    fontSize: 20.sp,
+    height: 24.sp/20.sp,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Rubik',
+  );
+
+    static TextStyle textStyle15 = TextStyle(
+    color: UiConstants.black3Color.withOpacity(0.6),
+    fontSize: 12.sp,
+    height: 14.sp/12.sp,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Rubik',
+  );
   
   static TextStyle splashTextStyle = TextStyle(
     fontSize: 58.sp,
@@ -128,4 +143,5 @@ class UiConstants {
     letterSpacing: -2.32, 
     color: UiConstants.whiteColor
   );
+
 }

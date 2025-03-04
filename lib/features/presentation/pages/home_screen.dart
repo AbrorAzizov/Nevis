@@ -167,34 +167,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Container(
 
                                   height:   65.h,
-                                  margin: getMarginOrPadding(
-                                      left: 20, right: 20,),
-                                 
                                   decoration: BoxDecoration(
                                  
                                     borderRadius: BorderRadius.circular(16.r),
                                   ),
                                   child: Container(
                                     color: UiConstants.whiteColor,
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: List.generate(
-                                        bloc.screens.length,
-                                        (index) => BottomNavigationBarTile(
-                                            icon: bloc.iconsPaths[index],
-                                            title: bloc.iconsNames[index],
-                                            countChatMessage:
-                                                index == 2 ? 99 : null,
-                                            onTap: () {
-                                              bloc.navigatorKeys[selectedIndex]
-                                                  .currentState!
-                                                  .popUntil(
-                                                      (route) => route.isFirst);
-                                              bloc.onChangePage(index);
-                                            },
-                                            isActive: selectedIndex == index),
+                                    child: Container(
+                                      padding: getMarginOrPadding(left: 20,right: 20),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: List.generate(
+                                          bloc.screens.length,
+                                          (index) => BottomNavigationBarTile(
+                                              icon: bloc.iconsPaths[index],
+                                              title: bloc.iconsNames[index],
+                                              countChatMessage:
+                                                  index == 2 ? 99 : null,
+                                              onTap: () {
+                                                bloc.navigatorKeys[selectedIndex]
+                                                    .currentState!
+                                                    .popUntil(
+                                                        (route) => route.isFirst);
+                                                bloc.onChangePage(index);
+                                              },
+                                              isActive: selectedIndex == index),
+                                        ),
                                       ),
                                     ),
                                   ),

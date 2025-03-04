@@ -30,7 +30,7 @@ class Routes {
   static const String infoAboutOrderScreen = '/info_about_order_screen';
   static const String selectRegionScreen = '/select_region_screen';
   static const String docsAndInsctructionsScreen = '/documents_and_instructions_screen';
-
+  static const String privacyPolicyScreen = '/privacy_policy_screen';
   static List<String> get allRoutes => [
         splashScreen,
         loginScreenPhoneCall,
@@ -60,7 +60,8 @@ class Routes {
         howPlaceOrderScreen,
         infoAboutOrderScreen,
         selectRegionScreen,
-        docsAndInsctructionsScreen
+        docsAndInsctructionsScreen,
+        privacyPolicyScreen
        
       ];
 
