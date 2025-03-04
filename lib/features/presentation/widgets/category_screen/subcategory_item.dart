@@ -39,7 +39,7 @@ class SubcategoryItem extends StatelessWidget {
         spreadRadius: -4, // Распространение
       ),
     ],
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(16.r),
         ),
         child: Row(
           children: [
@@ -107,7 +107,7 @@ class SubcategoryItem extends StatelessWidget {
               child: Transform.flip(
                 flipX: true,
                 child: SvgPicture.asset(Paths.arrowBackIconPath,
-                    color: UiConstants.darkBlue2Color.withOpacity(.6),
+                    color: UiConstants.black3Color.withOpacity(.6),
                     width: 20.w,
                     height: 20.w,
                     fit: BoxFit.contain,),

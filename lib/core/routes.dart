@@ -29,6 +29,7 @@ class Routes {
   static const String howPlaceOrderScreen = '/how_place_order_screen';
   static const String infoAboutOrderScreen = '/info_about_order_screen';
   static const String selectRegionScreen = '/select_region_screen';
+  static const String docsAndInsctructionsScreen = '/documents_and_instructions_screen';
 
   static List<String> get allRoutes => [
         splashScreen,
@@ -59,6 +60,7 @@ class Routes {
         howPlaceOrderScreen,
         infoAboutOrderScreen,
         selectRegionScreen,
+        docsAndInsctructionsScreen
        
       ];
 

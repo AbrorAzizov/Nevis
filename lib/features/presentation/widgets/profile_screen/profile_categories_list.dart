@@ -5,6 +5,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/pages/profile/about_us_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/articles_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/docs_and_instructions_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/how_place_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/info_about_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/news/news_screen.dart';
@@ -27,18 +28,6 @@ class ProfileCategoriesList extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         children: [
           SubcategoryItem(
-            title: 'Личные данные',
-            titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.personalDataIconPath,
-            onTap: () => Navigator.of(context).push(
-              Routes.createRoute(
-                const PersonalDataScreen(),
-                settings: RouteSettings(name: Routes.personalDataScreen),
-              ),
-            ),
-          ),
-          SizedBox(height: 8.h),
-          SubcategoryItem(
             title: 'Список заказов',
             titleStyle: UiConstants.textStyle3,
             imagePath: Paths.boxIconPath,
@@ -49,15 +38,14 @@ class ProfileCategoriesList extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 8.h),
           SubcategoryItem(
-            title: 'Информация о нас',
+            title: 'Личные данные',
             titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.crossIconPath,
+            imagePath: Paths.personalDataIconPath,
             onTap: () => Navigator.of(context).push(
               Routes.createRoute(
-                const AboutUsScreen(),
-                settings: RouteSettings(name: Routes.aboutUsScreen),
+                const PersonalDataScreen(),
+                settings: RouteSettings(name: Routes.personalDataScreen),
               ),
             ),
           ),
@@ -74,6 +62,17 @@ class ProfileCategoriesList extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8.h),
+           SubcategoryItem(
+            title: 'Документы и инструкции',
+            titleStyle: UiConstants.textStyle3,
+            imagePath: Paths.documnetsAndInstructionsIconPath,
+            onTap: () => Navigator.of(context).push(
+              Routes.createRoute(
+                const DocumentsAndInstructionsScreen(),
+                settings: RouteSettings(name: Routes.docsAndInsctructionsScreen),
+              ),
+            ),
+          ),
           
         ],
       ),

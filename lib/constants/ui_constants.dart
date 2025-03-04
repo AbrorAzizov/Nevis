@@ -119,6 +119,7 @@ class UiConstants {
     fontFamily: 'Rubik',
   );
   
+  
   static TextStyle splashTextStyle = TextStyle(
     fontSize: 58.sp,
     height: 54.sp/58.sp,

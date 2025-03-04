@@ -89,5 +89,10 @@ class Paths {
   static const String yandexLogInIconPath = 
       '${_imagesPath}yandex.svg';
    static const String personalDataIconPath = 
-      '${_imagesPath}personalData.svg';    
+      '${_imagesPath}personalData.svg';  
+   static const String documnetsAndInstructionsIconPath = '${_imagesPath}documentsAndInstructions.svg';
+   static const String boookingIconPath = '${_imagesPath}deliviry.svg';
+   static const String privacyPolicyIconPath = '${_imagesPath}protection.svg';
+   static const String instructionIconPath = '${_imagesPath}box2.svg';
+   static const String bonusIconPath = '${_imagesPath}bonus.svg';
 }
