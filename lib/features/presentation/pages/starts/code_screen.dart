@@ -36,6 +36,7 @@ class CodeScreen extends StatelessWidget {
         builder: (context, state) {
           final bloc = context.read<CodeScreenBloc>();
           return AppTemplate(
+            heightOfTopBar: 250,
             canBack: true,
             title: 'Введите код',
             subTitleWidget: RichText(

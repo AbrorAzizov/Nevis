@@ -64,15 +64,12 @@ class CustomAppBar extends StatelessWidget {
                   Expanded(
                     child: Skeleton.keep(
                       child: Center(
-                        child: Text(
-                          
-                          title ?? '',
-                          style: showBack
-                              ? UiConstants.textStyle5
-                              : UiConstants.textStyle1
-                                  .copyWith(color: UiConstants.darkBlueColor),
-                                 
-                        ),
+                        child: Text(title ?? '',
+                            style: showBack
+                                ? UiConstants.textStyle5
+                                : UiConstants.textStyle1
+                                    .copyWith(color: UiConstants.darkBlueColor),
+                            textAlign: TextAlign.center),
                       ),
                     ),
                   ),

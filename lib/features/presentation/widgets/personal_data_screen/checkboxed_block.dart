@@ -22,13 +22,15 @@ class _CheckboxesBlockState extends State<CheckboxesBlock> {
         widget.screenContext.read<PersonalDataScreenBloc>();
     return Column(
       children: [
-          AppTextFieldWidget(
-              textStyle: UiConstants.textStyle11,
-               fillColor: UiConstants.whiteColor,
-                  title: 'Email',
-                  hintText: 'Не указано',
-                  controller: personalDataBloc.emailController),
-                  SizedBox(height: 16.h,),
+        AppTextFieldWidget(
+            textStyle: UiConstants.textStyle11,
+            fillColor: UiConstants.whiteColor,
+            title: 'Email',
+            hintText: 'Не указано',
+            controller: personalDataBloc.emailController),
+        SizedBox(
+          height: 16.h,
+        ),
         CustomCheckbox(
           title: Text(
             'Хочу получать рекламные рассылки по email, смс и пуш-уведомления',
@@ -44,17 +46,17 @@ class _CheckboxesBlockState extends State<CheckboxesBlock> {
         ),
         SizedBox(height: 16.h),
         CustomCheckbox(
-          isEnabled: !personalDataBloc.state.isCheckedPolicyCheckbox,
+          //isEnabled: !personalDataBloc.state.isCheckedPolicyCheckbox,
           title: RichText(
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: 'Хочу получать сервисные пуш-уведомления (о работе приложения)',
+                  text:
+                      'Хочу получать сервисные пуш-уведомления (о работе приложения)',
                   style: UiConstants.textStyle11.copyWith(
                     color: UiConstants.black3Color.withOpacity(.8),
                   ),
                 ),
-                
               ],
             ),
           ),

@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:nevis/constants/ui_constants.dart';
 
-
 class BottomNavigationBarTile extends StatelessWidget {
   const BottomNavigationBarTile({
     super.key,
@@ -31,7 +30,7 @@ class BottomNavigationBarTile extends StatelessWidget {
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             countChatMessage != null && countChatMessage != 0
                 ? GFIconBadge(
@@ -52,15 +51,20 @@ class BottomNavigationBarTile extends StatelessWidget {
                     height: 24.w, width: 24.w, color: color),
             SizedBox(height: 4),
             Text(title,
-                style: UiConstants.textStyle12.copyWith(color: color, height: 1),
+                style:
+                    UiConstants.textStyle12.copyWith(color: color, height: 1),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis),
-                SizedBox(height: 13.h,),
-          Container(width: 80.w,height: 4.h,decoration: BoxDecoration(
-              color: isActive?   UiConstants.blueColor : Colors.transparent,
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(4),topRight: Radius.circular(4))
-
-            ),)    
+            SizedBox(height: 13.h),
+            Container(
+              width: 80.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                  color: isActive ? UiConstants.blueColor : Colors.transparent,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      topRight: Radius.circular(4))),
+            )
           ],
         ),
       ),
