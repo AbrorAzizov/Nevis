@@ -28,7 +28,7 @@ class OrderProgressIndicatorIcon extends StatelessWidget {
         child: SvgPicture.asset(
           imagePath,
           colorFilter: ColorFilter.mode(
-              color ?? UiConstants.purpleColor, BlendMode.srcIn),
+              color ?? UiConstants.blueColor, BlendMode.srcIn),
           height: double.infinity,
         ),
       ),

@@ -108,7 +108,8 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                             height: 104.w,
                             width: 104.w,
                             imageUrl:
-                                '${dotenv.env['PUBLIC_URL']!}${widget.product.image}',
+                                  'https://upload.wikimedia.org/wikipedia/commons/7/7b/Корвалол-Фармак.jpg',
+                                // '${dotenv.env['PUBLIC_URL']!}${widget.product.image}',
                             fit: BoxFit.fitHeight,
                             cacheManager: CustomCacheManager(),
                             errorWidget: (context, url, error) =>

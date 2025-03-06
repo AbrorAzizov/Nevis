@@ -47,6 +47,7 @@ dependencies:
   yandex_mapkit_lite: ^2.0.2
   image: ^4.5.2
   url_launcher: ^6.3.1
+  easy_stepper: ^0.8.5+1
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +76,7 @@ flutter:
     - assets/images/
     - assets/html/
     - .env
+    - assets/response.json
     - assets/response.json
 
   fonts:

@@ -20,32 +20,26 @@ class OrderItemProductsList extends StatelessWidget {
       height: 56.w,
       child: ListView.separated(
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: UiConstants.white2Color),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.r),
-                  child: CachedNetworkImage(
-                    height: 56.w,
-                    width: 56.w,
-                    imageUrl:
-                        // '${dotenv.env['PUBLIC_URL']!}${orderProducts[index].image}',
-                        'https://upload.wikimedia.org/wikipedia/commons/7/7b/Корвалол-Фармак.jpg',
-                    fit: BoxFit.fitHeight,
-                    cacheManager: CustomCacheManager(),
-                    errorWidget: (context, url, error) => SvgPicture.asset(
-                        Paths.drugTemplateIconPath,
-                        height: double.infinity),
-                    progressIndicatorBuilder: (context, url, progress) =>
-                        Center(
-                      child: CircularProgressIndicator(
-                          color: UiConstants.pink2Color),
-                    ),
-                  ),
-                ),
+          itemBuilder: (context, index) => ClipRRect(
+            borderRadius: BorderRadius.circular(8.r),
+            child: CachedNetworkImage(
+              height: 56.w,
+              width: 56.w,
+              imageUrl:
+                  // '${dotenv.env['PUBLIC_URL']!}${orderProducts[index].image}',
+                  'https://upload.wikimedia.org/wikipedia/commons/7/7b/Корвалол-Фармак.jpg',
+              fit: BoxFit.fitHeight,
+              cacheManager: CustomCacheManager(),
+              errorWidget: (context, url, error) => SvgPicture.asset(
+                  Paths.drugTemplateIconPath,
+                  height: double.infinity),
+              progressIndicatorBuilder: (context, url, progress) =>
+                  Center(
+                child: CircularProgressIndicator(
+                    color: UiConstants.pink2Color),
               ),
+            ),
+          ),
           separatorBuilder: (context, index) => SizedBox(width: 4.w),
           itemCount: orderProducts.length),
     );

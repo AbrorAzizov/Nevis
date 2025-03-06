@@ -87,8 +87,6 @@ class OrdersScreen extends StatelessWidget {
                                             left: 20,
                                             top: 16),
                                         children: [
-                                         
-                                        
                                           ListView.separated(
                                               padding: EdgeInsets.zero,
                                               physics:

@@ -106,12 +106,6 @@ class MockOrderRemoteDataSource implements OrderRemoteDataSource{
 
   MockOrderRemoteDataSource({required this.client, required this.sharedPreferences});
   @override
-  Future<OrderModel?> getOrderById(int id) {
-    // TODO: implement getOrderById
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<OrderModel>> getOrderHistory() async {
     await Future.delayed(Duration (milliseconds: 500)); 
    final jsonString = await rootBundle.loadString('assets/response.json');
@@ -119,5 +113,11 @@ class MockOrderRemoteDataSource implements OrderRemoteDataSource{
     List<dynamic> dataList = data['data'];
    return dataList.map((e) => OrderModel.fromJson(e)).toList();
   }
-
+  @override
+  Future<OrderModel?> getOrderById(int id) async {
+      await Future.delayed(Duration (milliseconds: 500)); 
+   final jsonString = await rootBundle.loadString('assets/response.json');
+    final data = jsonDecode(jsonString);
+   return OrderModel.fromJson(data['data'].first);
+  }
 }
