@@ -7,7 +7,7 @@ class UiConstants {
   static const Color white3Color = Color(0xFFF5F5F5);
   static const Color white4Color = Color(0xFFE8E9EA);
   static const Color white5Color = Color(0xFFF3F4F4);
-  static const Color backgroundColor = Color(0xFFFAFAFA);
+  static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color blackColor = Color(0xFF000000);
   static const Color black2Color = Color(0xFF4E4E4E);
   static const Color black3Color = Color(0xFF222222);
@@ -82,8 +82,9 @@ class UiConstants {
 
   static TextStyle textStyle8 = TextStyle(
     fontSize: 12.sp,
-    height: 16.37.sp / 12.sp,
-    fontWeight: FontWeight.w600,
+    height: 15.6.sp / 12.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Rubik'
   );
 
   static TextStyle textStyle9 = TextStyle(
@@ -132,6 +133,13 @@ class UiConstants {
     fontSize: 12.sp,
     height: 14.sp/12.sp,
     fontWeight: FontWeight.w400,
+    fontFamily: 'Rubik',
+  );
+  static TextStyle textStyle16 = TextStyle(
+    color: UiConstants.black3Color,
+    fontSize: 20.sp,
+    height: 24.sp/20.sp,
+    fontWeight: FontWeight.w600,
     fontFamily: 'Rubik',
   );
   

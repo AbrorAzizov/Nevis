@@ -32,57 +32,76 @@ class OrderItem extends StatelessWidget {
           decoration: BoxDecoration(
             color: UiConstants.whiteColor,
             borderRadius: BorderRadius.circular(16.r),
+             boxShadow: [
+    BoxShadow(
+      color: Color(0xFF144B63).withOpacity(0.1), 
+      blurRadius: 50, 
+      spreadRadius: -4, 
+      offset: Offset(-1, -4), 
+    ),
+  ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        order.typeReceipt!.name,
-                        style: UiConstants.textStyle8.copyWith(
-                          color: UiConstants.darkBlueColor.withOpacity(.6),
-                        ),
-                      ),
-                      Row(
+          child: Padding(
+            padding:getMarginOrPadding(all: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Заказ',
-                            style: UiConstants.textStyle3.copyWith(
-                                color: UiConstants.darkBlueColor,
-                                fontWeight: FontWeight.w800),
+                          
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Заказ',
+                                    style: UiConstants.textStyle16
+                                  ),
+                                   SizedBox(width: 8.w),
+                              Text(
+                                '№${order.orderId}',
+                                style: UiConstants.textStyle16,
+                              ),
+                                ],
+                              ),
+                              OrderItemStatusChip(orderStatus: order.status!)
+                            ],
                           ),
-                          SizedBox(width: 8.w),
+                          SizedBox(height: 16.h),
+                            Text(
+                              order.typeReceipt!.name,
+                              style: UiConstants.textStyle11.copyWith(
+                                color: UiConstants.blueColor
+                              ),
+                            ),
+                            SizedBox(height: 8.h,),
+                            Text('Время заказа'),
+                              SizedBox(height: 4.h,),
                           Text(
-                            '#${order.orderId}',
-                            style: UiConstants.textStyle3.copyWith(
-                                color: UiConstants.darkBlueColor,
-                                fontWeight: FontWeight.w800),
+                            Utils.formatDate(order.createdAt!),
+                            style: UiConstants.textStyle11,
                           ),
+                          SizedBox(height: 8.h),
+                            Text('Итого'),
+                            Text('${order.sumPrices.toString()} ₽', style: UiConstants.textStyle11,)
+                      
                         ],
                       ),
-                      SizedBox(height: 8.h),
-                      Text(
-                        Utils.formatDate(order.createdAt!),
-                        style: UiConstants.textStyle3.copyWith(
-                          color: UiConstants.darkBlue2Color.withOpacity(.6),
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      OrderItemStatusChip(orderStatus: order.status!)
-                    ],
-                  ),
-                  RightArrowButton(),
-                ],
-              ),
-              SizedBox(height: 8.h),
-              OrderItemProductsList(orderProducts: order.products ?? [])
-            ],
+                    ),
+                  
+                  ],
+                ), 
+                SizedBox(height: 8.h),
+                OrderItemProductsList(orderProducts: order.products ?? [])
+              ],
+            ),
           ),
         ),
       ),

@@ -23,8 +23,8 @@ class CategoryWidget extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SvgPicture.network('${dotenv.env['PUBLIC_URL']!}$imagePath',
-              width: 40.w, height: 40.w),
+          // SvgPicture.network('${dotenv.env['PUBLIC_URL']!}$imagePath',
+          //     width: 40.w, height: 40.w),
           SizedBox(height: 12.h),
           Text(title,
               style: UiConstants.textStyle3

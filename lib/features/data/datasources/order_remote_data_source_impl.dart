@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/services.dart'; // remove it
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:nevis/core/error/exception.dart';
@@ -97,4 +98,26 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
       rethrow;
     }
   }
+}
+
+class MockOrderRemoteDataSource implements OrderRemoteDataSource{
+   final http.Client client;
+  final SharedPreferences sharedPreferences;
+
+  MockOrderRemoteDataSource({required this.client, required this.sharedPreferences});
+  @override
+  Future<OrderModel?> getOrderById(int id) {
+    // TODO: implement getOrderById
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<OrderModel>> getOrderHistory() async {
+    await Future.delayed(Duration (milliseconds: 500)); 
+   final jsonString = await rootBundle.loadString('assets/response.json');
+   final data = jsonDecode(jsonString);
+    List<dynamic> dataList = data['data'];
+   return dataList.map((e) => OrderModel.fromJson(e)).toList();
+  }
+
 }

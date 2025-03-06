@@ -43,7 +43,7 @@ class OrdersScreen extends StatelessWidget {
                             CustomAppBar(
                               hintText: 'Искать по заказам',
                               controller: TextEditingController(),
-                              title: 'История заказов',
+                              title: 'Список заказов',
                               showBack: true,
                               isShowFilterButton: true,
                               onTapFilterButton: () =>
@@ -65,19 +65,19 @@ class OrdersScreen extends StatelessWidget {
                                                 ].contains(e.status))
                                             .toList();
                                       }
-                                      if ((ordersState.orders ?? []).isEmpty) {
-                                        return Center(
-                                          child: Text(
-                                            'Заказов нет',
-                                            style: UiConstants.textStyle3
-                                                .copyWith(
-                                                    color: UiConstants
-                                                        .darkBlueColor,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                          ),
-                                        );
-                                      }
+                                      // if ((ordersState.orders ?? []).isEmpty) {
+                                      //   return Center(
+                                      //     child: Text(
+                                      //       'Заказов нет',
+                                      //       style: UiConstants.textStyle3
+                                      //           .copyWith(
+                                      //               color: UiConstants
+                                      //                   .darkBlueColor,
+                                      //               fontWeight:
+                                      //                   FontWeight.w800),
+                                      //     ),
+                                      //   );
+                                      // }
 
                                       return ListView(
                                         shrinkWrap: true,
@@ -87,23 +87,8 @@ class OrdersScreen extends StatelessWidget {
                                             left: 20,
                                             top: 16),
                                         children: [
-                                          CustomCheckbox(
-                                            title: Text(
-                                              'Только активные',
-                                              style: UiConstants.textStyle2
-                                                  .copyWith(
-                                                      color: UiConstants
-                                                          .blackColor),
-                                            ),
-                                            isChecked:
-                                                ordersState.isOnlyActive!,
-                                            onChanged: (isChecked) =>
-                                                ordersBloc.add(
-                                              ChangeOnlyActiveOrdersEvent(
-                                                  isChecked),
-                                            ),
-                                          ),
-                                          SizedBox(height: 16.h),
+                                         
+                                        
                                           ListView.separated(
                                               padding: EdgeInsets.zero,
                                               physics:

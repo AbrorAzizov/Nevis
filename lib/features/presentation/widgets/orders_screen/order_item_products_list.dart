@@ -31,7 +31,8 @@ class OrderItemProductsList extends StatelessWidget {
                     height: 56.w,
                     width: 56.w,
                     imageUrl:
-                        '${dotenv.env['PUBLIC_URL']!}${orderProducts[index].image}',
+                        // '${dotenv.env['PUBLIC_URL']!}${orderProducts[index].image}',
+                        'https://upload.wikimedia.org/wikipedia/commons/7/7b/Корвалол-Фармак.jpg',
                     fit: BoxFit.fitHeight,
                     cacheManager: CustomCacheManager(),
                     errorWidget: (context, url, error) => SvgPicture.asset(

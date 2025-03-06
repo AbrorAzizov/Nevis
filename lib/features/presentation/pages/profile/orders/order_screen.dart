@@ -35,7 +35,7 @@ class OrderScreen extends StatelessWidget {
               OrderScreenBloc(getOneOrderUC: sl())..add(LoadDataEvent(orderId)),
           child: BlocBuilder<OrderScreenBloc, OrderScreenState>(
             builder: (context, orderState) {
-              //OrderScreenBloc orderBloc = context.read<OrderScreenBloc>();
+              OrderScreenBloc orderBloc = context.read<OrderScreenBloc>();
               return Scaffold(
                 backgroundColor: UiConstants.backgroundColor,
                 body: SafeArea(
