@@ -16,23 +16,13 @@ class OrderStatusWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           orderStatus.title,
           style:
-              UiConstants.textStyle5.copyWith(color: UiConstants.darkBlueColor),
+              UiConstants.textStyle17
         ),
-        if (Utils.getOrderStatusSubtitle(orderStatus, date: date).isNotEmpty)
-          Padding(
-            padding: getMarginOrPadding(top: 8),
-            child: Text(
-              Utils.getOrderStatusSubtitle(orderStatus, date: date),
-              style: UiConstants.textStyle3.copyWith(
-                color: UiConstants.darkBlue2Color.withOpacity(.6),
-              ),
-            ),
-          ),
       ],
     );
   }

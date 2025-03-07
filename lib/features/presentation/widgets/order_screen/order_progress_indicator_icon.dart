@@ -18,17 +18,18 @@ class OrderProgressIndicatorIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Skeleton.unite(
       child: Container(
-        height: 40.w,
-        width: 40.w,
-        padding: getMarginOrPadding(all: 10),
+         margin: EdgeInsets.zero, 
+        height: 50.w,
+        width: 50.w,
+        padding: getMarginOrPadding(all: 16),
         decoration: BoxDecoration(
-          color: isActive ? UiConstants.purple3Color : UiConstants.whiteColor,
-          borderRadius: BorderRadius.circular(8.r),
+          color: isActive ? UiConstants.blueColor : UiConstants.blue2Color,
+          borderRadius: BorderRadius.circular(25.r),
         ),
         child: SvgPicture.asset(
           imagePath,
           colorFilter: ColorFilter.mode(
-              color ?? UiConstants.blueColor, BlendMode.srcIn),
+               isActive ? UiConstants.whiteColor : UiConstants.blueColor, BlendMode.srcIn),
           height: double.infinity,
         ),
       ),

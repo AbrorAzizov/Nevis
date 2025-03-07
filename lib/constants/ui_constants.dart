@@ -35,7 +35,9 @@ class UiConstants {
   static const Color blueColor = Color(0xFF009FE3);
   static const Color blue2Color = Color(0xFFE5F5FC);
   static const Color blue3Color = Color(0xFFE5F5FC);
+  static const Color blue4Color = Color(0xFFCCECF9);
   static const Color red2Color = Color(0xFFFFE8E8);
+  static const Color lightGreyColor = Color(0xFFF7F7F7);
 
   static TextStyle textStyle1 = TextStyle(
     fontSize: 28.sp,
@@ -139,6 +141,14 @@ class UiConstants {
     color: UiConstants.black3Color,
     fontSize: 20.sp,
     height: 24.sp/20.sp,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Rubik',
+  );
+
+  static TextStyle textStyle17 = TextStyle(
+    color: UiConstants.black3Color,
+    fontSize: 32.sp,
+    height: 35.2.sp/32.sp,
     fontWeight: FontWeight.w600,
     fontFamily: 'Rubik',
   );

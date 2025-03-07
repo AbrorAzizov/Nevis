@@ -32,8 +32,8 @@ class OrderInfoList extends StatelessWidget {
         ),
         SizedBox(height: 8.h),
         OrderInfoItem(
-            imagePath: Paths.boxIconPath,
-            title: 'Способ получения',
+            imagePath: Paths.onTheWayIconPath,
+            title: 'Способ доставки',
             subtitle: order?.typeReceipt == TypeReceiving.pickup
                 ? 'Самовывоз'
                 : 'Доставка'),
@@ -50,9 +50,9 @@ class OrderInfoList extends StatelessWidget {
             padding: getMarginOrPadding(top: 8),
             child: OrderInfoItem(
                 imagePath: Paths.pointIconPath,
-                title: 'Аптека',
+                title: 'Адрес получения',
                 subtitle:
-                    'Аптека №36 InLek ОДО ДКМ-ФАРМ, Минский р-н, аг. Сеница, ул. Зеленая, 1, к. 5 (с/м Гиппо)'),
+                    'Санкт-Петербург, ул. Двинская, д. 11'),
           ),
         if (order?.typeReceipt == TypeReceiving.delivery)
           Padding(
@@ -60,8 +60,8 @@ class OrderInfoList extends StatelessWidget {
             child: OrderInfoItem(
                 imagePath: Paths.cardIconPath,
                 title: 'Способ оплаты',
-                subtitle: order?.paymentType == PaymentType.courier
-                    ? 'Курьеру'
+                subtitle: order?.paymentType == PaymentType.inPerson
+                    ? 'Наличными'
                     : 'Онлайн'),
           ),
       ],

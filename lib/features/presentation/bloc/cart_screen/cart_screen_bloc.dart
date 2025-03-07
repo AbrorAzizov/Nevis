@@ -160,7 +160,7 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
               selectedPharmacy: null,
               promoCodes: [],
               cartType: TypeReceiving.delivery,
-              paymentType: PaymentType.courier,
+              paymentType: PaymentType.inPerson,
               isShowPharmaciesWorkingNow: false,
               isShowPharmaciesProductsInStock: false),
         ) {

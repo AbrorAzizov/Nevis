@@ -49,14 +49,14 @@ class OrderInfoItem extends StatelessWidget {
                     width: 40.w,
                     padding: getMarginOrPadding(all: 12),
                     decoration: BoxDecoration(
-                      color: imageBackgroundColor ?? UiConstants.white2Color,
+                      color: imageBackgroundColor ?? UiConstants.lightGreyColor,
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: SvgPicture.asset(
                       imagePath,
                       colorFilter: ColorFilter.mode(
                           imageForegroundColor ??
-                              UiConstants.darkBlueColor.withOpacity(.4),
+                              UiConstants.black3Color.withOpacity(0.4),
                           BlendMode.srcIn),
                       height: double.infinity,
                     ),

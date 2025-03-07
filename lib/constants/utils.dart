@@ -86,8 +86,8 @@ class Utils {
 
   static String getRussianOrderStatus(OrderStatus status) {
     switch (status) {
-      case OrderStatus.courier:
-        return 'У курьера';
+      case OrderStatus.onTheWay:
+        return 'В пути';
       case OrderStatus.readyToIssue:
         return 'Готов к выдаче';
       case OrderStatus.reserved:
@@ -98,17 +98,21 @@ class Utils {
         return 'Получен';
       case OrderStatus.collected:
         return 'Собран';
-      case OrderStatus.processing:
-        return 'В обработке';
+      case OrderStatus.collecting:
+        return 'В сборке';
       case OrderStatus.awaitingPayment:
         return 'Ожидает оплаты';
+      case OrderStatus.courierSearching:
+        return 'Поиск курьера';  
+      case OrderStatus.courierWaiting:
+       return 'Ожидание курьера';   
     }
   }
 
   static String getOrderStatusSubtitle(OrderStatus status, {DateTime? date}) {
     switch (status) {
-      case OrderStatus.courier:
-        return "Курьер уже едет к вам";
+      case OrderStatus.onTheWay:
+        return "Курьер едет к вам";
       case OrderStatus.readyToIssue:
         return "Заказ ждет вас в аптеке до конца дня ${formatDate(date!)}";
       case OrderStatus.reserved:
@@ -117,7 +121,7 @@ class Utils {
         return "Спасибо за заказ";
       case OrderStatus.collected:
         return "Ваш заказ собран, скоро мы передадим его курьеру";
-      case OrderStatus.processing:
+      case OrderStatus.collecting:
         return "Мы уже начали работать с вашим заказом";
       case OrderStatus.awaitingPayment:
         return "Товары готовы к сборке и ожидают оплаты.";
@@ -128,22 +132,26 @@ class Utils {
 
   static String getOrderStatusIcon(OrderStatus status) {
     switch (status) {
-      case OrderStatus.courier:
-        return Paths.carIconPath;
+      case OrderStatus.onTheWay:
+        return Paths.onTheWayIconPath;
       case OrderStatus.readyToIssue:
         return Paths.boxIconPath;
       case OrderStatus.reserved:
         return Paths.hourglassIconPath;
       case OrderStatus.received:
-        return Paths.flagIconPath;
+        return Paths.readyIconPath;
       case OrderStatus.collected:
         return Paths.boxIconPath;
-      case OrderStatus.processing:
-        return Paths.clockIconPath;
+      case OrderStatus.collecting:
+        return Paths.collectingIconPath;
       case OrderStatus.awaitingPayment:
         return Paths.cardIconPath;
       case OrderStatus.canceled:
         return Paths.cancelIconPath;
+      case OrderStatus.courierSearching:
+        return Paths.courierSearchingIconPath;
+      case OrderStatus.courierWaiting:
+       return Paths.courierWaitingIconPath; 
     }
   }
 
@@ -153,22 +161,22 @@ class Utils {
     List<OrderStatus> statuses = [];
     if (orderStatus == OrderStatus.canceled) {
       statuses = [
-        OrderStatus.processing,
+        OrderStatus.collecting,
         OrderStatus.canceled,
       ];
     } else if (typeReceipt == TypeReceiving.pickup) {
       statuses = [
-        OrderStatus.processing,
+        OrderStatus.collecting,
         OrderStatus.reserved,
         OrderStatus.readyToIssue,
         OrderStatus.received,
       ];
     } else if (typeReceipt == TypeReceiving.delivery) {
       statuses = [
-        OrderStatus.processing,
-        OrderStatus.awaitingPayment,
-        OrderStatus.collected,
-        OrderStatus.courier,
+        OrderStatus.collecting,
+        OrderStatus.courierSearching,
+        OrderStatus.courierWaiting,
+        OrderStatus.onTheWay,
         OrderStatus.received,
       ];
 
@@ -282,11 +290,11 @@ class Utils {
   }
 
   static String formatPrice(double? price) {
-    if (price == null) return '-';
-    final NumberFormat formatter =
-        NumberFormat.currency(locale: 'ru_RU', symbol: 'р.');
-    return formatter.format(price);
-  }
+  if (price == null) return '-';
+  final NumberFormat formatter =
+      NumberFormat.currency(locale: 'ru_RU', symbol: '₽', decimalDigits: 0);
+  return formatter.format(price);
+}
 
   static Future<BitmapDescriptor> createBitmapIcon() async {
     final ByteData data = await rootBundle.load(Paths.mapPointPath);

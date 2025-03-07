@@ -60,24 +60,24 @@ class OrdersScreen extends StatelessWidget {
                                       if (ordersState.isOnlyActive!) {
                                         orders = orders
                                             .where((e) => [
-                                                  OrderStatus.courier,
+                                                  OrderStatus.onTheWay,
                                                   OrderStatus.readyToIssue
                                                 ].contains(e.status))
                                             .toList();
                                       }
-                                      // if ((ordersState.orders ?? []).isEmpty) {
-                                      //   return Center(
-                                      //     child: Text(
-                                      //       'Заказов нет',
-                                      //       style: UiConstants.textStyle3
-                                      //           .copyWith(
-                                      //               color: UiConstants
-                                      //                   .darkBlueColor,
-                                      //               fontWeight:
-                                      //                   FontWeight.w800),
-                                      //     ),
-                                      //   );
-                                      // }
+                                      if ((ordersState.orders ?? []).isEmpty) {
+                                        return Center(
+                                          child: Text(
+                                            'Заказов нет',
+                                            style: UiConstants.textStyle3
+                                                .copyWith(
+                                                    color: UiConstants
+                                                        .darkBlueColor,
+                                                    fontWeight:
+                                                        FontWeight.w800),
+                                          ),
+                                        );
+                                      }
 
                                       return ListView(
                                         shrinkWrap: true,

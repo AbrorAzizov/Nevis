@@ -99,5 +99,10 @@ class Paths {
    static const String mastercardIconPath  = '${_imagesPath}mastercard.png';
    static const String jcbIconPath  = '${_imagesPath}jcb.png';
    static const String mirIconPath  = '${_imagesPath}mir.png';
+   static const String collectingIconPath  = '${_imagesPath}collecting.svg';
+   static const String courierSearchingIconPath  = '${_imagesPath}couriersearching.svg';
+   static const String courierWaitingIconPath =   '${_imagesPath}courierwaiting.svg';
+   static const String onTheWayIconPath  =  '${_imagesPath}ontheway.svg';
+   static const String readyIconPath  =  '${_imagesPath}ready.svg';
 }
 

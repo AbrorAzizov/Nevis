@@ -47,7 +47,7 @@ class OrderScreen extends StatelessWidget {
                         return Column(
                           children: [
                             CustomAppBar(
-                              title: 'Заказ #${orderState.order?.orderId}',
+                              title: 'Заказ №${orderState.order?.orderId}',
                               showBack: true,
                               backgroundColor: UiConstants.backgroundColor,
                             ),
@@ -72,7 +72,7 @@ class OrderScreen extends StatelessWidget {
                                               bottom: 94,
                                               right: 20,
                                               left: 20,
-                                              top: 16),
+                                              top: 32),
                                           children: [
                                             if (!orderState.isLoading)
                                               OrderStatusWidget(
@@ -80,30 +80,25 @@ class OrderScreen extends StatelessWidget {
                                                       orderState.order!.status!,
                                                   date: orderState
                                                       .order!.createdAt!),
-                                            SizedBox(height: 16.h),
+                                            SizedBox(height: 32.h),
                                             if (!orderState.isLoading)
                                               OrderProgressIndicator(
-                                                  orderStatus:
-                                                      orderState.order!.status!,
-                                                  paymentType: orderState
-                                                      .order!.paymentType!,
-                                                  typeReceipt: orderState
-                                                      .order!.typeReceipt!),
-                                            if ((orderState.order?.products ??
-                                                    [])
-                                                .any((e) => e.recipe != null))
-                                              Padding(
-                                                padding:
-                                                    getMarginOrPadding(top: 16),
-                                                child: InfoBorderPlate(
-                                                    imagePath:
-                                                        Paths.infoIconPath,
-                                                    title:
-                                                        'В вашем заказе есть рецептурные препараты. Пожалуйста, не забудьте взять с собой рецепт.'),
+                                                orderStatus:
+                                                    orderState.order!.status!,
+                                                paymentType: orderState
+                                                    .order!.paymentType!,
+                                                // typeReceipt: orderState.order!.typeReceipt!
                                               ),
                                             SizedBox(height: 32.h),
+                                            AppButtonWidget(
+                                              text: 'Связаться с нами',
+                                              showBorder: true,
+                                              textColor: UiConstants.blueColor,
+                                              backgroundColor:
+                                                  UiConstants.backgroundColor,
+                                              onTap: () {},
+                                            ),
                                             ProductsListWidget(
-                                                title: 'Товары',
                                                 products: orderState
                                                         .order?.products ??
                                                     [],
@@ -111,11 +106,29 @@ class OrderScreen extends StatelessWidget {
                                                     ProductsListScreenType
                                                         .order),
                                             SizedBox(height: 32.h),
-                                            BlockWidget(
-                                              title: 'Информация о заказе',
-                                              spacing: 8,
-                                              child: OrderInfoList(
-                                                  order: orderState.order),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(16.r),
+                                                color: UiConstants.whiteColor,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Color(0xFF144B63)
+                                                        .withOpacity(0.1),
+                                                    blurRadius: 50,
+                                                    spreadRadius: -4,
+                                                    offset: Offset(-1, -4),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Padding(
+                                                padding: getMarginOrPadding(all: 16),
+                                                child: BlockWidget(
+                                                  title: 'Информация о заказе',
+                                                  spacing: 8,
+                                                  child: OrderInfoList(
+                                                      order: orderState.order),
+                                                ),
+                                              ),
                                             ),
                                             SizedBox(height: 32.h),
                                             if (orderState.order?.status ==
@@ -137,15 +150,6 @@ class OrderScreen extends StatelessWidget {
                                                   },
                                                 ),
                                               ),
-                                            AppButtonWidget(
-                                              text: 'Связаться с нами',
-                                              showBorder: true,
-                                              textColor:
-                                                  UiConstants.purpleColor,
-                                              backgroundColor:
-                                                  UiConstants.backgroundColor,
-                                              onTap: () {},
-                                            ),
                                           ],
                                         ),
                             )

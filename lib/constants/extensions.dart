@@ -10,13 +10,13 @@ extension StringExtensions on String? {
 
 extension OrderStatusExtension on OrderStatus {
   static const Map<OrderStatus, String> titles = {
-    OrderStatus.courier: 'У курьера',
+    OrderStatus.onTheWay: 'В пути',
     OrderStatus.readyToIssue: 'Готов к выдаче',
     OrderStatus.reserved: 'Зарезервирован',
     OrderStatus.canceled: 'Отменен',
     OrderStatus.received: 'Получен',
     OrderStatus.collected: 'Собран',
-    OrderStatus.processing: 'В обработке',
+    OrderStatus.collecting: 'В cборке',
     OrderStatus.awaitingPayment: 'Ожидает оплаты',
   };
 
@@ -27,7 +27,7 @@ extension OrderStatusExtension on OrderStatus {
         .firstWhere(
           (entry) => entry.value == title,
           orElse: () =>
-              const MapEntry(OrderStatus.processing, ''), // обработка ошибки
+              const MapEntry(OrderStatus.collecting, ''), // обработка ошибки
         )
         .key;
   }
@@ -51,7 +51,7 @@ extension TypeReceivingExtension on TypeReceiving {
 
 extension PaymentTypeExtension on PaymentType {
   static const Map<PaymentType, String> titles = {
-    PaymentType.courier: 'Курьеру',
+    PaymentType.inPerson: 'Наличными',
     PaymentType.online: 'Онлайн',
   };
 
@@ -60,6 +60,6 @@ extension PaymentTypeExtension on PaymentType {
   static PaymentType? fromTitle(String? title) {
     return title == titles[PaymentType.online]
         ? PaymentType.online
-        : PaymentType.courier;
+        : PaymentType.inPerson;
   }
 }

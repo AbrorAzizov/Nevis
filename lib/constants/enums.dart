@@ -8,7 +8,7 @@ enum ProductChipType { hit, seasonalOffer, stock, nova }
 
 enum TypeReceiving { all, delivery, pickup }
 
-enum PaymentType { courier, online }
+enum PaymentType { inPerson, online }
 
 enum PharmacyProductsAvailability { partially, fully }
 
@@ -17,14 +17,16 @@ enum ProductsListScreenType { cart, pharmacy, order }
 enum PharmacyListScreenType { cart, product }
 
 enum OrderStatus {
-  courier, // У курьера
+  onTheWay, // У курьера
   readyToIssue, // Готов к выдаче
   reserved, // Зарезервирован
   canceled, // Отменен
   received, // Получен
   collected, // Собран
-  processing, // В обработке
-  awaitingPayment // Ожидает оплаты
+  collecting, // В сборке 
+  courierSearching, 
+  courierWaiting,// Поиск курьера
+  awaitingPayment,
 }
 
 enum DeliveryZoneType { green, yellow }
