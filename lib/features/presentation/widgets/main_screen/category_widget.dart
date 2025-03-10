@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 
-
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget(
       {super.key, required this.imagePath, required this.title});

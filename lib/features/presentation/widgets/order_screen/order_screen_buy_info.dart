@@ -25,18 +25,24 @@ class OrderBuyInfoWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(pluralize(order?.products?.length ?? 1),style: UiConstants.textStyle11,),
               Text(
-                Utils.formatPrice(order?.totalSum ),
+                pluralize(order?.products?.length ?? 1),
+                style: UiConstants.textStyle11,
+              ),
+              Text(
+                Utils.formatPrice(order?.totalSum),
                 style: UiConstants.textStyle11
                     .copyWith(color: UiConstants.blackColor),
               ),
             ],
           ),
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Доставка',style: UiConstants.textStyle11,),
+              Text(
+                'Доставка',
+                style: UiConstants.textStyle11,
+              ),
               Text(
                 Utils.formatPrice(100),
                 style: UiConstants.textStyle11
@@ -44,10 +50,13 @@ class OrderBuyInfoWidget extends StatelessWidget {
               ),
             ],
           ),
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Ваша экономия',style: UiConstants.textStyle11,),
+              Text(
+                'Ваша экономия',
+                style: UiConstants.textStyle11,
+              ),
               Text(
                 Utils.formatPrice(10),
                 style: UiConstants.textStyle11
@@ -55,28 +64,30 @@ class OrderBuyInfoWidget extends StatelessWidget {
               ),
             ],
           ),
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Бонусы за покупку',style: UiConstants.textStyle11,),
+              Text(
+                'Бонусы за покупку',
+                style: UiConstants.textStyle11,
+              ),
               Container(
                 width: 52.w,
                 height: 22.h,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.r),
-                  gradient: LinearGradient(colors: [
-                    Color(0xFFBF80FF),
-                    Color(0xFF85C6FF)
-                  ])
-                ),
+                    borderRadius: BorderRadius.circular(30.r),
+                    gradient: LinearGradient(
+                        colors: [Color(0xFFBF80FF), Color(0xFF85C6FF)])),
                 child: Container(
-                
-                  padding: getMarginOrPadding(left: 4,right: 4),
+                  padding: getMarginOrPadding(left: 4, right: 4),
                   child: Row(
                     children: [
                       SvgPicture.asset(Paths.bonusIcon2Path),
-                      Expanded(child: Text(' +125',
-                      style: UiConstants.textStyle12.copyWith(color: UiConstants.whiteColor,)))
+                      Expanded(
+                          child: Text(' +125',
+                              style: UiConstants.textStyle12.copyWith(
+                                color: UiConstants.whiteColor,
+                              )))
                     ],
                   ),
                 ),
@@ -86,7 +97,10 @@ class OrderBuyInfoWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Итого',style: UiConstants.textStyle18,),
+              Text(
+                'Итого',
+                style: UiConstants.textStyle18,
+              ),
               Text(
                 Utils.formatPrice(1300),
                 style: UiConstants.textStyle18
@@ -106,9 +120,9 @@ class OrderBuyInfoWidget extends StatelessWidget {
       return "$count ${forms[0]}";
     } else if ([2, 3, 4].contains(count % 10) &&
         !(count % 100 >= 12 && count % 100 <= 14)) {
-      return "$count ${forms[1]}"; 
+      return "$count ${forms[1]}";
     } else {
-      return "$count ${forms[2]}"; 
+      return "$count ${forms[2]}";
     }
   }
 }

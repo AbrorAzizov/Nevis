@@ -5,7 +5,6 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
 
-
 class OrderStatusWidget extends StatelessWidget {
   const OrderStatusWidget(
       {super.key, required this.orderStatus, required this.date});
@@ -18,11 +17,7 @@ class OrderStatusWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          orderStatus.title,
-          style:
-              UiConstants.textStyle17
-        ),
+        Text(orderStatus.title, style: UiConstants.textStyle17),
       ],
     );
   }

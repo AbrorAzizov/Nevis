@@ -31,7 +31,7 @@ class PersonalDataScreen extends StatelessWidget {
               getMeUC: sl(),
               updateMeUC: sl(),
               deleteMeUC: sl()),
-            // ..getProfile(),
+          // ..getProfile(),
           child: BlocConsumer<PersonalDataScreenBloc, PersonalDataScreenState>(
             listener: (context, state) => switch (state) {
               DeleteAccountState _ =>
@@ -77,7 +77,7 @@ class PersonalDataScreen extends StatelessWidget {
                                       children: [
                                         GeneralInformationBlock(
                                             screenContext: context),
-                                        SizedBox(height: 16.h),                          
+                                        SizedBox(height: 16.h),
                                         CheckboxesBlock(screenContext: context),
                                         SizedBox(height: 32.h),
                                         AppButtonWidget(

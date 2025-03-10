@@ -6,8 +6,10 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/profile/cancel_order.screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/info_border_plate.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';
@@ -76,18 +78,32 @@ class OrderScreen extends StatelessWidget {
                                               left: 20,
                                               top: 20),
                                           children: [
-                                            if (!orderState.isLoading  && orderState.order!.status == OrderStatus.canceled)
-
-                                            Image.asset(Paths.canceledOrderIconPath,width: 133,height: 133,),
-
+                                            if (!orderState.isLoading &&
+                                                orderState.order!.status ==
+                                                    OrderStatus.canceled)
+                                              Image.asset(
+                                                Paths.canceledOrderIconPath,
+                                                width: 133,
+                                                height: 133,
+                                              ),
                                             if (!orderState.isLoading)
                                               OrderStatusWidget(
                                                   orderStatus:
                                                       orderState.order!.status!,
                                                   date: orderState
                                                       .order!.createdAt!),
-                                             (!orderState.isLoading  && orderState.order!.status == OrderStatus.canceled) ? SizedBox.shrink() : SizedBox(height: 32.h,),
-                                            if (!orderState.isLoading && orderState.order!.status != OrderStatus.canceled && orderState.order!.status != OrderStatus.received)
+                                            (!orderState.isLoading &&
+                                                    orderState.order!.status ==
+                                                        OrderStatus.canceled)
+                                                ? SizedBox.shrink()
+                                                : SizedBox(
+                                                    height: 32.h,
+                                                  ),
+                                            if (!orderState.isLoading &&
+                                                orderState.order!.status !=
+                                                    OrderStatus.canceled &&
+                                                orderState.order!.status !=
+                                                    OrderStatus.received)
                                               OrderProgressIndicator(
                                                 orderStatus:
                                                     orderState.order!.status!,
@@ -96,60 +112,101 @@ class OrderScreen extends StatelessWidget {
                                                 // typeReceipt: orderState.order!.typeReceipt!
                                               ),
                                             SizedBox(height: 32.h),
-
-                                    (!orderState.isLoading  && orderState.order!.status == OrderStatus.canceled) ?      
-                                       Container(
-                    
-              
-                                              padding: EdgeInsets.zero,
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                               AppButtonWidget(
-                                                      isExpanded: false,
-                                                      text: 'Связаться с нами',
-                                                      showBorder: true,
-                                                      textColor: UiConstants.blueColor,
-                                                      backgroundColor:
-                                                          UiConstants.backgroundColor,
-                                                      onTap: () {},
-                                                    ),
-                                                     AppButtonWidget
-                                                     (
-                                                     isExpanded: false,
-                                                    text: 'Повторить заказ',
-                                                    showBorder: true,
-                                                    isFilled: true,
-                                                    textColor: UiConstants.white2Color,
-                                                    backgroundColor:
-                                                        UiConstants.blueColor,
-                                                    onTap: () {},
-                                                                                                   ),
-                                                ],
-                                              ),
-                                            ) :  AppButtonWidget(
-                                                      isExpanded: false,
-                                                      text: 'Связаться с нами',
-                                                      showBorder: true,
-                                                      textColor: UiConstants.blueColor,
-                                                      backgroundColor:
-                                                          UiConstants.backgroundColor,
-                                                      onTap: () {},
-                                                    ),
-                                                    if(orderState.order?.status != OrderStatus.received && orderState.order?.status != OrderStatus.canceled)
-                                                    Column(
+                                            (!orderState.isLoading &&
+                                                    orderState.order!.status ==
+                                                        OrderStatus.canceled)
+                                                ? Container(
+                                                    padding: EdgeInsets.zero,
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
-                                                        SizedBox(height: 16.h,),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            Text('Отменить заказ'),
-                                                          ],
+                                                        Expanded(
+                                                          child: AppButtonWidget(
+                                                            
+                                                            text:
+                                                                'Связаться с нами',
+                                                            showBorder: true,
+                                                            textColor: UiConstants
+                                                                .blueColor,
+                                                            backgroundColor:
+                                                                UiConstants
+                                                                    .backgroundColor,
+                                                            onTap: () {},
+                                                          ),
                                                         ),
-                                                          SizedBox(height: 16.h,)
+                                                        SizedBox(width: 8.w,),
+                                                        Expanded(
+                                                          child: AppButtonWidget(
+                                                           
+                                                            text:
+                                                                'Повторить заказ',
+                                                            showBorder: true,
+                                                            isFilled: true,
+                                                            textColor: UiConstants
+                                                                .white2Color,
+                                                            backgroundColor:
+                                                                UiConstants
+                                                                    .blueColor,
+                                                            onTap: () {},
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
+                                                  )
+                                                : AppButtonWidget(
+                                                    isExpanded: false,
+                                                    text: 'Связаться с нами',
+                                                    showBorder: true,
+                                                    textColor:
+                                                        UiConstants.blueColor,
+                                                    backgroundColor: UiConstants
+                                                        .backgroundColor,
+                                                    onTap: () {},
+                                                  ),
+                                            if (orderState.order?.status !=
+                                                    OrderStatus.received &&
+                                                orderState.order?.status !=
+                                                    OrderStatus.canceled)
+                                              Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 16.h,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      GestureDetector(
+                                                        child: Text(
+                                                            'Отменить заказ'),
+                                                        onTap: () {
+                                                          Navigator.of(context)
+                                                              .push(
+                                                            Routes.createRoute(
+                                                              const CancelOrderScreen(),
+                                                              settings: RouteSettings(
+                                                                  name: Routes
+                                                                      .cancelOrderScreen,
+                                                                  arguments:
+                                                                      orderState
+                                                                          .order
+                                                                          ?.orderId),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 16.h,
+                                                  )
+                                                ],
+                                              ),
                                             ProductsListWidget(
                                                 products: orderState
                                                         .order?.products ??
@@ -157,25 +214,16 @@ class OrderScreen extends StatelessWidget {
                                                 productsListScreenType:
                                                     ProductsListScreenType
                                                         .order),
-                                                        SizedBox(height: 16.h,),
-                                                        OrderBuyInfoWidget(order:orderState.order),
-                                                        SizedBox(height: 16.h,),
-                                                       
-                                                         AppButtonWidget
-                                                     (
-                                                     isExpanded: false,
-                                                    text:  orderState.order?.status == OrderStatus.canceled ?'Загрузить чек возврата': 'Загрузить чек',
-                                                    showBorder: true,
-                                                    isFilled: false,
-                                                    textColor: UiConstants.blueColor,
-                                                    backgroundColor:
-                                                        UiConstants.whiteColor,
-                                                    onTap: () {},
-                                                                                                   ),
+                                            SizedBox(
+                                              height: 16.h,
+                                            ),
+                                            OrderBuyInfoWidget(
+                                                order: orderState.order),
                                             SizedBox(height: 32.h),
                                             Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(16.r),
+                                                borderRadius:
+                                                    BorderRadius.circular(16.r),
                                                 color: UiConstants.whiteColor,
                                                 boxShadow: [
                                                   BoxShadow(
@@ -188,7 +236,8 @@ class OrderScreen extends StatelessWidget {
                                                 ],
                                               ),
                                               child: Padding(
-                                                padding: getMarginOrPadding(all: 16),
+                                                padding:
+                                                    getMarginOrPadding(all: 16),
                                                 child: BlockWidget(
                                                   title: 'Информация о заказе',
                                                   spacing: 8,
@@ -198,7 +247,6 @@ class OrderScreen extends StatelessWidget {
                                               ),
                                             ),
                                             SizedBox(height: 32.h),
-
                                           ],
                                         ),
                             )

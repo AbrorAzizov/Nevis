@@ -38,9 +38,7 @@ class DocumentsAndInstructionsScreen extends StatelessWidget {
                               shrinkWrap: true,
                               padding: getMarginOrPadding(
                                   bottom: 94, right: 20, left: 20, top: 16),
-                              children: [
-                                DocsAndInstructionsCategoriesList()
-                              ],
+                              children: [DocsAndInstructionsCategoriesList()],
                             ),
                     ),
                   ],

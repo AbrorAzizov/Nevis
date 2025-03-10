@@ -20,20 +20,21 @@ class OrderInfoList extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: [
-         SizedBox(height: 16.h,),
+        SizedBox(
+          height: 16.h,
+        ),
         OrderInfoItem(
             imagePath: Paths.orderNumberIconPath,
             title: 'Номер заказа',
             subtitle: '${order?.orderId}'),
         SizedBox(height: 8.h),
-         OrderInfoItem(
+        OrderInfoItem(
           imagePath: Paths.timeIconPath,
           title: 'Время заказа',
           subtitle: Utils.formatDateTime(order?.createdAt),
         ),
         SizedBox(height: 8.h),
-       
-         OrderInfoItem(
+        OrderInfoItem(
           imagePath: Paths.pharmacyIconPath,
           title: 'Способ доставки',
           subtitle: 'Курьером',
@@ -43,20 +44,17 @@ class OrderInfoList extends StatelessWidget {
             imagePath: Paths.calendarIconPath,
             title: 'Период ожидания',
             subtitle: "10 октября 2024 - 12 ноября 2024"),
-
-              SizedBox(height: 8.h),
-            OrderInfoItem(
-                imagePath: Paths.geoIconPath,
-                title: 'Адрес',
-                subtitle: 'пр-кт Независимости, д.1'),
-       
-          Padding(
+        SizedBox(height: 8.h),
+        OrderInfoItem(
+            imagePath: Paths.geoIconPath,
+            title: 'Адрес',
+            subtitle: 'пр-кт Независимости, д.1'),
+        Padding(
             padding: getMarginOrPadding(top: 8),
             child: OrderInfoItem(
                 imagePath: Paths.cardIconPath,
                 title: 'Способ оплаты',
-                subtitle: 'Картой в приложении')
-          ),
+                subtitle: 'Картой в приложении')),
       ],
     );
   }

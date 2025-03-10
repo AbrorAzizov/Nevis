@@ -29,7 +29,8 @@ class BlockWidget extends StatefulWidget {
   _BlockWidgetState createState() => _BlockWidgetState();
 }
 
-class _BlockWidgetState extends State<BlockWidget> with SingleTickerProviderStateMixin {
+class _BlockWidgetState extends State<BlockWidget>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   bool _isExpanded = true;
@@ -68,66 +69,64 @@ class _BlockWidgetState extends State<BlockWidget> with SingleTickerProviderStat
     super.dispose();
   }
 
- @override
-@override
-Widget build(BuildContext context) {
-  return Column(
-    children: [
-      Padding(
-        padding: widget.contentPadding ?? EdgeInsets.zero,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: _toggleExpand,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: (widget.titleStyle ?? UiConstants.textStyle5)
-                          .copyWith(color: UiConstants.darkBlueColor),
-                    ),
-                    const SizedBox(width: 8), // Отступ перед иконкой
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      transitionBuilder: (child, animation) {
-                        return RotationTransition(turns: animation, child: child);
-                      },
-                      child: Icon(
-                        _isExpanded ? Icons.expand_less : Icons.expand_more,
-                        key: ValueKey(_isExpanded),
-                        color: UiConstants.darkBlueColor,
+  @override
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: widget.contentPadding ?? EdgeInsets.zero,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: _toggleExpand,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: (widget.titleStyle ?? UiConstants.textStyle5)
+                            .copyWith(color: UiConstants.darkBlueColor),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-
-            ),
-           
-            if (widget.clickableText != null)
-              GestureDetector(
-                onTap: widget.onTap,
-                child: Text(
-                  widget.clickableText!,
-                  style: UiConstants.textStyle3.copyWith(
-                    color: UiConstants.darkBlue2Color.withOpacity(.6),
+                      const SizedBox(width: 8), // Отступ перед иконкой
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) {
+                          return RotationTransition(
+                              turns: animation, child: child);
+                        },
+                        child: Icon(
+                          _isExpanded ? Icons.expand_less : Icons.expand_more,
+                          key: ValueKey(_isExpanded),
+                          color: UiConstants.darkBlueColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-          ],
+              if (widget.clickableText != null)
+                GestureDetector(
+                  onTap: widget.onTap,
+                  child: Text(
+                    widget.clickableText!,
+                    style: UiConstants.textStyle3.copyWith(
+                      color: UiConstants.darkBlue2Color.withOpacity(.6),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
-      ),
-      
-      SizeTransition(
-        sizeFactor: _animation,
-        axisAlignment: -1.0,
-        child: widget.child ?? const SizedBox(),
-      ),
-    ],
-  );
-}
+        SizeTransition(
+          sizeFactor: _animation,
+          axisAlignment: -1.0,
+          child: widget.child ?? const SizedBox(),
+        ),
+      ],
+    );
+  }
 }

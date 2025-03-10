@@ -198,8 +198,6 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                   padding: getMarginOrPadding(bottom: 4),
                                   child: OutStockChip(),
                                 ),
-                             
-                                
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
