@@ -13,7 +13,6 @@ import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_d
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 import 'package:nevis/locator_service.dart';
 
-
 class ContactsBlock extends StatefulWidget {
   const ContactsBlock({super.key, required this.screenContext});
 
@@ -57,14 +56,14 @@ class _ContactsBlockState extends State<ContactsBlock> {
                       FilteringTextInputFormatter.digitsOnly,
                       CustomPhoneInputFormatter()
                     ],
-                   
-                    isActionTitleActive: personalDataBloc
-                                .state.installedPhone !=
-                            personalDataBloc.phoneController.text &&
-                        personalDataBloc.phoneController.text.length == 19,
+                    isActionTitleActive:
+                        personalDataBloc.state.installedPhone !=
+                                personalDataBloc.phoneController.text &&
+                            personalDataBloc.phoneController.text.length == 19,
                     onTapActionTitle: () async {
-                      await context.read<CodeScreenBloc>().reset(
-                          phone: personalDataBloc.phoneController.text);
+                      await context
+                          .read<CodeScreenBloc>()
+                          .reset(phone: personalDataBloc.phoneController.text);
                       context.read<CodeScreenBloc>().startTimer(
                         phone: personalDataBloc.phoneController.text,
                         widget.screenContext,
@@ -83,7 +82,6 @@ class _ContactsBlockState extends State<ContactsBlock> {
                 },
               ),
             ),
-           
           ],
         ),
       ],

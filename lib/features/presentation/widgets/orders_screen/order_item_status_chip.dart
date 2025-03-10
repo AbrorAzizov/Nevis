@@ -17,7 +17,7 @@ class OrderItemStatusChip extends StatelessWidget {
     return Container(
       padding: getMarginOrPadding(left: 8, right: 8, top: 4, bottom: 4),
       decoration: BoxDecoration(
-        color: UiConstants.blueColor,
+        color: orderStatus == OrderStatus.canceled ?UiConstants.black3Color.withOpacity(.1) : UiConstants.blueColor,
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(
@@ -25,7 +25,7 @@ class OrderItemStatusChip extends StatelessWidget {
           Text(
             Utils.getRussianOrderStatus(orderStatus),
             style: UiConstants.textStyle8.copyWith(
-              color: UiConstants.whiteColor,
+              color: orderStatus == OrderStatus.canceled ?UiConstants.black2Color: UiConstants.whiteColor,
             ),
           ),
         ],

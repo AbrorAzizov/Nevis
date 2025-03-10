@@ -65,7 +65,6 @@ class Paths {
   static const String phoneIconPath = '${_imagesPath}phone.svg';
   static const String hourglassIconPath = '${_imagesPath}hourglass.svg';
   static const String flagIconPath = '${_imagesPath}flag.svg';
-  static const String calendarIconPath = '${_imagesPath}calendar.svg';
   static const String exitIconPath = '${_imagesPath}exit.svg';
   static const String emptyOrdersIconPath = '${_imagesPath}empty_orders.png';
   static const String cancelIconPath = '${_imagesPath}cancel.svg';
@@ -95,14 +94,23 @@ class Paths {
    static const String privacyPolicyIconPath = '${_imagesPath}protection.svg';
    static const String instructionIconPath = '${_imagesPath}box2.svg';
    static const String bonusIconPath = '${_imagesPath}bonus.svg';
-   static const String visaIconPath  = '${_imagesPath}visa.png';
+   static const String visaIconPath = '${_imagesPath}visa.png';
    static const String mastercardIconPath  = '${_imagesPath}mastercard.png';
-   static const String jcbIconPath  = '${_imagesPath}jcb.png';
+   static const String jcbIconPath = '${_imagesPath}jcb.png';
    static const String mirIconPath  = '${_imagesPath}mir.png';
    static const String collectingIconPath  = '${_imagesPath}collecting.svg';
    static const String courierSearchingIconPath  = '${_imagesPath}couriersearching.svg';
-   static const String courierWaitingIconPath =   '${_imagesPath}courierwaiting.svg';
+   static const String courierWaitingIconPath = '${_imagesPath}courierwaiting.svg';
    static const String onTheWayIconPath  =  '${_imagesPath}ontheway.svg';
-   static const String readyIconPath  =  '${_imagesPath}ready.svg';
+   static const String readyIconPath = '${_imagesPath}ready.svg';
+   static const String canceledOrderIconPath = '${_imagesPath}canceled_order.png';
+   static const String bonusIcon2Path = '${_imagesPath}bonusIcon.svg';
+   static const String orderNumberIconPath = '${_imagesPath}IconPaper.svg';
+   static const String timeIconPath =  '${_imagesPath}IconClock.svg';
+   static const String deliveryIconPath = '${_imagesPath}IconDeliviry.svg';
+   static const String calendarIconPath = '${_imagesPath}IconCalendar.svg'; 
+   static const String geoIconPath = '${_imagesPath}IconGeo.svg'; 
+   static const String pharmacyIconPath = '${_imagesPath}IconPharmacy.svg'; 
 }
+
 

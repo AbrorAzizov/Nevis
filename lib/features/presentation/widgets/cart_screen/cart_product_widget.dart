@@ -186,7 +186,11 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                   SizedBox(
                                     height: 18.h,
                                   ),
-                                  Text(widget.product.brand!),
+                                  Row(
+                                    children: [
+                                      Text(widget.product.brand!),
+                                    ],
+                                  ),
                                 ],
                               ),
                               if (!inStock)
@@ -194,34 +198,8 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                   padding: getMarginOrPadding(bottom: 4),
                                   child: OutStockChip(),
                                 ),
-                              if (widget.product.recipe != null && inStock)
-                                Padding(
-                                  padding: getMarginOrPadding(bottom: 4),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      OnlyPickupChip(),
-                                      if (widget.productsListScreenType ==
-                                          ProductsListScreenType.order)
-                                        Skeleton.ignore(
-                                          child: CircleAvatar(
-                                            backgroundColor:
-                                                UiConstants.pink2Color,
-                                            radius: 12.w,
-                                            child: Padding(
-                                              padding:
-                                                  getMarginOrPadding(all: 4),
-                                              child: SvgPicture.asset(
-                                                  Paths.replaceIconPath,
-                                                  color:
-                                                      UiConstants.whiteColor),
-                                            ),
-                                          ),
-                                        )
-                                    ],
-                                  ),
-                                ),
+                             
+                                
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,

@@ -56,7 +56,7 @@ class OrderInfoItem extends StatelessWidget {
                       imagePath,
                       colorFilter: ColorFilter.mode(
                           imageForegroundColor ??
-                              UiConstants.black3Color.withOpacity(0.4),
+                              UiConstants.black3Color,
                           BlendMode.srcIn),
                       height: double.infinity,
                     ),

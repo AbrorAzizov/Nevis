@@ -28,14 +28,14 @@ class GeneralInformationBlock extends StatelessWidget {
           children: [
             AppTextFieldWidget(
                 textStyle: UiConstants.textStyle11,
-               fillColor: UiConstants.whiteColor,
+                fillColor: UiConstants.whiteColor,
                 title: 'Имя',
                 hintText: 'Введите имя',
                 controller: personalDataBloc.fNameController),
             SizedBox(height: 16.h),
             AppTextFieldWidget(
-                 textStyle: UiConstants.textStyle11,
-               fillColor: UiConstants.whiteColor,
+                textStyle: UiConstants.textStyle11,
+                fillColor: UiConstants.whiteColor,
                 title: 'Фамилия',
                 hintText: 'Не указано',
                 controller: personalDataBloc.sNameController),
@@ -58,14 +58,23 @@ class GeneralInformationBlock extends StatelessWidget {
             //   onChangedField: (p0) =>
             //       personalDataBloc.birthdayController.text = p0,
             // ),
-            ContactsBlock(screenContext: screenContext,),
-            SizedBox(height: 16.h,),
+            ContactsBlock(
+              screenContext: screenContext,
+            ),
+            SizedBox(
+              height: 16.h,
+            ),
             Row(
               children: [
-                Text('Пол',style: UiConstants.textStyle11,),
+                Text(
+                  'Пол',
+                  style: UiConstants.textStyle11,
+                ),
               ],
             ),
-            SizedBox(height: 8.h,),
+            SizedBox(
+              height: 8.h,
+            ),
             Row(
               children: [
                 CustomRadioButton(

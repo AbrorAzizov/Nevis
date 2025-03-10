@@ -56,7 +56,7 @@ class AppButtonWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 13.5.h),
             child: Text(
               text,
-              style: UiConstants.textStyle3.copyWith(
+              style: UiConstants.textStyle14.copyWith(
                 height: 1,fontWeight: FontWeight.w700),
             ),
           ),

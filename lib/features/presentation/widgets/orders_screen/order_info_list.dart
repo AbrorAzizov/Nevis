@@ -20,49 +20,42 @@ class OrderInfoList extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: [
+         SizedBox(height: 16.h,),
         OrderInfoItem(
-            imagePath: Paths.documentIconPath,
+            imagePath: Paths.orderNumberIconPath,
             title: 'Номер заказа',
             subtitle: '${order?.orderId}'),
         SizedBox(height: 8.h),
-        OrderInfoItem(
-          imagePath: Paths.clockIconPath,
+         OrderInfoItem(
+          imagePath: Paths.timeIconPath,
           title: 'Время заказа',
           subtitle: Utils.formatDateTime(order?.createdAt),
         ),
         SizedBox(height: 8.h),
+       
+         OrderInfoItem(
+          imagePath: Paths.pharmacyIconPath,
+          title: 'Способ доставки',
+          subtitle: 'Курьером',
+        ),
+        SizedBox(height: 8.h),
         OrderInfoItem(
-            imagePath: Paths.onTheWayIconPath,
-            title: 'Способ доставки',
-            subtitle: order?.typeReceipt == TypeReceiving.pickup
-                ? 'Самовывоз'
-                : 'Доставка'),
-        if (order?.typeReceipt == TypeReceiving.delivery)
-          Padding(
-            padding: getMarginOrPadding(top: 8),
-            child: OrderInfoItem(
-                imagePath: Paths.pointIconPath,
+            imagePath: Paths.calendarIconPath,
+            title: 'Период ожидания',
+            subtitle: "10 октября 2024 - 12 ноября 2024"),
+
+              SizedBox(height: 8.h),
+            OrderInfoItem(
+                imagePath: Paths.geoIconPath,
                 title: 'Адрес',
                 subtitle: 'пр-кт Независимости, д.1'),
-          )
-        else
-          Padding(
-            padding: getMarginOrPadding(top: 8),
-            child: OrderInfoItem(
-                imagePath: Paths.pointIconPath,
-                title: 'Адрес получения',
-                subtitle:
-                    'Санкт-Петербург, ул. Двинская, д. 11'),
-          ),
-        if (order?.typeReceipt == TypeReceiving.delivery)
+       
           Padding(
             padding: getMarginOrPadding(top: 8),
             child: OrderInfoItem(
                 imagePath: Paths.cardIconPath,
                 title: 'Способ оплаты',
-                subtitle: order?.paymentType == PaymentType.inPerson
-                    ? 'Наличными'
-                    : 'Онлайн'),
+                subtitle: 'Картой в приложении')
           ),
       ],
     );

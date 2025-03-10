@@ -111,13 +111,24 @@ class MockOrderRemoteDataSource implements OrderRemoteDataSource{
    final jsonString = await rootBundle.loadString('assets/response.json');
    final data = jsonDecode(jsonString);
     List<dynamic> dataList = data['data'];
+
    return dataList.map((e) => OrderModel.fromJson(e)).toList();
   }
   @override
-  Future<OrderModel?> getOrderById(int id) async {
-      await Future.delayed(Duration (milliseconds: 500)); 
-   final jsonString = await rootBundle.loadString('assets/response.json');
-    final data = jsonDecode(jsonString);
-   return OrderModel.fromJson(data['data'].first);
+ Future<OrderModel?> getOrderById(int id) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    final jsonString = await rootBundle.loadString('assets/response.json');
+    final Map<String, dynamic> data = jsonDecode(jsonString);
+    if (data.containsKey('data') && data['data'] is List) {
+      final List<dynamic> orders = data['data'];
+      final orderData = orders.firstWhere(
+        (order) => order['order_id'] == id,
+        orElse: () => null, 
+      );
+      if (orderData != null) {
+        return OrderModel.fromJson(orderData);
+      }
+    }
+    return null;
   }
 }

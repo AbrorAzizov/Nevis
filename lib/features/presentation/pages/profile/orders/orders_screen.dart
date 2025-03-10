@@ -56,7 +56,6 @@ class OrdersScreen extends StatelessWidget {
                                   : Builder(builder: (context) {
                                       List<OrderEntity> orders = List.from(
                                           ordersState.filteredOrders ?? []);
-
                                       if (ordersState.isOnlyActive!) {
                                         orders = orders
                                             .where((e) => [

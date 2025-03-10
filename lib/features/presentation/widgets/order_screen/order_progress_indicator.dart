@@ -20,11 +20,12 @@ class OrderProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     int step = 0;
     List<OrderStatus> orderStatuses = Utils.getOrderStatuses(
         paymentType, typeReceipt,
-        orderStatus: orderStatus);
-
+        orderStatus: orderStatus);  
+    print(orderStatus);
          switch (orderStatus) {
       case OrderStatus.collecting:
         step = 0;

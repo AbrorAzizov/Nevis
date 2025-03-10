@@ -13,16 +13,17 @@ extension OrderStatusExtension on OrderStatus {
     OrderStatus.onTheWay: 'В пути',
     OrderStatus.readyToIssue: 'Готов к выдаче',
     OrderStatus.reserved: 'Зарезервирован',
-    OrderStatus.canceled: 'Отменен',
+    OrderStatus.canceled: 'Заказ отменен',
     OrderStatus.received: 'Получен',
     OrderStatus.collected: 'Собран',
-    OrderStatus.collecting: 'В cборке',
+    OrderStatus.collecting: 'В обработке',
     OrderStatus.awaitingPayment: 'Ожидает оплаты',
   };
 
   String get title => titles[this] ?? 'Неизвестный статус';
 
   static OrderStatus? fromTitle(String? title) {
+    print(title);
     return titles.entries
         .firstWhere(
           (entry) => entry.value == title,

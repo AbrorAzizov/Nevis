@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
@@ -14,6 +15,7 @@ import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_progress_indicator.dart';
+import 'package:nevis/features/presentation/widgets/order_screen/order_screen_buy_info.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_status_widget.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_info_list.dart';
 import 'package:nevis/locator_service.dart';
@@ -26,7 +28,7 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int? orderId = ModalRoute.of(context)?.settings.arguments! as int?;
-
+    print(orderId);
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
         final homeBloc = context.read<HomeScreenBloc>();
@@ -72,16 +74,20 @@ class OrderScreen extends StatelessWidget {
                                               bottom: 94,
                                               right: 20,
                                               left: 20,
-                                              top: 32),
+                                              top: 20),
                                           children: [
+                                            if (!orderState.isLoading  && orderState.order!.status == OrderStatus.canceled)
+
+                                            Image.asset(Paths.canceledOrderIconPath,width: 133,height: 133,),
+
                                             if (!orderState.isLoading)
                                               OrderStatusWidget(
                                                   orderStatus:
                                                       orderState.order!.status!,
                                                   date: orderState
                                                       .order!.createdAt!),
-                                            SizedBox(height: 32.h),
-                                            if (!orderState.isLoading)
+                                             (!orderState.isLoading  && orderState.order!.status == OrderStatus.canceled) ? SizedBox.shrink() : SizedBox(height: 32.h,),
+                                            if (!orderState.isLoading && orderState.order!.status != OrderStatus.canceled && orderState.order!.status != OrderStatus.received)
                                               OrderProgressIndicator(
                                                 orderStatus:
                                                     orderState.order!.status!,
@@ -90,14 +96,60 @@ class OrderScreen extends StatelessWidget {
                                                 // typeReceipt: orderState.order!.typeReceipt!
                                               ),
                                             SizedBox(height: 32.h),
-                                            AppButtonWidget(
-                                              text: 'Связаться с нами',
-                                              showBorder: true,
-                                              textColor: UiConstants.blueColor,
-                                              backgroundColor:
-                                                  UiConstants.backgroundColor,
-                                              onTap: () {},
-                                            ),
+
+                                    (!orderState.isLoading  && orderState.order!.status == OrderStatus.canceled) ?      
+                                       Container(
+                    
+              
+                                              padding: EdgeInsets.zero,
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                               AppButtonWidget(
+                                                      isExpanded: false,
+                                                      text: 'Связаться с нами',
+                                                      showBorder: true,
+                                                      textColor: UiConstants.blueColor,
+                                                      backgroundColor:
+                                                          UiConstants.backgroundColor,
+                                                      onTap: () {},
+                                                    ),
+                                                     AppButtonWidget
+                                                     (
+                                                     isExpanded: false,
+                                                    text: 'Повторить заказ',
+                                                    showBorder: true,
+                                                    isFilled: true,
+                                                    textColor: UiConstants.white2Color,
+                                                    backgroundColor:
+                                                        UiConstants.blueColor,
+                                                    onTap: () {},
+                                                                                                   ),
+                                                ],
+                                              ),
+                                            ) :  AppButtonWidget(
+                                                      isExpanded: false,
+                                                      text: 'Связаться с нами',
+                                                      showBorder: true,
+                                                      textColor: UiConstants.blueColor,
+                                                      backgroundColor:
+                                                          UiConstants.backgroundColor,
+                                                      onTap: () {},
+                                                    ),
+                                                    if(orderState.order?.status != OrderStatus.received && orderState.order?.status != OrderStatus.canceled)
+                                                    Column(
+                                                      children: [
+                                                        SizedBox(height: 16.h,),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            Text('Отменить заказ'),
+                                                          ],
+                                                        ),
+                                                          SizedBox(height: 16.h,)
+                                                      ],
+                                                    ),
                                             ProductsListWidget(
                                                 products: orderState
                                                         .order?.products ??
@@ -105,6 +157,21 @@ class OrderScreen extends StatelessWidget {
                                                 productsListScreenType:
                                                     ProductsListScreenType
                                                         .order),
+                                                        SizedBox(height: 16.h,),
+                                                        OrderBuyInfoWidget(order:orderState.order),
+                                                        SizedBox(height: 16.h,),
+                                                       
+                                                         AppButtonWidget
+                                                     (
+                                                     isExpanded: false,
+                                                    text:  orderState.order?.status == OrderStatus.canceled ?'Загрузить чек возврата': 'Загрузить чек',
+                                                    showBorder: true,
+                                                    isFilled: false,
+                                                    textColor: UiConstants.blueColor,
+                                                    backgroundColor:
+                                                        UiConstants.whiteColor,
+                                                    onTap: () {},
+                                                                                                   ),
                                             SizedBox(height: 32.h),
                                             Container(
                                               decoration: BoxDecoration(
@@ -131,25 +198,7 @@ class OrderScreen extends StatelessWidget {
                                               ),
                                             ),
                                             SizedBox(height: 32.h),
-                                            if (orderState.order?.status ==
-                                                OrderStatus.canceled)
-                                              Padding(
-                                                padding: getMarginOrPadding(
-                                                    bottom: 8),
-                                                child: AppButtonWidget(
-                                                  text: 'Повторить заказ',
-                                                  onTap: () {
-                                                    homeBloc
-                                                        .navigatorKeys[homeBloc
-                                                            .selectedPageIndex]
-                                                        .currentState!
-                                                        .popUntil((route) =>
-                                                            route.isFirst);
 
-                                                    homeBloc.onChangePage(2);
-                                                  },
-                                                ),
-                                              ),
                                           ],
                                         ),
                             )

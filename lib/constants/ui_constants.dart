@@ -103,7 +103,7 @@ class UiConstants {
   );
 
   static TextStyle textStyle14 = TextStyle(
-    fontSize: 14.sp,
+    fontSize: 13.sp,
     height: 19.1.sp / 14.sp,
     fontWeight: FontWeight.w800,
   );
@@ -149,6 +149,13 @@ class UiConstants {
     color: UiConstants.black3Color,
     fontSize: 32.sp,
     height: 35.2.sp/32.sp,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Rubik',
+  );
+
+   static TextStyle textStyle18 = TextStyle(
+    color: UiConstants.black3Color,
+    fontSize: 18.sp,
     fontWeight: FontWeight.w600,
     fontFamily: 'Rubik',
   );
