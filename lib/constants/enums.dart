@@ -6,7 +6,7 @@ enum CodeScreenType {signUp, reset,logInWithMessage, logInWithCall }
 
 enum ProductChipType { hit, seasonalOffer, stock, nova }
 
-enum TypeReceiving { all, delivery, pickup }
+enum TypeReceiving { all, delivery, pickup, pickupFromWareHouse }
 
 enum PaymentType { inPerson, online }
 
@@ -24,9 +24,9 @@ enum OrderStatus {
   received, // Получен
   collected, // Собран
   collecting, // В сборке 
-  courierSearching, 
+  courierSearching, // поиск курьера
   courierWaiting,// Поиск курьера
-  awaitingPayment,
+  accepted,
 }
 
 enum DeliveryZoneType { green, yellow }

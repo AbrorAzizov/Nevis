@@ -12,12 +12,12 @@ class OrderProgressIndicator extends StatelessWidget {
   const OrderProgressIndicator(
       {super.key,
       required this.orderStatus,
-      // required this.typeReceipt,
+      required this.typeReceipt,
       this.paymentType});
 
   final PaymentType? paymentType;
   final OrderStatus orderStatus;
-  final TypeReceiving typeReceipt = TypeReceiving.delivery;
+  final TypeReceiving typeReceipt;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,6 @@ class OrderProgressIndicator extends StatelessWidget {
     List<OrderStatus> orderStatuses = Utils.getOrderStatuses(
         paymentType, typeReceipt,
         orderStatus: orderStatus);
-    print(orderStatus);
     switch (orderStatus) {
       case OrderStatus.collecting:
         step = 0;
@@ -40,43 +39,39 @@ class OrderProgressIndicator extends StatelessWidget {
         step = 0;
         break;
       case OrderStatus.received:
-        step = 4;
+        step = typeReceipt == TypeReceiving.delivery ? 4 : 2;
         break;
       case OrderStatus.readyToIssue:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+        step = 1;
       case OrderStatus.reserved:
-        // TODO: Handle this case.
         throw UnimplementedError();
       case OrderStatus.collected:
-        // TODO: Handle this case.
         throw UnimplementedError();
-      case OrderStatus.awaitingPayment:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+      case OrderStatus.accepted:
+        step = 0;
     }
     return Skeleton.unite(
         child: EasyStepper(
-            showScrollbar: false,
+            showScrollbar: false,  
             showTitle: false,
+            stepShape: StepShape.circle,
+            finishedStepBackgroundColor: Colors.transparent,
             activeStep: step,
-            activeStepTextColor: Colors.black87,
-            finishedStepTextColor: Colors.black87,
             internalPadding: 0,
             borderThickness: 2,
             enableStepTapping: false,
             disableScroll: true,
             showLoadingAnimation: false,
             padding: EdgeInsets.zero,
-            defaultStepBorderType: BorderType.normal,
             lineStyle: LineStyle(
+              lineLength: typeReceipt == TypeReceiving.delivery ? 40 :  100,
               lineThickness: 2,
               defaultLineColor: UiConstants.blueColor,
               activeLineColor: UiConstants.blue4Color,
               unreachedLineColor: UiConstants.blue4Color,
               lineType: LineType.normal,
             ),
-            showStepBorder: false,
+            showStepBorder:false,
             steps: List.generate(orderStatuses.length, (index) {
               return EasyStep(
                   enabled: false,

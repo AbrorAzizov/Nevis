@@ -18,11 +18,12 @@ class OrderProgressIndicatorIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Skeleton.unite(
       child: Container(
-         margin: EdgeInsets.zero, 
+        margin: EdgeInsets.zero, 
         height: 50.w,
         width: 50.w,
         padding: getMarginOrPadding(all: 16),
         decoration: BoxDecoration(
+
           color: isActive ? UiConstants.blueColor : UiConstants.blue2Color,
           borderRadius: BorderRadius.circular(25.r),
         ),

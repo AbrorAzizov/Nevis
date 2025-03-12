@@ -49,6 +49,7 @@ class UiConstants {
     fontSize: 16.sp,
     height: 18.2.sp / 16.sp,
     fontWeight: FontWeight.w400,
+    fontFamily: 'Rubik',
   );
 
   static TextStyle textStyle3 = TextStyle(

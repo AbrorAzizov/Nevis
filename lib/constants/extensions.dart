@@ -17,13 +17,13 @@ extension OrderStatusExtension on OrderStatus {
     OrderStatus.received: 'Получен',
     OrderStatus.collected: 'Собран',
     OrderStatus.collecting: 'В обработке',
-    OrderStatus.awaitingPayment: 'Ожидает оплаты',
+    OrderStatus.accepted : 'Принят'
   };
 
   String get title => titles[this] ?? 'Неизвестный статус';
 
   static OrderStatus? fromTitle(String? title) {
-    print(title);
+
     return titles.entries
         .firstWhere(
           (entry) => entry.value == title,
@@ -38,15 +38,21 @@ extension TypeReceivingExtension on TypeReceiving {
   static const Map<TypeReceiving, String> titles = {
     TypeReceiving.all: 'Все',
     TypeReceiving.delivery: 'Доставка',
+    TypeReceiving.pickupFromWareHouse : 'Доставка со склада',
     TypeReceiving.pickup: 'Самовывоз',
   };
 
   String get title => titles[this] ?? 'Неизвестный способ получения';
 
   static TypeReceiving? fromTitle(String? title) {
-    return title == titles[TypeReceiving.delivery]
-        ? TypeReceiving.delivery
-        : TypeReceiving.pickup;
+
+ return titles.entries
+        .firstWhere(
+          (entry) => entry.value == title,
+          orElse: () =>
+              const MapEntry(TypeReceiving.delivery, ''), // обработка ошибки
+        )
+        .key;
   }
 }
 

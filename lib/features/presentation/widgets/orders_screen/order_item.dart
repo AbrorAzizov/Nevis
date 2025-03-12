@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/enums.dart';
+import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
@@ -74,8 +75,7 @@ class OrderItem extends StatelessWidget {
                           ),
                           SizedBox(height: 16.h),
                           Text(
-                            // order.typeReceipt!.name,
-                            'Доставка',
+                          TypeReceivingExtension.titles[order.typeReceipt]!,
                             style: UiConstants.textStyle11
                                 .copyWith(color: UiConstants.blueColor),
                           ),

@@ -100,12 +100,12 @@ class Utils {
         return 'Собран';
       case OrderStatus.collecting:
         return 'В сборке';
-      case OrderStatus.awaitingPayment:
-        return 'Ожидает оплаты';
       case OrderStatus.courierSearching:
         return 'Поиск курьера';  
       case OrderStatus.courierWaiting:
        return 'Ожидание курьера';   
+      case OrderStatus.accepted:
+       return 'Принят';     
     }
   }
 
@@ -114,7 +114,7 @@ class Utils {
       case OrderStatus.onTheWay:
         return "Курьер едет к вам";
       case OrderStatus.readyToIssue:
-        return "Заказ ждет вас в аптеке до конца дня ${formatDate(date!)}";
+        return "Готов к выдаче";
       case OrderStatus.reserved:
         return "Проверим наличие и свяжемся с вами в случае отсутствия товаров";
       case OrderStatus.received:
@@ -123,8 +123,6 @@ class Utils {
         return "Ваш заказ собран, скоро мы передадим его курьеру";
       case OrderStatus.collecting:
         return "Мы уже начали работать с вашим заказом";
-      case OrderStatus.awaitingPayment:
-        return "Товары готовы к сборке и ожидают оплаты.";
       default:
         return '';
     }
@@ -135,7 +133,7 @@ class Utils {
       case OrderStatus.onTheWay:
         return Paths.onTheWayIconPath;
       case OrderStatus.readyToIssue:
-        return Paths.boxIconPath;
+        return Paths.readyToIssueIconPath;
       case OrderStatus.reserved:
         return Paths.hourglassIconPath;
       case OrderStatus.received:
@@ -144,14 +142,14 @@ class Utils {
         return Paths.boxIconPath;
       case OrderStatus.collecting:
         return Paths.collectingIconPath;
-      case OrderStatus.awaitingPayment:
-        return Paths.cardIconPath;
       case OrderStatus.canceled:
         return Paths.cancelIconPath;
       case OrderStatus.courierSearching:
         return Paths.courierSearchingIconPath;
       case OrderStatus.courierWaiting:
        return Paths.courierWaitingIconPath; 
+      case OrderStatus.accepted:
+       return Paths.orderAcceptedIconPath;
     }
   }
 
@@ -159,15 +157,14 @@ class Utils {
       PaymentType? paymentType, TypeReceiving typeReceipt,
       {OrderStatus? orderStatus}) {
     List<OrderStatus> statuses = [];
+    print(typeReceipt);
     if (orderStatus == OrderStatus.canceled) {
       statuses = [
-        OrderStatus.collecting,
         OrderStatus.canceled,
       ];
-    } else if (typeReceipt == TypeReceiving.pickup) {
+    } else if (typeReceipt == TypeReceiving.pickup || typeReceipt ==  TypeReceiving.pickupFromWareHouse) {
       statuses = [
-        OrderStatus.collecting,
-        OrderStatus.reserved,
+       typeReceipt == TypeReceiving.pickup ? OrderStatus.accepted : OrderStatus.collecting,
         OrderStatus.readyToIssue,
         OrderStatus.received,
       ];
@@ -180,9 +177,6 @@ class Utils {
         OrderStatus.received,
       ];
 
-      if (paymentType != PaymentType.online) {
-        statuses.remove(OrderStatus.awaitingPayment);
-      }
     }
 
     if (orderStatus == null) {

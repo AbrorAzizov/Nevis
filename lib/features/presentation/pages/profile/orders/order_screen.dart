@@ -30,7 +30,6 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int? orderId = ModalRoute.of(context)?.settings.arguments! as int?;
-    print(orderId);
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
         final homeBloc = context.read<HomeScreenBloc>();
@@ -105,13 +104,80 @@ class OrderScreen extends StatelessWidget {
                                                 orderState.order!.status !=
                                                     OrderStatus.received)
                                               OrderProgressIndicator(
-                                                orderStatus:
-                                                    orderState.order!.status!,
-                                                paymentType: orderState
-                                                    .order!.paymentType!,
-                                                // typeReceipt: orderState.order!.typeReceipt!
-                                              ),
+                                                  orderStatus:
+                                                      orderState.order!.status!,
+                                                  paymentType: orderState
+                                                      .order!.paymentType!,
+                                                  typeReceipt: orderState
+                                                      .order!.typeReceipt!),
                                             SizedBox(height: 32.h),
+                                            if (!orderState.isLoading &&
+                                                orderState.order!.typeReceipt !=
+                                                    TypeReceiving.delivery &&  orderState.order!.status == OrderStatus.readyToIssue  )
+                                              Padding(
+                                                padding: getMarginOrPadding(bottom: 16),
+                                                child: Text(
+                                                    'Можете оплатить сейчас или при получении',
+                                                    textAlign: TextAlign.center,
+                                                    style: UiConstants.textStyle2,),
+                                              ),
+                                            if(!orderState.isLoading &&(orderState.order!.status == OrderStatus.accepted ||  orderState.order!.status == OrderStatus.readyToIssue) && orderState.order!.typeReceipt != TypeReceiving.delivery )
+                                              Padding(
+                                                padding: getMarginOrPadding(bottom: 32),
+                                                child: AppButtonWidget(
+                                                              text:
+                                                                  'Перейти к оплате',
+                                                              showBorder: false,
+                                                              
+                                                              textColor:
+                                                              orderState.order!.status == OrderStatus.accepted?    UiConstants
+                                                                      .black3Color.withOpacity(0.6) : UiConstants.whiteColor,
+                                                              backgroundColor:
+                                                              orderState.order!.status == OrderStatus.accepted ?
+                                                                  UiConstants
+                                                                      .black3Color.withOpacity(0.05) : UiConstants.blueColor,
+                                                              onTap:    orderState.order!.status == OrderStatus.accepted?  null : (){},
+                                                            ),
+                                              ),
+                                              if(!orderState.isLoading && orderState.order!.status == OrderStatus.readyToIssue)
+                                                Padding(
+                                                  padding: getMarginOrPadding(bottom: 32),
+                                                  child: Container(
+                                                  
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(16.r),
+                                                      color: UiConstants.blue2Color
+                                                  
+                                                    ),
+                                                    child: Padding(
+                                                      padding: getMarginOrPadding(all: 8),
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            decoration: BoxDecoration(
+                                                              color: UiConstants.whiteColor.withOpacity(.8),
+                                                              borderRadius: BorderRadius.circular(8.r)
+                                                              
+                                                            ),
+                                                            child: Padding(padding: getMarginOrPadding(all: 8),
+                                                              child: SvgPicture.asset(Paths.infoIconPath,colorFilter: ColorFilter.mode(
+                                                                 UiConstants.blueColor, BlendMode.srcIn
+                                                              ),),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 12.w,),
+                                                          Expanded(child: Text(
+                                                           orderState.order!.typeReceipt == TypeReceiving.pickup ?  'Заберите заказ в течение 48 часов или он будет отменен' : 'Заберите заказ в течение 7 дней или он будет отменен',
+                                                          style: UiConstants.textStyle11.copyWith(
+                                                            color: UiConstants.blueColor,
+                                                            fontWeight: FontWeight.w500
+                                                          ),))
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+
                                             (!orderState.isLoading &&
                                                     orderState.order!.status ==
                                                         OrderStatus.canceled)
@@ -125,29 +191,33 @@ class OrderScreen extends StatelessWidget {
                                                               .spaceBetween,
                                                       children: [
                                                         Expanded(
-                                                          child: AppButtonWidget(
-                                                            
+                                                          child:
+                                                              AppButtonWidget(
                                                             text:
                                                                 'Связаться с нами',
                                                             showBorder: true,
-                                                            textColor: UiConstants
-                                                                .blueColor,
+                                                            textColor:
+                                                                UiConstants
+                                                                    .blueColor,
                                                             backgroundColor:
                                                                 UiConstants
                                                                     .backgroundColor,
                                                             onTap: () {},
                                                           ),
                                                         ),
-                                                        SizedBox(width: 8.w,),
+                                                        SizedBox(
+                                                          width: 8.w,
+                                                        ),
                                                         Expanded(
-                                                          child: AppButtonWidget(
-                                                           
+                                                          child:
+                                                              AppButtonWidget(
                                                             text:
                                                                 'Повторить заказ',
                                                             showBorder: true,
                                                             isFilled: true,
-                                                            textColor: UiConstants
-                                                                .white2Color,
+                                                            textColor:
+                                                                UiConstants
+                                                                    .white2Color,
                                                             backgroundColor:
                                                                 UiConstants
                                                                     .blueColor,
@@ -157,7 +227,8 @@ class OrderScreen extends StatelessWidget {
                                                       ],
                                                     ),
                                                   )
-                                                : AppButtonWidget(
+                                                : 
+                                                 AppButtonWidget(
                                                     isExpanded: false,
                                                     text: 'Связаться с нами',
                                                     showBorder: true,
