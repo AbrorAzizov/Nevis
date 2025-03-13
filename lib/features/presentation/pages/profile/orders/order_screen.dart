@@ -11,7 +11,6 @@ import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.da
 import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/profile/cancel_order.screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/info_border_plate.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
@@ -50,6 +49,9 @@ class OrderScreen extends StatelessWidget {
                         return Column(
                           children: [
                             CustomAppBar(
+                              onChangedField: (String query){
+                                
+                              },
                               title: 'Заказ №${orderState.order?.orderId}',
                               showBack: true,
                               backgroundColor: UiConstants.backgroundColor,

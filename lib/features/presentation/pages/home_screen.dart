@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: 70.h,
                                   decoration: BoxDecoration(
                                     color: UiConstants.whiteColor,
-                                    borderRadius: BorderRadius.circular(16.r),
+                                  
                                   ),
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.end,

@@ -23,7 +23,7 @@ class CustomAppBar extends StatelessWidget {
     this.onTapFilterButton,
     this.onChangedField,
     this.onTapField,
-    this.screenContext,
+    this.screenContext, this.onTapCancel,
   });
 
   final BuildContext? screenContext;
@@ -39,10 +39,12 @@ class CustomAppBar extends StatelessWidget {
   final Function()? onTapFilterButton;
   final Function(String value)? onChangedField;
   final Function()? onTapField;
+  final Function()? onTapCancel;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+     
       color: backgroundColor ?? UiConstants.whiteColor,
       padding: contentPadding ??
           getMarginOrPadding(top: 16, bottom: 8, right: 20, left: 20),
@@ -102,37 +104,44 @@ class CustomAppBar extends StatelessWidget {
                 Expanded(
                   child: Skeleton.ignorePointer(
                     child: Skeleton.shade(
-                      child: AppTextFieldWidget(
-                          hintText: hintText ?? 'Искать препараты',
-                          fillColor: UiConstants.white2Color,
-                          controller: controller ?? TextEditingController(),
-                          prefixWidget: Skeleton.ignore(
-                            child: SvgPicture.asset(Paths.searchIconPath),
-                          ),
-                          suffixWidget: controller!.text.isNotEmpty
-                              ? Skeleton.ignore(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      controller?.clear();
-                                      onChangedField?.call("");
-                                    },
-                                    child:
-                                        SvgPicture.asset(Paths.closeIconPath),
-                                  ),
-                                )
-                              : null,
-                          onChangedField: onChangedField,
-                          onTap: onTapField),
+                      child: Container(
+                        decoration: BoxDecoration(
+                             color: backgroundColor ?? UiConstants.whiteColor,
+                            boxShadow: [
+                                                  BoxShadow(
+                                                    color: Color(0xFF144B63)
+                                                        .withOpacity(0.1),
+                                                    blurRadius: 50,
+                                                    spreadRadius: -4,
+                                                    offset: Offset(-1, -4),
+                                                  ),
+                                                ],
+                        ),
+                            
+                        child: AppTextFieldWidget(
+                            hintText: hintText ?? 'Искать препараты',
+                            fillColor: UiConstants.whiteColor,
+                            controller: controller ?? TextEditingController(),
+                            prefixWidget: Skeleton.ignore(
+                              child: SvgPicture.asset(Paths.searchIconPath),
+                            ),
+                            suffixWidget: controller!.text.isNotEmpty
+                                ? Skeleton.ignore(
+                                    child: GestureDetector(
+                                      onTap: onTapCancel,
+                                      child:
+                                          SvgPicture.asset(Paths.closeIconPath,colorFilter: ColorFilter.mode(
+                                            UiConstants.blackColor, BlendMode.srcIn),),
+                                    ),
+                                  )
+                                : null,
+                            onChangedField: onChangedField,
+                            onTap: onTapField),
+                      ),
                     ),
                   ),
                 ),
-                if (isShowFilterButton)
-                  Padding(
-                    padding: getMarginOrPadding(left: 8),
-                    child: Skeleton.ignorePointer(
-                      child: FilterButton(onTap: onTapFilterButton),
-                    ),
-                  )
+               
               ],
             ),
         ],

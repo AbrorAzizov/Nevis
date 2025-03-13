@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nevis/features/data/models/order_model.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/domain/usecases/orders/get_one_order.dart';
 
@@ -10,6 +11,8 @@ class OrderScreenBloc extends Bloc<OrderScreenEvent, OrderScreenState> {
   final GetOneOrderUC getOneOrderUC;
   OrderScreenBloc({required this.getOneOrderUC}) : super(OrderScreenState()) {
     on<LoadDataEvent>(_onLoadData);
+
+    
   }
 
   void _onLoadData(LoadDataEvent event, Emitter<OrderScreenState> emit) async {
@@ -30,4 +33,6 @@ class OrderScreenBloc extends Bloc<OrderScreenEvent, OrderScreenState> {
       );
     }
   }
+   
+ 
 }
