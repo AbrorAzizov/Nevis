@@ -11,7 +11,7 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
-import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 import 'dart:ui' as ui;
 
 class Utils {

@@ -18,7 +18,8 @@ import 'package:nevis/features/presentation/pages/main/main_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/about_us_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/article_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/articles_screen.dart';
-import 'package:nevis/features/presentation/pages/profile/cancel_order.screen.dart';
+import 'package:nevis/features/presentation/pages/profile/cancel_order_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/favourite_pharmacy_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/how_place_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/info_about_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/news/news_internal_screen.dart';
@@ -108,7 +109,8 @@ class MyApp extends StatelessWidget {
               Routes.loginScreenWithMessage :(context )=> const LoginScreenWithMessage(),
               Routes.loginScreenWithYandex :(context) => const LoginScreenWithYandex(),
               Routes.privacyPolicyScreen :(context) => const PrivacyPolicyScreen(),
-              Routes.cancelOrderScreen : (context) => const CancelOrderScreen()
+              Routes.cancelOrderScreen : (context) => const CancelOrderScreen(),
+              Routes.favouritePharmacy : (context) => const FavouritePharmacies(mapObjects: [],)
               
             },
             initialRoute: Routes.splashScreen,

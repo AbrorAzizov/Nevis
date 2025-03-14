@@ -9,7 +9,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/profile/cancel_order.screen.dart';
+import 'package:nevis/features/presentation/pages/profile/cancel_order_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';

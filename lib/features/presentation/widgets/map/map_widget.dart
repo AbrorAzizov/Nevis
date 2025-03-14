@@ -6,8 +6,9 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/widgets/map/address_plate.dart';
 import 'package:nevis/features/presentation/widgets/map/map_button.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
+
 
 class MapWidget extends StatelessWidget {
   final List<MapObject<dynamic>> mapObjects;
@@ -34,7 +35,7 @@ class MapWidget extends StatelessWidget {
                 );
               },
               onCameraPositionChanged:
-                  (position, reason, isGesture, visibleRegion) {},
+                  (position, reason, isGesture) {},
               gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
                 Factory<OneSequenceGestureRecognizer>(
                   () => EagerGestureRecognizer(),

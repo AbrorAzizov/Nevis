@@ -71,7 +71,7 @@ class _CartScreenState extends State<CartScreen> {
                 builder: (context, state) {
                   return Scaffold(
                     backgroundColor: UiConstants.backgroundColor,
-                    body: SafeArea(
+                    body: SafeArea( 
                       child: Skeletonizer(
                         ignorePointers: false,
                         enabled: isLoading,

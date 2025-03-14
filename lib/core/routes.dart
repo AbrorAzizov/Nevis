@@ -32,6 +32,7 @@ class Routes {
   static const String docsAndInsctructionsScreen = '/documents_and_instructions_screen';
   static const String privacyPolicyScreen = '/privacy_policy_screen';
   static const String cancelOrderScreen = '/cancel_order_screen';
+  static const String favouritePharmacy = '/favourite_pharmacy_screen';
 
   static List<String> get allRoutes => [
         splashScreen,
@@ -64,7 +65,8 @@ class Routes {
         selectRegionScreen,
         docsAndInsctructionsScreen,
         privacyPolicyScreen,
-        cancelOrderScreen
+        cancelOrderScreen,
+        favouritePharmacy
        
       ];
 
