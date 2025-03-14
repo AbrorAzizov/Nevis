@@ -5,7 +5,6 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector_chip.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class Selector extends StatefulWidget {

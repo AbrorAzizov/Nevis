@@ -1,21 +1,36 @@
 part of 'orders_screen_bloc.dart';
 
-class OrdersScreenState {}
+class OrdersScreenState extends Equatable {
+  final int selectorIndex;
 
+  const OrdersScreenState({this.selectorIndex = 0});
 
-class OrdersScreenIsLoading extends OrdersScreenState{}
-
-class OrdersScreenError extends OrdersScreenState{
-   final String? error;
-  OrdersScreenError({required this.error});
+  @override
+  List<Object?> get props => [selectorIndex];
 }
 
-class OrdersScreenLoaddedSuccesfully extends OrdersScreenState{
-   final List<OrderEntity> orders;
+class OrdersScreenIsLoading extends OrdersScreenState {
+  const OrdersScreenIsLoading({super.selectorIndex});
+}
 
- OrdersScreenLoaddedSuccesfully({required this.orders});
+class OrdersScreenError extends OrdersScreenState {
+  final String? error;
+  const OrdersScreenError({required this.error, super.selectorIndex});
+
+  @override
+  List<Object?> get props => [...super.props, error];
+}
+
+class OrdersScreenLoadedSuccessfully extends OrdersScreenState {
+  final List<OrderEntity> orders;
+
+  const OrdersScreenLoadedSuccessfully(
+      {required this.orders, super.selectorIndex});
+
+  @override
+  List<Object?> get props => [...super.props, orders];
 }
 
 class OrdersScreenNoMatches extends OrdersScreenState {
-  
+  const OrdersScreenNoMatches({super.selectorIndex});
 }

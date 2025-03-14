@@ -29,18 +29,18 @@ class SelectorChip extends StatelessWidget {
         child: Container(
           padding: getMarginOrPadding(top: 10, bottom: 10),
           alignment: Alignment.center,
-          margin: getMarginOrPadding(left: index != 0 ? 2 : 0),
           decoration: BoxDecoration(
-            color: selected ? UiConstants.purpleColor : Colors.transparent,
+            color: selected ? UiConstants.blue2Color : Colors.transparent,
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Text(
             text,
             style: UiConstants.textStyle2.copyWith(
-                fontSize: 15.sp,
-                color: selected
-                    ? UiConstants.whiteColor
-                    : UiConstants.darkBlueColor),
+              fontSize: 15.sp,
+              color: selected
+                  ? UiConstants.blueColor
+                  : UiConstants.black3Color.withOpacity(.6),
+            ),
             textAlign: TextAlign.center,
           ),
         ),

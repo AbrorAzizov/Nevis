@@ -115,7 +115,8 @@ class CancelOrderScreen extends StatelessWidget {
                                                         UiConstants.white2Color,
                                                     backgroundColor:
                                                         UiConstants.blueColor,
-                                                    onTap: () {},
+                                                    onTap: () =>
+                                                        Navigator.pop(context),
                                                   ),
                                                 ),
                                               ],

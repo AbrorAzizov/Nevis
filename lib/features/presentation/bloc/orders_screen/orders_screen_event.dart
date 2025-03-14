@@ -9,15 +9,15 @@ abstract class OrdersScreenEvent extends Equatable {
 
 class LoadDataEvent extends OrdersScreenEvent {}
 
-class SearchOrderEvent extends OrdersScreenEvent{
+class SearchOrderEvent extends OrdersScreenEvent {
   final String query;
 
   const SearchOrderEvent({required this.query});
 }
 
-class ShowAllLoadedOrdersEvent extends OrdersScreenEvent{
-
+class ChangeSelectorIndexEvent extends OrdersScreenEvent {
+  final int selectorIndex;
+  const ChangeSelectorIndexEvent(this.selectorIndex);
 }
 
-
-
+class ShowAllLoadedOrdersEvent extends OrdersScreenEvent {}
