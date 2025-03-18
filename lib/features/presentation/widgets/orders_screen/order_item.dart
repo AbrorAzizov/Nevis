@@ -12,7 +12,6 @@ import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/presentation/pages/profile/orders/order_screen.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_item_products_list.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_item_status_chip.dart';
-import 'package:nevis/features/presentation/widgets/right_arrow_button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class OrderItem extends StatelessWidget {
@@ -75,7 +74,7 @@ class OrderItem extends StatelessWidget {
                           ),
                           SizedBox(height: 16.h),
                           Text(
-                          TypeReceivingExtension.titles[order.typeReceipt]!,
+                            TypeReceivingExtension.titles[order.typeReceipt]!,
                             style: UiConstants.textStyle11
                                 .copyWith(color: UiConstants.blueColor),
                           ),

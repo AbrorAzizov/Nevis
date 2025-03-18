@@ -4,7 +4,7 @@ class Routes {
   static const String splashScreen = '/';
   static const String loginScreenPhoneCall = '/login_screen_with_phone_call';
   static const String loginScreenWithMessage = '/login_screen_with_message';
-  static const String loginScreenWithYandex= '/login_screen_with_yandex';
+  static const String loginScreenWithYandex = '/login_screen_with_yandex';
   static const String codeScreen = '/code_screen';
   static const String accountNotFoundScreen = '/account_not_found_screen';
   static const String homeScreen = '/home_screen';
@@ -29,10 +29,11 @@ class Routes {
   static const String howPlaceOrderScreen = '/how_place_order_screen';
   static const String infoAboutOrderScreen = '/info_about_order_screen';
   static const String selectRegionScreen = '/select_region_screen';
-  static const String docsAndInsctructionsScreen = '/documents_and_instructions_screen';
+  static const String docsAndInsctructionsScreen =
+      '/documents_and_instructions_screen';
   static const String privacyPolicyScreen = '/privacy_policy_screen';
   static const String cancelOrderScreen = '/cancel_order_screen';
-  static const String favouritePharmacy = '/favourite_pharmacy_screen';
+  static const String favoritePharmacy = '/favourite_pharmacy_screen';
 
   static List<String> get allRoutes => [
         splashScreen,
@@ -66,8 +67,7 @@ class Routes {
         docsAndInsctructionsScreen,
         privacyPolicyScreen,
         cancelOrderScreen,
-        favouritePharmacy
-       
+        favoritePharmacy
       ];
 
   // Метод для создания анимированного перехода

@@ -25,6 +25,14 @@ class _SelectorState extends State<Selector> {
         decoration: BoxDecoration(
           color: UiConstants.whiteColor,
           borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF144B63).withOpacity(0.1),
+              blurRadius: 50,
+              spreadRadius: -4,
+              offset: Offset(-1, -4),
+            ),
+          ],
         ),
         padding: getMarginOrPadding(left: 4, right: 4),
         child: BlocBuilder<SelectorCubit, SelectorState>(

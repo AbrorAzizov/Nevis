@@ -1,18 +1,15 @@
-import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:intl/intl.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
-import 'dart:ui' as ui;
+import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
 
 class Utils {
   static RegExp phoneRegexp = RegExp(r'^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$');
@@ -101,11 +98,11 @@ class Utils {
       case OrderStatus.collecting:
         return 'В сборке';
       case OrderStatus.courierSearching:
-        return 'Поиск курьера';  
+        return 'Поиск курьера';
       case OrderStatus.courierWaiting:
-       return 'Ожидание курьера';   
+        return 'Ожидание курьера';
       case OrderStatus.accepted:
-       return 'Принят';     
+        return 'Принят';
     }
   }
 
@@ -147,9 +144,9 @@ class Utils {
       case OrderStatus.courierSearching:
         return Paths.courierSearchingIconPath;
       case OrderStatus.courierWaiting:
-       return Paths.courierWaitingIconPath; 
+        return Paths.courierWaitingIconPath;
       case OrderStatus.accepted:
-       return Paths.orderAcceptedIconPath;
+        return Paths.orderAcceptedIconPath;
     }
   }
 
@@ -162,9 +159,12 @@ class Utils {
       statuses = [
         OrderStatus.canceled,
       ];
-    } else if (typeReceipt == TypeReceiving.pickup || typeReceipt ==  TypeReceiving.pickupFromWareHouse) {
+    } else if (typeReceipt == TypeReceiving.pickup ||
+        typeReceipt == TypeReceiving.pickupFromWareHouse) {
       statuses = [
-       typeReceipt == TypeReceiving.pickup ? OrderStatus.accepted : OrderStatus.collecting,
+        typeReceipt == TypeReceiving.pickup
+            ? OrderStatus.accepted
+            : OrderStatus.collecting,
         OrderStatus.readyToIssue,
         OrderStatus.received,
       ];
@@ -176,7 +176,6 @@ class Utils {
         OrderStatus.onTheWay,
         OrderStatus.received,
       ];
-
     }
 
     if (orderStatus == null) {
@@ -190,25 +189,26 @@ class Utils {
     return Map.from(map)..removeWhere((key, value) => value == null);
   }
 
-  static String formatPhoneNumber(String? phoneNumber, {bool toServerFormat = true}) {
-  if (phoneNumber == null || phoneNumber == '') return '';
-  
-  if (toServerFormat) {
-    // Преобразование из клиентского формата в серверный
-    final RegExp regex = RegExp(r'^\+7 \((\d{3})\) (\d{3})-(\d{2})-(\d{2})$');
-    return phoneNumber.replaceAllMapped(
-      regex,
-      (match) => '+7${match[1]}-${match[2]}-${match[3]}-${match[4]}',
-    );
-  } else {
-    // Преобразование из серверного формата в клиентский
-    final RegExp regex = RegExp(r'^\+7(\d{3})-?(\d{3})-?(\d{2})-?(\d{2})$');
-    return phoneNumber.replaceAllMapped(
-      regex,
-      (match) => '+7 (${match[1]}) ${match[2]}-${match[3]}-${match[4]}',
-    );
+  static String formatPhoneNumber(String? phoneNumber,
+      {bool toServerFormat = true}) {
+    if (phoneNumber == null || phoneNumber == '') return '';
+
+    if (toServerFormat) {
+      // Преобразование из клиентского формата в серверный
+      final RegExp regex = RegExp(r'^\+7 \((\d{3})\) (\d{3})-(\d{2})-(\d{2})$');
+      return phoneNumber.replaceAllMapped(
+        regex,
+        (match) => '+7${match[1]}-${match[2]}-${match[3]}-${match[4]}',
+      );
+    } else {
+      // Преобразование из серверного формата в клиентский
+      final RegExp regex = RegExp(r'^\+7(\d{3})-?(\d{3})-?(\d{2})-?(\d{2})$');
+      return phoneNumber.replaceAllMapped(
+        regex,
+        (match) => '+7 (${match[1]}) ${match[2]}-${match[3]}-${match[4]}',
+      );
+    }
   }
-}
 
   static void showCustomDialog(
       {required BuildContext screenContext,
@@ -284,15 +284,61 @@ class Utils {
   }
 
   static String formatPrice(double? price) {
-  if (price == null) return '-';
-  final NumberFormat formatter =
-      NumberFormat.currency(locale: 'ru_RU', symbol: '₽', decimalDigits: 0);
-  return formatter.format(price);
-}
+    if (price == null) return '-';
+    final NumberFormat formatter =
+        NumberFormat.currency(locale: 'ru_RU', symbol: '₽', decimalDigits: 0);
+    return formatter.format(price);
+  }
 
-  static Future<BitmapDescriptor> createBitmapIcon() async {
-    final ByteData data = await rootBundle.load(Paths.mapPointPath);
+  static Future<BitmapDescriptor> createBitmapIcon({int? count}) async {
+    if (count == null) {
+      final ByteData data = await rootBundle.load(Paths.mapPointPath);
+      final Uint8List list = Uint8List.view(data.buffer);
+      return BitmapDescriptor.fromBytes(list);
+    }
+
+    // Загружаем стандартную иконку
+    final ByteData data = await rootBundle.load(Paths.mapPointWithCounterPath);
     final Uint8List list = Uint8List.view(data.buffer);
-    return BitmapDescriptor.fromBytes(list);
+    final ui.Codec codec = await ui.instantiateImageCodec(list);
+    final ui.FrameInfo frameInfo = await codec.getNextFrame();
+    final ui.Image image = frameInfo.image;
+
+    // Рисуем поверх цифру
+    final ui.PictureRecorder recorder = ui.PictureRecorder();
+    final ui.Canvas canvas = ui.Canvas(recorder);
+    final paint = Paint();
+
+    // Рисуем основное изображение
+    canvas.drawImage(image, Offset.zero, paint);
+
+    // Настройки текста
+    final textPainter = TextPainter(
+        text: TextSpan(
+          text: count.toString(),
+          style: TextStyle(
+              color: UiConstants.white2Color,
+              fontSize: image.height * 0.45,
+              fontWeight: FontWeight.bold),
+        ),
+        textAlign: TextAlign.center,
+        textDirection: ui.TextDirection.ltr);
+
+    textPainter.layout();
+    final offset = Offset(
+      (image.width - textPainter.width) / 2,
+      (image.height - textPainter.height) / 2,
+    );
+
+    // Рисуем текст на холсте
+    textPainter.paint(canvas, offset);
+
+    final ui.Image newImage =
+        await recorder.endRecording().toImage(image.width, image.height);
+    final ByteData? newData =
+        await newImage.toByteData(format: ui.ImageByteFormat.png);
+    final Uint8List newList = newData!.buffer.asUint8List();
+
+    return BitmapDescriptor.fromBytes(newList);
   }
 }

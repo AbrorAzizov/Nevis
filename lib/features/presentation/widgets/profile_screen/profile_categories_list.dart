@@ -4,7 +4,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/pages/profile/docs_and_instructions_screen.dart';
-import 'package:nevis/features/presentation/pages/profile/favourite_pharmacy_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/favorite_pharmacy_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/how_place_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/orders/orders_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/personal_data_screen.dart';
@@ -70,15 +70,15 @@ class ProfileCategoriesList extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 8.h),
           SubcategoryItem(
             title: 'Любимые аптеки',
             titleStyle: UiConstants.textStyle3,
             imagePath: Paths.documnetsAndInstructionsIconPath,
             onTap: () => Navigator.of(context).push(
               Routes.createRoute(
-                const FavouritePharmaciesScreen(),
-                settings:
-                    RouteSettings(name: Routes.favouritePharmacy),
+                const FavoritePharmaciesScreen(),
+                settings: RouteSettings(name: Routes.favoritePharmacy),
               ),
             ),
           ),

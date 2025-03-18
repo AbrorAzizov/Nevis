@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/enums.dart';
-import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
-import 'package:nevis/core/formatters/date_input_formatter.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/pharmacies_screen/pharmacies_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
@@ -41,7 +37,7 @@ import 'package:nevis/features/presentation/widgets/custom_radio_button.dart';
 import 'package:nevis/features/presentation/widgets/dropdown_block_item.dart';
 import 'package:nevis/features/presentation/widgets/dropdown_block_template.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
-import 'package:nevis/features/presentation/widgets/map/map_widget.dart';
+import 'package:nevis/features/presentation/widgets/map/pharmacy_map_widget.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_info_list.dart';
 import 'package:nevis/features/presentation/widgets/pinput_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_screen/price_range_widget.dart';
@@ -324,8 +320,8 @@ class BottomSheetManager {
                 ),
                 SizedBox(height: 16.h),
                 Expanded(
-                  child: MapWidget(
-                    mapObjects: [],
+                  child: PharmacyMapWidget(
+                    points: [],
                   ),
                 ),
                 SizedBox(height: 16.h),
@@ -499,8 +495,8 @@ class BottomSheetManager {
                           else
                             SizedBox(
                               height: 510.h,
-                              child: MapWidget(
-                                mapObjects: [],
+                              child: PharmacyMapWidget(
+                                points: [],
                               ),
                             ),
                         ],
@@ -1026,5 +1022,4 @@ class BottomSheetManager {
       },
     );
   }
-
 }

@@ -5,7 +5,7 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/features/presentation/bloc/info_about_order_screen/info_about_order_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/about_us_screen/about_us_block_template.dart';
 import 'package:nevis/features/presentation/widgets/info_about_order_screen/courier_delivery_zone_item.dart';
-import 'package:nevis/features/presentation/widgets/map/map_widget.dart';
+import 'package:nevis/features/presentation/widgets/map/pharmacy_map_widget.dart';
 
 class CourierDeliveryZonesBlock extends StatelessWidget {
   const CourierDeliveryZonesBlock({super.key});
@@ -17,8 +17,8 @@ class CourierDeliveryZonesBlock extends StatelessWidget {
         return AboutUsBlockTemplate(
           title: 'Зоны курьерской доставки',
           children: [
-            MapWidget(
-              mapObjects: state.mapObjects ?? [],
+            PharmacyMapWidget(
+              points: [],
             ),
             SizedBox(height: 16.h),
             CourierDeliveryZoneItem(

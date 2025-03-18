@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
@@ -19,7 +18,7 @@ import 'package:nevis/features/presentation/pages/profile/about_us_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/article_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/articles_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/cancel_order_screen.dart';
-import 'package:nevis/features/presentation/pages/profile/favourite_pharmacy_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/favorite_pharmacy_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/how_place_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/info_about_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/news/news_internal_screen.dart';
@@ -36,8 +35,8 @@ import 'package:nevis/features/presentation/pages/starts/login_screen_with_messa
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_yandex.dart';
 import 'package:nevis/features/presentation/pages/starts/splash_screen.dart';
+
 import 'locator_service.dart' as di;
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +50,6 @@ Future main() async {
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 class MyApp extends StatelessWidget {
-  
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
@@ -78,7 +76,8 @@ class MyApp extends StatelessWidget {
             routes: {
               Routes.splashScreen: (context) => const SplashScreen(),
               Routes.codeScreen: (context) => const CodeScreen(),
-              Routes.loginScreenPhoneCall: (context) => const LoginScreenWithPhoneCall(),
+              Routes.loginScreenPhoneCall: (context) =>
+                  const LoginScreenWithPhoneCall(),
               Routes.accountNotFoundScreen: (context) =>
                   const AccountNotFoundScreen(),
               Routes.homeScreen: (context) => const HomeScreen(),
@@ -97,7 +96,6 @@ class MyApp extends StatelessWidget {
               Routes.orderScreen: (context) => const OrderScreen(),
               Routes.articlesScreen: (context) => const ArticlesScreen(),
               Routes.articleScreen: (context) => const ArticleScreen(),
-              
               Routes.newsScreen: (context) => const NewsScreen(),
               Routes.newsInternalScreen: (context) =>
                   const NewsInternalScreen(),
@@ -107,12 +105,15 @@ class MyApp extends StatelessWidget {
                   const HowPlaceOrderScreen(),
               Routes.infoAboutOrderScreen: (context) =>
                   const InfoAboutOrderScreen(),
-              Routes.loginScreenWithMessage :(context )=> const LoginScreenWithMessage(),
-              Routes.loginScreenWithYandex :(context) => const LoginScreenWithYandex(),
-              Routes.privacyPolicyScreen :(context) => const PrivacyPolicyScreen(),
-              Routes.cancelOrderScreen : (context) => const CancelOrderScreen(),
-              Routes.favouritePharmacy : (context) => const FavouritePharmaciesScreen()
-              
+              Routes.loginScreenWithMessage: (context) =>
+                  const LoginScreenWithMessage(),
+              Routes.loginScreenWithYandex: (context) =>
+                  const LoginScreenWithYandex(),
+              Routes.privacyPolicyScreen: (context) =>
+                  const PrivacyPolicyScreen(),
+              Routes.cancelOrderScreen: (context) => const CancelOrderScreen(),
+              Routes.favoritePharmacy: (context) =>
+                  const FavoritePharmaciesScreen()
             },
             initialRoute: Routes.splashScreen,
             navigatorObservers: [routeObserver],

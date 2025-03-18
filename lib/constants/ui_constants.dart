@@ -31,7 +31,7 @@ class UiConstants {
   static const Color lime2Color = Color(0xFFD3F3CF);
   static const Color gradientFirstColor = Color(0xFF50B1D7);
   static const Color gradientSecondColor = Color(0xFFB0E1F8);
-  static  Color defaultBorderColor = Color(0xFF222222).withOpacity(0.05);
+  static Color defaultBorderColor = Color(0xFF222222).withOpacity(0.05);
   static const Color blueColor = Color(0xFF009FE3);
   static const Color blue2Color = Color(0xFFE5F5FC);
   static const Color blue3Color = Color(0xFFE5F5FC);
@@ -84,11 +84,10 @@ class UiConstants {
   );
 
   static TextStyle textStyle8 = TextStyle(
-    fontSize: 12.sp,
-    height: 15.6.sp / 12.sp,
-    fontWeight: FontWeight.w500,
-    fontFamily: 'Rubik'
-  );
+      fontSize: 12.sp,
+      height: 15.6.sp / 12.sp,
+      fontWeight: FontWeight.w500,
+      fontFamily: 'Rubik');
 
   static TextStyle textStyle9 = TextStyle(
     fontSize: 22.sp,
@@ -126,22 +125,22 @@ class UiConstants {
   static TextStyle textStyle13 = TextStyle(
     color: UiConstants.black3Color,
     fontSize: 20.sp,
-    height: 24.sp/20.sp,
+    height: 24.sp / 20.sp,
     fontWeight: FontWeight.w600,
     fontFamily: 'Rubik',
   );
 
-    static TextStyle textStyle15 = TextStyle(
+  static TextStyle textStyle15 = TextStyle(
     color: UiConstants.black3Color.withOpacity(0.6),
     fontSize: 12.sp,
-    height: 14.sp/12.sp,
+    height: 14.sp / 12.sp,
     fontWeight: FontWeight.w400,
     fontFamily: 'Rubik',
   );
   static TextStyle textStyle16 = TextStyle(
     color: UiConstants.black3Color,
     fontSize: 20.sp,
-    height: 24.sp/20.sp,
+    height: 24.sp / 20.sp,
     fontWeight: FontWeight.w600,
     fontFamily: 'Rubik',
   );
@@ -149,25 +148,29 @@ class UiConstants {
   static TextStyle textStyle17 = TextStyle(
     color: UiConstants.black3Color,
     fontSize: 32.sp,
-    height: 35.2.sp/32.sp,
+    height: 35.2.sp / 32.sp,
     fontWeight: FontWeight.w600,
     fontFamily: 'Rubik',
   );
 
-   static TextStyle textStyle18 = TextStyle(
+  static TextStyle textStyle18 = TextStyle(
     color: UiConstants.black3Color,
     fontSize: 18.sp,
     fontWeight: FontWeight.w600,
     fontFamily: 'Rubik',
   );
-  
-  static TextStyle splashTextStyle = TextStyle(
-    fontSize: 58.sp,
-    height: 54.sp/58.sp,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'Montserrat',
-    letterSpacing: -2.32, 
-    color: UiConstants.whiteColor
-  );
 
+  static TextStyle splashTextStyle = TextStyle(
+      fontSize: 58.sp,
+      height: 54.sp / 58.sp,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Montserrat',
+      letterSpacing: -2.32,
+      color: UiConstants.whiteColor);
+
+  static TextStyle textStyle19 = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Rubik',
+  );
 }

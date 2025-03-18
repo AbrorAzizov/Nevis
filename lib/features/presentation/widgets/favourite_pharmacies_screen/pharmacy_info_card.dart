@@ -4,26 +4,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
+import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/favorite_button.dart';
 
 class PharmacyInfoCard extends StatelessWidget {
-  final PharmacyEntity? pharmacy;
-
-  const PharmacyInfoCard({super.key, required this.pharmacy});
+  const PharmacyInfoCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: getMarginOrPadding(left: 16, right: 16, bottom: 16),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Padding(
-            padding: getMarginOrPadding(top: 16, left: 16, bottom: 16),
+    return Container(
+      padding: getMarginOrPadding(all: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
             child: Column(
               spacing: 12.h,
               mainAxisSize: MainAxisSize.min,
@@ -53,17 +50,20 @@ class PharmacyInfoCard extends StatelessWidget {
                     ),
                     Expanded(
                       child: RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: 'Аптека Невис\n',
-                            style: UiConstants.textStyle10.copyWith(
-                                color:
-                                    UiConstants.black3Color.withOpacity(.6))),
-                        TextSpan(
-                            text: pharmacy?.pageTitle,
-                            style: UiConstants.textStyle10
-                                .copyWith(color: UiConstants.black3Color)),
-                      ])),
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: 'Аптека Невис\n',
+                                style: UiConstants.textStyle10.copyWith(
+                                    color: UiConstants.black3Color
+                                        .withOpacity(.6))),
+                            TextSpan(
+                                text: 'Аптека №7 InLek ООО Сеть аптек',
+                                style: UiConstants.textStyle10
+                                    .copyWith(color: UiConstants.black3Color)),
+                          ],
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -99,7 +99,7 @@ class PharmacyInfoCard extends StatelessWidget {
                                 color:
                                     UiConstants.black3Color.withOpacity(.6))),
                         TextSpan(
-                            text: pharmacy?.schedule,
+                            text: 'ПН-ПТ: 09:40-21:40\r\nСБ-ВС: 09:20-21:20',
                             style: UiConstants.textStyle10
                                 .copyWith(color: UiConstants.black3Color)),
                       ])),
@@ -130,30 +130,35 @@ class PharmacyInfoCard extends StatelessWidget {
                     ),
                     Expanded(
                       child: RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            text: 'Телефон\n',
-                            style: UiConstants.textStyle10.copyWith(
-                                color:
-                                    UiConstants.black3Color.withOpacity(.6))),
-                        TextSpan(
-                            text: '+7 (812) 490 92 70\n',
-                            style: UiConstants.textStyle10
-                                .copyWith(color: UiConstants.black3Color)),
-
-
-                           TextSpan(
-                            text: 'позвонить',
-                            style: UiConstants.textStyle10
-                                .copyWith(color: UiConstants.blueColor)),       
-                      ])),
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: 'Телефон\n',
+                                style: UiConstants.textStyle10.copyWith(
+                                    color: UiConstants.black3Color
+                                        .withOpacity(.6))),
+                            TextSpan(
+                                text: '+7 (812) 490 92 70\n',
+                                style: UiConstants.textStyle10
+                                    .copyWith(color: UiConstants.black3Color)),
+                            TextSpan(
+                                text: 'Позвонить',
+                                style: UiConstants.textStyle10
+                                    .copyWith(color: UiConstants.blueColor)),
+                          ],
+                        ),
+                      ),
                     )
                   ],
                 )
               ],
             ),
           ),
-        ),
+          SizedBox(width: 4.w),
+          FavoriteButton(
+            onPressed: () {},
+          )
+        ],
       ),
     );
   }

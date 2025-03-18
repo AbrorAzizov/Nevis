@@ -8,10 +8,10 @@ class PharmacyEntity extends Equatable {
   final String? coordinates;
   final String? image;
   final String? schedule;
-  final bool? isFavourite;
+  final bool? isFavorite;
 
-  const PharmacyEntity( {
-    this.isFavourite,
+  const PharmacyEntity({
+    this.isFavorite,
     this.pharmacyId,
     this.pageTitle,
     this.alias,
@@ -28,19 +28,18 @@ class PharmacyEntity extends Equatable {
     String? address,
     String? coordinates,
     String? image,
-    bool? isFavourite,
+    bool? isFavorite,
     String? schedule,
   }) =>
       PharmacyEntity(
-        pharmacyId: pharmacyId ?? this.pharmacyId,
-        pageTitle: pageTitle ?? this.pageTitle,
-        alias: alias ?? this.alias,
-        address: address ?? this.address,
-        coordinates: coordinates ?? this.coordinates,
-        image: image ?? this.image,
-        schedule: schedule ?? this.schedule,
-        isFavourite: isFavourite ?? this.isFavourite
-      );
+          pharmacyId: pharmacyId ?? this.pharmacyId,
+          pageTitle: pageTitle ?? this.pageTitle,
+          alias: alias ?? this.alias,
+          address: address ?? this.address,
+          coordinates: coordinates ?? this.coordinates,
+          image: image ?? this.image,
+          schedule: schedule ?? this.schedule,
+          isFavorite: isFavorite ?? this.isFavorite);
 
   @override
   List<Object?> get props => [
@@ -51,6 +50,6 @@ class PharmacyEntity extends Equatable {
         coordinates,
         image,
         schedule,
-        isFavourite,
+        isFavorite,
       ];
 }

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 
-
 class PharmacyModel extends PharmacyEntity {
   final int? pharmacyId;
   final String? pageTitle;
@@ -11,11 +10,11 @@ class PharmacyModel extends PharmacyEntity {
   final String? coordinates;
   final String? image;
   final String? schedule;
-  final bool? isFavourite; 
+  final bool? isFavorite;
 
   const PharmacyModel({
     this.pharmacyId,
-    this.isFavourite,
+    this.isFavorite,
     this.pageTitle,
     this.alias,
     this.address,
@@ -23,16 +22,14 @@ class PharmacyModel extends PharmacyEntity {
     this.image,
     this.schedule,
   }) : super(
-          pharmacyId: pharmacyId,
-          pageTitle: pageTitle,
-          alias: alias,
-          address: address,
-          coordinates: coordinates,
-          image: image,
-          schedule: schedule,
-          isFavourite: isFavourite
-          
-        );
+            pharmacyId: pharmacyId,
+            pageTitle: pageTitle,
+            alias: alias,
+            address: address,
+            coordinates: coordinates,
+            image: image,
+            schedule: schedule,
+            isFavorite: isFavorite);
 
   factory PharmacyModel.fromRawJson(String str) =>
       PharmacyModel.fromJson(json.decode(str));
@@ -57,6 +54,6 @@ class PharmacyModel extends PharmacyEntity {
         "coordinates": coordinates,
         "image": image,
         "schedule": schedule,
-        "isFavourite" : isFavourite,
+        "isFavorite": isFavorite,
       };
 }
