@@ -19,33 +19,37 @@ class MapWidget extends StatelessWidget {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        Container(
-          height: 439.h,
-          decoration: BoxDecoration(
+        
+        SizedBox(
+          height: 542.h,
+
+          child: ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: YandexMap(
-              onMapCreated: (controller) {
-                controller.moveCamera(
-                  CameraUpdate.newCameraPosition(
-                    CameraPosition(
-                        target: Point(latitude: 53.9006, longitude: 27.5590),
-                        zoom: 12),
+            child: YandexMap(
+                onMapCreated: (controller) {
+                  controller.moveCamera(
+                    CameraUpdate.newCameraPosition(
+                      CameraPosition(
+                          target: Point(latitude: 59.938784, longitude: 30.314997),
+                          zoom: 12),
+                    ),
+                  );
+                },
+                onCameraPositionChanged:
+                    (position, reason, isGesture) {
+
+                    },
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                  Factory<OneSequenceGestureRecognizer>(
+                    () => EagerGestureRecognizer(),
                   ),
-                );
-              },
-              onCameraPositionChanged:
-                  (position, reason, isGesture) {},
-              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-                Factory<OneSequenceGestureRecognizer>(
-                  () => EagerGestureRecognizer(),
-                ),
-              },
-              mapObjects: mapObjects),
+                },
+                mapObjects: mapObjects),
+          ),
         ),
         Positioned(
           right: 8,
-          bottom: 8,
+          bottom: 200,
           left: 8,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -65,11 +69,7 @@ class MapWidget extends StatelessWidget {
                   color: Color(0xFF222222).withOpacity(.6),
                   onPressed: () {}),
               SizedBox(height: 16.h),
-              AddressPlate(
-                city: 'г. Минск',
-                street: 'пр-кт Независимости, д.1',
-                onClose: () {},
-              ),
+             
             ],
           ),
         ),

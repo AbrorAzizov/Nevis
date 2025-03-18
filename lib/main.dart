@@ -37,6 +37,7 @@ import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_yandex.dart';
 import 'package:nevis/features/presentation/pages/starts/splash_screen.dart';
 import 'locator_service.dart' as di;
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -110,7 +111,7 @@ class MyApp extends StatelessWidget {
               Routes.loginScreenWithYandex :(context) => const LoginScreenWithYandex(),
               Routes.privacyPolicyScreen :(context) => const PrivacyPolicyScreen(),
               Routes.cancelOrderScreen : (context) => const CancelOrderScreen(),
-              Routes.favouritePharmacy : (context) => const FavouritePharmacies(mapObjects: [],)
+              Routes.favouritePharmacy : (context) => const FavouritePharmaciesScreen()
               
             },
             initialRoute: Routes.splashScreen,

@@ -8,8 +8,10 @@ class PharmacyEntity extends Equatable {
   final String? coordinates;
   final String? image;
   final String? schedule;
+  final bool? isFavourite;
 
-  const PharmacyEntity({
+  const PharmacyEntity( {
+    this.isFavourite,
     this.pharmacyId,
     this.pageTitle,
     this.alias,
@@ -26,6 +28,7 @@ class PharmacyEntity extends Equatable {
     String? address,
     String? coordinates,
     String? image,
+    bool? isFavourite,
     String? schedule,
   }) =>
       PharmacyEntity(
@@ -36,6 +39,7 @@ class PharmacyEntity extends Equatable {
         coordinates: coordinates ?? this.coordinates,
         image: image ?? this.image,
         schedule: schedule ?? this.schedule,
+        isFavourite: isFavourite ?? this.isFavourite
       );
 
   @override
@@ -47,5 +51,6 @@ class PharmacyEntity extends Equatable {
         coordinates,
         image,
         schedule,
+        isFavourite,
       ];
 }

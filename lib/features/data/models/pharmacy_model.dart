@@ -11,9 +11,11 @@ class PharmacyModel extends PharmacyEntity {
   final String? coordinates;
   final String? image;
   final String? schedule;
+  final bool? isFavourite; 
 
   const PharmacyModel({
     this.pharmacyId,
+    this.isFavourite,
     this.pageTitle,
     this.alias,
     this.address,
@@ -28,6 +30,8 @@ class PharmacyModel extends PharmacyEntity {
           coordinates: coordinates,
           image: image,
           schedule: schedule,
+          isFavourite: isFavourite
+          
         );
 
   factory PharmacyModel.fromRawJson(String str) =>
@@ -53,5 +57,6 @@ class PharmacyModel extends PharmacyEntity {
         "coordinates": coordinates,
         "image": image,
         "schedule": schedule,
+        "isFavourite" : isFavourite,
       };
 }

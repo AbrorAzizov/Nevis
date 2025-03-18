@@ -7,6 +7,7 @@
     
 
     <application
+         android:name=".MainApplication" 
         android:label="Nevis"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true">
@@ -36,6 +37,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+            <meta-data
+    android:name="com.yandex.android.maps.apikey"
+    android:value="39a54941-0819-4ad3-bec0-ea83ea36e655"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

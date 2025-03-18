@@ -69,4 +69,4 @@ class OrdersScreenBloc extends Bloc<OrdersScreenEvent, OrdersScreenState> {
     emit(OrdersScreenLoadedSuccessfully(
         orders: filteredOrders, selectorIndex: event.selectorIndex));
   }
-}
+} 

@@ -76,7 +76,7 @@ class ProfileCategoriesList extends StatelessWidget {
             imagePath: Paths.documnetsAndInstructionsIconPath,
             onTap: () => Navigator.of(context).push(
               Routes.createRoute(
-                const FavouritePharmacies(mapObjects: [],),
+                const FavouritePharmaciesScreen(),
                 settings:
                     RouteSettings(name: Routes.favouritePharmacy),
               ),
