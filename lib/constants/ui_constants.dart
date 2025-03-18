@@ -7,9 +7,10 @@ class UiConstants {
   static const Color white3Color = Color(0xFFF5F5F5);
   static const Color white4Color = Color(0xFFE8E9EA);
   static const Color white5Color = Color(0xFFF3F4F4);
-  static const Color backgroundColor = Color(0xFFFAFAFA);
+  static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color blackColor = Color(0xFF000000);
   static const Color black2Color = Color(0xFF4E4E4E);
+  static const Color black3Color = Color(0xFF222222);
   static const Color darkBlueColor = Color(0xFF19232B);
   static const Color darkBlue2Color = Color(0xFF19232A);
   static const Color purpleColor = Color(0xFF5324B2);
@@ -30,10 +31,13 @@ class UiConstants {
   static const Color lime2Color = Color(0xFFD3F3CF);
   static const Color gradientFirstColor = Color(0xFF50B1D7);
   static const Color gradientSecondColor = Color(0xFFB0E1F8);
-  static  Color defaultBorderColor = Color(0xFF222222).withOpacity(0.05);
+  static Color defaultBorderColor = Color(0xFF222222).withOpacity(0.05);
   static const Color blueColor = Color(0xFF009FE3);
   static const Color blue2Color = Color(0xFFE5F5FC);
+  static const Color blue3Color = Color(0xFFE5F5FC);
+  static const Color blue4Color = Color(0xFFCCECF9);
   static const Color red2Color = Color(0xFFFFE8E8);
+  static const Color lightGreyColor = Color(0xFFF7F7F7);
 
   static TextStyle textStyle1 = TextStyle(
     fontSize: 28.sp,
@@ -45,6 +49,7 @@ class UiConstants {
     fontSize: 16.sp,
     height: 18.2.sp / 16.sp,
     fontWeight: FontWeight.w400,
+    fontFamily: 'Rubik',
   );
 
   static TextStyle textStyle3 = TextStyle(
@@ -79,10 +84,10 @@ class UiConstants {
   );
 
   static TextStyle textStyle8 = TextStyle(
-    fontSize: 12.sp,
-    height: 16.37.sp / 12.sp,
-    fontWeight: FontWeight.w600,
-  );
+      fontSize: 12.sp,
+      height: 15.6.sp / 12.sp,
+      fontWeight: FontWeight.w500,
+      fontFamily: 'Rubik');
 
   static TextStyle textStyle9 = TextStyle(
     fontSize: 22.sp,
@@ -98,24 +103,74 @@ class UiConstants {
   );
 
   static TextStyle textStyle14 = TextStyle(
-    fontSize: 14.sp,
+    fontSize: 13.sp,
     height: 19.1.sp / 14.sp,
     fontWeight: FontWeight.w800,
   );
 
   static TextStyle textStyle11 = TextStyle(
+    color: UiConstants.black3Color,
     fontSize: 14.sp,
-    height: 16.59.sp / 14.sp,
+    height: 18.2.sp / 14.sp,
     fontWeight: FontWeight.w400,
     fontFamily: 'Rubik',
   );
-  
+  static TextStyle textStyle12 = TextStyle(
+    color: UiConstants.black3Color,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Rubik',
+  );
+
+  static TextStyle textStyle13 = TextStyle(
+    color: UiConstants.black3Color,
+    fontSize: 20.sp,
+    height: 24.sp / 20.sp,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Rubik',
+  );
+
+  static TextStyle textStyle15 = TextStyle(
+    color: UiConstants.black3Color.withOpacity(0.6),
+    fontSize: 12.sp,
+    height: 14.sp / 12.sp,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'Rubik',
+  );
+  static TextStyle textStyle16 = TextStyle(
+    color: UiConstants.black3Color,
+    fontSize: 20.sp,
+    height: 24.sp / 20.sp,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Rubik',
+  );
+
+  static TextStyle textStyle17 = TextStyle(
+    color: UiConstants.black3Color,
+    fontSize: 32.sp,
+    height: 35.2.sp / 32.sp,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Rubik',
+  );
+
+  static TextStyle textStyle18 = TextStyle(
+    color: UiConstants.black3Color,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'Rubik',
+  );
+
   static TextStyle splashTextStyle = TextStyle(
-    fontSize: 58.sp,
-    height: 54.sp/58.sp,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'Montserrat',
-    letterSpacing: -2.32, 
-    color: UiConstants.whiteColor
+      fontSize: 58.sp,
+      height: 54.sp / 58.sp,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Montserrat',
+      letterSpacing: -2.32,
+      color: UiConstants.whiteColor);
+
+  static TextStyle textStyle19 = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Rubik',
   );
 }

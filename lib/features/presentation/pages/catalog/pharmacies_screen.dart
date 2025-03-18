@@ -13,8 +13,7 @@ import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
-import 'package:nevis/features/presentation/widgets/map/map_widget.dart';
-
+import 'package:nevis/features/presentation/widgets/map/pharmacy_map_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PharmaciesScreen extends StatelessWidget {
@@ -113,19 +112,15 @@ class PharmaciesScreen extends StatelessWidget {
                                                 left: 20,
                                                 top: 16),
                                             children: [
-                                              Align(
-                                                alignment:
-                                                    AlignmentDirectional.center,
-                                                child: Selector(
-                                                  titlesList: const [
-                                                    'Список',
-                                                    'Карта'
-                                                  ],
-                                                  onTap: (int index) =>
-                                                      pharmaciesBloc.add(
-                                                    ChangeSelectorIndexEvent(
-                                                        index),
-                                                  ),
+                                              Selector(
+                                                titlesList: const [
+                                                  'Список',
+                                                  'Карта'
+                                                ],
+                                                onTap: (int index) =>
+                                                    pharmaciesBloc.add(
+                                                  ChangeSelectorIndexEvent(
+                                                      index),
                                                 ),
                                               ),
                                               SizedBox(height: 16.h),
@@ -154,8 +149,8 @@ class PharmaciesScreen extends StatelessWidget {
                                               else
                                                 SizedBox(
                                                   height: 510.h,
-                                                  child: MapWidget(
-                                                    mapObjects: [],
+                                                  child: PharmacyMapWidget(
+                                                    points: [],
                                                   ),
                                                 ),
                                             ],

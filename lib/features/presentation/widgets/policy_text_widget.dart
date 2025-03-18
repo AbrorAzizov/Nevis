@@ -13,28 +13,28 @@ class PolicyTextWidget extends StatelessWidget {
         children: [
           TextSpan(
             text: 'При входе на ресурс Вы принимаете условия\n',
-            style: UiConstants.textStyle2.copyWith(
+            style: UiConstants.textStyle11.copyWith(
               color: UiConstants.black2Color,
-              fontSize: 14
+             
             ),
           ),
           
           TextSpan(
             text: 'политики конфедициальности',
             style:
-                UiConstants.textStyle2.copyWith(color: UiConstants.blueColor, fontSize: 14),
+                UiConstants.textStyle11.copyWith(color: UiConstants.blueColor,),
           ),
            TextSpan(
             text: ' и',
-            style: UiConstants.textStyle2.copyWith(
+            style: UiConstants.textStyle11.copyWith(
               color: UiConstants.black2Color,
-               fontSize: 14
+            
             ),
           ),
            TextSpan(
             text: ' правила бонусной программы',
             style:
-                UiConstants.textStyle2.copyWith(color: UiConstants.blueColor, fontSize: 14),
+                UiConstants.textStyle11.copyWith(color: UiConstants.blueColor,),
           ),
          
         ],

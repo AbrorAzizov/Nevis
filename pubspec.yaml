@@ -42,10 +42,12 @@ dependencies:
   getwidget: ^5.0.0
   skeletonizer: ^1.4.2
   smooth_page_indicator: ^1.2.0+3
-  blurrycontainer: ^2.1.0
   flutter_html: ^3.0.0-beta.2
-  yandex_mapkit_lite: ^2.0.2
   image: ^4.5.2
+  url_launcher: ^6.3.1
+  easy_stepper: ^0.8.5+1
+  yandex_mapkit_lite: ^2.0.2
+  blurrycontainer: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +76,8 @@ flutter:
     - assets/images/
     - assets/html/
     - .env
+    - assets/response.json
+    - assets/pharmacies.json
 
   fonts:
     - family: Nunito

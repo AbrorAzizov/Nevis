@@ -1,18 +1,15 @@
-import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:intl/intl.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
-import 'dart:ui' as ui;
 
 class Utils {
   static RegExp phoneRegexp = RegExp(r'^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$');
@@ -86,8 +83,8 @@ class Utils {
 
   static String getRussianOrderStatus(OrderStatus status) {
     switch (status) {
-      case OrderStatus.courier:
-        return 'У курьера';
+      case OrderStatus.onTheWay:
+        return 'В пути';
       case OrderStatus.readyToIssue:
         return 'Готов к выдаче';
       case OrderStatus.reserved:
@@ -98,29 +95,31 @@ class Utils {
         return 'Получен';
       case OrderStatus.collected:
         return 'Собран';
-      case OrderStatus.processing:
-        return 'В обработке';
-      case OrderStatus.awaitingPayment:
-        return 'Ожидает оплаты';
+      case OrderStatus.collecting:
+        return 'В сборке';
+      case OrderStatus.courierSearching:
+        return 'Поиск курьера';
+      case OrderStatus.courierWaiting:
+        return 'Ожидание курьера';
+      case OrderStatus.accepted:
+        return 'Принят';
     }
   }
 
   static String getOrderStatusSubtitle(OrderStatus status, {DateTime? date}) {
     switch (status) {
-      case OrderStatus.courier:
-        return "Курьер уже едет к вам";
+      case OrderStatus.onTheWay:
+        return "Курьер едет к вам";
       case OrderStatus.readyToIssue:
-        return "Заказ ждет вас в аптеке до конца дня ${formatDate(date!)}";
+        return "Готов к выдаче";
       case OrderStatus.reserved:
         return "Проверим наличие и свяжемся с вами в случае отсутствия товаров";
       case OrderStatus.received:
         return "Спасибо за заказ";
       case OrderStatus.collected:
         return "Ваш заказ собран, скоро мы передадим его курьеру";
-      case OrderStatus.processing:
+      case OrderStatus.collecting:
         return "Мы уже начали работать с вашим заказом";
-      case OrderStatus.awaitingPayment:
-        return "Товары готовы к сборке и ожидают оплаты.";
       default:
         return '';
     }
@@ -128,22 +127,26 @@ class Utils {
 
   static String getOrderStatusIcon(OrderStatus status) {
     switch (status) {
-      case OrderStatus.courier:
-        return Paths.carIconPath;
+      case OrderStatus.onTheWay:
+        return Paths.onTheWayIconPath;
       case OrderStatus.readyToIssue:
-        return Paths.boxIconPath;
+        return Paths.readyToIssueIconPath;
       case OrderStatus.reserved:
         return Paths.hourglassIconPath;
       case OrderStatus.received:
-        return Paths.flagIconPath;
+        return Paths.readyIconPath;
       case OrderStatus.collected:
         return Paths.boxIconPath;
-      case OrderStatus.processing:
-        return Paths.clockIconPath;
-      case OrderStatus.awaitingPayment:
-        return Paths.cardIconPath;
+      case OrderStatus.collecting:
+        return Paths.collectingIconPath;
       case OrderStatus.canceled:
         return Paths.cancelIconPath;
+      case OrderStatus.courierSearching:
+        return Paths.courierSearchingIconPath;
+      case OrderStatus.courierWaiting:
+        return Paths.courierWaitingIconPath;
+      case OrderStatus.accepted:
+        return Paths.orderAcceptedIconPath;
     }
   }
 
@@ -151,30 +154,28 @@ class Utils {
       PaymentType? paymentType, TypeReceiving typeReceipt,
       {OrderStatus? orderStatus}) {
     List<OrderStatus> statuses = [];
+    print(typeReceipt);
     if (orderStatus == OrderStatus.canceled) {
       statuses = [
-        OrderStatus.processing,
         OrderStatus.canceled,
       ];
-    } else if (typeReceipt == TypeReceiving.pickup) {
+    } else if (typeReceipt == TypeReceiving.pickup ||
+        typeReceipt == TypeReceiving.pickupFromWareHouse) {
       statuses = [
-        OrderStatus.processing,
-        OrderStatus.reserved,
+        typeReceipt == TypeReceiving.pickup
+            ? OrderStatus.accepted
+            : OrderStatus.collecting,
         OrderStatus.readyToIssue,
         OrderStatus.received,
       ];
     } else if (typeReceipt == TypeReceiving.delivery) {
       statuses = [
-        OrderStatus.processing,
-        OrderStatus.awaitingPayment,
-        OrderStatus.collected,
-        OrderStatus.courier,
+        OrderStatus.collecting,
+        OrderStatus.courierSearching,
+        OrderStatus.courierWaiting,
+        OrderStatus.onTheWay,
         OrderStatus.received,
       ];
-
-      if (paymentType != PaymentType.online) {
-        statuses.remove(OrderStatus.awaitingPayment);
-      }
     }
 
     if (orderStatus == null) {
@@ -188,25 +189,26 @@ class Utils {
     return Map.from(map)..removeWhere((key, value) => value == null);
   }
 
-  static String formatPhoneNumber(String? phoneNumber, {bool toServerFormat = true}) {
-  if (phoneNumber == null || phoneNumber == '') return '';
-  
-  if (toServerFormat) {
-    // Преобразование из клиентского формата в серверный
-    final RegExp regex = RegExp(r'^\+7 \((\d{3})\) (\d{3})-(\d{2})-(\d{2})$');
-    return phoneNumber.replaceAllMapped(
-      regex,
-      (match) => '+7${match[1]}-${match[2]}-${match[3]}-${match[4]}',
-    );
-  } else {
-    // Преобразование из серверного формата в клиентский
-    final RegExp regex = RegExp(r'^\+7(\d{3})-?(\d{3})-?(\d{2})-?(\d{2})$');
-    return phoneNumber.replaceAllMapped(
-      regex,
-      (match) => '+7 (${match[1]}) ${match[2]}-${match[3]}-${match[4]}',
-    );
+  static String formatPhoneNumber(String? phoneNumber,
+      {bool toServerFormat = true}) {
+    if (phoneNumber == null || phoneNumber == '') return '';
+
+    if (toServerFormat) {
+      // Преобразование из клиентского формата в серверный
+      final RegExp regex = RegExp(r'^\+7 \((\d{3})\) (\d{3})-(\d{2})-(\d{2})$');
+      return phoneNumber.replaceAllMapped(
+        regex,
+        (match) => '+7${match[1]}-${match[2]}-${match[3]}-${match[4]}',
+      );
+    } else {
+      // Преобразование из серверного формата в клиентский
+      final RegExp regex = RegExp(r'^\+7(\d{3})-?(\d{3})-?(\d{2})-?(\d{2})$');
+      return phoneNumber.replaceAllMapped(
+        regex,
+        (match) => '+7 (${match[1]}) ${match[2]}-${match[3]}-${match[4]}',
+      );
+    }
   }
-}
 
   static void showCustomDialog(
       {required BuildContext screenContext,
@@ -284,13 +286,59 @@ class Utils {
   static String formatPrice(double? price) {
     if (price == null) return '-';
     final NumberFormat formatter =
-        NumberFormat.currency(locale: 'ru_RU', symbol: 'р.');
+        NumberFormat.currency(locale: 'ru_RU', symbol: '₽', decimalDigits: 0);
     return formatter.format(price);
   }
 
-  static Future<BitmapDescriptor> createBitmapIcon() async {
-    final ByteData data = await rootBundle.load(Paths.mapPointPath);
+  static Future<BitmapDescriptor> createBitmapIcon({int? count}) async {
+    if (count == null) {
+      final ByteData data = await rootBundle.load(Paths.mapPointPath);
+      final Uint8List list = Uint8List.view(data.buffer);
+      return BitmapDescriptor.fromBytes(list);
+    }
+
+    // Загружаем стандартную иконку
+    final ByteData data = await rootBundle.load(Paths.mapPointWithCounterPath);
     final Uint8List list = Uint8List.view(data.buffer);
-    return BitmapDescriptor.fromBytes(list);
+    final ui.Codec codec = await ui.instantiateImageCodec(list);
+    final ui.FrameInfo frameInfo = await codec.getNextFrame();
+    final ui.Image image = frameInfo.image;
+
+    // Рисуем поверх цифру
+    final ui.PictureRecorder recorder = ui.PictureRecorder();
+    final ui.Canvas canvas = ui.Canvas(recorder);
+    final paint = Paint();
+
+    // Рисуем основное изображение
+    canvas.drawImage(image, Offset.zero, paint);
+
+    // Настройки текста
+    final textPainter = TextPainter(
+        text: TextSpan(
+          text: count.toString(),
+          style: TextStyle(
+              color: UiConstants.white2Color,
+              fontSize: image.height * 0.45,
+              fontWeight: FontWeight.bold),
+        ),
+        textAlign: TextAlign.center,
+        textDirection: ui.TextDirection.ltr);
+
+    textPainter.layout();
+    final offset = Offset(
+      (image.width - textPainter.width) / 2,
+      (image.height - textPainter.height) / 2,
+    );
+
+    // Рисуем текст на холсте
+    textPainter.paint(canvas, offset);
+
+    final ui.Image newImage =
+        await recorder.endRecording().toImage(image.width, image.height);
+    final ByteData? newData =
+        await newImage.toByteData(format: ui.ImageByteFormat.png);
+    final Uint8List newList = newData!.buffer.asUint8List();
+
+    return BitmapDescriptor.fromBytes(newList);
   }
 }

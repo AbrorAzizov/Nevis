@@ -260,13 +260,22 @@ Future<void> init() async {
     ),
   );
   
-  sl.registerLazySingleton<OrderRepository>(
-    () => OrderRepositoryImpl(
+  // sl.registerLazySingleton<OrderRepository>(
+  //   () => OrderRepositoryImpl(
+  //     orderRemoteDataSource: sl(),
+  //     networkInfo: sl(),
+  //     errorHandler: sl(),
+  //   ),
+  // );
+
+ sl.registerLazySingleton<OrderRepository>(
+    () => MockOrderRepositoryImpl(
       orderRemoteDataSource: sl(),
       networkInfo: sl(),
       errorHandler: sl(),
     ),
   );
+
 
   //// DataSources
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -299,8 +308,15 @@ Future<void> init() async {
       sharedPreferences: sl(),
     ),
   );
-  sl.registerLazySingleton<OrderRemoteDataSource>(
-    () => OrderRemoteDataSourceImpl(
+  // sl.registerLazySingleton<OrderRemoteDataSource>(
+  //   () => OrderRemoteDataSourceImpl(
+  //     client: sl(),
+  //     sharedPreferences: sl(),
+  //   ),
+  // );
+
+   sl.registerLazySingleton<OrderRemoteDataSource>(
+    () => MockOrderRemoteDataSource(
       client: sl(),
       sharedPreferences: sl(),
     ),

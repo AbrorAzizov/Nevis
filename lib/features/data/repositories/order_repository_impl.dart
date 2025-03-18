@@ -31,3 +31,30 @@ class OrderRepositoryImpl implements OrderRepository {
         () async => await orderRemoteDataSource.getOrderById(id),
       );
 }
+
+class MockOrderRepositoryImpl implements OrderRepository {
+  final OrderRemoteDataSource orderRemoteDataSource;
+  final NetworkInfo networkInfo;
+  final ErrorHandler errorHandler;
+
+  const MockOrderRepositoryImpl({
+    required this.orderRemoteDataSource,
+    required this.networkInfo,
+    required this.errorHandler,
+  });
+
+  // 📌 Получение списка заказов
+  @override
+  Future<Either<Failure, List<OrderModel>>> getOrderHistory() async =>
+      await errorHandler.handle(
+        () async => await orderRemoteDataSource.getOrderHistory(),
+      );
+
+  // 📌 Получение заказа по ID
+  @override
+  Future<Either<Failure, OrderModel?>> getOrderById(int id) async =>
+      await errorHandler.handle(
+        () async => await orderRemoteDataSource.getOrderById(id),
+      );
+}
+

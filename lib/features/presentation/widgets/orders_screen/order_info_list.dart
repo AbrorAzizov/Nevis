@@ -20,50 +20,41 @@ class OrderInfoList extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       children: [
+        SizedBox(
+          height: 16.h,
+        ),
         OrderInfoItem(
-            imagePath: Paths.documentIconPath,
+            imagePath: Paths.orderNumberIconPath,
             title: 'Номер заказа',
             subtitle: '${order?.orderId}'),
         SizedBox(height: 8.h),
         OrderInfoItem(
-          imagePath: Paths.clockIconPath,
+          imagePath: Paths.timeIconPath,
           title: 'Время заказа',
           subtitle: Utils.formatDateTime(order?.createdAt),
         ),
         SizedBox(height: 8.h),
         OrderInfoItem(
-            imagePath: Paths.boxIconPath,
-            title: 'Способ получения',
-            subtitle: order?.typeReceipt == TypeReceiving.pickup
-                ? 'Самовывоз'
-                : 'Доставка'),
-        if (order?.typeReceipt == TypeReceiving.delivery)
-          Padding(
-            padding: getMarginOrPadding(top: 8),
-            child: OrderInfoItem(
-                imagePath: Paths.pointIconPath,
-                title: 'Адрес',
-                subtitle: 'пр-кт Независимости, д.1'),
-          )
-        else
-          Padding(
-            padding: getMarginOrPadding(top: 8),
-            child: OrderInfoItem(
-                imagePath: Paths.pointIconPath,
-                title: 'Аптека',
-                subtitle:
-                    'Аптека №36 InLek ОДО ДКМ-ФАРМ, Минский р-н, аг. Сеница, ул. Зеленая, 1, к. 5 (с/м Гиппо)'),
-          ),
-        if (order?.typeReceipt == TypeReceiving.delivery)
-          Padding(
+          imagePath: Paths.pharmacyIconPath,
+          title: 'Способ доставки',
+          subtitle: 'Курьером',
+        ),
+        SizedBox(height: 8.h),
+        OrderInfoItem(
+            imagePath: Paths.calendarIconPath,
+            title: 'Период ожидания',
+            subtitle: "10 октября 2024 - 12 ноября 2024"),
+        SizedBox(height: 8.h),
+        OrderInfoItem(
+            imagePath: Paths.geoIconPath,
+            title: 'Адрес',
+            subtitle: 'пр-кт Независимости, д.1'),
+        Padding(
             padding: getMarginOrPadding(top: 8),
             child: OrderInfoItem(
                 imagePath: Paths.cardIconPath,
                 title: 'Способ оплаты',
-                subtitle: order?.paymentType == PaymentType.courier
-                    ? 'Курьеру'
-                    : 'Онлайн'),
-          ),
+                subtitle: 'Картой в приложении')),
       ],
     );
   }

@@ -26,9 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => CartScreenBloc()..update(),
-        ),
+        BlocProvider(create: (context) => CartScreenBloc()
+            // ..update(),
+            ),
         BlocProvider(
           create: (context) => HomeScreenBloc(context: context),
         ),
@@ -163,15 +163,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (!searchState.isExpanded)
                               Positioned(
                                 child: Container(
-                                  height: 65.h,
-                                  margin: getMarginOrPadding(
-                                      left: 20, right: 20, bottom: 8),
-                                  padding: getMarginOrPadding(all: 8),
+                                  padding:
+                                      getMarginOrPadding(left: 20, right: 20),
+                                  height: 70.h,
                                   decoration: BoxDecoration(
                                     color: UiConstants.whiteColor,
-                                    borderRadius: BorderRadius.circular(16.r),
+                                  
                                   ),
                                   child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: List.generate(

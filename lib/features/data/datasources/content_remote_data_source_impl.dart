@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:nevis/core/error/exception.dart';
@@ -328,37 +329,46 @@ class ContentRemoteDataSourceImpl implements ContentRemoteDataSource {
 
   @override
   Future<List<PharmacyModel>> getPharmacies(String address) async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    String url = '${baseUrl}pharmacies/?address=$address';
-    final String? serverToken =
-        sharedPreferences.getString(SharedPreferencesKeys.accessToken);
+  //   String baseUrl = dotenv.env['BASE_URL']!;
+  //   String url = '${baseUrl}pharmacies/?address=$address';
+  //   final String? serverToken =
+  //       sharedPreferences.getString(SharedPreferencesKeys.accessToken);
 
-    log('GET $url');
+  //   log('GET $url');
 
-    try {
-      final response = await client.get(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $serverToken'
-        },
-      );
+  //   try {
+  //     final response = await client.get(
+  //       Uri.parse(url),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json',
+  //         'Authorization': 'Bearer $serverToken'
+  //       },
+  //     );
 
-      log('Response ($url): ${response.statusCode} ${response.body}');
+  //     log('Response ($url): ${response.statusCode} ${response.body}');
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+  //     if (response.statusCode == 200) {
+  //       final data = json.decode(response.body);
 
-        List<dynamic> dataList = data['data'];
+  //       List<dynamic> dataList = data['data'];
 
-        return dataList.map((e) => PharmacyModel.fromJson(e)).toList();
-      } else {
-        throw ServerException();
-      }
-    } catch (e) {
-      log('Error during getPharmacies: $e', level: 1000);
-      rethrow;
-    }
+  //       return dataList.map((e) => PharmacyModel.fromJson(e)).toList();
+  //     } else {
+  //       throw ServerException();
+  //     }
+  //   } catch (e) {
+  //     log('Error during getPharmacies: $e', level: 1000);
+  //     rethrow;
+  //   }
+  // }
+
+   await Future.delayed(Duration (milliseconds: 500)); 
+   final jsonString = await rootBundle.loadString('assets/pharmacies.json');
+   final data = jsonDecode(jsonString);
+    List<dynamic> dataList = data['data'];
+    print(data);
+   return dataList.map((e) => PharmacyModel.fromJson(e)).toList();
+
   }
 }

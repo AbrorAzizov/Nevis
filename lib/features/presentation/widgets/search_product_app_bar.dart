@@ -90,16 +90,7 @@ class SearchProductAppBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: getMarginOrPadding(left: 8),
-                    child: Skeleton.ignorePointer(
-                      child: FilterButton(
-                        onTap: () => BottomSheetManager.showProductsFilterSheet(
-                            context,
-                            searchBloc: searchBloc),
-                      ),
-                    ),
-                  )
+                 
                 ],
               ),
             ],

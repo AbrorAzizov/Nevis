@@ -6,9 +6,9 @@ enum CodeScreenType {signUp, reset,logInWithMessage, logInWithCall }
 
 enum ProductChipType { hit, seasonalOffer, stock, nova }
 
-enum TypeReceiving { all, delivery, pickup }
+enum TypeReceiving { all, delivery, pickup, pickupFromWareHouse }
 
-enum PaymentType { courier, online }
+enum PaymentType { inPerson, online }
 
 enum PharmacyProductsAvailability { partially, fully }
 
@@ -17,14 +17,16 @@ enum ProductsListScreenType { cart, pharmacy, order }
 enum PharmacyListScreenType { cart, product }
 
 enum OrderStatus {
-  courier, // У курьера
+  onTheWay, // У курьера
   readyToIssue, // Готов к выдаче
   reserved, // Зарезервирован
   canceled, // Отменен
   received, // Получен
   collected, // Собран
-  processing, // В обработке
-  awaitingPayment // Ожидает оплаты
+  collecting, // В сборке 
+  courierSearching, // поиск курьера
+  courierWaiting,// Поиск курьера
+  accepted,
 }
 
 enum DeliveryZoneType { green, yellow }

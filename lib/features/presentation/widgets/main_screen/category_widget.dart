@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 
-
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget(
       {super.key, required this.imagePath, required this.title});
@@ -23,8 +22,8 @@ class CategoryWidget extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SvgPicture.network('${dotenv.env['PUBLIC_URL']!}$imagePath',
-              width: 40.w, height: 40.w),
+          // SvgPicture.network('${dotenv.env['PUBLIC_URL']!}$imagePath',
+          //     width: 40.w, height: 40.w),
           SizedBox(height: 12.h),
           Text(title,
               style: UiConstants.textStyle3

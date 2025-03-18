@@ -65,7 +65,7 @@ class CustomRadioButton extends StatelessWidget {
             overlayColor: WidgetStateProperty.all(
               UiConstants.darkBlueColor.withOpacity(.3),
             ),
-            activeColor: UiConstants.purpleColor,
+            activeColor: UiConstants.blueColor,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             onChanged: (value) => onChanged(),
           ),

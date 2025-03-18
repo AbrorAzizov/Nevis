@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/enums.dart';
-import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/formatters/custom_phone_input_formatter.dart';
@@ -15,7 +13,6 @@ import 'package:nevis/features/presentation/pages/starts/code_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/app_template.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
-import 'package:nevis/features/presentation/widgets/policy_text_widget.dart';
 import 'package:nevis/locator_service.dart';
 
 class LoginScreenWithMessage extends StatelessWidget {
@@ -45,7 +42,7 @@ class LoginScreenWithMessage extends StatelessWidget {
         builder: (context, state) {
           final bloc = context.read<LoginScreenBloc>();
           return AppTemplate(
-            heightOfTopBar: 170,
+            heightOfTopBar: 190,
             canBack: true,
             title: 'Введите телефон',
             subTitleText: 'Вам придет смс с кодом.',

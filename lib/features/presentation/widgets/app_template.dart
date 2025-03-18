@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-
 
 class AppTemplate extends StatelessWidget {
   const AppTemplate(
@@ -15,9 +13,8 @@ class AppTemplate extends StatelessWidget {
       this.subTitleWidget,
       required this.body,
       this.canBack = false,
-      this.bodyPadding, 
-      this.heightOfTopBar = 231
-    });
+      this.bodyPadding,
+      this.heightOfTopBar = 231});
 
   final String title;
   final String? subTitleText;
@@ -34,17 +31,18 @@ class AppTemplate extends StatelessWidget {
           statusBarIconBrightness: Brightness.light,
           systemNavigationBarColor: Colors.transparent),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage(Paths.backgroundGradientIconPath),
                 fit: BoxFit.cover),
           ),
-          child: Column(  
+          child: Column(
             children: [
               Container(
                 padding: getMarginOrPadding(
-                    left: 20, right: 20, top: kTextTabBarHeight, bottom:  16),
+                    left: 20, right: 20, top: kTextTabBarHeight, bottom: 16),
                 height: heightOfTopBar.h,
                 width: double.infinity,
                 child: Column(
@@ -54,14 +52,14 @@ class AppTemplate extends StatelessWidget {
                     if (canBack)
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
-                        child: SvgPicture.asset(Paths.arrowBackIconPath,
-                            width: 24.w, height: 24.w),
+                        child: Icon(Icons.arrow_back_ios,
+                            size: 15.w, color: UiConstants.whiteColor),
                       ),
                     Spacer(),
                     Text(
                       title,
-                      style: UiConstants.textStyle1
-                          .copyWith(color: UiConstants.whiteColor,
+                      style: UiConstants.textStyle1.copyWith(
+                          color: UiConstants.whiteColor,
                           fontFamily: 'Rubik',
                           fontWeight: FontWeight.w600,
                           fontSize: 32.sp),
@@ -72,9 +70,10 @@ class AppTemplate extends StatelessWidget {
                         child: Text(
                           subTitleText ?? '',
                           style: UiConstants.textStyle2
-                              .copyWith(color: UiConstants.whiteColor).copyWith(
+                              .copyWith(color: UiConstants.whiteColor)
+                              .copyWith(
                                 fontSize: 16.sp,
-                                letterSpacing: 0, 
+                                letterSpacing: 0,
                               ),
                         ),
                       )

@@ -17,25 +17,19 @@ class OrderItemStatusChip extends StatelessWidget {
     return Container(
       padding: getMarginOrPadding(left: 8, right: 8, top: 4, bottom: 4),
       decoration: BoxDecoration(
-        color: UiConstants.white5Color,
-        borderRadius: BorderRadius.circular(200.r),
+        color: orderStatus == OrderStatus.canceled
+            ? UiConstants.black3Color.withOpacity(.1)
+            : UiConstants.blueColor,
+        borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(
         children: [
-          Skeleton.unite(
-            child: CircleAvatar(
-              radius: 3.r,
-              backgroundColor: [OrderStatus.courier, OrderStatus.readyToIssue]
-                      .contains(orderStatus)
-                  ? UiConstants.greenColor
-                  : UiConstants.darkBlue2Color.withOpacity(.8),
-            ),
-          ),
-          SizedBox(width: 4.w),
           Text(
             Utils.getRussianOrderStatus(orderStatus),
-            style: UiConstants.textStyle6.copyWith(
-              color: UiConstants.darkBlue2Color.withOpacity(.8),
+            style: UiConstants.textStyle8.copyWith(
+              color: orderStatus == OrderStatus.canceled
+                  ? UiConstants.black2Color
+                  : UiConstants.whiteColor,
             ),
           ),
         ],

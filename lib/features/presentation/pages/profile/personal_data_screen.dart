@@ -11,7 +11,6 @@ import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
-import 'package:nevis/features/presentation/widgets/personal_data_screen/change_password_block.dart';
 import 'package:nevis/features/presentation/widgets/personal_data_screen/checkboxed_block.dart';
 import 'package:nevis/features/presentation/widgets/personal_data_screen/contacts_block.dart';
 import 'package:nevis/features/presentation/widgets/personal_data_screen/general_information_block.dart';
@@ -31,8 +30,8 @@ class PersonalDataScreen extends StatelessWidget {
               context: context.read<HomeScreenBloc>().context,
               getMeUC: sl(),
               updateMeUC: sl(),
-              deleteMeUC: sl())
-            ..getProfile(),
+              deleteMeUC: sl()),
+          // ..getProfile(),
           child: BlocConsumer<PersonalDataScreenBloc, PersonalDataScreenState>(
             listener: (context, state) => switch (state) {
               DeleteAccountState _ =>
@@ -55,7 +54,8 @@ class PersonalDataScreen extends StatelessWidget {
                 body: SafeArea(
                   child: Skeletonizer(
                     ignorePointers: false,
-                    enabled: state.isLoading,
+                    enabled: false,
+                    // enabled: state.isLoading,
                     child: Builder(
                       builder: (context) {
                         return Column(
@@ -76,11 +76,6 @@ class PersonalDataScreen extends StatelessWidget {
                                           top: 16),
                                       children: [
                                         GeneralInformationBlock(
-                                            screenContext: context),
-                                        SizedBox(height: 16.h),
-                                        ContactsBlock(screenContext: context),
-                                        SizedBox(height: 16.h),
-                                        ChangePasswordBlock(
                                             screenContext: context),
                                         SizedBox(height: 16.h),
                                         CheckboxesBlock(screenContext: context),

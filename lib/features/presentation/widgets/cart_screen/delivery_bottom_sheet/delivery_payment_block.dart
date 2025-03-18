@@ -50,11 +50,11 @@ class _DeliveryPaymentBlockState extends State<DeliveryPaymentBlock> {
                 imagePath: Paths.courierIconPath,
                 title: 'Курьеру',
                 subtitle: 'Картой или наличными',
-                isChecked: paymentType == PaymentType.courier,
+                isChecked: paymentType == PaymentType.inPerson,
                 onTap: () {
-                  setState(() => paymentType = PaymentType.courier);
+                  setState(() => paymentType = PaymentType.inPerson);
                   cartBloc.add(
-                    ChangePaymentTypeEvent(PaymentType.courier),
+                    ChangePaymentTypeEvent(PaymentType.inPerson),
                   );
                 },
               ),

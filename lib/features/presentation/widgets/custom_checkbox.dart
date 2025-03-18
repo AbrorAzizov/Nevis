@@ -45,7 +45,7 @@ class CustomCheckbox extends StatelessWidget {
                       if (states.contains(WidgetState.selected)) {
                         // Состояние включено
                         return isEnabled
-                            ? UiConstants.purpleColor
+                            ? UiConstants.blueColor
                             : UiConstants.mutedVioletColor;
                       }
                       return UiConstants.whiteColor; // Состояние выключено

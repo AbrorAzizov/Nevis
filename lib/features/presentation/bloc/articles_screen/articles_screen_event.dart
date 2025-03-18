@@ -8,3 +8,4 @@ abstract class ArticlesScreenEvent extends Equatable {
 }
 
 class LoadArticlesEvent extends ArticlesScreenEvent {}
+   

@@ -1,29 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/bottom_sheet_manager.dart';
-import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
+import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
+import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_item.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
+
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  TextEditingController searchController = TextEditingController();
+  int selectorIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
-        HomeScreenBloc homeBloc = context.read<HomeScreenBloc>();
         return BlocProvider(
           create: (context) =>
               OrdersScreenBloc(getOrderHistoryUC: sl())..add(LoadDataEvent()),
@@ -35,90 +39,100 @@ class OrdersScreen extends StatelessWidget {
                 body: SafeArea(
                   child: Skeletonizer(
                     ignorePointers: false,
-                    enabled: ordersState.isLoading,
+                    enabled: ordersState is OrdersScreenIsLoading,
                     child: Builder(
                       builder: (context) {
                         return Column(
                           children: [
                             CustomAppBar(
-                              hintText: 'Искать по заказам',
-                              controller: TextEditingController(),
-                              title: 'История заказов',
+                              hintText: 'Введите номер заказа',
+                              controller: searchController,
+                              title: 'Список заказов',
                               showBack: true,
-                              isShowFilterButton: true,
-                              onTapFilterButton: () =>
-                                  BottomSheetManager.showOrdersFilterSheet(
-                                      homeBloc.context, context),
+                              isShowFilterButton: false,
+                              onTapCancel: () {
+                                searchController.clear();
+                                ordersBloc.add(ShowAllLoadedOrdersEvent());
+                              },
+                              onChangedField: (String query) {
+                                if (query.isNotEmpty) {
+                                  ordersBloc.add(SearchOrderEvent(
+                                      query: searchController.text));
+                                } else {
+                                  ordersBloc.add(ShowAllLoadedOrdersEvent());
+                                }
+                              },
+                            ),
+                            Padding(
+                              padding: getMarginOrPadding(left: 20, right: 20),
+                              child: BlocProvider(
+                                create: (context) => SelectorCubit(
+                                    index: ordersState.selectorIndex),
+                                child: Selector(
+                                  titlesList: const ['В работе', 'Завершенные'],
+                                  onTap: (int index) => ordersBloc.add(
+                                    ChangeSelectorIndexEvent(index),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (ordersState is OrdersScreenNoMatches)
+                              Padding(
+                                padding: getMarginOrPadding(left: 20, top: 10),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Нет заказов по вашему запросу',
+                                      style: UiConstants.textStyle10.copyWith(
+                                          color: UiConstants.redColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            SizedBox(
+                              height: 16.h,
                             ),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : Builder(builder: (context) {
-                                      List<OrderEntity> orders = List.from(
-                                          ordersState.filteredOrders ?? []);
-
-                                      if (ordersState.isOnlyActive!) {
-                                        orders = orders
-                                            .where((e) => [
-                                                  OrderStatus.courier,
-                                                  OrderStatus.readyToIssue
-                                                ].contains(e.status))
-                                            .toList();
-                                      }
-                                      if ((ordersState.orders ?? []).isEmpty) {
-                                        return Center(
-                                          child: Text(
-                                            'Заказов нет',
-                                            style: UiConstants.textStyle3
-                                                .copyWith(
-                                                    color: UiConstants
-                                                        .darkBlueColor,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                          ),
-                                        );
-                                      }
-
-                                      return ListView(
-                                        shrinkWrap: true,
+                              child: Builder(
+                                builder: (context) {
+                                  if (homeState is InternetUnavailable) {
+                                    return InternetNoInternetConnectionWidget();
+                                  }
+                                  if (ordersState
+                                          is OrdersScreenLoadedSuccessfully &&
+                                      ordersState.orders.isEmpty) {
+                                    return Center(
+                                      child: Text(
+                                        'Заказов нет',
+                                        style: UiConstants.textStyle3.copyWith(
+                                          color: UiConstants.darkBlueColor,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  if (ordersState
+                                      is OrdersScreenLoadedSuccessfully) {
+                                    return ListView.separated(
                                         padding: getMarginOrPadding(
                                             bottom: 94,
                                             right: 20,
                                             left: 20,
                                             top: 16),
-                                        children: [
-                                          CustomCheckbox(
-                                            title: Text(
-                                              'Только активные',
-                                              style: UiConstants.textStyle2
-                                                  .copyWith(
-                                                      color: UiConstants
-                                                          .blackColor),
+                                        physics: BouncingScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) =>
+                                            OrderItem(
+                                              order: ordersState.orders[index],
                                             ),
-                                            isChecked:
-                                                ordersState.isOnlyActive!,
-                                            onChanged: (isChecked) =>
-                                                ordersBloc.add(
-                                              ChangeOnlyActiveOrdersEvent(
-                                                  isChecked),
-                                            ),
-                                          ),
-                                          SizedBox(height: 16.h),
-                                          ListView.separated(
-                                              padding: EdgeInsets.zero,
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemBuilder: (context, index) =>
-                                                  OrderItem(
-                                                      order: orders[index]),
-                                              separatorBuilder:
-                                                  (context, index) =>
-                                                      SizedBox(height: 8.h),
-                                              itemCount: orders.length)
-                                        ],
-                                      );
-                                    }),
+                                        separatorBuilder: (context, index) =>
+                                            SizedBox(height: 8.h),
+                                        itemCount: ordersState.orders.length);
+                                  } else {
+                                    return SizedBox.shrink();
+                                  }
+                                },
+                              ),
                             )
                           ],
                         );

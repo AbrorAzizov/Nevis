@@ -49,14 +49,15 @@ class AppButtonWidget extends StatelessWidget {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(borderRadius ?? 30.r),
                 side: showBorder
-                    ? BorderSide(color: UiConstants.purpleColor)
+                    ? BorderSide(color: UiConstants.blueColor)
                     : BorderSide.none),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 13.5.h),
             child: Text(
               text,
-              style: UiConstants.textStyle3.copyWith(height: 1),
+              style: UiConstants.textStyle14.copyWith(
+                height: 1,fontWeight: FontWeight.w700),
             ),
           ),
         ),
