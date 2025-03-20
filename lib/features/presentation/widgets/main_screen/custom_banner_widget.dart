@@ -37,16 +37,16 @@ class _CustomBannerWidgetState extends State<CustomBannerWidget> {
 
   void _startAutoScroll() {
     _stopAutoScroll();
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      if (widget.pageController.hasClients) {
-        final nextPage = (widget.pageController.page?.toInt() ?? 0) + 1;
-        widget.pageController.animateToPage(
-          nextPage % widget.banners.length,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
+    // _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    //   if (widget.pageController.hasClients) {
+    //     final nextPage = (widget.pageController.page?.toInt() ?? 0) + 1;
+    //     widget.pageController.animateToPage(
+    //       nextPage % widget.banners.length,
+    //       duration: Duration(milliseconds: 300),
+    //       curve: Curves.easeInOut,
+    //     );
+    //   }
+    // });
   }
 
   void _stopAutoScroll() {

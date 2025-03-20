@@ -34,7 +34,6 @@ class _FavoritePharmaciesScreenState extends State<FavoritePharmaciesScreen> {
           child: BlocBuilder<FavoritePharmaciesBloc, FavoritePharmaciesState>(
             builder: (context, state) {
               final bloc = context.read<FavoritePharmaciesBloc>();
-
               return Scaffold(
                 backgroundColor: UiConstants.whiteColor,
                 body: SafeArea(

@@ -12,6 +12,7 @@ import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/sales_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/select_region_screen.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';
@@ -55,6 +56,15 @@ class MainScreen extends StatelessWidget {
                         return Column(
                           children: [
                             SearchProductAppBar(
+                              onTapFavoriteProductsChip: () {
+                                FocusScope.of(context).unfocus();
+                                Navigator.of(context).push(
+                                  Routes.createRoute(
+                                    const FavouriteProductsScreen(),
+                                  
+                                  ),
+                                );
+                              },
                               screenContext: context,
                               onTapLocationChip: () {
                                 FocusScope.of(context).unfocus();
@@ -99,7 +109,10 @@ class MainScreen extends StatelessWidget {
                                               ),
                                             ),
                                             child: ProductsListWidget(
-                                              products: state.daily ?? [], productsListScreenType: ProductsListScreenType.pharmacy,
+                                              products: state.daily ?? [],
+                                              productsListScreenType:
+                                                  ProductsListScreenType
+                                                      .pharmacy,
                                             ),
                                           ),
                                         if (!Skeletonizer.of(context).enabled)

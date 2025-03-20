@@ -31,7 +31,6 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int? productId = ModalRoute.of(context)!.settings.arguments as int?;
-
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
         final homeBloc = context.read<HomeScreenBloc>();

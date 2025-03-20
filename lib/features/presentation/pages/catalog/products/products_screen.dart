@@ -27,7 +27,6 @@ class ProductsScreen extends StatelessWidget {
     final title = args['title'] as String?;
     final productParam = args['productParam'] as ProductParam?;
     final products = args['products'] as List<ProductEntity>?;
-
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
         HomeScreenBloc homeBloc = context.read<HomeScreenBloc>();

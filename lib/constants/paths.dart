@@ -116,4 +116,7 @@ class Paths {
   static const String pharmacyIconPath = '${_imagesPath}IconPharmacy.svg';
   static const String orderAcceptedIconPath = '${_imagesPath}accepted.svg';
   static const String readyToIssueIconPath = '${_imagesPath}readyToIssue.svg';
+  static const String favouriteProductsIconPath = '${_imagesPath}favourite.svg';
+  static const String noFavouriteProductsIconPath = '${_imagesPath}bigHeart.png';
+  static const String recipe = '${_imagesPath}recipe.svg';
 }

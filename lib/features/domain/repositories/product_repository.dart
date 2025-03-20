@@ -12,4 +12,5 @@ abstract class ProductRepository {
       ProductParam param);
   Future<Either<Failure, List<ProductPharmacyEntity>>> getProductPharmacies(
       int id);
+  // Future<Either<Failure, List<    
 }

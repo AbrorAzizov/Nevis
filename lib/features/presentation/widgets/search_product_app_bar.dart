@@ -17,10 +17,12 @@ class SearchProductAppBar extends StatelessWidget {
     super.key,
     this.onTapLocationChip,
     this.onTapBack,
-    this.screenContext,
+    this.screenContext, 
+    this.onTapFavoriteProductsChip,
   });
 
   final Function()? onTapLocationChip;
+  final Function()? onTapFavoriteProductsChip;
   final Function()? onTapBack;
   final BuildContext? screenContext;
 
@@ -31,7 +33,9 @@ class SearchProductAppBar extends StatelessWidget {
       bloc: searchBloc,
       builder: (context, state) {
         return Container(
-          color: UiConstants.whiteColor,
+          decoration: BoxDecoration(
+            color: UiConstants.backgroundColor,
+          ),
           padding: getMarginOrPadding(top: 8, bottom: 8, right: 20, left: 20),
           child: Column(
             children: [
@@ -62,35 +66,60 @@ class SearchProductAppBar extends StatelessWidget {
                   Expanded(
                     child: Skeleton.ignorePointer(
                       child: Skeleton.shade(
-                        child: AppTextFieldWidget(
-                          //focusNode: searchBloc.focusNode,
-                          hintText: 'Искать препараты',
-                          controller: searchBloc.searchController,
-                          fillColor: UiConstants.white2Color,
-                          hintMaxLines: 1,
-                          prefixWidget: Skeleton.ignore(
-                            child: SvgPicture.asset(Paths.searchIconPath),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF144B63).withOpacity(0.1),
+                                blurRadius: 50,
+                                spreadRadius: -4,
+                                offset: Offset(-1, -4),
+                              ),
+                            ],
                           ),
-                          suffixWidget: state.isExpanded
-                              ? Skeleton.ignore(
-                                  child: GestureDetector(
-                                    onTap: () =>
-                                        searchBloc.add(ClearQueryEvent()),
-                                    child:
-                                        SvgPicture.asset(Paths.closeIconPath),
-                                  ),
-                                )
-                              : null,
-                          onChangedField: (p0) =>
-                              searchBloc.add(ChangeQueryEvent(p0)),
-                          onTapOutside: (event) {},
-                          onTap: () =>
-                              searchBloc.add(ToggleExpandCollapseEvent(true)),
+                          child: AppTextFieldWidget(
+                            //focusNode: searchBloc.focusNode,
+                            hintText: 'Поиск товаров',
+                            controller: searchBloc.searchController,
+                            fillColor: UiConstants.whiteColor,
+                            hintMaxLines: 1,
+                            prefixWidget: Skeleton.ignore(
+                              child: SvgPicture.asset(Paths.searchIconPath),
+                            ),
+                            suffixWidget: state.isExpanded
+                                ? Skeleton.ignore(
+                                    child: GestureDetector(
+                                      onTap: () =>
+                                          searchBloc.add(ClearQueryEvent()),
+                                      child:
+                                          SvgPicture.asset(Paths.closeIconPath),
+                                    ),
+                                  )
+                                : null,
+                            onChangedField: (p0) =>
+                                searchBloc.add(ChangeQueryEvent(p0)),
+                            onTapOutside: (event) {},
+                            onTap: () =>
+                                searchBloc.add(ToggleExpandCollapseEvent(true)),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                 
+                  if (onTapFavoriteProductsChip != null && !state.isExpanded)
+                    Padding(
+                      padding:getMarginOrPadding(left: 12),
+                      child: Skeleton.replace(
+                        child: GestureDetector(
+                          onTap: onTapFavoriteProductsChip,
+                          child: Padding(
+                            padding: getMarginOrPadding(right: 8),
+                            child: SvgPicture.asset(Paths.favouriteProductsIconPath,
+                                width: 24.w, height: 24.w),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ],

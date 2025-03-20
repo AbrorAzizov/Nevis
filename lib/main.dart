@@ -19,6 +19,7 @@ import 'package:nevis/features/presentation/pages/profile/articles/article_scree
 import 'package:nevis/features/presentation/pages/profile/articles/articles_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/cancel_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/favorite_pharmacy_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/how_place_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/info_about_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/news/news_internal_screen.dart';
@@ -113,7 +114,9 @@ class MyApp extends StatelessWidget {
                   const PrivacyPolicyScreen(),
               Routes.cancelOrderScreen: (context) => const CancelOrderScreen(),
               Routes.favoritePharmacy: (context) =>
-                  const FavoritePharmaciesScreen()
+                  const FavoritePharmaciesScreen(),
+               Routes.favouriteProducts: (context) =>
+                  const FavouriteProductsScreen()    
             },
             initialRoute: Routes.splashScreen,
             navigatorObservers: [routeObserver],

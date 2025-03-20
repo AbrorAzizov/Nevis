@@ -34,6 +34,8 @@ class Routes {
   static const String privacyPolicyScreen = '/privacy_policy_screen';
   static const String cancelOrderScreen = '/cancel_order_screen';
   static const String favoritePharmacy = '/favourite_pharmacy_screen';
+  static const String favouriteProducts  = '/favourite_products_screen';
+  
 
   static List<String> get allRoutes => [
         splashScreen,
@@ -67,7 +69,8 @@ class Routes {
         docsAndInsctructionsScreen,
         privacyPolicyScreen,
         cancelOrderScreen,
-        favoritePharmacy
+        favoritePharmacy,
+        favouriteProducts
       ];
 
   // Метод для создания анимированного перехода
