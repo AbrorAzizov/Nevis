@@ -30,10 +30,19 @@ class ProductWidget extends StatelessWidget {
           ),
         ),
       ),
-      child: SizedBox(
+      child: Container(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: Color(0xFF144B63).withOpacity(0.1),
+            blurRadius: 20,
+            spreadRadius: -4,
+            offset: Offset(-1, 4),
+          ),
+        ]),
         width: 180.w,
-        height: 420.h,
         child: Card(
+          margin: EdgeInsets.zero,
+          elevation: 0,
           color: UiConstants.whiteColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,12 +57,11 @@ class ProductWidget extends StatelessWidget {
                       child: CachedNetworkImage(
                         imageUrl:
                             'https://upload.wikimedia.org/wikipedia/commons/7/7b/Корвалол-Фармак.jpg',
-                        fit: BoxFit.fitHeight,
+                        fit: BoxFit.fitWidth,
                         cacheManager: CustomCacheManager(),
                         errorWidget: (context, url, error) => SvgPicture.asset(
-                          Paths.drugTemplateIconPath,
-                          height: double.infinity,
-                        ),
+                            Paths.drugTemplateIconPath,
+                            height: double.infinity),
                         progressIndicatorBuilder: (context, url, progress) =>
                             Center(
                           child: CircularProgressIndicator(
@@ -119,9 +127,7 @@ class ProductWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: 4.w,
-                        ),
+                        SizedBox(width: 4.w),
                         Container(
                           width: 32.w,
                           height: 16.h,
@@ -157,11 +163,11 @@ class ProductWidget extends StatelessWidget {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    SizedBox(height: 32.h),
                     SizedBox(
-                      height: 32.h,
+                      height: 40.h,
+                      child: ProductPrice(product: product),
                     ),
-                    SizedBox(
-                        height: 40.h, child: ProductPrice(product: product)),
                     AppButtonWidget(
                       isFilled: false,
                       showBorder: true,

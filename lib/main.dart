@@ -115,8 +115,8 @@ class MyApp extends StatelessWidget {
               Routes.cancelOrderScreen: (context) => const CancelOrderScreen(),
               Routes.favoritePharmacy: (context) =>
                   const FavoritePharmaciesScreen(),
-               Routes.favouriteProducts: (context) =>
-                  const FavouriteProductsScreen()    
+              Routes.favouriteProducts: (context) =>
+                  const FavoriteProductsScreen()
             },
             initialRoute: Routes.splashScreen,
             navigatorObservers: [routeObserver],

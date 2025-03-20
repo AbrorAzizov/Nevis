@@ -5,11 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
-import 'package:nevis/features/presentation/widgets/filter_button.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SearchProductAppBar extends StatelessWidget {
@@ -17,7 +14,7 @@ class SearchProductAppBar extends StatelessWidget {
     super.key,
     this.onTapLocationChip,
     this.onTapBack,
-    this.screenContext, 
+    this.screenContext,
     this.onTapFavoriteProductsChip,
   });
 
@@ -108,14 +105,16 @@ class SearchProductAppBar extends StatelessWidget {
                   ),
                   if (onTapFavoriteProductsChip != null && !state.isExpanded)
                     Padding(
-                      padding:getMarginOrPadding(left: 12),
+                      padding: getMarginOrPadding(left: 12),
                       child: Skeleton.replace(
                         child: GestureDetector(
                           onTap: onTapFavoriteProductsChip,
                           child: Padding(
                             padding: getMarginOrPadding(right: 8),
-                            child: SvgPicture.asset(Paths.favouriteProductsIconPath,
-                                width: 24.w, height: 24.w),
+                            child: SvgPicture.asset(
+                                Paths.favouriteProductsIconPath,
+                                width: 24.w,
+                                height: 24.w),
                           ),
                         ),
                       ),

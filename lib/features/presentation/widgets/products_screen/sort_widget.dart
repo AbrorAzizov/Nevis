@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/features/presentation/widgets/products_screen/sort_button.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SortWidget extends StatelessWidget {
-  const SortWidget({super.key, required this.onTap});
+  const SortWidget(
+      {super.key,
+      required this.onTap,
+      required this.text,
+      required this.iconPath});
 
   final Function() onTap;
+  final String text;
+  final String iconPath;
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +26,17 @@ class SortWidget extends StatelessWidget {
             children: [
               Container(
                 padding:
-                    getMarginOrPadding(left: 8, top: 8, bottom: 8, right: 16),
-                decoration: BoxDecoration(
-                  color: UiConstants.whiteColor,
-                  borderRadius: BorderRadius.circular(200.r),
-                ),
+                    getMarginOrPadding(left: 16, top: 3, bottom: 3, right: 16),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SortButton(onTap: onTap),
+                    Skeleton.ignore(
+                      child:
+                          SvgPicture.asset(iconPath, width: 24.w, height: 24.w),
+                    ),
                     SizedBox(width: 8.w),
                     Text(
-                      'Сортировка',
+                      text,
                       style: UiConstants.textStyle3
                           .copyWith(color: UiConstants.darkBlueColor),
                     ),

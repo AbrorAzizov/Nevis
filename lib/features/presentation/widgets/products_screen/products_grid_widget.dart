@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/core/routes.dart';
-
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/product_screen.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/product_widget.dart';
@@ -17,7 +16,7 @@ class ProductsGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int itemCount = isLoading ? 8 : products.length;
-    double itemHeight = 285.w;
+    double itemHeight = 380.w;
     double itemWidth = 156.w;
     double blocksSize = itemHeight * (itemCount / 2).round();
     double mainAxisSpacingSize =

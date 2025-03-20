@@ -47,7 +47,7 @@ class _FavoritePharmaciesScreenState extends State<FavoritePharmaciesScreen> {
                           controller: searchController,
                           title: 'Аптеки',
                           showBack: true,
-                          isShowFilterButton: false,
+                          isShowFavoriteButton: false,
                           onTapCancel: () {
                             searchController.clear();
                             bloc.add(ChangeQueryEvent(""));

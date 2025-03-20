@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
-import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
@@ -12,9 +11,7 @@ import 'package:nevis/features/presentation/bloc/products_screen/products_screen
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
-import 'package:nevis/features/presentation/widgets/products_screen/sort_widget.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -49,14 +46,9 @@ class ProductsScreen extends StatelessWidget {
                         return Column(
                           children: [
                             CustomAppBar(
-                              controller: TextEditingController(),
-                              showBack: true,
-                              isShowFilterButton: true,
-                              onTapFilterButton: () {
-                                BottomSheetManager.showProductsFilterSheet(
-                                    context);
-                              },
-                            ),
+                                controller: TextEditingController(),
+                                showBack: true,
+                                isShowFavoriteButton: true),
                             Expanded(
                               child: homeState is InternetUnavailable
                                   ? InternetNoInternetConnectionWidget()
@@ -86,11 +78,11 @@ class ProductsScreen extends StatelessWidget {
                                           ),
                                         ),
                                         SizedBox(height: 16.h),
-                                        SortWidget(
+                                        /* SortWidget(
                                           onTap: () => BottomSheetManager
                                               .showProductSortSheet(
                                                   homeBloc.context, context),
-                                        ),
+                                        ),*/
                                         SizedBox(height: 16.h),
                                         ProductsGridWidget(
                                             isLoading: state.isLoading,

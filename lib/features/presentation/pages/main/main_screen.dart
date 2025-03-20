@@ -23,7 +23,6 @@ import 'package:nevis/features/presentation/widgets/main_screen/internet_no_inte
 import 'package:nevis/features/presentation/widgets/sales_screen/sales_horizontal_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class MainScreen extends StatelessWidget {
@@ -60,8 +59,7 @@ class MainScreen extends StatelessWidget {
                                 FocusScope.of(context).unfocus();
                                 Navigator.of(context).push(
                                   Routes.createRoute(
-                                    const FavouriteProductsScreen(),
-                                  
+                                    const FavoriteProductsScreen(),
                                   ),
                                 );
                               },

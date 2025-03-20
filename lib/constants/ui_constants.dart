@@ -7,7 +7,7 @@ class UiConstants {
   static const Color white3Color = Color(0xFFF5F5F5);
   static const Color white4Color = Color(0xFFE8E9EA);
   static const Color white5Color = Color(0xFFF3F4F4);
-  static const Color backgroundColor = Color(0xFFFFFFFF);
+  static const Color backgroundColor = Color(0xFFfcfdff);
   static const Color blackColor = Color(0xFF000000);
   static const Color black2Color = Color(0xFF4E4E4E);
   static const Color black3Color = Color(0xFF222222);
@@ -27,7 +27,7 @@ class UiConstants {
   static const Color yellow2Color = Color(0xFFFCE076);
   static const Color yellow3Color = Color(0xFFFCF0C7);
   static const Color greenColor = Color(0xFF70A545);
-  
+
   static const Color green2Color = Color(0xFF96E58A);
   static const Color limeColor = Color(0xFFE7FFC9);
   static const Color lime2Color = Color(0xFFD3F3CF);

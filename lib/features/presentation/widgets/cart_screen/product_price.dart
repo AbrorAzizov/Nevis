@@ -25,7 +25,8 @@ class ProductPrice extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Распределяем элементы по краям
+            mainAxisAlignment: MainAxisAlignment
+                .spaceBetween, // Распределяем элементы по краям
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +53,7 @@ class ProductPrice extends StatelessWidget {
                   FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      Utils.formatPrice(product.price ?? 5000),
+                      Utils.formatPrice(product.price ?? 500),
                       style: UiConstants.textStyle14.copyWith(
                         color: product.oldPrice != null
                             ? UiConstants.blueColor
@@ -64,7 +65,8 @@ class ProductPrice extends StatelessWidget {
               ),
               Container(
                 height: 22.h,
-                padding: EdgeInsets.symmetric(horizontal: 4.w,vertical: 1.h), // Адаптивные отступы
+                padding: EdgeInsets.symmetric(
+                    horizontal: 4.w, vertical: 1.h), // Адаптивные отступы
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.r),
                   gradient: LinearGradient(
@@ -72,7 +74,8 @@ class ProductPrice extends StatelessWidget {
                   ),
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min, // Контейнер адаптируется под текст
+                  mainAxisSize:
+                      MainAxisSize.min, // Контейнер адаптируется под текст
                   children: [
                     SvgPicture.asset(Paths.bonusIcon2Path),
                     SizedBox(width: 4.w),

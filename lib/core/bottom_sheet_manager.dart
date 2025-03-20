@@ -456,9 +456,7 @@ class BottomSheetManager {
                               hintText: 'Искать аптеки',
                               backgroundColor: Colors.transparent,
                               contentPadding: EdgeInsets.zero,
-                              isShowFilterButton: true,
-                              onTapFilterButton: () => showPharmacySort2Sheet(
-                                  homeContext, screenContext),
+                              isShowFavoriteButton: true,
                             ),
                           ),
                           SizedBox(height: 32.h),

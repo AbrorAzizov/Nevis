@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/pharmacies_screen/pharmacies_screen_bloc.dart';
@@ -27,7 +26,8 @@ class PharmaciesScreen extends StatelessWidget {
 
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
-        HomeScreenBloc homeBloc = context.read<HomeScreenBloc>();
+        //HomeScreenBloc homeBloc = context.read<HomeScreenBloc>();
+
         return BlocProvider(
           create: (context) => PharmaciesScreenBloc()
             ..add(
@@ -81,10 +81,7 @@ class PharmaciesScreen extends StatelessWidget {
                                         .withOpacity(.6),
                                   ),
                                 ),
-                                isShowFilterButton: true,
-                                onTapFilterButton: () =>
-                                    BottomSheetManager.showPharmacySortSheet(
-                                        homeBloc.context, context),
+                                isShowFavoriteButton: true,
                                 onChangedField: (value) => pharmaciesBloc.add(
                                   ChangeQueryEvent(value),
                                 ),

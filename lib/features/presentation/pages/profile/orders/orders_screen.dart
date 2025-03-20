@@ -49,7 +49,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               controller: searchController,
                               title: 'Список заказов',
                               showBack: true,
-                              isShowFilterButton: false,
+                              isShowFavoriteButton: false,
                               onTapCancel: () {
                                 searchController.clear();
                                 ordersBloc.add(ShowAllLoadedOrdersEvent());

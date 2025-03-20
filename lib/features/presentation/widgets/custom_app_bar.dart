@@ -18,8 +18,7 @@ class CustomAppBar extends StatelessWidget {
     this.contentPadding,
     this.backgroundColor,
     this.hintText,
-    this.isShowFilterButton = false,
-    this.onTapFilterButton,
+    this.isShowFavoriteButton = false,
     this.onChangedField,
     this.onTapField,
     this.screenContext,
@@ -35,8 +34,7 @@ class CustomAppBar extends StatelessWidget {
   final EdgeInsets? contentPadding;
   final Color? backgroundColor;
   final String? hintText;
-  final bool isShowFilterButton;
-  final Function()? onTapFilterButton;
+  final bool isShowFavoriteButton;
   final Function(String value)? onChangedField;
   final Function()? onTapField;
   final Function()? onTapCancel;
@@ -127,7 +125,7 @@ class CustomAppBar extends StatelessWidget {
                             ],
                           ),
                           child: AppTextFieldWidget(
-                              hintText: hintText ?? 'Искать препараты',
+                              hintText: hintText ?? 'Поиск товаров',
                               fillColor: UiConstants.whiteColor,
                               controller: controller ?? TextEditingController(),
                               prefixWidget: Skeleton.ignore(
