@@ -6,7 +6,7 @@ class FavoriteProductsScreenState extends Equatable {
   final ProductSortType? selectedSortType;
   final ProductFilterOrSortType? selectedFilterOrSortType;
 
-  const FavoriteProductsScreenState( {
+  const FavoriteProductsScreenState({
     required this.selectedFilterOrSortType,
     required this.selectedProductIds,
     required this.selectedSortType,
@@ -21,9 +21,10 @@ class FavoriteProductsScreenState extends Equatable {
   }) {
     return FavoriteProductsScreenState(
       selectedProductIds: selectedProductIds ?? this.selectedProductIds,
-      isAllProductsChecked: isAllProductsChecked ?? this.isAllProductsChecked, 
-      selectedSortType: selectedSortType ?? this.selectedSortType, 
-      selectedFilterOrSortType: selectedFilterOrSortType ?? this.selectedFilterOrSortType,
+      isAllProductsChecked: isAllProductsChecked ?? this.isAllProductsChecked,
+      selectedSortType: selectedSortType ?? this.selectedSortType,
+      selectedFilterOrSortType:
+          selectedFilterOrSortType ?? this.selectedFilterOrSortType,
     );
   }
 
@@ -31,5 +32,7 @@ class FavoriteProductsScreenState extends Equatable {
   List<Object?> get props => [
         selectedProductIds,
         isAllProductsChecked,
+        selectedSortType,
+        selectedFilterOrSortType,
       ];
 }

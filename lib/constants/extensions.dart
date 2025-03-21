@@ -1,5 +1,3 @@
-
-
 import 'package:nevis/constants/enums.dart';
 
 extension StringExtensions on String? {
@@ -17,13 +15,12 @@ extension OrderStatusExtension on OrderStatus {
     OrderStatus.received: 'Получен',
     OrderStatus.collected: 'Собран',
     OrderStatus.collecting: 'В обработке',
-    OrderStatus.accepted : 'Принят'
+    OrderStatus.accepted: 'Принят'
   };
 
   String get title => titles[this] ?? 'Неизвестный статус';
 
   static OrderStatus? fromTitle(String? title) {
-
     return titles.entries
         .firstWhere(
           (entry) => entry.value == title,
@@ -38,15 +35,14 @@ extension TypeReceivingExtension on TypeReceiving {
   static const Map<TypeReceiving, String> titles = {
     TypeReceiving.all: 'Все',
     TypeReceiving.delivery: 'Доставка',
-    TypeReceiving.pickupFromWareHouse : 'Доставка со склада',
+    TypeReceiving.pickupFromWareHouse: 'Доставка со склада',
     TypeReceiving.pickup: 'Самовывоз',
   };
 
   String get title => titles[this] ?? 'Неизвестный способ получения';
 
   static TypeReceiving? fromTitle(String? title) {
-
- return titles.entries
+    return titles.entries
         .firstWhere(
           (entry) => entry.value == title,
           orElse: () =>
@@ -68,5 +64,20 @@ extension PaymentTypeExtension on PaymentType {
     return title == titles[PaymentType.online]
         ? PaymentType.online
         : PaymentType.inPerson;
+  }
+}
+
+extension ProductSortTypeExtension on ProductSortType {
+  String get displayName {
+    switch (this) {
+      case ProductSortType.popularity:
+        return 'Популярное';
+      case ProductSortType.alphabet:
+        return 'По алфавиту';
+      case ProductSortType.priceDecrease:
+        return 'Дороже';
+      case ProductSortType.priceIncrease:
+        return 'Дешевле';
+    }
   }
 }

@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/enums.dart';
+import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
@@ -158,7 +158,6 @@ class FavoriteProductsScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 SizedBox(height: 16.h),
-                                               
                                                 SizedBox(
                                                   height: 380.h,
                                                   child: ListView.separated(
@@ -171,13 +170,14 @@ class FavoriteProductsScreen extends StatelessWidget {
                                                         BouncingScrollPhysics(),
                                                     itemCount:
                                                         snapshot.data!.length,
-                                                    itemBuilder: (context,
-                                                            index) =>
-                                                        ProductWidget(
-                                                            product: snapshot
-                                                                .data![index], 
-                                                                showCheckbox: false, 
-                                                                isSelected: false,),
+                                                    itemBuilder:
+                                                        (context, index) =>
+                                                            ProductWidget(
+                                                      product:
+                                                          snapshot.data![index],
+                                                      showCheckbox: false,
+                                                      isSelected: false,
+                                                    ),
                                                     separatorBuilder: (context,
                                                             index) =>
                                                         SizedBox(width: 8.w),
@@ -197,23 +197,32 @@ class FavoriteProductsScreen extends StatelessWidget {
                                                 SizedBox(height: 16.h),
                                                 Container(
                                                   decoration:
-                                                  state.selectedFilterOrSortType != null? BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16.r),
-                                                      color: UiConstants
-                                                          .whiteColor,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Color(
-                                                                  0xFF144B63)
-                                                              .withOpacity(0.1),
-                                                          blurRadius: 50,
-                                                          spreadRadius: -4,
-                                                          offset:
-                                                              Offset(-1, -4),
-                                                        ),
-                                                      ]): null,
+                                                      state.selectedFilterOrSortType !=
+                                                              null
+                                                          ? BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          16.r),
+                                                              color: UiConstants
+                                                                  .whiteColor,
+                                                              boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Color(
+                                                                            0xFF144B63)
+                                                                        .withOpacity(
+                                                                            0.1),
+                                                                    blurRadius:
+                                                                        50,
+                                                                    spreadRadius:
+                                                                        -4,
+                                                                    offset:
+                                                                        Offset(
+                                                                            -1,
+                                                                            -4),
+                                                                  ),
+                                                                ])
+                                                          : null,
                                                   child: Padding(
                                                     padding: getMarginOrPadding(
                                                         top: 16),
@@ -226,30 +235,53 @@ class FavoriteProductsScreen extends StatelessWidget {
                                                           children: [
                                                             Expanded(
                                                               child: SortWidget(
-                                                                iconColor: state.selectedFilterOrSortType == ProductFilterOrSortType.filter? UiConstants.blueColor : UiConstants.black3Color.withOpacity(.6), 
+                                                                iconColor: state
+                                                                            .selectedFilterOrSortType ==
+                                                                        ProductFilterOrSortType
+                                                                            .filter
+                                                                    ? UiConstants
+                                                                        .blueColor
+                                                                    : UiConstants
+                                                                        .black3Color
+                                                                        .withOpacity(
+                                                                            .6),
                                                                 style: null,
                                                                 text: 'Фильтр',
                                                                 iconPath: Paths
                                                                     .sortIconPath,
-                                                                onTap: () {
-                                                                 
-                                                                },
+                                                                onTap: () {},
                                                               ),
                                                             ),
                                                             Expanded(
                                                               child: SortWidget(
-                                                                iconColor:  state.selectedFilterOrSortType == ProductFilterOrSortType.sort? UiConstants.blueColor : UiConstants.black3Color.withOpacity(.6) ,
-                                                                style:  state.selectedFilterOrSortType == ProductFilterOrSortType.sort? 
-                                                                UiConstants.textStyle11.copyWith(color: UiConstants.blueColor) :  UiConstants.textStyle11,
+                                                                iconColor: state
+                                                                            .selectedFilterOrSortType ==
+                                                                        ProductFilterOrSortType
+                                                                            .sort
+                                                                    ? UiConstants
+                                                                        .blueColor
+                                                                    : UiConstants
+                                                                        .black3Color
+                                                                        .withOpacity(
+                                                                            .6),
+                                                                style: state.selectedFilterOrSortType ==
+                                                                        ProductFilterOrSortType
+                                                                            .sort
+                                                                    ? UiConstants
+                                                                        .textStyle11
+                                                                        .copyWith(
+                                                                            color: UiConstants
+                                                                                .blueColor)
+                                                                    : UiConstants
+                                                                        .textStyle11,
                                                                 text:
                                                                     'Сортировка',
                                                                 iconPath: Paths
                                                                     .filtersIconPath,
                                                                 onTap: () {
-                                                                   bloc.add(
+                                                                  bloc.add(
                                                                       ShowSortProductsTypes());
-                                                            
-                                                                }, 
+                                                                },
                                                               ),
                                                             ),
                                                           ],
@@ -259,93 +291,49 @@ class FavoriteProductsScreen extends StatelessWidget {
                                                             ProductFilterOrSortType
                                                                 .sort)
                                                           Padding(
-                                                            padding: const EdgeInsets.all(16.0),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(16.0),
                                                             child: Column(
+                                                              spacing: 8.h,
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
                                                                       .start,
-                                                              children: [
-                                                                
-                                                                CustomRadioButton(
-                                                                  isLabelOnLeft:
-                                                                      false,
-                                                                  title:
-                                                                      'Популярное',
-                                                                  textStyle:
-                                                                      UiConstants
-                                                                          .textStyle2,
-                                                                  value: ProductSortType
-                                                                      .popularity,
-                                                                  groupValue: state
-                                                                      .selectedSortType,
-                                                                  onChanged: (value) =>
-                                                                      bloc.add(
-                                                                    SelectSortProductsType(
-                                                                        productSortType:
-                                                                           value),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                    height: 8.h),
-                                                                CustomRadioButton(
-                                                                  isLabelOnLeft:
-                                                                      false,
-                                                                  title:
-                                                                      'По алфавиту',
-                                                                  textStyle:
-                                                                      UiConstants
-                                                                          .textStyle2,
-                                                                  value: ProductSortType
-                                                                      .alphabet,
-                                                                  groupValue: state
-                                                                      .selectedSortType,
-                                                                  onChanged: (value) =>
-                                                                     bloc.add(
-                                                                    SelectSortProductsType(
-                                                                        productSortType:
-                                                                           value),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                    height: 8.h),
-                                                                CustomRadioButton(
-                                                                  isLabelOnLeft:
-                                                                      false,
-                                                                  title:
-                                                                      'Дешевле',
-                                                                  textStyle:
-                                                                      UiConstants
-                                                                          .textStyle2,
-                                                                  value: ProductSortType
-                                                                      .priceIncrease,
-                                                                  groupValue: state
-                                                                      .selectedSortType,
-                                                                  onChanged: (value) =>
-                                                                     bloc.add(
-                                                                    SelectSortProductsType(
-                                                                        productSortType:
-                                                                           value),
-                                                                )),
-                                                                SizedBox(
-                                                                    height: 8.h),
-                                                                CustomRadioButton(
-                                                                  isLabelOnLeft:
-                                                                      false,
-                                                                  title: 'Дороже',
-                                                                  textStyle:
-                                                                      UiConstants
-                                                                          .textStyle2,
-                                                                  value: ProductSortType
-                                                                      .priceDecrease,
-                                                                  groupValue: state
-                                                                      .selectedSortType,
-                                                                   onChanged: (value) =>
-                                                                     bloc.add(
-                                                                    SelectSortProductsType(
-                                                                        productSortType:
-                                                                           value),
-                                                                )),
-                                                              ],
+                                                              children:
+                                                                  List.generate(
+                                                                ProductSortType
+                                                                    .values
+                                                                    .length,
+                                                                (index) {
+                                                                  ProductSortType
+                                                                      productSortType =
+                                                                      ProductSortType
+                                                                              .values[
+                                                                          index];
+
+                                                                  return CustomRadioButton(
+                                                                    isLabelOnLeft:
+                                                                        false,
+                                                                    title: productSortType
+                                                                        .displayName,
+                                                                    textStyle:
+                                                                        UiConstants
+                                                                            .textStyle2,
+                                                                    value:
+                                                                        productSortType,
+                                                                    groupValue:
+                                                                        state
+                                                                            .selectedSortType,
+                                                                    onChanged:
+                                                                        (value) =>
+                                                                            bloc.add(
+                                                                      SelectSortProductsType(
+                                                                          productSortType:
+                                                                              productSortType),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ),
                                                             ),
                                                           ),
                                                       ],
@@ -376,11 +364,13 @@ class FavoriteProductsScreen extends StatelessWidget {
                                                 ),
                                                 SizedBox(height: 16.h),
                                                 ProductsGridWidget(
-                                                    isLoading: false,
-                                                    products: snapshot.data
-                                                        as List<ProductEntity>,
-                                                         selectedProductIds: state.selectedProductIds, 
-                                                         showCheckbox: true,)
+                                                  isLoading: false,
+                                                  products: snapshot.data
+                                                      as List<ProductEntity>,
+                                                  selectedProductIds:
+                                                      state.selectedProductIds,
+                                                  showCheckbox: true,
+                                                )
                                               ],
                                             ),
                                           );

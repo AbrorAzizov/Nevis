@@ -52,6 +52,7 @@ class FavoriteProductsScreenBloc
         );
       },
     );
+
     on<ToggleProductSelection>((event, emit) {
       final newSelectedProductIds = Set<int>.from(state.selectedProductIds);
 
