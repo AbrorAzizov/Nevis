@@ -50,20 +50,27 @@ class ProductPrice extends StatelessWidget {
                         ),
                       ],
                     ),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      Utils.formatPrice(product.price ?? 500),
-                      style: UiConstants.textStyle14.copyWith(
-                        color: product.oldPrice != null
-                            ? UiConstants.blueColor
-                            : UiConstants.blackColor,
-                      ),
-                    ),
-                  ),
+                 
                 ],
               ),
-              Container(
+            
+            ],
+          ),
+           Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.fill,
+                        child: Text(
+                          Utils.formatPrice(product.price ?? 500),
+                          style: UiConstants.textStyle14.copyWith(
+                            color: product.oldPrice != null
+                                ? UiConstants.blueColor
+                                : UiConstants.blackColor,
+                          ),
+                        ),
+                      ),
+                        Container(
                 height: 22.h,
                 padding: EdgeInsets.symmetric(
                     horizontal: 4.w, vertical: 1.h), // Адаптивные отступы
@@ -88,8 +95,8 @@ class ProductPrice extends StatelessWidget {
                   ],
                 ),
               ),
-            ],
-          ),
+                    ],
+                  ),
         ],
       ),
     );

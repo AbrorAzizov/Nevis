@@ -31,6 +31,8 @@ enum OrderStatus {
 
 enum DeliveryZoneType { green, yellow }
 
-enum ProductSortType { popularity, priceDecrease, priceIncrease }
+enum ProductSortType { popularity, priceDecrease, priceIncrease, alphabet }
+
+enum ProductFilterOrSortType {sort, filter}
 
 enum GenderType { male, female }

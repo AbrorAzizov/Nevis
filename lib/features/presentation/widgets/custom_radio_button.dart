@@ -19,14 +19,14 @@ class CustomRadioButton extends StatelessWidget {
   final String title;
   final dynamic value;
   final dynamic groupValue;
-  final Function() onChanged;
+   final Function(dynamic) onChanged; 
   final TextStyle? textStyle;
   final bool isLabelOnLeft;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onChanged(),
+      onTap: () => onChanged(value),
       child: Skeleton.unite(
         child: Row(
           mainAxisAlignment: isLabelOnLeft
@@ -67,7 +67,7 @@ class CustomRadioButton extends StatelessWidget {
             ),
             activeColor: UiConstants.blueColor,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            onChanged: (value) => onChanged(),
+            onChanged: (value) => onChanged(value),
           ),
         ),
       ),
@@ -76,11 +76,11 @@ class CustomRadioButton extends StatelessWidget {
 
   Widget _buildLabel() {
     return Padding(
-      padding: getMarginOrPadding(left: 4),
+      padding: getMarginOrPadding(left: 12),
       child: Text(
         title,
-        style: (textStyle ?? UiConstants.textStyle11)
-            .copyWith(color: UiConstants.darkBlueColor),
+        style: (textStyle ?? UiConstants.textStyle2)
+            .copyWith(color: UiConstants.black3Color,fontWeight: FontWeight.w500),
       ),
     );
   }

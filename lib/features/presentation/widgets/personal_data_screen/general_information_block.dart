@@ -75,27 +75,27 @@ class GeneralInformationBlock extends StatelessWidget {
             SizedBox(
               height: 8.h,
             ),
-            Row(
-              children: [
-                CustomRadioButton(
-                  title: 'Мужской',
-                  value: GenderType.male,
-                  groupValue: personalDataBloc.state.gender,
-                  onChanged: () => personalDataBloc.add(
-                    ChangeGenderEvent(GenderType.male),
-                  ),
-                ),
-                SizedBox(width: 24.w),
-                CustomRadioButton(
-                  title: 'Женский',
-                  value: GenderType.female,
-                  groupValue: personalDataBloc.state.gender,
-                  onChanged: () => personalDataBloc.add(
-                    ChangeGenderEvent(GenderType.female),
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     CustomRadioButton(
+            //       title: 'Мужской',
+            //       value: GenderType.male,
+            //       groupValue: personalDataBloc.state.gender,
+            //       onChanged: () => personalDataBloc.add(
+            //         ChangeGenderEvent(GenderType.male),
+            //       ),
+            //     ),
+            //     SizedBox(width: 24.w),
+            //     CustomRadioButton(
+            //       title: 'Женский',
+            //       value: GenderType.female,
+            //       groupValue: personalDataBloc.state.gender,
+            //       onChanged: () => personalDataBloc.add(
+            //         ChangeGenderEvent(GenderType.female),
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ],

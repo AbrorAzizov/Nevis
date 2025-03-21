@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nevis/constants/enums.dart';
 
 part 'favorite_products_screen_event.dart';
 part 'favorite_products_screen_state.dart';
@@ -11,6 +12,8 @@ class FavoriteProductsScreenBloc
           FavoriteProductsScreenState(
             isAllProductsChecked: false,
             selectedProductIds: {},
+            selectedSortType: ProductSortType.popularity,
+            selectedFilterOrSortType: null,
           ),
         ) {
     on<PickAllProductsEvent>(
@@ -31,5 +34,33 @@ class FavoriteProductsScreenBloc
         );
       },
     );
+
+    on<ShowSortProductsTypes>(
+      (event, emit) async {
+        emit(
+          state.copyWith(
+              selectedFilterOrSortType: ProductFilterOrSortType.sort),
+        );
+      },
+    );
+
+    on<SelectSortProductsType>(
+      (event, emit) async {
+        print("Выбран новый тип сортировки: ${event.productSortType}");
+        emit(
+          state.copyWith(selectedSortType: event.productSortType),
+        );
+      },
+    );
+    on<ToggleProductSelection>((event, emit) {
+      final newSelectedProductIds = Set<int>.from(state.selectedProductIds);
+
+      if (newSelectedProductIds.contains(event.productId)) {
+        newSelectedProductIds.remove(event.productId);
+      } else {
+        newSelectedProductIds.add(event.productId);
+      }
+      emit(state.copyWith(selectedProductIds: newSelectedProductIds));
+    });
   }
 }

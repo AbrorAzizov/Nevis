@@ -85,8 +85,11 @@ class ProductsScreen extends StatelessWidget {
                                         ),*/
                                         SizedBox(height: 16.h),
                                         ProductsGridWidget(
+                                            
                                             isLoading: state.isLoading,
-                                            products: state.products ?? [])
+                                            products: state.products ?? [], 
+                                            selectedProductIds: {}, 
+                                            showCheckbox: false,)
                                       ],
                                     ),
                             ),

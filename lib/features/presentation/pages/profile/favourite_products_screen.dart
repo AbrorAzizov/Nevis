@@ -5,9 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
@@ -15,6 +17,7 @@ import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.da
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
+import 'package:nevis/features/presentation/widgets/custom_radio_button.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/product_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
@@ -40,6 +43,7 @@ class FavoriteProductsScreen extends StatelessWidget {
           child: BlocBuilder<FavoriteProductsScreenBloc,
               FavoriteProductsScreenState>(
             builder: (context, state) {
+              print(state.selectedSortType);
               final bloc = context.read<FavoriteProductsScreenBloc>();
               return Scaffold(
                 backgroundColor: UiConstants.backgroundColor,
@@ -154,7 +158,7 @@ class FavoriteProductsScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 SizedBox(height: 16.h),
-                                                // Горизонтальный ListView без паддинга
+                                               
                                                 SizedBox(
                                                   height: 380.h,
                                                   child: ListView.separated(
@@ -171,7 +175,9 @@ class FavoriteProductsScreen extends StatelessWidget {
                                                             index) =>
                                                         ProductWidget(
                                                             product: snapshot
-                                                                .data![index]),
+                                                                .data![index], 
+                                                                showCheckbox: false, 
+                                                                isSelected: false,),
                                                     separatorBuilder: (context,
                                                             index) =>
                                                         SizedBox(width: 8.w),
@@ -189,25 +195,162 @@ class FavoriteProductsScreen extends StatelessWidget {
                                             child: Column(
                                               children: [
                                                 SizedBox(height: 16.h),
-                                                Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: SortWidget(
-                                                        text: 'Сортировка',
-                                                        iconPath:
-                                                            Paths.sortIconPath,
-                                                        onTap: () {},
-                                                      ),
+                                                Container(
+                                                  decoration:
+                                                  state.selectedFilterOrSortType != null? BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16.r),
+                                                      color: UiConstants
+                                                          .whiteColor,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Color(
+                                                                  0xFF144B63)
+                                                              .withOpacity(0.1),
+                                                          blurRadius: 50,
+                                                          spreadRadius: -4,
+                                                          offset:
+                                                              Offset(-1, -4),
+                                                        ),
+                                                      ]): null,
+                                                  child: Padding(
+                                                    padding: getMarginOrPadding(
+                                                        top: 16),
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Expanded(
+                                                              child: SortWidget(
+                                                                iconColor: state.selectedFilterOrSortType == ProductFilterOrSortType.filter? UiConstants.blueColor : UiConstants.black3Color.withOpacity(.6), 
+                                                                style: null,
+                                                                text: 'Фильтр',
+                                                                iconPath: Paths
+                                                                    .sortIconPath,
+                                                                onTap: () {
+                                                                 
+                                                                },
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child: SortWidget(
+                                                                iconColor:  state.selectedFilterOrSortType == ProductFilterOrSortType.sort? UiConstants.blueColor : UiConstants.black3Color.withOpacity(.6) ,
+                                                                style:  state.selectedFilterOrSortType == ProductFilterOrSortType.sort? 
+                                                                UiConstants.textStyle11.copyWith(color: UiConstants.blueColor) :  UiConstants.textStyle11,
+                                                                text:
+                                                                    'Сортировка',
+                                                                iconPath: Paths
+                                                                    .filtersIconPath,
+                                                                onTap: () {
+                                                                   bloc.add(
+                                                                      ShowSortProductsTypes());
+                                                            
+                                                                }, 
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        if (state
+                                                                .selectedFilterOrSortType ==
+                                                            ProductFilterOrSortType
+                                                                .sort)
+                                                          Padding(
+                                                            padding: const EdgeInsets.all(16.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                
+                                                                CustomRadioButton(
+                                                                  isLabelOnLeft:
+                                                                      false,
+                                                                  title:
+                                                                      'Популярное',
+                                                                  textStyle:
+                                                                      UiConstants
+                                                                          .textStyle2,
+                                                                  value: ProductSortType
+                                                                      .popularity,
+                                                                  groupValue: state
+                                                                      .selectedSortType,
+                                                                  onChanged: (value) =>
+                                                                      bloc.add(
+                                                                    SelectSortProductsType(
+                                                                        productSortType:
+                                                                           value),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                    height: 8.h),
+                                                                CustomRadioButton(
+                                                                  isLabelOnLeft:
+                                                                      false,
+                                                                  title:
+                                                                      'По алфавиту',
+                                                                  textStyle:
+                                                                      UiConstants
+                                                                          .textStyle2,
+                                                                  value: ProductSortType
+                                                                      .alphabet,
+                                                                  groupValue: state
+                                                                      .selectedSortType,
+                                                                  onChanged: (value) =>
+                                                                     bloc.add(
+                                                                    SelectSortProductsType(
+                                                                        productSortType:
+                                                                           value),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                    height: 8.h),
+                                                                CustomRadioButton(
+                                                                  isLabelOnLeft:
+                                                                      false,
+                                                                  title:
+                                                                      'Дешевле',
+                                                                  textStyle:
+                                                                      UiConstants
+                                                                          .textStyle2,
+                                                                  value: ProductSortType
+                                                                      .priceIncrease,
+                                                                  groupValue: state
+                                                                      .selectedSortType,
+                                                                  onChanged: (value) =>
+                                                                     bloc.add(
+                                                                    SelectSortProductsType(
+                                                                        productSortType:
+                                                                           value),
+                                                                )),
+                                                                SizedBox(
+                                                                    height: 8.h),
+                                                                CustomRadioButton(
+                                                                  isLabelOnLeft:
+                                                                      false,
+                                                                  title: 'Дороже',
+                                                                  textStyle:
+                                                                      UiConstants
+                                                                          .textStyle2,
+                                                                  value: ProductSortType
+                                                                      .priceDecrease,
+                                                                  groupValue: state
+                                                                      .selectedSortType,
+                                                                   onChanged: (value) =>
+                                                                     bloc.add(
+                                                                    SelectSortProductsType(
+                                                                        productSortType:
+                                                                           value),
+                                                                )),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                      ],
                                                     ),
-                                                    Expanded(
-                                                      child: SortWidget(
-                                                        text: 'Фильтр',
-                                                        iconPath: Paths
-                                                            .filtersIconPath,
-                                                        onTap: () {},
-                                                      ),
-                                                    ),
-                                                  ],
+                                                  ),
                                                 ),
                                                 SizedBox(height: 16.h),
                                                 CustomCheckbox(
@@ -235,7 +378,9 @@ class FavoriteProductsScreen extends StatelessWidget {
                                                 ProductsGridWidget(
                                                     isLoading: false,
                                                     products: snapshot.data
-                                                        as List<ProductEntity>)
+                                                        as List<ProductEntity>,
+                                                         selectedProductIds: state.selectedProductIds, 
+                                                         showCheckbox: true,)
                                               ],
                                             ),
                                           );

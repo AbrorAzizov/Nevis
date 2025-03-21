@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/paths.dart';
@@ -8,15 +9,19 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/custom_cache_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
+import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/product_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/product_price.dart';
+import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
 import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/favorite_button.dart';
 
 class ProductWidget extends StatelessWidget {
   final ProductEntity product;
+  final bool isSelected;
+  final bool showCheckbox;
 
-  const ProductWidget({super.key, required this.product});
+  const ProductWidget({super.key, required this.product, required this.isSelected, required this.showCheckbox});
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +52,10 @@ class ProductWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Stack(
-                alignment: Alignment.topRight,
+               
                 children: [
                   SizedBox(
                     height: 120.h,
@@ -78,7 +84,21 @@ class ProductWidget extends StatelessWidget {
                         onPressed: () {},
                       ),
                     ),
-                  )
+                  ),
+                  if (showCheckbox)
+                  Padding(
+                    padding: getMarginOrPadding(top: 8, right: 8),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: CustomCheckbox(
+                        isChecked:isSelected,
+                        onChanged: (_){
+                            context
+                  .read<FavoriteProductsScreenBloc>()
+                  .add(ToggleProductSelection(product.productId!));
+                      })
+                    ),
+                  ),
                 ],
               ),
               SizedBox(height: 8.h),
@@ -168,6 +188,7 @@ class ProductWidget extends StatelessWidget {
                       height: 40.h,
                       child: ProductPrice(product: product),
                     ),
+                    SizedBox(height: 8.h,),
                     AppButtonWidget(
                       isFilled: false,
                       showBorder: true,

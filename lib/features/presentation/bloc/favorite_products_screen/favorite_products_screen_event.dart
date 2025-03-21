@@ -12,3 +12,18 @@ class PickAllProductsEvent extends FavoriteProductsScreenEvent {
 
   const PickAllProductsEvent({required this.productIds});
 }
+
+class ShowSortProductsTypes extends FavoriteProductsScreenEvent{
+  
+}
+
+class SelectSortProductsType extends FavoriteProductsScreenEvent{
+  final ProductSortType productSortType;
+  const SelectSortProductsType({required this.productSortType}); 
+}
+
+class ToggleProductSelection extends FavoriteProductsScreenEvent {
+  final int productId;
+
+ const ToggleProductSelection(this.productId);
+}

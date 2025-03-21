@@ -17,7 +17,7 @@ class ProductsListWidget extends StatelessWidget {
           padding: getMarginOrPadding(left: 20, right: 20),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) =>
-              ProductWidget(product: products[index]),
+              ProductWidget(product: products[index], isSelected: false, showCheckbox: false,),
           separatorBuilder: (context, index) => SizedBox(width: 8.w),
           itemCount: products.length),
     );

@@ -10,11 +10,15 @@ class SortWidget extends StatelessWidget {
       {super.key,
       required this.onTap,
       required this.text,
-      required this.iconPath});
+      required this.iconPath,
+      required this.style, 
+      required this.iconColor});
 
   final Function() onTap;
   final String text;
   final String iconPath;
+  final TextStyle? style;
+  final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +36,13 @@ class SortWidget extends StatelessWidget {
                   children: [
                     Skeleton.ignore(
                       child:
-                          SvgPicture.asset(iconPath, width: 24.w, height: 24.w),
+                          SvgPicture.asset(iconPath, width: 24.w, height: 24.w,
+                          colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),),
                     ),
                     SizedBox(width: 8.w),
                     Text(
                       text,
-                      style: UiConstants.textStyle3
-                          .copyWith(color: UiConstants.darkBlueColor),
+                      style: style,
                     ),
                   ],
                 ),
