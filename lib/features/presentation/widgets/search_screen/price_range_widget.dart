@@ -7,9 +7,9 @@ import 'package:nevis/features/presentation/bloc/search_screen/search_screen_blo
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 
 class PriceRangeWidget extends StatefulWidget {
-  const PriceRangeWidget({super.key, required this.homeContext});
+  const PriceRangeWidget({super.key, });
 
-  final BuildContext homeContext;
+
 
   @override
   State<PriceRangeWidget> createState() => _PriceRangeWidgetState();
@@ -26,9 +26,9 @@ class _PriceRangeWidgetState extends State<PriceRangeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    SearchScreenBloc searchBloc = widget.homeContext.read<SearchScreenBloc>();
+
     return BlocBuilder<SearchScreenBloc, SearchScreenState>(
-      bloc: searchBloc,
+
       builder: (context, state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,34 +43,14 @@ class _PriceRangeWidgetState extends State<PriceRangeWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: AppTextFieldWidget(
-                      fillColor: UiConstants.whiteColor,
-                      controller: searchBloc.minValueController,
-                      onChangedField: (value) {
-                        searchBloc.add(
-                          ChangePriceEvent(double.tryParse(value), true),
-                        );
-                      },
-                      boxShadow: boxShadow),
-                ),
+              
                 Container(
                   margin: getMarginOrPadding(right: 8, left: 8),
                   height: 1.h,
                   width: 12.w,
                   color: Color(0xFF222222).withOpacity(.6),
                 ),
-                Expanded(
-                  child: AppTextFieldWidget(
-                      fillColor: UiConstants.whiteColor,
-                      controller: searchBloc.maxValueController,
-                      onChangedField: (value) {
-                        searchBloc.add(
-                          ChangePriceEvent(double.tryParse(value), false),
-                        );
-                      },
-                      boxShadow: boxShadow),
-                ),
+               
               ],
             ),
             SizedBox(height: 3.h),
@@ -86,15 +66,10 @@ class _PriceRangeWidgetState extends State<PriceRangeWidget> {
                     RangeValues(state.minSelectedPrice, state.maxSelectedPrice),
                 min: state.minAllowedPrice,
                 max: state.maxAllowedPrice,
-                activeColor: UiConstants.purpleColor,
+                activeColor: UiConstants.blueColor,
                 inactiveColor: UiConstants.white5Color,
                 onChanged: (RangeValues values) {
-                  searchBloc.add(
-                    ChangePriceEvent(values.start.roundToDouble(), true),
-                  );
-                  searchBloc.add(
-                    ChangePriceEvent(values.end.roundToDouble(), false),
-                  );
+                
                 },
                 labels: RangeLabels(
                   state.minSelectedPrice.round().toString(),

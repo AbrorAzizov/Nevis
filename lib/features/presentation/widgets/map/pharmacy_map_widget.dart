@@ -8,7 +8,7 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
 import 'package:nevis/features/presentation/bloc/pharmacy_map/pharmacy_map_bloc.dart';
-import 'package:nevis/features/presentation/widgets/favourite_pharmacies_screen/pharmacy_info_card.dart';
+import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/pharmacy_info_card.dart';
 import 'package:nevis/features/presentation/widgets/map/map_button.dart';
 import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
 
