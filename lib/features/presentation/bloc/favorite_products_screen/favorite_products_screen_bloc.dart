@@ -10,7 +10,8 @@ import 'package:nevis/features/domain/entities/product_entity.dart';
 part 'favorite_products_screen_event.dart';
 part 'favorite_products_screen_state.dart';
 
-class FavoriteProductsScreenBloc extends Bloc<FavoriteProductsScreenEvent, FavoriteProductsScreenState> {
+class FavoriteProductsScreenBloc
+    extends Bloc<FavoriteProductsScreenEvent, FavoriteProductsScreenState> {
   FavoriteProductsScreenBloc()
       : super(
           FavoriteProductsScreenState(
@@ -19,7 +20,7 @@ class FavoriteProductsScreenBloc extends Bloc<FavoriteProductsScreenEvent, Favor
             selectedSortType: ProductSortType.popularity,
             selectedFilterOrSortType: null,
             products: [],
-            isLoading: true, 
+            isLoading: true,
             error: null,
           ),
         ) {
@@ -31,8 +32,8 @@ class FavoriteProductsScreenBloc extends Bloc<FavoriteProductsScreenEvent, Favor
     on<ToggleProductSelection>(_onToggleProductSelection);
   }
 
-  Future<void> _onLoadProducts(
-      LoadProductsEvent event, Emitter<FavoriteProductsScreenState> emit) async {
+  Future<void> _onLoadProducts(LoadProductsEvent event,
+      Emitter<FavoriteProductsScreenState> emit) async {
     emit(state.copyWith(isLoading: true));
     try {
       String jsonString = await rootBundle.loadString('assets/products.json');
@@ -42,32 +43,40 @@ class FavoriteProductsScreenBloc extends Bloc<FavoriteProductsScreenEvent, Favor
           dataList.map((e) => ProductModel.fromJson(e)).toList();
       emit(state.copyWith(products: products, isLoading: false));
     } catch (e) {
-      emit(state.copyWith(isLoading: false,error: e.toString()));
+      emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }
 
- void _onPickAllProducts(
-    PickAllProductsEvent event, Emitter<FavoriteProductsScreenState> emit) {
-  final Set<int> newSelectedProductIds = state.isAllProductsChecked
-      ? <int>{} 
-      : state.products.map((e) => e.productId!).toSet();
+  void _onPickAllProducts(
+      PickAllProductsEvent event, Emitter<FavoriteProductsScreenState> emit) {
+    final Set<int> newSelectedProductIds = state.isAllProductsChecked
+        ? <int>{}
+        : state.products.map((e) => e.productId!).toSet();
 
-  emit(state.copyWith(
-    selectedProductIds: newSelectedProductIds,
-    isAllProductsChecked: newSelectedProductIds.isNotEmpty,
-  ));
-}
+    emit(state.copyWith(
+      selectedProductIds: newSelectedProductIds,
+      isAllProductsChecked: newSelectedProductIds.isNotEmpty,
+    ));
+  }
 
   void _onShowSortProductsTypes(
       ShowSortProductsTypes event, Emitter<FavoriteProductsScreenState> emit) {
-    emit(state.copyWith(
-        selectedFilterOrSortType: ProductFilterOrSortType.sort));
+    if (state.selectedFilterOrSortType == ProductFilterOrSortType.sort) {
+      emit(state.copyWith(selectedFilterOrSortType: null));
+    } else {
+      emit(state.copyWith(
+          selectedFilterOrSortType: ProductFilterOrSortType.sort));
+    }
   }
 
-   void _onShowFilterProductsTypes(
-      ShowFilterProductsTypes event, Emitter<FavoriteProductsScreenState> emit) {
-    emit(state.copyWith(
-        selectedFilterOrSortType: ProductFilterOrSortType.filter));
+  void _onShowFilterProductsTypes(ShowFilterProductsTypes event,
+      Emitter<FavoriteProductsScreenState> emit) {
+    if (state.selectedFilterOrSortType == ProductFilterOrSortType.filter) {
+      emit(state.copyWith(selectedFilterOrSortType: null));
+    } else {
+      emit(state.copyWith(
+          selectedFilterOrSortType: ProductFilterOrSortType.filter));
+    }
   }
 
   void _onSelectSortProductsType(

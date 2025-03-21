@@ -21,7 +21,11 @@ class ProductWidget extends StatelessWidget {
   final bool isSelected;
   final bool showCheckbox;
 
-  const ProductWidget({super.key, required this.product, required this.isSelected, required this.showCheckbox});
+  const ProductWidget(
+      {super.key,
+      required this.product,
+      required this.isSelected,
+      required this.showCheckbox});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,6 @@ class ProductWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Stack(
-               
                 children: [
                   SizedBox(
                     height: 120.h,
@@ -86,19 +89,17 @@ class ProductWidget extends StatelessWidget {
                     ),
                   ),
                   if (showCheckbox)
-                  Padding(
-                    padding: getMarginOrPadding(top: 8, right: 8),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: CustomCheckbox(
-                        isChecked:isSelected,
-                        onChanged: (_){
-                            context
-                  .read<FavoriteProductsScreenBloc>()
-                  .add(ToggleProductSelection(product.productId!));
-                      })
+                    Padding(
+                      padding: getMarginOrPadding(top: 8, left: 8),
+                      child: Align(
+                          alignment: Alignment.topLeft,
+                          child: CustomCheckbox(
+                              isChecked: isSelected,
+                              onChanged: (_) {
+                                context.read<FavoriteProductsScreenBloc>().add(
+                                    ToggleProductSelection(product.productId!));
+                              })),
                     ),
-                  ),
                 ],
               ),
               SizedBox(height: 8.h),
@@ -188,7 +189,9 @@ class ProductWidget extends StatelessWidget {
                       height: 40.h,
                       child: ProductPrice(product: product),
                     ),
-                    SizedBox(height: 8.h,),
+                    SizedBox(
+                      height: 8.h,
+                    ),
                     AppButtonWidget(
                       isFilled: false,
                       showBorder: true,

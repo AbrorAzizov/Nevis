@@ -7,7 +7,6 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_radio_button.dart';
 import 'package:nevis/features/presentation/widgets/dropdown_block_item.dart';
@@ -15,24 +14,45 @@ import 'package:nevis/features/presentation/widgets/dropdown_block_template.dart
 import 'package:nevis/features/presentation/widgets/products_screen/sort_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_screen/price_range_widget.dart';
 
-class FilterSortContainer extends StatelessWidget {
+class FilterSortContainer extends StatefulWidget {
   final List<ProductSortType> sortTypes;
   final ProductSortType? selectedSortType;
   final Function(ProductSortType) onSortSelected;
   final ProductFilterOrSortType? filterOrSortType;
+  final Function() onConfirmFilter;
 
   const FilterSortContainer({
-    Key? key,
+    super.key,
     required this.sortTypes,
     required this.selectedSortType,
     required this.onSortSelected,
     required this.filterOrSortType,
-  }) : super(key: key);
+    required this.onConfirmFilter,
+  });
+
+  @override
+  State<FilterSortContainer> createState() => _FilterSortContainerState();
+}
+
+class _FilterSortContainerState extends State<FilterSortContainer> {
+  final Map<String, bool> _filterStates = {};
+
+  void _toggleFilter(String key, bool value) {
+    setState(() {
+      _filterStates[key] = value;
+    });
+  }
+
+  void _resetFilters() {
+    setState(() {
+      _filterStates.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: filterOrSortType != null
+      decoration: widget.filterOrSortType != null
           ? BoxDecoration(
               borderRadius: BorderRadius.circular(16.r),
               color: UiConstants.whiteColor,
@@ -55,17 +75,19 @@ class FilterSortContainer extends StatelessWidget {
               children: [
                 Expanded(
                   child: SortWidget(
-                    iconColor:
-                        filterOrSortType == ProductFilterOrSortType.filter
-                            ? UiConstants.blueColor
-                            : UiConstants.black3Color.withOpacity(.6),
-                    style: filterOrSortType == ProductFilterOrSortType.filter
+                    iconColor: widget.filterOrSortType ==
+                            ProductFilterOrSortType.filter
+                        ? UiConstants.blueColor
+                        : UiConstants.black3Color.withOpacity(.6),
+                    style: widget.filterOrSortType ==
+                            ProductFilterOrSortType.filter
                         ? UiConstants.textStyle11
-                            .copyWith(color: UiConstants.blueColor): UiConstants.textStyle11,
+                            .copyWith(color: UiConstants.blueColor)
+                        : UiConstants.textStyle11,
                     text: 'Фильтр',
                     iconPath: Paths.sortIconPath,
                     onTap: () {
-                       context
+                      context
                           .read<FavoriteProductsScreenBloc>()
                           .add(ShowFilterProductsTypes());
                     },
@@ -73,13 +95,15 @@ class FilterSortContainer extends StatelessWidget {
                 ),
                 Expanded(
                   child: SortWidget(
-                    iconColor: filterOrSortType == ProductFilterOrSortType.sort
-                        ? UiConstants.blueColor
-                        : UiConstants.black3Color.withOpacity(.6),
-                    style: filterOrSortType == ProductFilterOrSortType.sort
-                        ? UiConstants.textStyle11
-                            .copyWith(color: UiConstants.blueColor)
-                        : UiConstants.textStyle11,
+                    iconColor:
+                        widget.filterOrSortType == ProductFilterOrSortType.sort
+                            ? UiConstants.blueColor
+                            : UiConstants.black3Color.withOpacity(.6),
+                    style:
+                        widget.filterOrSortType == ProductFilterOrSortType.sort
+                            ? UiConstants.textStyle11
+                                .copyWith(color: UiConstants.blueColor)
+                            : UiConstants.textStyle11,
                     text: 'Сортировка',
                     iconPath: Paths.filtersIconPath,
                     onTap: () {
@@ -87,90 +111,172 @@ class FilterSortContainer extends StatelessWidget {
                           .read<FavoriteProductsScreenBloc>()
                           .add(ShowSortProductsTypes());
                     },
-                  ), 
+                  ),
                 ),
               ],
             ),
-            if (filterOrSortType == ProductFilterOrSortType.sort)
+            if (widget.filterOrSortType == ProductFilterOrSortType.sort)
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   spacing: 8.h,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
-                    sortTypes.length,
+                    widget.sortTypes.length,
                     (index) {
-                      final productSortType = sortTypes[index];
+                      final productSortType = widget.sortTypes[index];
                       return CustomRadioButton(
                         isLabelOnLeft: false,
                         title: productSortType.displayName,
                         textStyle: UiConstants.textStyle2,
                         value: productSortType,
-                        groupValue: selectedSortType,
-                        onChanged: (value) => onSortSelected(productSortType),
+                        groupValue: widget.selectedSortType,
+                        onChanged: (value) =>
+                            widget.onSortSelected(productSortType),
                       );
                     },
                   ),
                 ),
               ),
-               if (filterOrSortType == ProductFilterOrSortType.filter)
+            if (widget.filterOrSortType == ProductFilterOrSortType.filter)
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Container(
+                child: SizedBox(
                   height: 500,
                   child: ListView(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     children: [
+                      Text(
+                        'Аптека',
+                        style: UiConstants.textStyle2
+                            .copyWith(color: UiConstants.darkBlueColor),
+                      ),
+                      SizedBox(height: 8.h),
+                      Text(
+                        'Не выбрана',
+                        style: UiConstants.textStyle11
+                            .copyWith(color: UiConstants.black2Color),
+                      ),
+                      SizedBox(height: 8.h),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Фильтры',
-                            style: UiConstants.textStyle5
-                                .copyWith(color: UiConstants.darkBlueColor),
+                            'Выбрать на карте',
+                            style: UiConstants.textStyle11.copyWith(
+                              color: UiConstants.black3Color.withOpacity(.6),
+                            ),
                           ),
-                         
+                          SizedBox(width: 8.w),
+                          Icon(Icons.arrow_forward_ios,
+                              color: UiConstants.black3Color.withOpacity(.6),
+                              size: 13)
                         ],
                       ),
                       SizedBox(height: 16.h),
-                      PriceRangeWidget(),
-                      SizedBox(height: 11.h),
                       DropdownBlockTemplate(
-                        title: 'Форма выпуска',
+                        title: 'Бренд',
                         child: ListView.separated(
-                            physics: NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) => DropdownBlockItem(
-                                  text: 'Text',
-                                  isChecked: true,
-                                      
-                                  onChanged: (isChecked) {
-                
-                                  }
-                                ),
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 8),
-                            itemCount: 5),
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            String key = 'Бренд $index';
+                            return DropdownBlockItem(
+                              text: key,
+                              isChecked: _filterStates[key] ?? false,
+                              onChanged: (isChecked) =>
+                                  _toggleFilter(key, isChecked ?? false),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 8),
+                          itemCount: 5,
+                        ),
                       ),
                       SizedBox(height: 16.h),
                       DropdownBlockTemplate(
-                        title: 'Страна производства',
+                        title: 'Форма выпуска',
                         child: ListView.separated(
-                            physics: NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) => DropdownBlockItem(
-                                  text: 'Text',
-                                  isChecked: true,
-                                  onChanged: (isChecked){
-                
-                                  }
-                                ),
-                            separatorBuilder: (context, index) =>
-                                SizedBox(height: 8),
-                            itemCount: 5),
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            String key = 'Форма выпуска $index';
+                            return DropdownBlockItem(
+                              text: key,
+                              isChecked: _filterStates[key] ?? false,
+                              onChanged: (isChecked) =>
+                                  _toggleFilter(key, isChecked ?? false),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 8),
+                          itemCount: 5,
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      DropdownBlockTemplate(
+                        title: 'Действующее вещество',
+                        child: ListView.separated(
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            String key = 'Действующее вещество $index';
+                            return DropdownBlockItem(
+                              text: key,
+                              isChecked: _filterStates[key] ?? false,
+                              onChanged: (isChecked) =>
+                                  _toggleFilter(key, isChecked ?? false),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 8),
+                          itemCount: 5,
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      DropdownBlockTemplate(
+                        title: 'Группа товаров',
+                        child: ListView.separated(
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            String key = 'Группа товаров $index';
+                            return DropdownBlockItem(
+                              text: key,
+                              isChecked: _filterStates[key] ?? false,
+                              onChanged: (isChecked) =>
+                                  _toggleFilter(key, isChecked ?? false),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 8),
+                          itemCount: 5,
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      DropdownBlockTemplate(
+                        title: 'Страна',
+                        child: ListView.separated(
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            String key = 'Страна $index';
+                            return DropdownBlockItem(
+                              text: key,
+                              isChecked: _filterStates[key] ?? false,
+                              onChanged: (isChecked) =>
+                                  _toggleFilter(key, isChecked ?? false),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 8),
+                          itemCount: 5,
+                        ),
                       ),
                       Padding(
                         padding: getMarginOrPadding(top: 16, bottom: 16),
@@ -179,32 +285,24 @@ class FilterSortContainer extends StatelessWidget {
                         ),
                       ),
                       DropdownBlockItem(
-                        text: 'Без рецепта',
-                        isChecked: true,
-                        onChanged: (isChecked) {
-                
-                        }
-                      ),
-                      SizedBox(height: 8.h),
-                      DropdownBlockItem(
                         text: 'Участвует в акции',
-                        isChecked:  true,
-                        onChanged: (isChecked) {
-                
-                        }
-                      ),
-                      SizedBox(height: 8.h),
-                      DropdownBlockItem(
-                        text: 'Возможна доставка',
-                        isChecked:true,
-                        onChanged: (isChecked) {
-                          
-                        }
+                        isChecked: _filterStates['Участвует в акции'] ?? false,
+                        onChanged: (isChecked) => _toggleFilter(
+                            'Участвует в акции', isChecked ?? false),
                       ),
                       SizedBox(height: 16.h),
+                      PriceRangeWidget(),
+                      SizedBox(height: 16.h),
                       AppButtonWidget(
-                        text: 'Показать результаты',
-                        onTap: () => Navigator.pop(context),
+                          text: 'Применить', onTap: widget.onConfirmFilter),
+                      SizedBox(height: 8.h),
+                      GestureDetector(
+                        onTap: _resetFilters,
+                        child: Text('Сбросить фильтры',
+                            style: UiConstants.textStyle11.copyWith(
+                              color: UiConstants.black3Color.withOpacity(.6),
+                            ),
+                            textAlign: TextAlign.center),
                       )
                     ],
                   ),

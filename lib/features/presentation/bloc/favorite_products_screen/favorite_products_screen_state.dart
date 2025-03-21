@@ -9,7 +9,7 @@ class FavoriteProductsScreenState extends Equatable {
   final bool isLoading;
   final String? error;
 
-  const FavoriteProductsScreenState( {
+  const FavoriteProductsScreenState({
     required this.error,
     required this.products,
     required this.selectedFilterOrSortType,
@@ -19,23 +19,22 @@ class FavoriteProductsScreenState extends Equatable {
     required this.isLoading,
   });
 
-  FavoriteProductsScreenState copyWith({
-    List<ProductEntity>? products,
-    Set<int>? selectedProductIds,
-    ProductSortType? selectedSortType,
-    bool? isAllProductsChecked,
-    ProductFilterOrSortType? selectedFilterOrSortType,
-    bool? isLoading,
-    String? error
-  }) {
+  FavoriteProductsScreenState copyWith(
+      {List<ProductEntity>? products,
+      Set<int>? selectedProductIds,
+      ProductSortType? selectedSortType,
+      bool? isAllProductsChecked,
+      ProductFilterOrSortType? selectedFilterOrSortType,
+      bool? isLoading,
+      String? error}) {
     return FavoriteProductsScreenState(
       products: products ?? this.products,
       selectedProductIds: selectedProductIds ?? this.selectedProductIds,
       isAllProductsChecked: isAllProductsChecked ?? this.isAllProductsChecked,
       selectedSortType: selectedSortType ?? this.selectedSortType,
-      selectedFilterOrSortType: selectedFilterOrSortType ?? this.selectedFilterOrSortType,
-      isLoading: isLoading ?? this.isLoading, 
-      error: error ?? this.error ,
+      selectedFilterOrSortType: selectedFilterOrSortType,
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
     );
   }
 

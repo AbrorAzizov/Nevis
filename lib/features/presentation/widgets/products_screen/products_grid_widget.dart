@@ -10,10 +10,14 @@ class ProductsGridWidget extends StatelessWidget {
   final bool isLoading;
   final List<ProductEntity> products;
   final Set<int> selectedProductIds;
-  final bool showCheckbox; 
+  final bool showCheckbox;
 
   const ProductsGridWidget(
-      {super.key, required this.products, required this.isLoading, required this.selectedProductIds, required this.showCheckbox});
+      {super.key,
+      required this.products,
+      required this.isLoading,
+      required this.selectedProductIds,
+      required this.showCheckbox});
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +46,8 @@ class ProductsGridWidget extends StatelessWidget {
             ),
             itemCount: itemCount,
             itemBuilder: (context, index) {
-               final product = products[index];
-               final isSelected = selectedProductIds.contains(product.productId);
+              final product = products[index];
+              final isSelected = selectedProductIds.contains(product.productId);
               return GestureDetector(
                 onTap: () => Navigator.of(context).push(
                   Routes.createRoute(
@@ -53,7 +57,10 @@ class ProductsGridWidget extends StatelessWidget {
                         arguments: products[index].productId),
                   ),
                 ),
-                child: ProductWidget(product: product, isSelected: isSelected, showCheckbox: true,),
+                child: ProductWidget(
+                    product: product,
+                    isSelected: isSelected,
+                    showCheckbox: true),
               );
             },
           ),

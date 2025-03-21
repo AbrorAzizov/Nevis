@@ -1,29 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/enums.dart';
-import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/features/data/models/product_model.dart';
-import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
-import 'package:nevis/features/presentation/widgets/custom_radio_button.dart';
 import 'package:nevis/features/presentation/widgets/favourite_products_screen/selected_products_price_info_widget.dart';
 import 'package:nevis/features/presentation/widgets/filter_and_sort_widget.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
-import 'package:nevis/features/presentation/widgets/products_screen/product_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
-import 'package:nevis/features/presentation/widgets/products_screen/sort_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class FavoriteProductsScreen extends StatelessWidget {
@@ -124,6 +112,7 @@ class FavoriteProductsScreen extends StatelessWidget {
               bloc.add(SelectSortProductsType(productSortType: sortType));
             },
             filterOrSortType: state.selectedFilterOrSortType,
+            onConfirmFilter: () => bloc.add(ShowFilterProductsTypes()),
           ),
           SizedBox(height: 16.h),
           CustomCheckbox(
@@ -137,21 +126,30 @@ class FavoriteProductsScreen extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           ProductsGridWidget(
-            isLoading: false,
-            products: state.products,
-            selectedProductIds: state.selectedProductIds,
-            showCheckbox: true,
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          if(state.selectedProductIds.isNotEmpty)
-          SelectedProductsPriceInformationWidget(
-            products: state.products
-                .where((product) =>
-                    state.selectedProductIds.contains(product.productId))
-                .toList(),
-          )
+              isLoading: false,
+              products: state.products,
+              selectedProductIds: state.selectedProductIds,
+              showCheckbox: true),
+          SizedBox(height: 10.h),
+          if (state.selectedProductIds.isNotEmpty)
+            Column(
+              children: [
+                SelectedProductsPriceInformationWidget(
+                  products: state.products
+                      .where((product) =>
+                          state.selectedProductIds.contains(product.productId))
+                      .toList(),
+                ),
+                SizedBox(height: 16.h),
+                AppButtonWidget(
+                  text: 'Добавить 2 товара в корзину',
+                  onTap: () {},
+                  isFilled: false,
+                  textColor: UiConstants.blueColor,
+                  showBorder: true,
+                )
+              ],
+            )
         ],
       ),
     );
