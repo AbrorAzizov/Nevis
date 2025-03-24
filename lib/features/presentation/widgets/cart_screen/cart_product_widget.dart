@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dismissible_tile/flutter_dismissible_tile.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/enums.dart';
@@ -15,14 +14,11 @@ import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/change_count_product_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/info_border_plate.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/only_pickup_chip.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/out_stock_chip.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/product_price.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/product_stock_chip.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
 import 'package:nevis/features/presentation/widgets/product_chip_widget.dart';
-
-import 'package:skeletonizer/skeletonizer.dart';
 
 class CartProductWidget extends StatefulWidget {
   const CartProductWidget({

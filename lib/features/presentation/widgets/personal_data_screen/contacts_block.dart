@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/core/formatters/custom_phone_input_formatter.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
@@ -37,7 +34,8 @@ class _ContactsBlockState extends State<ContactsBlock> {
                   context: context.read<HomeScreenBloc>().context,
                   requestCodeUC: sl(),
                   phone: personalDataBloc.phoneController.text,
-                  code: personalDataBloc.state.confirmPhoneCode, loginUC: sl()),
+                  code: personalDataBloc.state.confirmPhoneCode,
+                  loginUC: sl()),
               child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
                 listener: (context, state) async => switch (state) {
                   SuccessPasteState _ => await personalDataBloc.updateProfile(

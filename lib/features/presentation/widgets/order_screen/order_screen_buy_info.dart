@@ -5,9 +5,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
-import 'package:nevis/features/data/models/order_model.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/product_price.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class OrderBuyInfoWidget extends StatelessWidget {

@@ -12,10 +12,8 @@ import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/personal_data_screen/checkboxed_block.dart';
-import 'package:nevis/features/presentation/widgets/personal_data_screen/contacts_block.dart';
 import 'package:nevis/features/presentation/widgets/personal_data_screen/general_information_block.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PersonalDataScreen extends StatelessWidget {

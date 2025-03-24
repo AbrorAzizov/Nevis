@@ -10,7 +10,6 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/formatters/custom_phone_input_formatter.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/login_screen/login_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/home_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/code_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_yandex.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';

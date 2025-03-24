@@ -12,11 +12,7 @@ import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/pharmacies_screen/pharmacies_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/cart_pharmacy_widget.dart';
@@ -33,14 +29,10 @@ import 'package:nevis/features/presentation/widgets/cart_screen/summary_block/ca
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
-import 'package:nevis/features/presentation/widgets/custom_radio_button.dart';
-import 'package:nevis/features/presentation/widgets/dropdown_block_item.dart';
-import 'package:nevis/features/presentation/widgets/dropdown_block_template.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
 import 'package:nevis/features/presentation/widgets/map/pharmacy_map_widget.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_info_list.dart';
 import 'package:nevis/features/presentation/widgets/pinput_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_screen/price_range_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class BottomSheetManager {

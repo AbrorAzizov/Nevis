@@ -8,7 +8,6 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/custom_cache_manager.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/change_count_product_widget.dart';
 
 class CuttedOrderInfo extends StatelessWidget {
   const CuttedOrderInfo({super.key, required this.product});
@@ -48,8 +47,8 @@ class CuttedOrderInfo extends StatelessWidget {
           ),
           Text(
             '${product.count} шт.',
-            style: UiConstants.textStyle8
-                .copyWith(color: UiConstants.black3Color),
+            style:
+                UiConstants.textStyle8.copyWith(color: UiConstants.black3Color),
           ),
         ],
       ),

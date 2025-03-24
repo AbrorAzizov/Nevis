@@ -19,6 +19,7 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
       String? token =
           sharedPreferences.getString(SharedPreferencesKeys.accessToken);
       if (token != null) {
+        //bool isSuccessFetchData = await _getUserData();
         bool isSuccessFetchData = await _getUserData();
         if (isSuccessFetchData) {
           emit(SplashScreenNavigateHome());

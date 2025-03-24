@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/route_manager.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/ui_constants.dart';
@@ -30,21 +29,27 @@ class CodeScreen extends StatelessWidget {
       create: (context) => CodeScreenBloc(
         context: context,
         requestCodeUC: sl(),
-        phone: args['phone'], 
+        phone: args['phone'],
         loginUC: sl(),
       )
       // ..startTimer(context),
       ,
       child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
         listener: (context, state) {
-          if(state.showError){
+          if (state.showError) {
             Get.closeAllSnackbars();
             Get.showSnackbar(GetSnackBar(
-               snackPosition: SnackPosition.TOP, 
+              snackPosition: SnackPosition.TOP,
               title: 'Ошибка',
-              duration: Duration(seconds:2),
+              duration: Duration(seconds: 2),
               message: state.codeErrorText,
             ));
+          } else if (state is CorrectedCodeState) {
+            Navigator.of(context).pushAndRemoveUntil(
+                Routes.createRoute(
+                  const HomeScreen(),
+                ),
+                (route) => false);
           }
         },
         builder: (context, state) {

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/utils.dart';
-
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_info_item.dart';
 

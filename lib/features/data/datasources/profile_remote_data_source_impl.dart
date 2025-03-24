@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
-import 'package:nevis/constants/utils.dart';
+import 'package:flutter/services.dart';
+import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/data/models/profile_model.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ProfileRemoteDataSource {
@@ -17,44 +15,24 @@ abstract class ProfileRemoteDataSource {
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
-  final http.Client client;
+  final ApiClient apiClient;
   final SharedPreferences sharedPreferences;
 
-  ProfileRemoteDataSourceImpl(
-      {required this.client, required this.sharedPreferences});
+  ProfileRemoteDataSourceImpl({
+    required this.apiClient,
+    required this.sharedPreferences,
+  });
 
   @override
   Future<ProfileModel> getMe() async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    final String? serverToken =
-        sharedPreferences.getString(SharedPreferencesKeys.accessToken);
-
-    final uri = Uri.parse('${baseUrl}profile/user');
-    final headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $serverToken'
-    };
-
-    log('GET Request: $uri', name: 'ProfileRemoteDataSourceImpl.getMe');
-    log('Headers: $headers', name: 'ProfileRemoteDataSourceImpl.getMe');
-
     try {
-      final response = await client.get(uri, headers: headers);
+      final data = await apiClient.get(
+        endpoint: 'users/profile',
+        callPathNameForLog: '${runtimeType.toString()}.getMe',
+      );
 
-      log('Response Status Code: ${response.statusCode}',
-          name: 'ProfileRemoteDataSourceImpl.getMe');
-      log('Response Body: ${response.body}',
-          name: 'ProfileRemoteDataSourceImpl.getMe');
-
-      if (response.statusCode == 200) {
-        final person = json.decode(response.body)['data'];
-        return ProfileModel.fromJson(person);
-      } else {
-        log('Error: ServerException occurred',
-            name: 'ProfileRemoteDataSourceImpl.getMe', error: response.body);
-        throw ServerException();
-      }
+      //final person = data;
+      return ProfileModel();
     } catch (e) {
       log('Error during getMe: $e', level: 1000);
       rethrow;
@@ -63,48 +41,24 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<String?> updateMe(ProfileModel profile) async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    final String? serverToken =
-        sharedPreferences.getString(SharedPreferencesKeys.accessToken);
-
-    final uri = Uri.parse('${baseUrl}profile/update');
-    final headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $serverToken'
-    };
-    final body = jsonEncode(Utils.getNotNullFields(profile.toJson()));
-
-    log('PUT Request: $uri', name: 'ProfileRemoteDataSourceImpl.updateMe');
-    log('Headers: $headers', name: 'ProfileRemoteDataSourceImpl.updateMe');
-    log('Request Body: $body', name: 'ProfileRemoteDataSourceImpl.updateMe');
-
     try {
-      final response = await client.put(uri, headers: headers, body: body);
+      final data = await apiClient.put(
+        endpoint: 'profile/update',
+        body: profile.toJson(),
+        callPathNameForLog: '${runtimeType.toString()}.updateMe',
+      );
 
-      log('Response Status Code: ${response.statusCode}',
-          name: 'ProfileRemoteDataSourceImpl.updateMe');
-      log('Response Body: ${response.body}',
-          name: 'ProfileRemoteDataSourceImpl.updateMe');
-
-      switch (response.statusCode) {
+      switch (data['statusCode']) {
         case 200:
-          final data = json.decode(response.body);
           return data['data']['code'];
         case 409:
-          final data = json.decode(response.body);
           final error = data['data']['error'];
           if (error.toString().contains('SMS')) {
             return data['data']['code'].toString();
           } else if (error.toString().contains('СМС')) {
-            return 'null';
             throw SendingCodeTooOftenException();
           }
-          log('Error: AcceptPersonalDataException occurred',
-              name: 'ProfileRemoteDataSourceImpl.updateMe',
-              error: response.body);
           throw AcceptPersonalDataException();
-
         default:
           throw ServerException();
       }
@@ -116,39 +70,51 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<void> deleteMe() async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    final String? serverToken =
-        sharedPreferences.getString(SharedPreferencesKeys.accessToken);
-
-    final uri = Uri.parse('${baseUrl}profile/delete');
-    final headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $serverToken'
-    };
-
-    log('GET Request: $uri', name: 'ProfileRemoteDataSourceImpl.deleteMe');
-    log('Headers: $headers', name: 'ProfileRemoteDataSourceImpl.deleteMe');
-
     try {
-      final response = await client.delete(uri, headers: headers);
+      final data = await apiClient.delete(
+        endpoint: 'profile/delete',
+        callPathNameForLog: '${runtimeType.toString()}.deleteMe',
+      );
 
-      log('Response Status Code: ${response.statusCode}',
-          name: 'ProfileRemoteDataSourceImpl.deleteMe');
-      log('Response Body: ${response.body}',
-          name: 'ProfileRemoteDataSourceImpl.deleteMe');
-
-      if (response.statusCode != 200) {
-        log('Error: ServerException occurred',
-            name: 'ProfileRemoteDataSourceImpl.deleteMe', error: response.body);
+      if (data['statusCode'] != 200) {
         throw ServerException();
       } else {
-        // очищаем токен
+        // Remove token from SharedPreferences
         sharedPreferences.remove(SharedPreferencesKeys.accessToken);
       }
     } catch (e) {
       log('Error during deleteMe: $e', level: 1000);
       rethrow;
     }
+  }
+}
+
+class MockProfileRemoteDataSource implements ProfileRemoteDataSource {
+  final SharedPreferences sharedPreferences;
+
+  MockProfileRemoteDataSource({required this.sharedPreferences});
+
+  @override
+  Future<ProfileModel> getMe() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    final jsonString =
+        await rootBundle.loadString('assets/mock_profile_response.json');
+    final data = jsonDecode(jsonString);
+    return ProfileModel.fromJson(data['data']);
+  }
+
+  @override
+  Future<String?> updateMe(ProfileModel profile) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    final jsonString =
+        await rootBundle.loadString('assets/mock_profile_update_response.json');
+    final data = jsonDecode(jsonString);
+    return data['data']['code'];
+  }
+
+  @override
+  Future<void> deleteMe() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    sharedPreferences.remove(SharedPreferencesKeys.accessToken);
   }
 }

@@ -1,11 +1,8 @@
-import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthRemoteDataSource {
@@ -16,159 +13,98 @@ abstract class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final http.Client client;
+  final ApiClient apiClient;
   final SharedPreferences sharedPreferences;
 
   AuthRemoteDataSourceImpl({
-    required this.client,
+    required this.apiClient,
     required this.sharedPreferences,
   });
 
   @override
   Future<void> login(String phone, String code) async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    String url = '${baseUrl}auth/login';
-
-    log('POST $url');
-    log('Request body: ${jsonEncode({'phone_number': phone, 'verification_code': code})}');
-
     try {
-      final response = await client.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json', 
+      final data = await apiClient.post(
+        endpoint: 'auth/login',
+        body: {
+          'phone_number': phone,
+          'verification_code': code,
         },
-        body: jsonEncode({'phone_number': phone, 'verification_code': code}),
+        exceptions: {
+          401: ConfirmationCodeWrongException(),
+          429: TooManyRequestsException(),
+        },
+        callPathNameForLog: '${runtimeType.toString()}.login',
       );
-      log('Response ($url): ${response.statusCode} ${response.body}');
-      print(response.statusCode);
-      switch (response.statusCode) {
-        
-        case 200:
-          
-          final data = json.decode(response.body);
-          if(data.containsKey('session_token')){
-              await sharedPreferences.setString(
-              SharedPreferencesKeys.accessToken, data['session_token']);
-          break;
-          }
-          else{
-            throw ConfirmationCodeWrongException();
-          }
-        
-         case 401:
-          throw ConfirmationCodeWrongException();
-        case 429:
-          throw TooManyRequestsException();
-        default:
-          throw ServerException();
+
+      if (data.containsKey('access_token')) {
+        await sharedPreferences.setString(
+            SharedPreferencesKeys.accessToken, data['access_token']['token']);
+        await sharedPreferences.setString(
+            SharedPreferencesKeys.refreshToken, data['refresh_token']['token']);
+      } else {
+        throw ConfirmationCodeWrongException();
       }
     } catch (e) {
-      log('Error during login: $e', level: 1000);
+      log('Error during login: $e',
+          name: '${runtimeType.toString()}.login', level: 1000);
       rethrow;
     }
   }
 
   @override
   Future<void> logout() async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    String url = '${baseUrl}auth/logout';
-
-    final String? serverToken =
-        sharedPreferences.getString(SharedPreferencesKeys.accessToken);
-
-    log('POST $url');
-
     try {
-      final response = await client.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $serverToken'
+      await apiClient.post(
+        endpoint: 'auth/logout',
+        exceptions: {
+          401: ServerException(),
         },
+        callPathNameForLog: '${runtimeType.toString()}.logout',
       );
-      // очищаем токен
+
+      // Clear token after successful logout
       sharedPreferences.remove(SharedPreferencesKeys.accessToken);
-
-      log('Response ($url): ${response.statusCode} ${response.body}');
-
-      if (response.statusCode != 200) {
-        throw ServerException();
-      }
     } catch (e) {
-      log('Error during logout: $e', level: 1000);
+      log('Error during logout: $e',
+          name: '${runtimeType.toString()}.logout', level: 1000);
       rethrow;
     }
   }
 
   @override
   Future<void> requestCode(String phone) async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    String url = '${baseUrl}auth/verification-code';
-
-    log('POST $url');
-    log('Request body: ${jsonEncode({'phone_number': phone})}');
-
     try {
-     
-      final response = await client.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+      await apiClient.post(
+        endpoint: 'auth/verification-code',
+        body: {'phone_number': phone},
+        exceptions: {
+          409: SendingCodeTooOftenException(),
         },
-        body: jsonEncode({'phone_number': phone}),
+        callPathNameForLog: '${runtimeType.toString()}.requestCode',
       );
-
-      log('Response ($url): ${response.statusCode} ${response.body}');
-
-      switch (response.statusCode) {
-        case 200:
-          return;
-        case 409:
-          throw SendingCodeTooOftenException();
-        default:
-          throw ServerException();
-      }
     } catch (e) {
-      log('Error during requestCode: $e', level: 1000);
+      log('Error during requestCode: $e',
+          name: '${runtimeType.toString()}.requestCode', level: 1000);
       rethrow;
     }
   }
 
   @override
   Future<bool?> isPhoneExists(String phone) async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    String url = '${baseUrl}auth/check';
-
-    log('POST $url');
-    log('Request body: ${jsonEncode({'phone': phone})}');
-
     try {
-      final response = await client.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+      final data = await apiClient.post(
+        endpoint: 'auth/check',
+        body: {'phone': phone},
+        exceptions: {
+          422: InvalidFormatException(),
         },
-        body: jsonEncode({'phone': phone}),
+        callPathNameForLog: '${runtimeType.toString()}.isPhoneExists',
       );
-
-      log('Response ($url): ${response.statusCode} ${response.body}');
-
-      switch (response.statusCode) {
-        case 200:
-          final data = json.decode(response.body);
-          return data['data']['phone'] == 'found';
-        case 422:
-          throw InvalidFormatException();
-        default:
-          throw ServerException();
-      }
+      return data['data']['phone'] == 'found';
     } catch (e) {
-      log('Error during isPhoneExists: $e', level: 1000);
+      log('Error during isPhoneExists: $e',
+          name: '${runtimeType.toString()}.isPhoneExists', level: 1000);
       rethrow;
     }
   }

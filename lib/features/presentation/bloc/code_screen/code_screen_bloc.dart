@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
 
   final FocusNode codeFocusNode = FocusNode(); // FocusNode для поля ввода кода
 
-  CodeScreenBloc( {
+  CodeScreenBloc({
     required this.loginUC,
     required this.requestCodeUC,
     String? phone,
@@ -33,9 +34,9 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
     String? code,
   }) : super(CodeScreenState(phone: phone)) {
     screenContext = context!;
-    on<CodeChangedEvent>(_onCodeChanged); 
-    on<TimerTickEvent>(_onTimerTick); 
-    on<SubmitCodeEvent>(_onSubmitCode); 
+    on<CodeChangedEvent>(_onCodeChanged);
+    on<TimerTickEvent>(_onTimerTick);
+    on<SubmitCodeEvent>(_onSubmitCode);
 
     // Навешивание листенера на TextEditingController
     codeController.addListener(_codeListener);
@@ -66,38 +67,33 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
   }
 
   // Обработка нажатия на кнопку "Войти"
-  void _onSubmitCode(SubmitCodeEvent event, Emitter<CodeScreenState> emit) async{
-      emit(state.copyWith(showError: false));
+  void _onSubmitCode(
+      SubmitCodeEvent event, Emitter<CodeScreenState> emit) async {
+    emit(state.copyWith(showError: false));
 
-      final failureOrLoads = await loginUC(AuthenticationParams(
-            phone: Utils.formatPhoneNumber(state.phone),
-            code: state.code
-           ));
-        failureOrLoads.fold(
-          (failure) => switch (failure) {
-            TooManyRequestsFailure _ => emit(state.copyWith(
-                showError: true,
-                codeErrorText: 'Слишком много запросов')),
-            ConfirmationCodeWrongFailure _ => emit(state.copyWith(
-                showError: true,
-                codeErrorText: 'Неверный код')),
-            ServerFailure _ => emit(state.copyWith(
-                showError: true, codeErrorText: 'Неизвестная ошибка')),
-            _ => emit(state.copyWith(
-                showError: true, codeErrorText: 'Неизвестная ошибка')),
-          },
-          (_) {
-            emit(state.copyWith(showError: false));
-            emit(CorrectedCodeState());
-          },
-        );
-             print(state.codeErrorText); 
-  
+    final failureOrLoads = await loginUC(AuthenticationParams(
+        phone: Utils.formatPhoneNumber(state.phone), code: state.code));
+    failureOrLoads.fold(
+      (failure) => switch (failure) {
+        TooManyRequestsFailure _ => emit(state.copyWith(
+            showError: true, codeErrorText: 'Слишком много запросов')),
+        ConfirmationCodeWrongFailure _ =>
+          emit(state.copyWith(showError: true, codeErrorText: 'Неверный код')),
+        ServerFailure _ => emit(state.copyWith(
+            showError: true, codeErrorText: 'Неизвестная ошибка')),
+        _ => emit(state.copyWith(
+            showError: true, codeErrorText: 'Неизвестная ошибка')),
+      },
+      (_) {
+        emit(state.copyWith(showError: false));
+        emit(CorrectedCodeState());
+      },
+    );
   }
 
   // Обработка запроса нового кода
   void _onRequestNewCode(
-     RequestNewCodeEvent event, Emitter<CodeScreenState> emit) {
+      RequestNewCodeEvent event, Emitter<CodeScreenState> emit) {
     _timer?.cancel(); // Остановка предыдущего таймера
     startTimer(screenContext); // Запуск нового таймера
   }
@@ -123,7 +119,7 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
     String? codeOrMsg = requestCodeFun != null
         ? await requestCodeFun() // Вызов функции
         : null;
-        //await _requestCode(); // Вызов метода _requestCode
+    //await _requestCode(); // Вызов метода _requestCode
 
     if (double.tryParse(codeOrMsg!) != null ||
         (phone == state.phone && state.correctCode != null)) {

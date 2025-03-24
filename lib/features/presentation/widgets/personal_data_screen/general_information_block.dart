@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nevis/constants/enums.dart';
-import 'package:nevis/constants/paths.dart';
-import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/formatters/date_input_formatter.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
-import 'package:nevis/features/presentation/widgets/custom_radio_button.dart';
 import 'package:nevis/features/presentation/widgets/personal_data_screen/contacts_block.dart';
 
 class GeneralInformationBlock extends StatelessWidget {

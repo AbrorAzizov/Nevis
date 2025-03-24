@@ -8,10 +8,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/formatters/custom_phone_input_formatter.dart';
-import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/login_screen/login_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/home_screen.dart';
-import 'package:nevis/features/presentation/pages/starts/code_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/app_template.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
@@ -28,9 +25,8 @@ class LoginScreenWithYandex extends StatelessWidget {
     LoginScreenType loginScreenType = args!['redirect_type'];
     return BlocProvider(
       create: (context) => LoginScreenBloc(
-        args: args, 
+        args: args,
         requestCodeUC: sl(),
-  
       ),
       child: BlocConsumer<LoginScreenBloc, LoginScreenState>(
         listener: (context, state) async {
@@ -46,7 +42,7 @@ class LoginScreenWithYandex extends StatelessWidget {
           final bloc = context.read<LoginScreenBloc>();
           return AppTemplate(
             canBack: true,
-            title:  'Авторизация',
+            title: 'Авторизация',
             subTitleText:
                 'Войдите, чтобы совершать покупки,\nкопить бонусы и иметь быстрый доступ к карте лояльности',
             bodyPadding:
@@ -60,8 +56,10 @@ class LoginScreenWithYandex extends StatelessWidget {
                     SvgPicture.asset(Paths.yandexLogInIconPath),
                   ],
                 ),
-                SizedBox(height: 32.h,),
-                    AppTextFieldWidget(
+                SizedBox(
+                  height: 32.h,
+                ),
+                AppTextFieldWidget(
                   fillColor: UiConstants.whiteColor,
                   title: 'Введите номер телефона',
                   hintText: '+7 (800) 000 00 00',
@@ -79,13 +77,11 @@ class LoginScreenWithYandex extends StatelessWidget {
                     text: 'Войти',
                     onTap: () {
                       Navigator.pop(context);
-                    }
-                    ),
+                    }),
                 SizedBox(
                   height: 32.h,
                 ),
                 PolicyTextWidget(),
-                
               ],
             ),
           );

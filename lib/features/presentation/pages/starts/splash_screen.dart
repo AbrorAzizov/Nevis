@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
-import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/splash_screen/splash_screen_bloc.dart';
@@ -56,7 +52,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
             );
-  
           } else if (state is SplashScreenNavigateHome) {
             Navigator.of(context).pushReplacement(
               Routes.createRoute(
@@ -98,11 +93,16 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-               Row(
-                      children: [
-                        Expanded(child: Text('АПТЕКА НЕВИС',style: UiConstants.splashTextStyle,textAlign: TextAlign.center,)),
-                      ],
-                    )
+                Row(
+                  children: [
+                    Expanded(
+                        child: Text(
+                      'АПТЕКА НЕВИС',
+                      style: UiConstants.splashTextStyle,
+                      textAlign: TextAlign.center,
+                    )),
+                  ],
+                )
               ],
             ),
           ),
@@ -111,7 +111,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-
-
- 

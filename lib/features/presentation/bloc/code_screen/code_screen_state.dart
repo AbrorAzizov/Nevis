@@ -10,10 +10,8 @@ class CodeScreenState extends Equatable {
   final int secondsLeft;
   final bool showError;
 
-
-  const CodeScreenState(
-     {
-     this.codeErrorText,
+  const CodeScreenState({
+    this.codeErrorText,
     this.correctCode,
     this.phone,
     this.code = '',
@@ -34,15 +32,14 @@ class CodeScreenState extends Equatable {
     String? codeErrorText,
   }) {
     return CodeScreenState(
-      correctCode: correctCode ?? this.correctCode,
-      phone: phone ?? this.phone,
-      code: code ?? this.code,
-      isButtonActive: isButtonActive ?? this.isButtonActive,
-      canRequestNewCode: canRequestNewCode ?? this.canRequestNewCode,
-      secondsLeft: secondsLeft ?? this.secondsLeft,
-      showError: showError ?? this.showError,
-      codeErrorText: codeErrorText ?? this.codeErrorText
-    );
+        correctCode: correctCode ?? this.correctCode,
+        phone: phone ?? this.phone,
+        code: code ?? this.code,
+        isButtonActive: isButtonActive ?? this.isButtonActive,
+        canRequestNewCode: canRequestNewCode ?? this.canRequestNewCode,
+        secondsLeft: secondsLeft ?? this.secondsLeft,
+        showError: showError ?? this.showError,
+        codeErrorText: codeErrorText ?? this.codeErrorText);
   }
 
   @override
@@ -68,9 +65,4 @@ class SuccessPasteState extends CodeScreenState {
   List<Object?> get props => [phone, correctCode];
 }
 
-class CorrectedCodeState extends CodeScreenState{
- 
-}
-
-
-
+class CorrectedCodeState extends CodeScreenState {}

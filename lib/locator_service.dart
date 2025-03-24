@@ -1,8 +1,8 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/auth_remote_data_source_impl.dart';
@@ -91,8 +91,8 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => CodeScreenBloc(
-      requestCodeUC: sl<RequestCodeUC>(), 
-      loginUC:  sl<LoginUC>(),
+      requestCodeUC: sl<RequestCodeUC>(),
+      loginUC: sl<LoginUC>(),
     ),
   );
   sl.registerFactory(
@@ -248,72 +248,69 @@ Future<void> init() async {
       errorHandler: sl(),
     ),
   );
-  
-  // sl.registerLazySingleton<OrderRepository>(
-  //   () => OrderRepositoryImpl(
-  //     orderRemoteDataSource: sl(),
-  //     networkInfo: sl(),
-  //     errorHandler: sl(),
-  //   ),
-  // );
 
- sl.registerLazySingleton<OrderRepository>(
-    () => MockOrderRepositoryImpl(
+  sl.registerLazySingleton<OrderRepository>(
+    () => OrderRepositoryImpl(
       orderRemoteDataSource: sl(),
       networkInfo: sl(),
       errorHandler: sl(),
     ),
   );
 
-
   //// DataSources
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(
-      client: sl(),
+      apiClient: sl(),
       sharedPreferences: sl(),
     ),
   );
   sl.registerLazySingleton<ProfileRemoteDataSource>(
     () => ProfileRemoteDataSourceImpl(
-      client: sl(),
+      apiClient: sl(),
       sharedPreferences: sl(),
     ),
   );
   sl.registerLazySingleton<ContentRemoteDataSource>(
     () => ContentRemoteDataSourceImpl(
-      client: sl(),
+      apiClient: sl(),
       sharedPreferences: sl(),
     ),
   );
   sl.registerLazySingleton<ProductRemoteDataSource>(
     () => ProductRemoteDataSourceImpl(
-      client: sl(),
+      apiClient: sl(),
       sharedPreferences: sl(),
     ),
   );
   sl.registerLazySingleton<CategoryRemoteDataSource>(
     () => CategoryRemoteDataSourceImpl(
-      client: sl(),
+      apiClient: sl(),
       sharedPreferences: sl(),
     ),
   );
-  // sl.registerLazySingleton<OrderRemoteDataSource>(
-  //   () => OrderRemoteDataSourceImpl(
-  //     client: sl(),
-  //     sharedPreferences: sl(),
-  //   ),
-  // );
 
-   sl.registerLazySingleton<OrderRemoteDataSource>(
-    () => MockOrderRemoteDataSource(
-      client: sl(),
+  sl.registerLazySingleton<OrderRemoteDataSource>(
+    () => OrderRemoteDataSourceImpl(
+      apiClient: sl(),
       sharedPreferences: sl(),
     ),
   );
+
+  //sl.registerLazySingleton<OrderRemoteDataSource>(
+  //  () => MockOrderRemoteDataSource(
+  //    sharedPreferences: sl(),
+  //  ),
+  //);
 
   //// Core
   sl.registerLazySingleton<NetworkInfo>(
     () => NetworkInfoImpl(sl()),
+  );
+  sl.registerLazySingleton<ApiClient>(
+    () => ApiClient(
+      client: sl(),
+      sharedPreferences: sl(),
+    ),
   );
   sl.registerLazySingleton<ErrorHandler>(
     () => ErrorHandlerImpl(sl()),

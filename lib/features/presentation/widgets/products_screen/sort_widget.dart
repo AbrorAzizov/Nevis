@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/size_utils.dart';
-import 'package:nevis/constants/ui_constants.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SortWidget extends StatelessWidget {
@@ -11,7 +10,7 @@ class SortWidget extends StatelessWidget {
       required this.onTap,
       required this.text,
       required this.iconPath,
-      required this.style, 
+      required this.style,
       required this.iconColor});
 
   final Function() onTap;
@@ -35,9 +34,13 @@ class SortWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Skeleton.ignore(
-                      child:
-                          SvgPicture.asset(iconPath, width: 24.w, height: 24.w,
-                          colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),),
+                      child: SvgPicture.asset(
+                        iconPath,
+                        width: 24.w,
+                        height: 24.w,
+                        colorFilter:
+                            ColorFilter.mode(iconColor, BlendMode.srcIn),
+                      ),
                     ),
                     SizedBox(width: 8.w),
                     Text(

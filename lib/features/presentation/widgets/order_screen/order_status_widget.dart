@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/extensions.dart';
-import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/constants/utils.dart';
 
 class OrderStatusWidget extends StatelessWidget {
   const OrderStatusWidget(

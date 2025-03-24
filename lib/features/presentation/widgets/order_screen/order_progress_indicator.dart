@@ -1,11 +1,9 @@
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:nevis/constants/enums.dart';
-import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_progress_indicator_icon.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class OrderProgressIndicator extends StatelessWidget {
@@ -52,7 +50,7 @@ class OrderProgressIndicator extends StatelessWidget {
     }
     return Skeleton.unite(
         child: EasyStepper(
-            showScrollbar: false,  
+            showScrollbar: false,
             showTitle: false,
             stepShape: StepShape.circle,
             finishedStepBackgroundColor: Colors.transparent,
@@ -64,14 +62,14 @@ class OrderProgressIndicator extends StatelessWidget {
             showLoadingAnimation: false,
             padding: EdgeInsets.zero,
             lineStyle: LineStyle(
-              lineLength: typeReceipt == TypeReceiving.delivery ? 40 :  100,
+              lineLength: typeReceipt == TypeReceiving.delivery ? 40 : 100,
               lineThickness: 2,
               defaultLineColor: UiConstants.blueColor,
               activeLineColor: UiConstants.blue4Color,
               unreachedLineColor: UiConstants.blue4Color,
               lineType: LineType.normal,
             ),
-            showStepBorder:false,
+            showStepBorder: false,
             steps: List.generate(orderStatuses.length, (index) {
               return EasyStep(
                   enabled: false,

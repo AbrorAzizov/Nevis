@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/routes.dart';
-import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 
 class AccountNotFoundScreen extends StatelessWidget {
   const AccountNotFoundScreen({super.key});
