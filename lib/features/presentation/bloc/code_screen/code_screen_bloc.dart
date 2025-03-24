@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/authentification_param.dart';
+import 'package:nevis/features/domain/usecases/auth/login.dart';
 import 'package:nevis/features/domain/usecases/auth/request_code.dart';
 
 part 'code_screen_event.dart';
@@ -12,8 +13,8 @@ part 'code_screen_state.dart';
 
 class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
   late BuildContext screenContext;
-
   final RequestCodeUC requestCodeUC;
+  final LoginUC loginUC;
 
   static const int _initialTimerValue =
       60; // Значение таймера по умолчанию (60 секунд)
@@ -24,17 +25,17 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
 
   final FocusNode codeFocusNode = FocusNode(); // FocusNode для поля ввода кода
 
-  CodeScreenBloc({
+  CodeScreenBloc( {
+    required this.loginUC,
     required this.requestCodeUC,
     String? phone,
     BuildContext? context,
     String? code,
   }) : super(CodeScreenState(phone: phone)) {
     screenContext = context!;
-    on<CodeChangedEvent>(_onCodeChanged); // Событие изменения кода
-    on<RequestNewCodeEvent>(_onRequestNewCode); // Событие запроса нового кода
-    on<TimerTickEvent>(_onTimerTick); // Событие изменения таймера
-    on<SubmitCodeEvent>(_onSubmitCode); // Событие нажатия кнопки "Войти"
+    on<CodeChangedEvent>(_onCodeChanged); 
+    on<TimerTickEvent>(_onTimerTick); 
+    on<SubmitCodeEvent>(_onSubmitCode); 
 
     // Навешивание листенера на TextEditingController
     codeController.addListener(_codeListener);
@@ -65,21 +66,38 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
   }
 
   // Обработка нажатия на кнопку "Войти"
-  void _onSubmitCode(SubmitCodeEvent event, Emitter<CodeScreenState> emit) {
-    if (state.code == state.correctCode) {
-      // Если код верный, ошибки нет
+  void _onSubmitCode(SubmitCodeEvent event, Emitter<CodeScreenState> emit) async{
       emit(state.copyWith(showError: false));
-      emit(SuccessPasteState(
-          phone: state.phone, correctCode: state.correctCode));
-    } else {
-      // Если код неверный, показать ошибку
-      emit(state.copyWith(showError: true));
-    }
+
+      final failureOrLoads = await loginUC(AuthenticationParams(
+            phone: Utils.formatPhoneNumber(state.phone),
+            code: state.code
+           ));
+        failureOrLoads.fold(
+          (failure) => switch (failure) {
+            TooManyRequestsFailure _ => emit(state.copyWith(
+                showError: true,
+                codeErrorText: 'Слишком много запросов')),
+            ConfirmationCodeWrongFailure _ => emit(state.copyWith(
+                showError: true,
+                codeErrorText: 'Неверный код')),
+            ServerFailure _ => emit(state.copyWith(
+                showError: true, codeErrorText: 'Неизвестная ошибка')),
+            _ => emit(state.copyWith(
+                showError: true, codeErrorText: 'Неизвестная ошибка')),
+          },
+          (_) {
+            emit(state.copyWith(showError: false));
+            emit(CorrectedCodeState());
+          },
+        );
+             print(state.codeErrorText); 
+  
   }
 
   // Обработка запроса нового кода
   void _onRequestNewCode(
-      RequestNewCodeEvent event, Emitter<CodeScreenState> emit) {
+     RequestNewCodeEvent event, Emitter<CodeScreenState> emit) {
     _timer?.cancel(); // Остановка предыдущего таймера
     startTimer(screenContext); // Запуск нового таймера
   }
@@ -142,25 +160,6 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
         },
       );
     }
-  }
-
-  Future<String> _requestCode() async {
-    final failureOrLoads = await requestCodeUC(
-      AuthenticationParams(
-        phone: Utils.formatPhoneNumber(state.phone!),
-      ),
-    );
-
-    // отправка кода
-    return failureOrLoads.fold(
-      (failure) => switch (failure) {
-        SendingCodeTooOftenFailure _ =>
-          'Слишком частая отправка кода или превышено число попыток за день, введите предыдущий код',
-        ServerFailure _ => 'Неизвестная ошибка',
-        _ => 'Неизвестная ошибка',
-      },
-      (code) => code.toString(),
-    );
   }
 
   Future reset({String? phone}) async {

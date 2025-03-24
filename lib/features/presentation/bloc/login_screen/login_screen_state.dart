@@ -3,7 +3,6 @@ part of 'login_screen_bloc.dart';
 class LoginScreenState extends Equatable {
   final bool isButtonActive;
   final String? phoneErrorText;
-  final String? passwordErrorText;
   final bool showError;
 
   // New properties for validation
@@ -12,7 +11,6 @@ class LoginScreenState extends Equatable {
   const LoginScreenState({
     this.isButtonActive = false,
     this.phoneErrorText,
-    this.passwordErrorText,
     this.showError = false,
     this.isValidPhone = false,
   });
@@ -31,9 +29,6 @@ class LoginScreenState extends Equatable {
       isButtonActive: isButtonActive ?? this.isButtonActive,
       phoneErrorText:
           resetPhoneErrorText ? null : phoneErrorText ?? this.phoneErrorText,
-      passwordErrorText: resetPasswordErrorText
-          ? null
-          : passwordErrorText ?? this.passwordErrorText,
       showError: showError ?? this.showError,
       isValidPhone: isValidPhone ?? this.isValidPhone,
     );
@@ -43,10 +38,9 @@ class LoginScreenState extends Equatable {
   List<Object?> get props => [
         isButtonActive,
         phoneErrorText,
-        passwordErrorText,
         showError,
         isValidPhone,
       ];
 }
 
-class LogInState extends LoginScreenState {}
+class CodeSuccesefullyDelivired extends LoginScreenState {}

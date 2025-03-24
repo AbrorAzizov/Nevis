@@ -22,22 +22,21 @@ class LoginScreenWithMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, dynamic>? args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-
-    LoginScreenType loginScreenType = args!['redirect_type'];
+     LoginScreenType loginScreenType = args!['redirect_type'];
     return BlocProvider(
       create: (context) => LoginScreenBloc(
         args: args,
-        loginUC: sl(),
+        requestCodeUC: sl(),
       ),
       child: BlocConsumer<LoginScreenBloc, LoginScreenState>(
         listener: (context, state) async {
-          if (state is LogInState) {
-            Navigator.of(context).pushAndRemoveUntil(
-                Routes.createRoute(
-                  const HomeScreen(),
-                ),
-                (route) => false);
-          }
+          // if (state is LogInState) {
+          //   Navigator.of(context).pushAndRemoveUntil(
+          //       Routes.createRoute(
+          //         const HomeScreen(),
+          //       ),
+          //       (route) => false);
+          // }
         },
         builder: (context, state) {
           final bloc = context.read<LoginScreenBloc>();

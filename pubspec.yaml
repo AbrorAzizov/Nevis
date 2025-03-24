@@ -48,6 +48,7 @@ dependencies:
   easy_stepper: ^0.8.5+1
   yandex_mapkit_lite: ^2.0.2
   blurrycontainer: ^2.1.0
+  get: ^4.7.2
 
 dev_dependencies:
   flutter_test:

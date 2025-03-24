@@ -26,9 +26,7 @@ import 'package:nevis/features/domain/repositories/profile_repository.dart';
 import 'package:nevis/features/domain/usecases/auth/is_phone_exists.dart';
 import 'package:nevis/features/domain/usecases/auth/login.dart';
 import 'package:nevis/features/domain/usecases/auth/logout.dart';
-import 'package:nevis/features/domain/usecases/auth/registration.dart';
 import 'package:nevis/features/domain/usecases/auth/request_code.dart';
-import 'package:nevis/features/domain/usecases/auth/update_password.dart';
 import 'package:nevis/features/domain/usecases/category/get_brands.dart';
 import 'package:nevis/features/domain/usecases/category/get_categories.dart';
 import 'package:nevis/features/domain/usecases/category/get_countries.dart';
@@ -63,7 +61,6 @@ import 'package:nevis/features/presentation/bloc/news_internal_screen/news_inter
 import 'package:nevis/features/presentation/bloc/news_screen/news_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/passwrod_screen/password_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/product_screen/product_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
@@ -84,7 +81,7 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => LoginScreenBloc(
-      loginUC: sl<LoginUC>(),
+      requestCodeUC: sl<RequestCodeUC>(),
     ),
   );
   sl.registerFactory(
@@ -94,14 +91,8 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => CodeScreenBloc(
-      requestCodeUC: sl<RequestCodeUC>(),
-    ),
-  );
-  sl.registerFactory(
-    () => PasswordScreenBloc(
-      updatePasswordUC: sl<UpdatePasswordUC>(),
-      registrationUC: sl<RegistrationUC>(),
-      loginUC: sl<LoginUC>(),
+      requestCodeUC: sl<RequestCodeUC>(), 
+      loginUC:  sl<LoginUC>(),
     ),
   );
   sl.registerFactory(
@@ -186,9 +177,7 @@ Future<void> init() async {
   // Auth
   sl.registerLazySingleton(() => LoginUC(sl()));
   sl.registerLazySingleton(() => LogoutUC(sl()));
-  sl.registerLazySingleton(() => RegistrationUC(sl()));
   sl.registerLazySingleton(() => RequestCodeUC(sl()));
-  sl.registerLazySingleton(() => UpdatePasswordUC(sl()));
   sl.registerLazySingleton(() => IsPhoneExistsUC(sl()));
 
   // Profile

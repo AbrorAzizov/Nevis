@@ -28,18 +28,19 @@ class LoginScreenWithYandex extends StatelessWidget {
     LoginScreenType loginScreenType = args!['redirect_type'];
     return BlocProvider(
       create: (context) => LoginScreenBloc(
-        args: args,
-        loginUC: sl(),
+        args: args, 
+        requestCodeUC: sl(),
+  
       ),
       child: BlocConsumer<LoginScreenBloc, LoginScreenState>(
         listener: (context, state) async {
-          if (state is LogInState) {
-            Navigator.of(context).pushAndRemoveUntil(
-                Routes.createRoute(
-                  const HomeScreen(),
-                ),
-                (route) => false);
-          }
+          // if (state is LogInState) {
+          //   Navigator.of(context).pushAndRemoveUntil(
+          //       Routes.createRoute(
+          //         const HomeScreen(),
+          //       ),
+          //       (route) => false);
+          // }
         },
         builder: (context, state) {
           final bloc = context.read<LoginScreenBloc>();

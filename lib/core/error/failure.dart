@@ -32,3 +32,5 @@ class InvalidFormatFailure extends Failure {}
 class AccountDontExistsFailure extends Failure {}
 
 class AcceptPersonalDataFailure extends Failure {}
+
+class TooManyRequestsFailure extends Failure {}

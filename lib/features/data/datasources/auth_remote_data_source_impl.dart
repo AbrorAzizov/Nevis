@@ -10,9 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthRemoteDataSource {
   Future<bool?> isPhoneExists(String phone);
-  Future<int> requestCode(String phone);
-  Future<void> registration(String phone, String code);
-  Future<void> updatePassword(String phone, String password, String code);
+  Future<void> requestCode(String phone);
   Future<void> login(String phone, String password);
   Future<void> logout();
 }
@@ -27,44 +25,42 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   });
 
   @override
-  Future<void> login(String phone, String password) async {
+  Future<void> login(String phone, String code) async {
     String baseUrl = dotenv.env['BASE_URL']!;
     String url = '${baseUrl}auth/login';
 
     log('POST $url');
-    log('Request body: ${jsonEncode({'phone': phone, 'password': password})}');
+    log('Request body: ${jsonEncode({'phone_number': phone, 'verification_code': code})}');
 
     try {
       final response = await client.post(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          'Accept': 'application/json', 
         },
-        body: jsonEncode({'phone': phone, 'password': password}),
+        body: jsonEncode({'phone_number': phone, 'verification_code': code}),
       );
-
       log('Response ($url): ${response.statusCode} ${response.body}');
-
+      print(response.statusCode);
       switch (response.statusCode) {
+        
         case 200:
+          
           final data = json.decode(response.body);
-          await sharedPreferences.setString(
-              SharedPreferencesKeys.accessToken, data['data']['access_token']);
-
+          if(data.containsKey('session_token')){
+              await sharedPreferences.setString(
+              SharedPreferencesKeys.accessToken, data['session_token']);
           break;
-        case 422:
-          final data = json.decode(response.body);
-          final errors = data['errors'];
-          log('Validation errors: $errors');
-          if (errors != null) {
-            if (errors['phone'] != null) {
-              throw PhoneDontFoundException();
-            } else if (errors['password'] != null) {
-              throw UncorrectedPasswordException();
-            }
           }
-          throw ServerException();
+          else{
+            throw ConfirmationCodeWrongException();
+          }
+        
+         case 401:
+          throw ConfirmationCodeWrongException();
+        case 429:
+          throw TooManyRequestsException();
         default:
           throw ServerException();
       }
@@ -108,65 +104,29 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> registration(String phone, String code) async {
+  Future<void> requestCode(String phone) async {
     String baseUrl = dotenv.env['BASE_URL']!;
-    String url = '${baseUrl}auth/registration';
+    String url = '${baseUrl}auth/verification-code';
 
     log('POST $url');
-    log('Request body: ${jsonEncode({'phone': phone, 'code': code})}');
+    log('Request body: ${jsonEncode({'phone_number': phone})}');
 
     try {
+     
       final response = await client.post(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: jsonEncode({'phone': phone, 'code': code}),
+        body: jsonEncode({'phone_number': phone}),
       );
 
       log('Response ($url): ${response.statusCode} ${response.body}');
 
       switch (response.statusCode) {
         case 200:
-          break;
-        case 409:
-          throw PhoneDontFoundException();
-        case 422:
-          throw PhoneAlreadyTakenException();
-        default:
-          throw ServerException();
-      }
-    } catch (e) {
-      log('Error during registration: $e', level: 1000);
-      rethrow;
-    }
-  }
-
-  @override
-  Future<int> requestCode(String phone) async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    String url = '${baseUrl}auth/request-code';
-
-    log('POST $url');
-    log('Request body: ${jsonEncode({'phone': phone})}');
-
-    try {
-      final response = await client.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({'phone': phone}),
-      );
-
-      log('Response ($url): ${response.statusCode} ${response.body}');
-
-      switch (response.statusCode) {
-        case 200:
-          final data = json.decode(response.body);
-          return data['data']['code'];
+          return;
         case 409:
           throw SendingCodeTooOftenException();
         default:
@@ -174,65 +134,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
     } catch (e) {
       log('Error during requestCode: $e', level: 1000);
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> updatePassword(
-      String phone, String password, String code) async {
-    String baseUrl = dotenv.env['BASE_URL']!;
-    String url = '${baseUrl}auth/update-password';
-
-    log('POST $url');
-    log('Request body: ${jsonEncode({
-          'phone': phone,
-          'password': password,
-          'code': code
-        })}');
-
-    try {
-      final response = await client.post(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: jsonEncode({'phone': phone, 'password': password, 'code': code}),
-      );
-
-      log('Response ($url): ${response.statusCode} ${response.body}');
-
-      switch (response.statusCode) {
-        case 200:
-          break;
-
-        case 409:
-          final data = json.decode(response.body);
-          final error = data['data']['error'];
-          log('Error 409: $error');
-          if (error == 'Код не совпал') {
-            throw ConfirmationCodeWrongException();
-          }
-          throw SessionExpiredException();
-        case 422:
-          final data = json.decode(response.body);
-          final errors = data['errors'];
-          log('updatePassword errors: $errors');
-          if (errors != null) {
-            if (errors['phone'] != null) {
-              throw PhoneDontFoundException();
-            } else if (errors['password'] != null) {
-              throw PasswordMatchesPreviousOneException();
-            }
-          }
-          throw ServerException();
-
-        default:
-          throw ServerException();
-      }
-    } catch (e) {
-      log('Error during updatePassword: $e', level: 1000);
       rethrow;
     }
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/route_manager.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
@@ -28,11 +30,23 @@ class CodeScreen extends StatelessWidget {
       create: (context) => CodeScreenBloc(
         context: context,
         requestCodeUC: sl(),
-        phone: args['phone'],
-      ),
-      // )..startTimer(context),
+        phone: args['phone'], 
+        loginUC: sl(),
+      )
+      // ..startTimer(context),
+      ,
       child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if(state.showError){
+            Get.closeAllSnackbars();
+            Get.showSnackbar(GetSnackBar(
+               snackPosition: SnackPosition.TOP, 
+              title: 'Ошибка',
+              duration: Duration(seconds:2),
+              message: state.codeErrorText,
+            ));
+          }
+        },
         builder: (context, state) {
           final bloc = context.read<CodeScreenBloc>();
           return AppTemplate(
@@ -100,11 +114,9 @@ class CodeScreen extends StatelessWidget {
                       AppButtonWidget(
                           isActive: state.isButtonActive,
                           text: 'Войти',
-                          onTap: () => Navigator.of(context).pushAndRemoveUntil(
-                              Routes.createRoute(
-                                const HomeScreen(),
-                              ),
-                              (route) => false)),
+                          onTap: () {
+                            // bloc.add()
+                          }),
                       SizedBox(height: 16.h),
                       if (state.canRequestNewCode)
                         GestureDetector(
@@ -141,11 +153,9 @@ class CodeScreen extends StatelessWidget {
                       AppButtonWidget(
                           isActive: state.isButtonActive,
                           text: 'Войти',
-                          onTap: () => Navigator.of(context).pushAndRemoveUntil(
-                              Routes.createRoute(
-                                const HomeScreen(),
-                              ),
-                              (route) => false)),
+                          onTap: () {
+                            bloc.add(SubmitCodeEvent());
+                          }),
                       SizedBox(height: 16.h),
                       if (state.canRequestNewCode)
                         GestureDetector(

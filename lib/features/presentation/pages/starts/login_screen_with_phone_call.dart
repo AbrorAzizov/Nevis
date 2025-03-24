@@ -31,23 +31,32 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
     return BlocProvider(
       create: (context) => LoginScreenBloc(
         args: args,
-        loginUC: sl(),
+        requestCodeUC: sl(),
       ),
       child: BlocConsumer<LoginScreenBloc, LoginScreenState>(
         listener: (context, state) async {
-          if (state is LogInState) {
-            Navigator.of(context).pushAndRemoveUntil(
-                Routes.createRoute(
-                  const HomeScreen(),
+          if (state is CodeSuccesefullyDelivired) {
+            print('filini');
+            Navigator.of(context).push(
+              Routes.createRoute(
+                const CodeScreen(),
+                settings: RouteSettings(
+                  name: Routes.codeScreen,
+                  arguments: {
+                    'redirect_type': CodeScreenType.logInWithCall,
+                    'phone':
+                        context.read<LoginScreenBloc>().phoneController.text
+                  },
                 ),
-                (route) => false);
+              ),
+            );
           }
         },
         builder: (context, state) {
           final bloc = context.read<LoginScreenBloc>();
           return AppTemplate(
             canBack: loginScreenType == LoginScreenType.accountExists,
-            title:  'Авторизация',
+            title: 'Авторизация',
             subTitleText:
                 'Войдите, чтобы совершать покупки,\nкопить бонусы и иметь быстрый доступ к карте лояльности',
             bodyPadding:
@@ -72,21 +81,8 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
                     isActive: state.isButtonActive,
                     text: 'Получить код',
                     onTap: () {
-                      Navigator.of(context).push(
-                        Routes.createRoute(
-                          const CodeScreen(),
-                          settings: RouteSettings(
-                            name: Routes.codeScreen,
-                            arguments: {
-                              'redirect_type': CodeScreenType.logInWithCall,
-                              'phone': bloc.phoneController.text
-                            },
-                          ),
-                        ),
-                      );
-                    }
-                    //bloc.add(SubmitLoginEvent()),
-                    ),
+                      bloc.add(SendCodeEvent());
+                    }),
                 SizedBox(height: 32.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -101,20 +97,21 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: (){
-                         Navigator.of(context).push(
-                        Routes.createRoute(
-                          const LoginScreenWithYandex(),
-                          settings: RouteSettings(
-                            name: Routes.loginScreenWithYandex,
-                            arguments: {
-                              'redirect_type': LoginScreenType.logInWithYandex,
-                            },
-                          ),
-                        ),
-                      );
-                      },
-                      child: SvgPicture.asset(Paths.yandexLogInIconPath)),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            Routes.createRoute(
+                              const LoginScreenWithYandex(),
+                              settings: RouteSettings(
+                                name: Routes.loginScreenWithYandex,
+                                arguments: {
+                                  'redirect_type':
+                                      LoginScreenType.logInWithYandex,
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                        child: SvgPicture.asset(Paths.yandexLogInIconPath)),
                     SizedBox(
                       width: 12.w,
                     ),

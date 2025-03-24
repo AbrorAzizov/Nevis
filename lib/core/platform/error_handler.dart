@@ -3,7 +3,6 @@ import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/platform/network_info.dart';
 
-
 abstract class ErrorHandler {
   Future<Either<Failure, T>> handle<T>(Future<T> Function() fun);
 }
@@ -18,6 +17,8 @@ class ErrorHandlerImpl implements ErrorHandler {
     if (await networkInfo.isConnected) {
       try {
         return Right(await fun());
+      } on TooManyRequestsException {
+        return Left(TooManyRequestsFailure());
       } on ServerException {
         return Left(ServerFailure());
       } on SendingCodeTooOftenException {

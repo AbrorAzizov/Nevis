@@ -23,4 +23,4 @@ class PasswordChangedEvent extends LoginScreenEvent {
   List<Object> get props => [password];
 }
 
-class SubmitLoginEvent extends LoginScreenEvent {}
+class SendCodeEvent extends LoginScreenEvent {}

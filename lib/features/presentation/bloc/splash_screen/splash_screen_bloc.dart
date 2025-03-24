@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/domain/usecases/profile/get_me.dart';
 import 'package:shared_preferences/shared_preferences.dart';

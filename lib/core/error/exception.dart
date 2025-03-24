@@ -21,3 +21,5 @@ class InvalidFormatException implements Exception {}
 class AccountDontExistsException implements Exception {}
 
 class AcceptPersonalDataException implements Exception {}
+
+class TooManyRequestsException implements Exception{}

@@ -37,7 +37,7 @@ class _ContactsBlockState extends State<ContactsBlock> {
                   context: context.read<HomeScreenBloc>().context,
                   requestCodeUC: sl(),
                   phone: personalDataBloc.phoneController.text,
-                  code: personalDataBloc.state.confirmPhoneCode),
+                  code: personalDataBloc.state.confirmPhoneCode, loginUC: sl()),
               child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
                 listener: (context, state) async => switch (state) {
                   SuccessPasteState _ => await personalDataBloc.updateProfile(

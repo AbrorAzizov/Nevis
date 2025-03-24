@@ -39,7 +39,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     precacheImage(AssetImage(Paths.logoIconPath), context);
     ImageProvider logo = AssetImage(Paths.logoIconPath);
-
     return BlocProvider(
       create: (_) => SplashScreenBloc(
         sharedPreferences: sl(),
@@ -48,21 +47,16 @@ class _SplashScreenState extends State<SplashScreen> {
       child: BlocListener<SplashScreenBloc, SplashScreenState>(
         listener: (context, state) {
           if (state is SplashScreenNavigateLogin) {
-            // Navigator.of(context).pushReplacement(
-            //   Routes.createRoute(
-            //     const LoginScreenWithPhoneCall(),
-            //     settings: RouteSettings(
-            //       name: Routes.loginScreenPhoneCall,
-            //       arguments: {'redirect_type': LoginScreenType.login},
-            //     ),
-            //   ),
-            // );
-             Navigator.of(context).pushReplacement(
+            Navigator.of(context).pushReplacement(
               Routes.createRoute(
-                const HomeScreen(),
-                settings: RouteSettings(name: Routes.homeScreen),
+                const LoginScreenWithPhoneCall(),
+                settings: RouteSettings(
+                  name: Routes.loginScreenPhoneCall,
+                  arguments: {'redirect_type': LoginScreenType.login},
+                ),
               ),
             );
+  
           } else if (state is SplashScreenNavigateHome) {
             Navigator.of(context).pushReplacement(
               Routes.createRoute(
