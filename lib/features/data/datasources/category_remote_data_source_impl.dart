@@ -24,10 +24,10 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
   Future<List<CategoryModel>> getCategories({int? id}) async {
     try {
       final data = await apiClient.get(
-        endpoint: 'categories/$id',
+        endpoint: 'catalog',
         callPathNameForLog: '${runtimeType.toString()}.getCategories',
       );
-
+    
       List<dynamic> dataList = data['data'];
       return dataList.map((e) => CategoryModel.fromJson(e)).toList();
     } catch (e) {

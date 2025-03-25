@@ -4,13 +4,13 @@ class ProductsScreenState extends Equatable {
   final bool isLoading;
   final String? error;
   final ProductSortType? productSortType;
-  final List<ProductEntity>? products;
+  final List<ProductEntity> products;
 
   const ProductsScreenState({
     this.isLoading = true,
     this.error,
     this.productSortType,
-    this.products,
+    required this.products,
   });
 
   ProductsScreenState copyWith({

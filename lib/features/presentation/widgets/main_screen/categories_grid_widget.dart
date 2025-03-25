@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/constants/enums.dart';
+import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/presentation/pages/catalog/category_screen.dart';
@@ -18,8 +20,8 @@ class CategoriesGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double itemHeight = 128.w;
-    double itemWidth = 156.w;
+    double itemHeight = 140.w;
+    double itemWidth = 100.w;
     double blocksSize = itemHeight * (categories.length / 2).round();
     double mainAxisSpacingSize = 8.w *
         ((categories.length / 2 - 1) > 0 ? (categories.length / 2 - 1) : 0)
@@ -35,14 +37,16 @@ class CategoriesGridWidget extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           padding: contentPadding,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 8.w,
-            mainAxisSpacing: 8.w,
+            crossAxisCount: 3,
+            crossAxisSpacing: 10.w,
+            mainAxisSpacing: 12.h,
             childAspectRatio: itemWidth / itemHeight,
           ),
           itemCount: categories.length, // Количество элементов
           itemBuilder: (context, index) {
             final category = categories[index];
+            final categoryEnum = ProductCategoriesExtension.fromTitle(category.pageTitle);
+            final imagePath = categoryEnum?.categoryImagePath;
             return GestureDetector(
               onTap: () => Navigator.of(context).push(
                 Routes.createRoute(
@@ -54,7 +58,7 @@ class CategoriesGridWidget extends StatelessWidget {
                 ),
               ),
               child: CategoryWidget(
-                  imagePath: category.image ?? '',
+                  imagePath: imagePath ?? '',
                   title: category.pageTitle ?? ''),
             );
           },

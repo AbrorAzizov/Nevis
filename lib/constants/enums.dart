@@ -16,6 +16,17 @@ enum ProductsListScreenType { cart, pharmacy, order }
 
 enum PharmacyListScreenType { cart, product }
 
+enum ProductCategories {
+  hygiene,
+  cosmetic,
+  medicines,
+  motherAndBaby,
+  medicineTools,
+  optic,
+  orthopedic,
+  sport
+}
+
 enum OrderStatus {
   onTheWay, // У курьера
   readyToIssue, // Готов к выдаче

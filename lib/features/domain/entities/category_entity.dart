@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class CategoryEntity extends Equatable {
+class   CategoryEntity extends Equatable {
   final int? categoryId;
   final int? parent;
   final String? pageTitle;

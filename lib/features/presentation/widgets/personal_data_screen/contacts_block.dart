@@ -37,11 +37,13 @@ class _ContactsBlockState extends State<ContactsBlock> {
                   code: personalDataBloc.state.confirmPhoneCode,
                   loginUC: sl()),
               child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
-                listener: (context, state) async => switch (state) {
-                  SuccessPasteState _ => await personalDataBloc.updateProfile(
-                      confirmedCode: state.correctCode),
-                  _ => {},
-                },
+                listener: (context, state) async 
+                // => switch (state) {
+                //   SuccessPasteState _ => await personalDataBloc.updateProfile(
+                //       confirmedCode: state.correctCode),
+                //   _ => {},
+                // }, 
+                =>(),
                 builder: (context, state) {
                   return AppTextFieldWidget(
                     textStyle: UiConstants.textStyle11,
@@ -59,17 +61,17 @@ class _ContactsBlockState extends State<ContactsBlock> {
                                 personalDataBloc.phoneController.text &&
                             personalDataBloc.phoneController.text.length == 19,
                     onTapActionTitle: () async {
-                      await context
-                          .read<CodeScreenBloc>()
-                          .reset(phone: personalDataBloc.phoneController.text);
-                      context.read<CodeScreenBloc>().startTimer(
-                        phone: personalDataBloc.phoneController.text,
-                        widget.screenContext,
-                        requestCodeFun: () async {
-                          return await personalDataBloc.updateProfile(
-                              requestedCode: true);
-                        },
-                      );
+                      // await context
+                      //     .read<CodeScreenBloc>()
+                      //     .reset(phone: personalDataBloc.phoneController.text);
+                      // context.read<CodeScreenBloc>().startTimer(
+                      //   phone: personalDataBloc.phoneController.text,
+                      //   widget.screenContext,
+                      //   requestCodeFun: () async {
+                      //     return await personalDataBloc.updateProfile(
+                      //         requestedCode: true);
+                      //   },
+                      // );
                       BottomSheetManager.showConfirmationCodeSheet(
                           context.read<HomeScreenBloc>().context,
                           context,

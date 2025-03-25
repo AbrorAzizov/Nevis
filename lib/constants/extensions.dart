@@ -1,4 +1,5 @@
 import 'package:nevis/constants/enums.dart';
+import 'package:nevis/constants/paths.dart';
 
 extension StringExtensions on String? {
   String orDash() {
@@ -50,6 +51,52 @@ extension TypeReceivingExtension on TypeReceiving {
         )
         .key;
   }
+}
+
+extension ProductCategoriesExtension on ProductCategories {
+  static const Map<ProductCategories, String> titles = {
+    ProductCategories.hygiene: 'Средства гигены',
+    ProductCategories.cosmetic: 'Косметика и уход',
+    ProductCategories.medicines: 'Лекарства и БАДы',
+    ProductCategories.motherAndBaby: 'Мама и малыш',
+    ProductCategories.medicineTools: 'Медицинские приборы',
+    ProductCategories.optic : 'Оптика',
+    ProductCategories.orthopedic : 'Ортопедический салон',
+    ProductCategories.sport : 'Спорт и фитнес'
+  };
+
+  String get title => titles[this] ?? 'Неизвестный способ получения';
+
+  static ProductCategories? fromTitle(String? title) {
+    return titles.entries
+        .firstWhere(
+          (entry) => entry.value == title,     
+          orElse: () =>  MapEntry( ProductCategories.hygiene, 'Средства гигены'),   
+
+        )
+        .key;
+  }
+   String get categoryImagePath {
+    switch (this) {
+      case ProductCategories.hygiene:
+        return Paths.hygieneIconPath;
+      case ProductCategories.cosmetic:
+        return Paths.cosmeticIconPath;
+      case ProductCategories.medicineTools:
+        return Paths.medicineToolsIconPath;
+      case  ProductCategories.optic:
+        return Paths.opticIconPaths;
+      case  ProductCategories.motherAndBaby:
+        return Paths.motherAndBabyIconPath;
+       case  ProductCategories.sport:
+        return Paths.sportIconPath;  
+      case ProductCategories.medicines:
+        return Paths.medicinesIconPath;
+      case ProductCategories.orthopedic:
+        return Paths.orthopedicIconPath;
+    }
+  }
+
 }
 
 extension PaymentTypeExtension on PaymentType {

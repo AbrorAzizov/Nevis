@@ -22,11 +22,11 @@ class PersonalDataScreenBloc
   final UpdateMeUC updateMeUC;
   final DeleteMeUC deleteMeUC;
 
-  TextEditingController fNameController = TextEditingController();
-  TextEditingController sNameController = TextEditingController();
+  TextEditingController fNameController = TextEditingController(text: 'Константин');
+  TextEditingController sNameController = TextEditingController(text: 'Усиков');
   TextEditingController birthdayController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController(text: '7 800 555-35-35');
+  TextEditingController emailController = TextEditingController(text: 'example@mail.ru');
 
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
@@ -122,22 +122,22 @@ class PersonalDataScreenBloc
       },
     );
 
-    on<SubmitEvent>(
-      (event, emit) async {
-        final isValidPhone = Utils.phoneRegexp.hasMatch(phoneController.text);
-        if (state.installedPhone != phoneController.text && isValidPhone) {
-          Utils.showCustomDialog(
-            screenContext: screenContext!,
-            text: 'Номер телефона не подтверждён',
-            action: (context) {
-              Navigator.of(context).pop();
-            },
-          );
-        } else {
-          await updateProfile();
-        }
-      },
-    );
+    // on<SubmitEvent>(
+    //   (event, emit) async {
+    //     final isValidPhone = Utils.phoneRegexp.hasMatch(phoneController.text);
+    //     if (state.installedPhone != phoneController.text && isValidPhone) {
+    //       Utils.showCustomDialog(
+    //         screenContext: screenContext!,
+    //         text: 'Номер телефона не подтверждён',
+    //         action: (context) {
+    //           Navigator.of(context).pop();
+    //         },
+    //       );
+    //     } else {
+    //       await updateProfile();
+    //     }
+    //   },
+    // );
 
     on<DeleteAccountEvent>(
       (event, emit) async {
@@ -172,21 +172,20 @@ class PersonalDataScreenBloc
       (profile) {
         fNameController.text = profile.firstName ?? '';
         sNameController.text = profile.lastName ?? '';
-        birthdayController.text = profile.birthday != null
-            ? profile.birthday!.replaceAll('.', ' / ')
+        birthdayController.text = profile.dateOfBirth != null
+            ? profile.dateOfBirth!.replaceAll('.', ' / ')
             : '';
         phoneController.text =
-            Utils.formatPhoneNumber(profile.phoneNumber, toServerFormat: false);
-        emailController.text = profile.emailAddress ?? '';
+            Utils.formatPhoneNumber(profile.phone, toServerFormat: false);
+        emailController.text = profile.phone ?? '';
         emit(
           PersonalDataScreenState(
             isLoading: false,
             gender: GenderType.values
                     .firstWhereOrNull((e) => e.name == profile.gender) ??
                 GenderType.values.first,
-            isCheckedNotificationCheckbox: profile.statusNotifications ?? false,
-            isCheckedPolicyCheckbox: profile.acceptPolicy ?? false,
-            installedPhone: Utils.formatPhoneNumber(profile.phoneNumber,
+
+            installedPhone: Utils.formatPhoneNumber(profile.phone,
                 toServerFormat: false),
           ),
         );
@@ -194,64 +193,64 @@ class PersonalDataScreenBloc
     );
   }
 
-  Future<String?> updateProfile(
-      {bool requestedCode = false, String? confirmedCode}) async {
-    final failureOrLoads = await updateMeUC(
-      ProfileModel(
-          firstName: fNameController.text,
-          lastName: sNameController.text,
-          phoneNumber: Utils.formatPhoneNumber(phoneController.text),
-          gender: GenderType.values.firstWhere((e) => e == state.gender).name,
-          birthday: birthdayController.text.replaceAll(' / ', '.'),
-          emailAddress: emailController.text,
-          acceptPolicy: state.isCheckedPolicyCheckbox ? "1" : "0",
-          statusNotifications: state.isCheckedNotificationCheckbox ? "1" : "0",
-          code: confirmedCode,
-          oldPassword: oldPasswordController.text,
-          newPassword: newPasswordController.text,
-          newPasswordConfirm: newPasswordConfirmController.text),
-    );
+  // Future<String?> updateProfile(
+  //     {bool requestedCode = false, String? confirmedCode}) async {
+  //   final failureOrLoads = await updateMeUC(
+  //     ProfileModel(
+  //         firstName: fNameController.text,
+  //         lastName: sNameController.text,
+  //         phone: Utils.formatPhoneNumber(phoneController.text),
+  //         gender: GenderType.values.firstWhere((e) => e == state.gender).name,
+  //         dateOfBirth: birthdayController.text.replaceAll(' / ', '.'),
+  //         email: emailController.text,
+  //         acceptPolicy: state.isCheckedPolicyCheckbox ? "1" : "0",
+  //         statusNotifications: state.isCheckedNotificationCheckbox ? "1" : "0",
+  //         code: confirmedCode,
+  //         oldPassword: oldPasswordController.text,
+  //         newPassword: newPasswordController.text,
+  //         newPasswordConfirm: newPasswordConfirmController.text),
+  //   );
 
-    return failureOrLoads.fold(
-      (failure) {
-        String error = switch (failure) {
-          SendingCodeTooOftenFailure _ =>
-            'Слишком частая отправка кода или превышено число попыток за день',
-          AcceptPersonalDataFailure _ =>
-            'Примите условия политики обработки персональных данных',
-          _ => 'Ошибка обновления данных'
-        };
-        if (!requestedCode) {
-          Utils.showCustomDialog(
-            screenContext: screenContext!,
-            text: error,
-            action: (context) {
-              Navigator.of(context).pop();
-            },
-          );
-        }
-        return error;
-      },
-      (code) async {
-        if (!requestedCode) {
-          if (confirmedCode != null) {
-            Navigator.of(screenContext!).pop();
-          }
-          await getProfile();
-          Utils.showCustomDialog(
-            screenContext: screenContext!,
-            title: 'Уведомление',
-            text: 'Данные обновлены',
-            action: (context) {
-              Navigator.of(context).pop();
-            },
-          );
-        }
+  //   return failureOrLoads.fold(
+  //     (failure) {
+  //       String error = switch (failure) {
+  //         SendingCodeTooOftenFailure _ =>
+  //           'Слишком частая отправка кода или превышено число попыток за день',
+  //         AcceptPersonalDataFailure _ =>
+  //           'Примите условия политики обработки персональных данных',
+  //         _ => 'Ошибка обновления данных'
+  //       };
+  //       if (!requestedCode) {
+  //         Utils.showCustomDialog(
+  //           screenContext: screenContext!,
+  //           text: error,
+  //           action: (context) {
+  //             Navigator.of(context).pop();
+  //           },
+  //         );
+  //       }
+  //       return error;
+  //     },
+  //     (code) async {
+  //       if (!requestedCode) {
+  //         if (confirmedCode != null) {
+  //           Navigator.of(screenContext!).pop();
+  //         }
+  //         await getProfile();
+  //         Utils.showCustomDialog(
+  //           screenContext: screenContext!,
+  //           title: 'Уведомление',
+  //           text: 'Данные обновлены',
+  //           action: (context) {
+  //             Navigator.of(context).pop();
+  //           },
+  //         );
+  //       }
 
-        return code;
-      },
-    );
-  }
+  //       return code;
+  //     },
+  //   );
+  // }
 
   @override
   Future<void> close() {

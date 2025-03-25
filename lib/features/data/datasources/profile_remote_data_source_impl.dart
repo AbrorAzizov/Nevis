@@ -27,7 +27,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<ProfileModel> getMe() async {
     try {
       final data = await apiClient.get(
-        endpoint: 'users/profile',
+        endpoint: 'profile',
         callPathNameForLog: '${runtimeType.toString()}.getMe',
       );
 
@@ -86,35 +86,5 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       log('Error during deleteMe: $e', level: 1000);
       rethrow;
     }
-  }
-}
-
-class MockProfileRemoteDataSource implements ProfileRemoteDataSource {
-  final SharedPreferences sharedPreferences;
-
-  MockProfileRemoteDataSource({required this.sharedPreferences});
-
-  @override
-  Future<ProfileModel> getMe() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    final jsonString =
-        await rootBundle.loadString('assets/mock_profile_response.json');
-    final data = jsonDecode(jsonString);
-    return ProfileModel.fromJson(data['data']);
-  }
-
-  @override
-  Future<String?> updateMe(ProfileModel profile) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    final jsonString =
-        await rootBundle.loadString('assets/mock_profile_update_response.json');
-    final data = jsonDecode(jsonString);
-    return data['data']['code'];
-  }
-
-  @override
-  Future<void> deleteMe() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    sharedPreferences.remove(SharedPreferencesKeys.accessToken);
   }
 }

@@ -296,11 +296,6 @@ Future<void> init() async {
     ),
   );
 
-  //sl.registerLazySingleton<OrderRemoteDataSource>(
-  //  () => MockOrderRemoteDataSource(
-  //    sharedPreferences: sl(),
-  //  ),
-  //);
 
   //// Core
   sl.registerLazySingleton<NetworkInfo>(

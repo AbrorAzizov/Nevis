@@ -119,4 +119,12 @@ class Paths {
   static const String favouriteProductsIconPath = '${_imagesPath}favourite.svg';
   static const String noFavoriteProductsIconPath = '${_imagesPath}bigHeart.png';
   static const String recipe = '${_imagesPath}recipe.svg';
+  static const String hygieneIconPath = '${_imagesPath}IconToothBrush.svg';
+  static const String cosmeticIconPath = '${_imagesPath}IconCosmetics.svg';
+  static const String medicinesIconPath = '${_imagesPath}IconBAD.svg';
+  static const String motherAndBabyIconPath = '${_imagesPath}IconBaby.svg';
+  static const String medicineToolsIconPath = '${_imagesPath}IconStetoscope.svg';
+  static const String opticIconPaths= '${_imagesPath}IconGlasses.svg';
+  static const String orthopedicIconPath =  '${_imagesPath}IconOrthopedics.svg';
+  static const String sportIconPath =  '${_imagesPath}IconFitness.svg';
 }

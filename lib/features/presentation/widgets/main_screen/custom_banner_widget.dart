@@ -92,35 +92,35 @@ class _CustomBannerWidgetState extends State<CustomBannerWidget> {
             ),
           ),
         ),
-        Skeleton.ignore(
-          child: Align(
-            alignment: AlignmentDirectional.center,
-            child: Padding(
-              padding: getMarginOrPadding(top: 8),
-              child: SmoothPageIndicator(
-                controller: widget.pageController,
-                count: widget.banners.length,
-                axisDirection: Axis.horizontal,
-                effect: WormEffect(
-                  spacing: 4.w,
-                  dotWidth: 6.w,
-                  dotHeight: 6.w,
-                  dotColor: UiConstants.white4Color,
-                  activeDotColor: UiConstants.darkBlueColor.withOpacity(.6),
-                ),
-                onDotClicked: (index) {
-                  widget.pageController.animateToPage(
-                    index,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.linear,
-                  );
-                  // Сбрасываем таймер при клике на индикатор
-                  _startAutoScroll();
-                },
-              ),
-            ),
-          ),
-        ),
+        // Skeleton.ignore(
+        //   child: Align(
+        //     alignment: AlignmentDirectional.center,
+        //     child: Padding(
+        //       padding: getMarginOrPadding(top: 8),
+        //       child: SmoothPageIndicator(
+        //         controller: widget.pageController,
+        //         count: widget.banners.length,
+        //         axisDirection: Axis.horizontal,
+        //         effect: WormEffect(
+        //           spacing: 4.w,
+        //           dotWidth: 6.w,
+        //           dotHeight: 6.w,
+        //           dotColor: UiConstants.white4Color,
+        //           activeDotColor: UiConstants.darkBlueColor.withOpacity(.6),
+        //         ),
+        //         onDotClicked: (index) {
+        //           widget.pageController.animateToPage(
+        //             index,
+        //             duration: Duration(milliseconds: 200),
+        //             curve: Curves.linear,
+        //           );
+        //           // Сбрасываем таймер при клике на индикатор
+        //           _startAutoScroll();
+        //         },
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
+import 'package:nevis/features/presentation/widgets/custom_radio_button.dart';
 import 'package:nevis/features/presentation/widgets/personal_data_screen/contacts_block.dart';
 
 class GeneralInformationBlock extends StatelessWidget {
@@ -68,27 +70,27 @@ class GeneralInformationBlock extends StatelessWidget {
             SizedBox(
               height: 8.h,
             ),
-            // Row(
-            //   children: [
-            //     CustomRadioButton(
-            //       title: 'Мужской',
-            //       value: GenderType.male,
-            //       groupValue: personalDataBloc.state.gender,
-            //       onChanged: () => personalDataBloc.add(
-            //         ChangeGenderEvent(GenderType.male),
-            //       ),
-            //     ),
-            //     SizedBox(width: 24.w),
-            //     CustomRadioButton(
-            //       title: 'Женский',
-            //       value: GenderType.female,
-            //       groupValue: personalDataBloc.state.gender,
-            //       onChanged: () => personalDataBloc.add(
-            //         ChangeGenderEvent(GenderType.female),
-            //       ),
-            //     ),
-            //   ],
-            // ),
+            Row(
+              children: [
+                CustomRadioButton(
+                  title: 'Мужской',
+                  value: GenderType.male,
+                  groupValue: personalDataBloc.state.gender,
+                  onChanged: (value) => personalDataBloc.add(
+                    ChangeGenderEvent(GenderType.male),
+                  ),
+                ),
+                SizedBox(width: 24.w),
+                CustomRadioButton(
+                  title: 'Женский',
+                  value: GenderType.female,
+                  groupValue: personalDataBloc.state.gender,
+                  onChanged: (value) => personalDataBloc.add(
+                    ChangeGenderEvent(GenderType.female),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ],

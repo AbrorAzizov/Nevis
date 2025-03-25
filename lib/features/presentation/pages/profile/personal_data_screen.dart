@@ -28,8 +28,8 @@ class PersonalDataScreen extends StatelessWidget {
               context: context.read<HomeScreenBloc>().context,
               getMeUC: sl(),
               updateMeUC: sl(),
-              deleteMeUC: sl()),
-          // ..getProfile(),
+              deleteMeUC: sl())..getProfile(),
+          
           child: BlocConsumer<PersonalDataScreenBloc, PersonalDataScreenState>(
             listener: (context, state) => switch (state) {
               DeleteAccountState _ =>
@@ -52,8 +52,8 @@ class PersonalDataScreen extends StatelessWidget {
                 body: SafeArea(
                   child: Skeletonizer(
                     ignorePointers: false,
-                    enabled: false,
-                    // enabled: state.isLoading,
+                    
+                    enabled: state.isLoading,
                     child: Builder(
                       builder: (context) {
                         return Column(

@@ -24,9 +24,7 @@ class CatalogScreen extends StatelessWidget {
         return BlocProvider(
           create: (context) => CatalogScreenBloc(
             getCategoriesUC: sl(),
-          )..add(
-              LoadCategoriesEvent(),
-            ),
+          )..add(LoadCategoriesEvent()),
           child: BlocBuilder<CatalogScreenBloc, CatalogScreenState>(
             builder: (context, state) {
               if (state.errorText != null) {
@@ -39,12 +37,17 @@ class CatalogScreen extends StatelessWidget {
                 body: SafeArea(
                   child: Skeletonizer(
                     ignorePointers: false,
-                    enabled: state.isLoading,
+                    enabled: false,
                     child: Builder(
                       builder: (context) {
                         return Column(
                           children: [
-                            SearchProductAppBar(),
+                            SearchProductAppBar(
+                              onTapFavoriteProductsChip: (){},
+                              onTapLocationChip: (){
+
+                              },
+                            ),
                             Expanded(
                               child: homeState is InternetUnavailable
                                   ? InternetNoInternetConnectionWidget()
@@ -56,16 +59,6 @@ class CatalogScreen extends StatelessWidget {
                                           left: 20,
                                           top: 16),
                                       children: [
-                                        Text(
-                                          'Каталог',
-                                          style: UiConstants.textStyle1
-                                              .copyWith(
-                                                  color: UiConstants
-                                                      .darkBlueColor),
-                                        ),
-                                        SizedBox(height: 16.h),
-                                        StocksPlateWidget(),
-                                        SizedBox(height: 8.h),
                                         CategoriesGridWidget(
                                             categories: state.isLoading
                                                 ? List.generate(

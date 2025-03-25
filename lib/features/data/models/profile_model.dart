@@ -1,54 +1,47 @@
 
 
+import 'package:nevis/features/data/models/adress_model.dart';
 import 'package:nevis/features/domain/entities/profile_entity.dart';
 
 class ProfileModel extends ProfileEntity {
-  final String? code;
-
   const ProfileModel({
-    super.userId,
-    super.phoneNumber,
     super.firstName,
     super.lastName,
+    super.phone,
+    super.dateOfBirth,
     super.gender,
-    super.birthday,
-    super.emailAddress,
-    super.statusNotifications,
-    super.acceptPolicy,
-    super.oldPassword,
-    super.newPassword,
-    super.newPasswordConfirm,
-    this.code,
+    super.email,
+    super.subscribeToMarketing,
+    super.deliveryAddress,
   });
 
-  factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
-        userId: json["userId"],
-        phoneNumber: json["phone"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        gender: json["gender"],
-        birthday: json["birthday"],
-        emailAddress: json["email"],
-        statusNotifications: json["statusNotifications"],
-        acceptPolicy: json["acceptPolicy"],
-        oldPassword: json["old_password"],
-        newPassword: json["new_password"],
-        newPasswordConfirm: json["new_password_confirm"],
-      );
+  factory ProfileModel.fromJson(Map<String, dynamic> json) {
+    return ProfileModel(
+      firstName: json["personal_info"]["first_name"],
+      lastName: json["personal_info"]["last_name"],
+      phone: json["personal_info"]["phone"],
+      dateOfBirth: json["personal_info"]["date_of_birth"],
+      gender: json["personal_info"]["gender"],
+      email: json["personal_info"]["email"],
+      subscribeToMarketing: json["personal_info"]["subscribe_to_marketing"],
+      deliveryAddress: json["delivery address"] != null
+          ? AdressModel.fromJson(json["delivery_address"])
+          : null,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "userId": userId,
-        "phone": phoneNumber,
-        "first_name": firstName,
-        "last_name": lastName,
+  Map<String, dynamic> toJson() {
+    return {
+      "personal info": {
+        "first name": firstName,
+        "last name": lastName,
+        "phone": phone,
+        "date of birth": dateOfBirth,
         "gender": gender,
-        "birthday": birthday,
-        "email": emailAddress,
-        "status_notifications": statusNotifications,
-        "accept_policy": acceptPolicy,
-        "code": code,
-        "old_password": oldPassword,
-        "new_password": newPassword,
-        "new_password_confirm": newPasswordConfirm,
-      };
+        "email": email,
+        "subscribe to marketing": subscribeToMarketing,
+      },
+      "delivery address": (deliveryAddress as AdressModel?)?.toJson(),
+    };
+  }
 }
