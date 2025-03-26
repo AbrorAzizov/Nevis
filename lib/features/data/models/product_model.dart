@@ -31,6 +31,7 @@ class ProductModel extends ProductEntity {
     super.productDateRegister,
     super.productTimeRegister,
     super.count,
+    super.valueBuy,
   });
 
   @override
@@ -69,6 +70,7 @@ class ProductModel extends ProductEntity {
       productDateRegister: json["product_date_register"],
       productTimeRegister: json["product_time_register"],
       count: json["count"],
+      valueBuy: int.tryParse(json["value_buy_price"] ?? ''),
     );
   }
 

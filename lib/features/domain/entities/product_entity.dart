@@ -28,9 +28,11 @@ class ProductEntity extends Equatable {
   final String? productDateRegister;
   final String? productTimeRegister;
   final int? count;
+  final int? valueBuy;
 
-  const ProductEntity({
+  const ProductEntity( {
     this.productId,
+    this.valueBuy,
     this.mnn,
     this.mnnLat,
     this.name,

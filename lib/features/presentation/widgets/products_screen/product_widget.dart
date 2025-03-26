@@ -184,7 +184,38 @@ class ProductWidget extends StatelessWidget {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 32.h),
+                    if(product.valueBuy != null)
+                    Container(
+                    
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                        image:
+                         AssetImage('assets/images/value_buy.png'),
+                         fit: BoxFit.fill)
+                      ),
+                      width: 140.w,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8,top: 6,bottom: 6,right: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(text: TextSpan(
+                              children: [
+                              TextSpan(text: 'Купить выгодно\n',
+                              style: UiConstants.textStyle15.copyWith(color: UiConstants.purpleColor))  ,
+                               TextSpan(text: 'от ${product.valueBuy} ₽',style: UiConstants.textStyle15.copyWith(color: UiConstants.purpleColor,fontWeight: FontWeight.w500))  ,
+                              
+                              ]
+                            )),
+                            RotatedBox(
+                              quarterTurns: 1,
+                              child: SvgPicture.asset(Paths.dropdownArrowIconPath))
+                           
+                          ],  
+                        ),
+                      ),
+                      ),
+                    product.valueBuy == null ? SizedBox(height: 41.h) : SizedBox.shrink(),
                     SizedBox(
                       height: 40.h,
                       child: ProductPrice(product: product),
@@ -200,6 +231,7 @@ class ProductWidget extends StatelessWidget {
                       textColor: UiConstants.blueColor,
                       onTap: () {},
                     ),
+                    
                   ],
                 ),
               ),

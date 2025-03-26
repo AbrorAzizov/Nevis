@@ -13,7 +13,6 @@ import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.da
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/pharmacy_available_products_chip.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
 class CartPharmacyWidget extends StatelessWidget {
   const CartPharmacyWidget({
     super.key,

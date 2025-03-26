@@ -13,7 +13,7 @@ class UiConstants {
   static const Color black3Color = Color(0xFF222222);
   static const Color darkBlueColor = Color(0xFF19232B);
   static const Color darkBlue2Color = Color(0xFF19232A);
-  static const Color purpleColor = Color(0xFF5324B2);
+  static const Color purpleColor = Color(0xFFA347FF);
   static const Color purple2Color = Color(0xFF6B02ED);
   static const Color purple3Color = Color(0xFFF8F2FE);
   static const Color mutedVioletColor = Color(0xFF6E6C79);
