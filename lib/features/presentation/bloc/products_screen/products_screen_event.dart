@@ -6,22 +6,13 @@ abstract class ProductsScreenEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
+class LoadProductsEvent extends ProductsScreenEvent {}
 
-class LoadDataEvent extends ProductsScreenEvent {
-  final ProductParam? productParam;
-  final List<ProductEntity>? products;
+class ShowSortProductsTypes extends ProductsScreenEvent {}
 
-  const LoadDataEvent(this.productParam, this.products);
+class ShowFilterProductsTypes extends ProductsScreenEvent {}
 
-  @override
-  List<Object?> get props => [productParam, products];
-}
-
-class ChangeProductSortTypeEvent extends ProductsScreenEvent {
+class SelectSortProductsType extends ProductsScreenEvent {
   final ProductSortType productSortType;
-
-  const ChangeProductSortTypeEvent(this.productSortType);
-
-  @override
-  List<Object> get props => [productSortType];
+  const SelectSortProductsType({required this.productSortType});
 }

@@ -60,7 +60,7 @@ class ProductsGridWidget extends StatelessWidget {
                 child: ProductWidget(
                     product: product,
                     isSelected: isSelected,
-                    showCheckbox: true),
+                    showCheckbox: showCheckbox),
               );
             },
           ),

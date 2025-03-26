@@ -106,6 +106,7 @@ class FavoriteProductsScreen extends StatelessWidget {
         children: [
           SizedBox(height: 16.h),
           FilterSortContainer(
+            isFromFav: true,
             sortTypes: ProductSortType.values,
             selectedSortType: state.selectedSortType,
             onSortSelected: (sortType) {

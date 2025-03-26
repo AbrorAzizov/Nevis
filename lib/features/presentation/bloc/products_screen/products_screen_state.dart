@@ -1,32 +1,42 @@
 part of 'products_screen_bloc.dart';
 
 class ProductsScreenState extends Equatable {
+  final List<ProductEntity> products;
+  final ProductSortType? selectedSortType;
+  final ProductFilterOrSortType? selectedFilterOrSortType;
   final bool isLoading;
   final String? error;
-  final ProductSortType? productSortType;
-  final List<ProductEntity> products;
 
   const ProductsScreenState({
-    this.isLoading = true,
-    this.error,
-    this.productSortType,
+    required this.error,
     required this.products,
+    required this.selectedFilterOrSortType,
+    required this.selectedSortType,
+    required this.isLoading,
   });
 
-  ProductsScreenState copyWith({
-    bool? isLoading,
-    String? error,
-    ProductSortType? productSortType,
-    List<ProductEntity>? products,
-  }) {
+  ProductsScreenState copyWith(
+      {List<ProductEntity>? products,
+      Set<int>? selectedProductIds,
+      ProductSortType? selectedSortType,
+      bool? isAllProductsChecked,
+      ProductFilterOrSortType? selectedFilterOrSortType,
+      bool? isLoading,
+      String? error}) {
     return ProductsScreenState(
+      products: products ?? this.products,
+      selectedSortType: selectedSortType ?? this.selectedSortType,
+      selectedFilterOrSortType: selectedFilterOrSortType,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
-      productSortType: productSortType ?? this.productSortType,
-      products: products ?? this.products,
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, error, productSortType, products];
+  List<Object?> get props => [
+        products,
+        selectedSortType,
+        selectedFilterOrSortType,
+        isLoading,
+      ];
 }

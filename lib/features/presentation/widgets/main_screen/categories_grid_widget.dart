@@ -5,6 +5,7 @@ import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/presentation/pages/catalog/category_screen.dart';
+import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/category_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -50,11 +51,9 @@ class CategoriesGridWidget extends StatelessWidget {
             return GestureDetector(
               onTap: () => Navigator.of(context).push(
                 Routes.createRoute(
-                  CategoryScreen(
-                    categoryId: category.categoryId,
-                    categoryTitle: category.pageTitle,
-                  ),
-                  settings: RouteSettings(name: Routes.categoryScreen),
+                  ProductsScreen(),
+                  settings: RouteSettings(name: Routes.productsScreen,
+                  arguments: {'title':category.pageTitle}),
                 ),
               ),
               child: CategoryWidget(

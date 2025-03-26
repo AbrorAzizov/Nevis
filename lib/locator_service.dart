@@ -148,7 +148,7 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => ProductsScreenBloc(
-      searchProductsUC: sl<SearchProductsUC>(),
+      
     ),
   );
   sl.registerFactory(

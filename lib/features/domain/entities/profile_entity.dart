@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+
 import 'package:equatable/equatable.dart';
 import 'package:nevis/features/domain/entities/adress_entity.dart';
 

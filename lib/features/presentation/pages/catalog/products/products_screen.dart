@@ -1,55 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/enums.dart';
+import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/constants/utils.dart';
-import 'package:nevis/core/params/product_param.dart';
-import 'package:nevis/features/domain/entities/product_entity.dart';
-import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
-import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/favourite_products_screen/selected_products_price_info_widget.dart';
 import 'package:nevis/features/presentation/widgets/filter_and_sort_widget.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
-import 'package:nevis/locator_service.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
 
-
-class ProdcutsScreen extends StatelessWidget {
-  const ProdcutsScreen({super.key});
+class ProductsScreen extends StatelessWidget {
+  const ProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final String title = args?['title'];
+
     return BlocProvider(
-      create: (context) =>
-          ProductsScreenBloc(searchProductsUC: sl())..add(LoadDataEvent()),
-      child:
-          BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
+      create: (context) => ProductsScreenBloc()..add(LoadProductsEvent()),
+      child: BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
         builder: (context, state) {
           final bloc = context.read<ProductsScreenBloc>();
-
           return Scaffold(
             backgroundColor: UiConstants.backgroundColor,
             body: SafeArea(
-              child: Skeletonizer(
-                ignorePointers: false,
-                enabled: false,
-                child: Column(
-                  children: [
-                    CustomAppBar(
-                      screenContext: context,
-                      showBack: true,
-                      controller: TextEditingController(),
+              child: Column(
+                children: [
+                  SearchProductAppBar(
+                    screenContext: context,
+                    onTapFavoriteProductsChip: () {},
+                    onTapLocationChip: () {},
+                  ),
+                  SizedBox(height: 16.h),
+                  Padding(
+                    padding: getMarginOrPadding(left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          child: SvgPicture.asset(Paths.arrowBackIconPath),
+                          onTap: () => Navigator.pop(context),
+                        ),
+                        SizedBox(width: 8),
+                        Text(title, style: UiConstants.textStyle5),
+                      ],
                     ),
+                  ),
+                  SizedBox(height: 16),
+                  if (state.isLoading)
+                    Expanded(child: Center(child: CircularProgressIndicator()))
+                  else if (state.error != null)
                     Expanded(
-                      child: _buildBody(state, bloc),
+                        child: Center(child: Text("Ошибка загрузки данных")))
+                  else
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding:
+                            getMarginOrPadding(bottom: 94, left: 20, right: 20),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 50.h, child: FilterChips()),
+                            FilterSortContainer(
+                              isFromFav: false,
+                              sortTypes: ProductSortType.values,
+                              selectedSortType: state.selectedSortType,
+                              onSortSelected: (sortType) {
+                                bloc.add(SelectSortProductsType(
+                                    productSortType: sortType));
+                              },
+                              filterOrSortType: state.selectedFilterOrSortType,
+                              onConfirmFilter: () =>
+                                  bloc.add(ShowFilterProductsTypes()),
+                            ),
+                            SizedBox(height: 16),
+                            ProductsGridWidget(
+                              isLoading: false,
+                              products: state.products,
+                              showCheckbox: false,
+                              selectedProductIds: {},
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
           );
@@ -57,105 +95,68 @@ class ProdcutsScreen extends StatelessWidget {
       ),
     );
   }
+}
+class FilterChips extends StatefulWidget {
+  const FilterChips({super.key});
 
-  Widget _buildBody(
-      ProductsScreenState state, ProductsScreenBloc bloc) {
-    if (state.isLoading) {
-      return Center(child: CircularProgressIndicator());
-    } else if (state.error != null) {
-      return Center(child: Text("Ошибка загрузки данных"));
-    } else if (state.products.isEmpty) {
-      return _buildEmptyFavorites();
-    } else {
-      return _buildProductList(state, bloc);
-    }
-  }
+  @override
+  _FilterChipsState createState() => _FilterChipsState();
+}
 
-  Widget _buildEmptyFavorites() {
-    return SingleChildScrollView(
-      padding: getMarginOrPadding(bottom: 94),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('Избранное', style: UiConstants.textStyle17),
-          ),
-          SizedBox(height: 8.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              'В избранном пока нет товаров',
-              style: UiConstants.textStyle11.copyWith(
-                color: UiConstants.black3Color.withOpacity(.6),
-              ),
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Center(child: Image.asset(Paths.noFavoriteProductsIconPath)),
-          SizedBox(height: 9.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: AppButtonWidget(onTap: () {}, text: 'В каталог'),
-          ),
-        ],
-      ),
+class _FilterChipsState extends State<FilterChips> {
+  int _selectedIndex = 0;
+  final List<String> categories = [
+    'Аллергия', 'Антибиотики','Астма'
+  ];
+
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollToSelectedChip(int index) {
+    double chipWidth = 100.0;
+    double scrollOffset = index * chipWidth;
+
+    _scrollController.animateTo(
+      scrollOffset,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
     );
   }
 
-  Widget _buildProductList(
-      ProductsScreenState state, ProductsScreenBloc bloc) {
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: getMarginOrPadding(bottom: 94, left: 20, right: 20),
-      child: Column(
-        children: [
-          SizedBox(height: 16.h),
-          FilterSortContainer(
-            sortTypes: ProductSortType.values,
-            selectedSortType: state.selectedSortType,
-            onSortSelected: (sortType) {
-              bloc.add(SelectSortProductsType(productSortType: sortType));
-            },
-            filterOrSortType: state.selectedFilterOrSortType,
-            onConfirmFilter: () => bloc.add(ShowFilterProductsTypes()),
-          ),
-          SizedBox(height: 16.h),
-          CustomCheckbox(
-            title: Text(
-              'Выбрать все',
-              style: UiConstants.textStyle8
-                  .copyWith(color: UiConstants.blackColor),
-            ),
-            isChecked: state.isAllProductsChecked,
-            onChanged: (_) => bloc.add(PickAllProductsEvent()),
-          ),
-          SizedBox(height: 16.h),
-          ProductsGridWidget(
-              isLoading: false,
-              products: state.products,
-              selectedProductIds: state.selectedProductIds,
-              showCheckbox: true),
-          SizedBox(height: 10.h),
-          if (state.selectedProductIds.isNotEmpty)
-            Column(
-              children: [
-                SelectedProductsPriceInformationWidget(
-                  products: state.products
-                      .where((product) =>
-                          state.selectedProductIds.contains(product.productId))
-                      .toList(),
-                ),
-                SizedBox(height: 16.h),
-                AppButtonWidget(
-                  text: 'Добавить 2 товара в корзину',
-                  onTap: () {},
-                  isFilled: false,
-                  textColor: UiConstants.blueColor,
-                  showBorder: true,
-                )
-              ],
-            )
-        ],
+      controller: _scrollController,
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(categories.length, (index) {
+          final bool isSelected = _selectedIndex == index;
+          return 
+             ChoiceChip(
+              selectedColor: UiConstants.blueColor,
+              backgroundColor: UiConstants.whiteColor,
+              labelStyle: UiConstants.textStyle19.copyWith(
+                color: isSelected ? Colors.white : Colors.black,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+
+              showCheckmark: false,
+              label: Text(categories[index]),
+              selected: isSelected,
+              onSelected: (bool selected) {
+                if (selected) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                  _scrollToSelectedChip(index);
+                }
+              },
+          
+          );
+        }),
       ),
     );
   }
