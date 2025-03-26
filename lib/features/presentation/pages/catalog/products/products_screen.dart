@@ -59,29 +59,35 @@ class ProductsScreen extends StatelessWidget {
                     Expanded(
                       child: SingleChildScrollView(
                         padding:
-                            getMarginOrPadding(bottom: 94, left: 20, right: 20),
+                            getMarginOrPadding(bottom: 94),
                         child: Column(
                           children: [
-                            FilterSortContainer(
-                              isFromFav: false,
-                              sortTypes: ProductSortType.values,
-                              selectedSortType: state.selectedSortType,
-                              onSortSelected: (sortType) {
-                                bloc.add(SelectSortProductsType(
-                                    productSortType: sortType));
-                              },
-                              filterOrSortType: state.selectedFilterOrSortType,
-                              onConfirmFilter: () =>
-                                  bloc.add(ShowFilterProductsTypes()),
+                            Padding(
+                              padding: getMarginOrPadding(left: 20,right: 20),
+                              child: FilterSortContainer(
+                                isFromFav: false,
+                                sortTypes: ProductSortType.values,
+                                selectedSortType: state.selectedSortType,
+                                onSortSelected: (sortType) {
+                                  bloc.add(SelectSortProductsType(
+                                      productSortType: sortType));
+                                },
+                                filterOrSortType: state.selectedFilterOrSortType,
+                                onConfirmFilter: () =>
+                                    bloc.add(ShowFilterProductsTypes()),
+                              ),
                             ),
                             SizedBox(height: 16.h),
                             SizedBox(height: 40.h, child: FilterChips()),
                             SizedBox(height: 16.h),
-                            ProductsGridWidget(
-                              isLoading: false,
-                              products: state.products,
-                              showCheckbox: false,
-                              selectedProductIds: {},
+                            Padding(
+                              padding: getMarginOrPadding(left: 20,right: 20),
+                              child: ProductsGridWidget(
+                                isLoading: false,
+                                products: state.products,
+                                showCheckbox: false,
+                                selectedProductIds: {},
+                              ),
                             ),
                             SizedBox(height: 10),
                           ],
@@ -126,8 +132,10 @@ class _FilterChipsState extends State<FilterChips> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       controller: _scrollController,
+      padding: EdgeInsets.zero,
       scrollDirection: Axis.horizontal,
       child: Row(
+        spacing: 22.w,
         children: List.generate(categories.length, (index) {
           final bool isSelected = _selectedIndex == index;
           return ChoiceChip(

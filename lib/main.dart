@@ -73,6 +73,13 @@ class MyApp extends StatelessWidget {
             title: 'InLek',
             theme: ThemeData(
                 scaffoldBackgroundColor: UiConstants.whiteColor,
+     
+      
+                focusColor: UiConstants.blue3Color ,
+                highlightColor:  UiConstants.blue3Color,
+                chipTheme: ChipThemeData(
+                  surfaceTintColor: Colors.transparent
+                ),
                 fontFamily: 'Nunito'),
             //home: HomeScreen(),
             routes: {
