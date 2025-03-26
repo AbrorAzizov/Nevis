@@ -62,7 +62,6 @@ class ProductsScreen extends StatelessWidget {
                             getMarginOrPadding(bottom: 94, left: 20, right: 20),
                         child: Column(
                           children: [
-                            SizedBox(height: 50.h, child: FilterChips()),
                             FilterSortContainer(
                               isFromFav: false,
                               sortTypes: ProductSortType.values,
@@ -75,7 +74,9 @@ class ProductsScreen extends StatelessWidget {
                               onConfirmFilter: () =>
                                   bloc.add(ShowFilterProductsTypes()),
                             ),
-                            SizedBox(height: 16),
+                            SizedBox(height: 16.h),
+                            SizedBox(height: 40.h, child: FilterChips()),
+                            SizedBox(height: 16.h),
                             ProductsGridWidget(
                               isLoading: false,
                               products: state.products,
@@ -96,6 +97,7 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 }
+
 class FilterChips extends StatefulWidget {
   const FilterChips({super.key});
 
@@ -105,9 +107,7 @@ class FilterChips extends StatefulWidget {
 
 class _FilterChipsState extends State<FilterChips> {
   int _selectedIndex = 0;
-  final List<String> categories = [
-    'Аллергия', 'Антибиотики','Астма'
-  ];
+  final List<String> categories = ['Аллергия', 'Антибиотики', 'Астма'];
 
   final ScrollController _scrollController = ScrollController();
 
@@ -130,31 +130,28 @@ class _FilterChipsState extends State<FilterChips> {
       child: Row(
         children: List.generate(categories.length, (index) {
           final bool isSelected = _selectedIndex == index;
-          return 
-             ChoiceChip(
-              selectedColor: UiConstants.blueColor,
-              backgroundColor: UiConstants.whiteColor,
-              labelStyle: UiConstants.textStyle19.copyWith(
-                color: isSelected ? Colors.white : Colors.black,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent),
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-
-              showCheckmark: false,
-              label: Text(categories[index]),
-              selected: isSelected,
-              onSelected: (bool selected) {
-                if (selected) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                  _scrollToSelectedChip(index);
-                }
-              },
-          
+          return ChoiceChip(
+            selectedColor: UiConstants.blueColor,
+            backgroundColor: UiConstants.whiteColor,
+            labelStyle: UiConstants.textStyle19.copyWith(
+              color: isSelected ? Colors.white : Colors.black,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            showCheckmark: false,
+            label: Text(categories[index]),
+            selected: isSelected,
+            onSelected: (bool selected) {
+              if (selected) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+                _scrollToSelectedChip(index);
+              }
+            },
           );
         }),
       ),
