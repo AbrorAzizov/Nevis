@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
+
+import 'package:flutter/services.dart';
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/features/data/models/product_model.dart';
@@ -73,13 +76,26 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<List<ProductPharmacyModel>> getProductPharmacies(int id) async {
+    //   try {
+    //     final data = await apiClient.get(
+    //       endpoint: 'product/$id/pharmacies',
+    //       callPathNameForLog: '${runtimeType.toString()}.getProductPharmacies',
+    //     );
+    //     List<dynamic> dataList = data['data'];
+    //     return dataList
+    //         .map((e) => ProductPharmacyModel.fromJson(e['product_pharmacy_json']))
+    //         .toList();
+    //   } catch (e) {
+    //     log('Error during getProductPharmacies: $e', level: 1000);
+    //     rethrow;
+    //   }
+    // }
     try {
-      final data = await apiClient.get(
-        endpoint: 'product/$id/pharmacies',
-        callPathNameForLog: '${runtimeType.toString()}.getProductPharmacies',
-      );
+      final String jsonString =
+          await rootBundle.loadString('assets/product_pharmacies.json');
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
 
-      List<dynamic> dataList = data['data'];
+      List<dynamic> dataList = jsonData['data'];
       return dataList
           .map((e) => ProductPharmacyModel.fromJson(e['product_pharmacy_json']))
           .toList();

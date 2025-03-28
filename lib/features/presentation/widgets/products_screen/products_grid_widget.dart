@@ -53,8 +53,7 @@ class ProductsGridWidget extends StatelessWidget {
                   Routes.createRoute(
                     const ProductScreen(),
                     settings: RouteSettings(
-                        name: Routes.productScreen,
-                        arguments: products[index].productId),
+                        name: Routes.productScreen, arguments: products[index]),
                   ),
                 ),
                 child: ProductWidget(

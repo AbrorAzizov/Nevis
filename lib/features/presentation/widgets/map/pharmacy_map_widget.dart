@@ -10,12 +10,15 @@ import 'package:nevis/core/models/map_marker_model.dart';
 import 'package:nevis/features/presentation/bloc/pharmacy_map/pharmacy_map_bloc.dart';
 import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/pharmacy_info_card.dart';
 import 'package:nevis/features/presentation/widgets/map/map_button.dart';
+import 'package:nevis/features/presentation/widgets/value_buy_product_screen/pharmacy_product_info_card_widget.dart';
 import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
 
 class PharmacyMapWidget extends StatelessWidget {
   final List<MapMarkerModel> points;
+  final bool fromProduct;
   final double? height;
-  const PharmacyMapWidget({super.key, required this.points, this.height});
+  const PharmacyMapWidget(
+      {super.key, required this.points, this.height, this.fromProduct = false});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +27,10 @@ class PharmacyMapWidget extends StatelessWidget {
           PharmacyMapBloc()..add(InitPharmacyMapEvent(points: points)),
       child: BlocBuilder<PharmacyMapBloc, PharmacyMapState>(
         builder: (context, state) {
+          final selectedPoint = state.points.firstWhere(
+            (e) => e.id.toString() == state.selectedMarkerId,
+            orElse: () => points.first,
+          );
           final bloc = context.read<PharmacyMapBloc>();
 
           return ClipRRect(
@@ -33,7 +40,9 @@ class PharmacyMapWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.r),
               ),
-              padding: getMarginOrPadding(bottom: 94, left: 20, right: 20),
+              padding: getMarginOrPadding(
+                bottom: 94,
+              ),
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
@@ -97,7 +106,11 @@ class PharmacyMapWidget extends StatelessWidget {
                                 street = addressSplit.skip(1).join(', ');
                               }*/
 
-                              return PharmacyInfoCard();
+                              return fromProduct
+                                  ? PharmacyProductInfoCard(
+                                      data: selectedPoint.data!,
+                                    )
+                                  : PharmacyInfoCard();
                             }),
                           ),
                       ],

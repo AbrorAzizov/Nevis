@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class ProductPharmacyEntity extends Equatable {
-  final double? price;
+  final int? price;
   final String? address;
   final String? schedule;
   final double? priceOld;

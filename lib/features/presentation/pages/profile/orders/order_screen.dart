@@ -20,7 +20,6 @@ import 'package:nevis/features/presentation/widgets/order_screen/order_screen_bu
 import 'package:nevis/features/presentation/widgets/order_screen/order_status_widget.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_info_list.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class OrderScreen extends StatelessWidget {
@@ -49,9 +48,7 @@ class OrderScreen extends StatelessWidget {
                         return Column(
                           children: [
                             CustomAppBar(
-                              onChangedField: (String query){
-                                
-                              },
+                              onChangedField: (String query) {},
                               title: 'Заказ №${orderState.order?.orderId}',
                               showBack: true,
                               backgroundColor: UiConstants.backgroundColor,
@@ -115,71 +112,121 @@ class OrderScreen extends StatelessWidget {
                                             SizedBox(height: 32.h),
                                             if (!orderState.isLoading &&
                                                 orderState.order!.typeReceipt !=
-                                                    TypeReceiving.delivery &&  orderState.order!.status == OrderStatus.readyToIssue  )
+                                                    TypeReceiving.delivery &&
+                                                orderState.order!.status ==
+                                                    OrderStatus.readyToIssue)
                                               Padding(
-                                                padding: getMarginOrPadding(bottom: 16),
+                                                padding: getMarginOrPadding(
+                                                    bottom: 16),
                                                 child: Text(
-                                                    'Можете оплатить сейчас или при получении',
-                                                    textAlign: TextAlign.center,
-                                                    style: UiConstants.textStyle2,),
+                                                  'Можете оплатить сейчас или при получении',
+                                                  textAlign: TextAlign.center,
+                                                  style: UiConstants.textStyle2,
+                                                ),
                                               ),
-                                            if(!orderState.isLoading &&(orderState.order!.status == OrderStatus.accepted ||  orderState.order!.status == OrderStatus.readyToIssue) && orderState.order!.typeReceipt != TypeReceiving.delivery )
+                                            if (!orderState.isLoading &&
+                                                (orderState.order!.status ==
+                                                        OrderStatus.accepted ||
+                                                    orderState.order!.status ==
+                                                        OrderStatus
+                                                            .readyToIssue) &&
+                                                orderState.order!.typeReceipt !=
+                                                    TypeReceiving.delivery)
                                               Padding(
-                                                padding: getMarginOrPadding(bottom: 32),
+                                                padding: getMarginOrPadding(
+                                                    bottom: 32),
                                                 child: AppButtonWidget(
-                                                              text:
-                                                                  'Перейти к оплате',
-                                                              showBorder: false,
-                                                              
-                                                              textColor:
-                                                              orderState.order!.status == OrderStatus.accepted?    UiConstants
-                                                                      .black3Color.withOpacity(0.6) : UiConstants.whiteColor,
-                                                              backgroundColor:
-                                                              orderState.order!.status == OrderStatus.accepted ?
-                                                                  UiConstants
-                                                                      .black3Color.withOpacity(0.05) : UiConstants.blueColor,
-                                                              onTap:    orderState.order!.status == OrderStatus.accepted?  null : (){},
-                                                            ),
+                                                  text: 'Перейти к оплате',
+                                                  showBorder: false,
+                                                  textColor: orderState
+                                                              .order!.status ==
+                                                          OrderStatus.accepted
+                                                      ? UiConstants.black3Color
+                                                          .withOpacity(0.6)
+                                                      : UiConstants.whiteColor,
+                                                  backgroundColor: orderState
+                                                              .order!.status ==
+                                                          OrderStatus.accepted
+                                                      ? UiConstants.black3Color
+                                                          .withOpacity(0.05)
+                                                      : UiConstants.blueColor,
+                                                  onTap: orderState
+                                                              .order!.status ==
+                                                          OrderStatus.accepted
+                                                      ? null
+                                                      : () {},
+                                                ),
                                               ),
-                                              if(!orderState.isLoading && orderState.order!.status == OrderStatus.readyToIssue)
-                                                Padding(
-                                                  padding: getMarginOrPadding(bottom: 32),
-                                                  child: Container(
-                                                  
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(16.r),
-                                                      color: UiConstants.blue2Color
-                                                  
-                                                    ),
-                                                    child: Padding(
-                                                      padding: getMarginOrPadding(all: 8),
-                                                      child: Row(
-                                                        children: [
-                                                          Container(
-                                                            decoration: BoxDecoration(
-                                                              color: UiConstants.whiteColor.withOpacity(.8),
-                                                              borderRadius: BorderRadius.circular(8.r)
-                                                              
-                                                            ),
-                                                            child: Padding(padding: getMarginOrPadding(all: 8),
-                                                              child: SvgPicture.asset(Paths.infoIconPath,colorFilter: ColorFilter.mode(
-                                                                 UiConstants.blueColor, BlendMode.srcIn
-                                                              ),),
+                                            if (!orderState.isLoading &&
+                                                orderState.order!.status ==
+                                                    OrderStatus.readyToIssue)
+                                              Padding(
+                                                padding: getMarginOrPadding(
+                                                    bottom: 32),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16.r),
+                                                      color: UiConstants
+                                                          .blue2Color),
+                                                  child: Padding(
+                                                    padding: getMarginOrPadding(
+                                                        all: 8),
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          decoration: BoxDecoration(
+                                                              color: UiConstants
+                                                                  .whiteColor
+                                                                  .withOpacity(
+                                                                      .8),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.r)),
+                                                          child: Padding(
+                                                            padding:
+                                                                getMarginOrPadding(
+                                                                    all: 8),
+                                                            child: SvgPicture
+                                                                .asset(
+                                                              Paths
+                                                                  .infoIconPath,
+                                                              colorFilter:
+                                                                  ColorFilter.mode(
+                                                                      UiConstants
+                                                                          .blueColor,
+                                                                      BlendMode
+                                                                          .srcIn),
                                                             ),
                                                           ),
-                                                          SizedBox(width: 12.w,),
-                                                          Expanded(child: Text(
-                                                           orderState.order!.typeReceipt == TypeReceiving.pickup ?  'Заберите заказ в течение 48 часов или он будет отменен' : 'Заберите заказ в течение 7 дней или он будет отменен',
-                                                          style: UiConstants.textStyle11.copyWith(
-                                                            color: UiConstants.blueColor,
-                                                            fontWeight: FontWeight.w500
-                                                          ),))
-                                                        ],
-                                                      ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 12.w,
+                                                        ),
+                                                        Expanded(
+                                                            child: Text(
+                                                          orderState.order!
+                                                                      .typeReceipt ==
+                                                                  TypeReceiving
+                                                                      .pickup
+                                                              ? 'Заберите заказ в течение 48 часов или он будет отменен'
+                                                              : 'Заберите заказ в течение 7 дней или он будет отменен',
+                                                          style: UiConstants
+                                                              .textStyle11
+                                                              .copyWith(
+                                                                  color: UiConstants
+                                                                      .blueColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                        ))
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
-
+                                              ),
                                             (!orderState.isLoading &&
                                                     orderState.order!.status ==
                                                         OrderStatus.canceled)
@@ -229,8 +276,7 @@ class OrderScreen extends StatelessWidget {
                                                       ],
                                                     ),
                                                   )
-                                                : 
-                                                 AppButtonWidget(
+                                                : AppButtonWidget(
                                                     isExpanded: false,
                                                     text: 'Связаться с нами',
                                                     showBorder: true,

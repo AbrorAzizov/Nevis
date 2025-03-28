@@ -18,7 +18,6 @@ import 'package:nevis/features/presentation/widgets/cart_screen/out_stock_chip.d
 import 'package:nevis/features/presentation/widgets/cart_screen/product_price.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/product_stock_chip.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
-import 'package:nevis/features/presentation/widgets/product_chip_widget.dart';
 
 class CartProductWidget extends StatefulWidget {
   const CartProductWidget({
@@ -125,7 +124,7 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                               progressIndicatorBuilder:
                                   (context, url, progress) => Center(
                                 child: CircularProgressIndicator(
-                                    color: UiConstants.pink2Color),
+                                    color: UiConstants.blueColor),
                               ),
                             ),
                             if (!inStock)
@@ -134,34 +133,6 @@ class _CartProductWidgetState extends State<CartProductWidget> {
                                 width: 104.w,
                                 color: UiConstants.whiteColor.withOpacity(.6),
                               ),
-                            Positioned(
-                              top: 4.h,
-                              left: 8.w,
-                              right: 8.w,
-                              child: Wrap(
-                                spacing: 4.w,
-                                runSpacing: 4.w,
-                                children: widget.index % 3 == 2 && inStock
-                                    ? [
-                                        ProductChipWidget(
-                                            productChipType:
-                                                ProductChipType.seasonalOffer),
-                                        ProductChipWidget(
-                                            productChipType:
-                                                ProductChipType.nova),
-                                        ProductChipWidget(
-                                            productChipType:
-                                                ProductChipType.stock),
-                                      ]
-                                    : widget.index % 3 == 1 && inStock
-                                        ? [
-                                            ProductChipWidget(
-                                                productChipType:
-                                                    ProductChipType.hit)
-                                          ]
-                                        : [],
-                              ),
-                            )
                           ],
                         ),
                         SizedBox(width: 8.w),

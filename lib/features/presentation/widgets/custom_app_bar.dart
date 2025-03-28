@@ -8,28 +8,29 @@ import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({
-    super.key,
-    this.controller,
-    this.showLocationChip = false,
-    this.showBack = false,
-    this.title,
-    this.action,
-    this.contentPadding,
-    this.backgroundColor,
-    this.hintText,
-    this.isShowFavoriteButton = false,
-    this.onChangedField,
-    this.onTapField,
-    this.screenContext,
-    this.onTapCancel,
-  });
+  const CustomAppBar(
+      {super.key,
+      this.controller,
+      this.showLocationChip = false,
+      this.showBack = false,
+      this.title,
+      this.action,
+      this.contentPadding,
+      this.backgroundColor,
+      this.hintText,
+      this.isShowFavoriteButton = false,
+      this.onChangedField,
+      this.onTapField,
+      this.screenContext,
+      this.onTapCancel,
+      this.usePadding = true});
 
   final BuildContext? screenContext;
   final TextEditingController? controller;
   final bool showLocationChip;
   final bool showBack;
   final String? title;
+  final bool usePadding;
   final Widget? action;
   final EdgeInsets? contentPadding;
   final Color? backgroundColor;
@@ -44,7 +45,11 @@ class CustomAppBar extends StatelessWidget {
     return Container(
       color: backgroundColor ?? UiConstants.whiteColor,
       padding: contentPadding ??
-          getMarginOrPadding(top: 16, bottom: 8, right: 20, left: 20),
+          getMarginOrPadding(
+              top: usePadding ? 16 : 0,
+              bottom: usePadding ? 8 : 16,
+              right: usePadding ? 20 : 0,
+              left: usePadding ? 20 : 0),
       child: Column(
         children: [
           if (title != null || action != null || controller == null)

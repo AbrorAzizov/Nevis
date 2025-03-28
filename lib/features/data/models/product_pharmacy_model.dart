@@ -1,4 +1,3 @@
-
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 
 class ProductPharmacyModel extends ProductPharmacyEntity {
@@ -20,7 +19,7 @@ class ProductPharmacyModel extends ProductPharmacyEntity {
 
   factory ProductPharmacyModel.fromJson(Map<String, dynamic> json) =>
       ProductPharmacyModel(
-        price: (json["price"] as num?)?.toDouble(),
+        price: (json["price"] as num?)?.toInt(),
         address: json["address"],
         schedule: json["schedule"],
         priceOld: (json["price_old"] as num?)?.toDouble(),

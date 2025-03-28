@@ -12,6 +12,7 @@ import 'package:nevis/features/presentation/pages/catalog/category_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/pharmacies_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/product_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
+import 'package:nevis/features/presentation/pages/catalog/products/value_buy_product_screen.dart';
 import 'package:nevis/features/presentation/pages/home_screen.dart';
 import 'package:nevis/features/presentation/pages/main/banner_screen.dart';
 import 'package:nevis/features/presentation/pages/main/main_screen.dart';
@@ -73,13 +74,9 @@ class MyApp extends StatelessWidget {
             title: 'InLek',
             theme: ThemeData(
                 scaffoldBackgroundColor: UiConstants.whiteColor,
-     
-      
-                focusColor: UiConstants.blue3Color ,
-                highlightColor:  UiConstants.blue3Color,
-                chipTheme: ChipThemeData(
-                  surfaceTintColor: Colors.transparent
-                ),
+                focusColor: UiConstants.blue3Color,
+                highlightColor: UiConstants.blue3Color,
+                chipTheme: ChipThemeData(surfaceTintColor: Colors.transparent),
                 fontFamily: 'Nunito'),
             //home: HomeScreen(),
             routes: {
@@ -124,7 +121,9 @@ class MyApp extends StatelessWidget {
               Routes.favoritePharmacy: (context) =>
                   const FavoritePharmaciesScreen(),
               Routes.favouriteProducts: (context) =>
-                  const FavoriteProductsScreen()
+                  const FavoriteProductsScreen(),
+              Routes.valueBuyProductScreen: (context) =>
+                  const ValueBuyProductScreen()
             },
             initialRoute: Routes.splashScreen,
             navigatorObservers: [routeObserver],

@@ -67,6 +67,7 @@ import 'package:nevis/features/presentation/bloc/products_screen/products_screen
 import 'package:nevis/features/presentation/bloc/profile_screen/profile_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/sign_up_screen/sign_up_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/splash_screen/splash_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sl = GetIt.instance;
@@ -147,13 +148,16 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(
-    () => ProductsScreenBloc(
-      
-    ),
+    () => ProductsScreenBloc(),
   );
   sl.registerFactory(
     () => ProductScreenBloc(
       getOneProductUC: sl<GetOneProductUC>(),
+      getProductPharmaciesUC: sl<GetProductPharmaciesUC>(),
+    ),
+  );
+  sl.registerFactory(
+    () => ValueBuyProductScreenBloc(
       getProductPharmaciesUC: sl<GetProductPharmaciesUC>(),
     ),
   );
@@ -295,7 +299,6 @@ Future<void> init() async {
       sharedPreferences: sl(),
     ),
   );
-
 
   //// Core
   sl.registerLazySingleton<NetworkInfo>(

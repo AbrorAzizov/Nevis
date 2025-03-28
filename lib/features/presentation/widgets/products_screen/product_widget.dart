@@ -11,6 +11,7 @@ import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/product_screen.dart';
+import 'package:nevis/features/presentation/pages/catalog/products/value_buy_product_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/product_price.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
@@ -184,38 +185,56 @@ class ProductWidget extends StatelessWidget {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if(product.valueBuy != null)
-                    Container(
-                    
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                        image:
-                         AssetImage('assets/images/value_buy.png'),
-                         fit: BoxFit.fill)
-                      ),
-                      width: 140.w,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8,top: 6,bottom: 6,right: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RichText(text: TextSpan(
+                    if (product.valueBuy != null)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            Routes.createRoute(
+                              const ValueBuyProductScreen(),
+                              settings: RouteSettings(
+                                name: Routes.valueBuyProductScreen,
+                                arguments: {'product': product},
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/images/value_buy.png'),
+                                  fit: BoxFit.fill)),
+                          width: 140.w,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8, top: 6, bottom: 6, right: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                              TextSpan(text: 'Купить выгодно\n',
-                              style: UiConstants.textStyle15.copyWith(color: UiConstants.purpleColor))  ,
-                               TextSpan(text: 'от ${product.valueBuy} ₽',style: UiConstants.textStyle15.copyWith(color: UiConstants.purpleColor,fontWeight: FontWeight.w500))  ,
-                              
-                              ]
-                            )),
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: SvgPicture.asset(Paths.dropdownArrowIconPath))
-                           
-                          ],  
+                                RichText(
+                                    text: TextSpan(children: [
+                                  TextSpan(
+                                      text: 'Купить выгодно\n',
+                                      style: UiConstants.textStyle15.copyWith(
+                                          color: UiConstants.purpleColor)),
+                                  TextSpan(
+                                      text: 'от ${product.valueBuy} ₽',
+                                      style: UiConstants.textStyle15.copyWith(
+                                          color: UiConstants.purpleColor,
+                                          fontWeight: FontWeight.w500)),
+                                ])),
+                                RotatedBox(
+                                    quarterTurns: 1,
+                                    child: SvgPicture.asset(
+                                        Paths.dropdownArrowIconPath))
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      ),
-                    product.valueBuy == null ? SizedBox(height: 41.h) : SizedBox.shrink(),
+                    product.valueBuy == null
+                        ? SizedBox(height: 41.h)
+                        : SizedBox.shrink(),
                     SizedBox(
                       height: 40.h,
                       child: ProductPrice(product: product),
@@ -231,7 +250,6 @@ class ProductWidget extends StatelessWidget {
                       textColor: UiConstants.blueColor,
                       onTap: () {},
                     ),
-                    
                   ],
                 ),
               ),

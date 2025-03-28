@@ -1,0 +1,77 @@
+{
+    "success": true,
+    "data": [
+        {
+            "product_id": 4707,
+            "product_pharmacy_json": {
+                "price": 110,
+                "address": "198035 г. Санкт-Петербург, ул. Двинская, 11",
+                "schedule": "ПН-ВС: 09:00-22:00",
+                "price_old": 49.29,
+                "product_id": 4707,
+                "coordinates": "59.98006191456112, 30.3384017957718",
+                "pharmacy_id": 6905,
+                "stock_count": "50",
+                "product_name": "Магне В6 табл. N60",
+                "pharmacy_name": "Аптека №1 InLek OOO Сеть аптек",
+                "pharmacy_alias": "apteka-n1-inlek",
+                "expiration_date": "Годен до 31.01.2025",
+                "pharmacy_delivery": "Самовывоз"
+            }
+        },
+        {
+            "product_id": 4707,
+            "product_pharmacy_json": {
+                "price": 100,
+                "address": "198035 г. Санкт-Петербург, пр-т Пушкинский, 14",
+                "schedule": "ПН-ВС: 09:00-22:00",
+                "price_old": 49.29,
+                "product_id": 4707,
+                "coordinates": "59.95926576066199, 30.42163481445532",
+                "pharmacy_id": 6908,
+                "stock_count": "50",
+                "product_name": "Магне В6 табл. N60",
+                "pharmacy_name": "Аптека №10 InLek OOO Сеть аптек",
+                "pharmacy_alias": "apteka-n10-inlek",
+                "expiration_date": "Годен до 31.01.2025",
+                "pharmacy_delivery": "Самовывоз"
+            }
+        },
+        {
+            "product_id": 4707,
+            "product_pharmacy_json": {
+                "price": 200,
+                "address": "198035 г. Санкт-Петербург, ул. Челюскинцев, 136",
+                "schedule": "ПН-ВС: 9:00-22:00",
+                "price_old": 49.29,
+                "product_id": 4707,
+                "coordinates": "59.98283849208737, 30.407710117023218",
+                "pharmacy_id": 663503,
+                "stock_count": "14",
+                "product_name": "Магне В6 табл. N60",
+                "pharmacy_name": "Аптека №16 InLek ОДО ДКМ-ФАРМ",
+                "pharmacy_alias": "apteka-n16-inlek",
+                "expiration_date": "Годен до 31.01.2025",
+                "pharmacy_delivery": "Самовывоз"
+            }
+        },
+        {
+            "product_id": 4707,
+            "product_pharmacy_json": {
+                "price": 300,
+                "address": "198035 г. Санкт-Петербург, Минское шоссе, 31 ТЦ Парк Сити",
+                "schedule": "ПН-ВС: 08:00-01:00",
+                "price_old": 49.29,
+                "product_id": 4707,
+                "coordinates": "59.988734095751916, 30.197440360601032",
+                "pharmacy_id": 890006,
+                "stock_count": "38.667",
+                "product_name": "Магне В6 табл. N60",
+                "pharmacy_name": "Аптека №5 InLek ООО Сеть аптек",
+                "pharmacy_alias": "apteka-n5-inlek1",
+                "expiration_date": "Годен до 28.02.2025",
+                "pharmacy_delivery": "Самовывоз"
+            }
+        }
+    ]
+}
