@@ -70,18 +70,21 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
       bool isSelected = point.id.toString() == state.selectedMarkerId;
       final priceColor =
           isSelected ? UiConstants.whiteColor : UiConstants.blueColor;
+      final int? price = point.data?['price'];
 
       final placemark = PlacemarkMapObject(
         opacity: 1,
         mapId: MapObjectId(point.id.toString()),
-        text: PlacemarkText(
-          text: '${point.data?['price']} ₽',
-          style: PlacemarkTextStyle(
-            size: 14,
-            color: priceColor,
-            placement: TextStylePlacement.bottom,
-          ),
-        ),
+        text: price != null
+            ? PlacemarkText(
+                text: '$price ₽',
+                style: PlacemarkTextStyle(
+                  size: 14,
+                  color: priceColor,
+                  placement: TextStylePlacement.bottom,
+                ),
+              )
+            : null,
         point: Point(
           latitude: point.point.latitude,
           longitude: point.point.longitude,
@@ -95,7 +98,6 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
 
       placemarks.add(placemark);
     }
-
     // Создание кластеризованной коллекции маркеров
     final clusterizedCollection = ClusterizedPlacemarkCollection(
       mapId: MapObjectId('clusterized_collection'),

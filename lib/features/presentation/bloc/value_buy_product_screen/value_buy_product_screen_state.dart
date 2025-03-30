@@ -7,10 +7,14 @@ class ValueBuyProductScreenState extends Equatable {
   final ProductEntity? product;
   final List<MapMarkerModel> points;
   final List<ProductPharmacyEntity>? pharmacies;
-  final ProductPharmacyEntity? selectedPharmacy;
+  final ProductPharmacyEntity? selectedPharmacyMarker;
+  final ProductPharmacyEntity? selectedPharmacyCard;
+  final Map<int, int> counters;
 
   const ValueBuyProductScreenState({
-    this.selectedPharmacy,
+    this.counters = const {},
+    this.selectedPharmacyMarker,
+    this.selectedPharmacyCard,
     this.selectorIndex = 0,
     this.isLoading = true,
     this.error,
@@ -23,21 +27,33 @@ class ValueBuyProductScreenState extends Equatable {
     int? selectorIndex,
     List<ProductPharmacyEntity>? pharmacies,
     List<MapMarkerModel>? points,
-    ProductPharmacyEntity? selectedPharmacy,
+    ProductPharmacyEntity? selectedPharmacyMarker,
     String? error,
     bool? isLoading,
+    ProductPharmacyEntity? selectedPharmacyCard,
+    Map<int, int>? counters,
   }) {
     return ValueBuyProductScreenState(
-      selectorIndex: selectorIndex ?? this.selectorIndex,
-      pharmacies: pharmacies ?? this.pharmacies,
-      points: points ?? this.points,
-      selectedPharmacy: selectedPharmacy ?? this.selectedPharmacy,
-      error: error,
-      isLoading: isLoading ?? this.isLoading,
-    );
+        selectorIndex: selectorIndex ?? this.selectorIndex,
+        pharmacies: pharmacies ?? this.pharmacies,
+        points: points ?? this.points,
+        selectedPharmacyMarker:
+            selectedPharmacyMarker ?? this.selectedPharmacyMarker,
+        error: error,
+        isLoading: isLoading ?? this.isLoading,
+        counters: counters ?? this.counters,
+        selectedPharmacyCard: selectedPharmacyCard);
   }
 
   @override
-  List<Object?> get props =>
-      [selectorIndex, pharmacies, points, selectedPharmacy, error, isLoading];
+  List<Object?> get props => [
+        selectorIndex,
+        pharmacies,
+        points,
+        selectedPharmacyMarker,
+        error,
+        isLoading,
+        selectedPharmacyCard,
+        counters
+      ];
 }

@@ -7,7 +7,9 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
+import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/presentation/bloc/pharmacy_map/pharmacy_map_bloc.dart';
+import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/pharmacy_info_card.dart';
 import 'package:nevis/features/presentation/widgets/map/map_button.dart';
 import 'package:nevis/features/presentation/widgets/value_buy_product_screen/pharmacy_product_info_card_widget.dart';
@@ -17,8 +19,13 @@ class PharmacyMapWidget extends StatelessWidget {
   final List<MapMarkerModel> points;
   final bool fromProduct;
   final double? height;
-  const PharmacyMapWidget(
-      {super.key, required this.points, this.height, this.fromProduct = false});
+
+  const PharmacyMapWidget({
+    super.key,
+    required this.points,
+    this.height,
+    this.fromProduct = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +34,8 @@ class PharmacyMapWidget extends StatelessWidget {
           PharmacyMapBloc()..add(InitPharmacyMapEvent(points: points)),
       child: BlocBuilder<PharmacyMapBloc, PharmacyMapState>(
         builder: (context, state) {
-          final selectedPoint = state.points.firstWhere(
-            (e) => e.id.toString() == state.selectedMarkerId,
-            orElse: () => points.first,
-          );
           final bloc = context.read<PharmacyMapBloc>();
+          final valueBuyBloc = context.read<ValueBuyProductScreenBloc>();
 
           return ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
@@ -41,77 +45,92 @@ class PharmacyMapWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.r),
               ),
               padding: getMarginOrPadding(
-                bottom: 94,
+                bottom: 16,
+                left: fromProduct ? 0 : 20,
+                right: fromProduct ? 0 : 20,
               ),
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
                   YandexMap(
-                      onMapCreated: (controller) => bloc
-                        ..add(AttachControllerEvent(mapController: controller)),
-                      onCameraPositionChanged: (position, reason, isGesture,
-                              visibleRegion) =>
-                          bloc.add(UpdatePharmacyMapEvent(position: position)),
-                      gestureRecognizers: <Factory<
-                          OneSequenceGestureRecognizer>>{
-                        Factory<OneSequenceGestureRecognizer>(
-                          () => EagerGestureRecognizer(),
-                        ),
-                      },
-                      mapObjects: state.markers),
+                    onMapCreated: (controller) => bloc
+                        .add(AttachControllerEvent(mapController: controller)),
+                    onCameraPositionChanged:
+                        (position, reason, isGesture, visibleRegion) {
+                      bloc.add(UpdatePharmacyMapEvent(position: position));
+                    },
+                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                      Factory<OneSequenceGestureRecognizer>(
+                        () => EagerGestureRecognizer(),
+                      ),
+                    },
+                    mapObjects: state.markers,
+                  ),
                   Positioned(
                     right: 8,
-                    bottom: 8,
+                    bottom: fromProduct ? 70 : 16,
                     left: 8,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         MapButton(
-                            assetName: Paths.locationIconPath,
-                            color: UiConstants.blueColor,
-                            backgroundColor: UiConstants.blue4Color,
-                            onPressed: () =>
-                                bloc.add(MoveToCurrentLocationEvent())),
+                          assetName: Paths.locationIconPath,
+                          color: UiConstants.blueColor,
+                          backgroundColor: UiConstants.blue4Color,
+                          onPressed: () =>
+                              bloc.add(MoveToCurrentLocationEvent()),
+                        ),
                         SizedBox(height: 8.h),
                         MapButton(
-                            assetName: Paths.plusIconPath,
-                            color: UiConstants.black2Color,
-                            backgroundColor:
-                                UiConstants.whiteColor.withOpacity(.8),
-                            onPressed: () => bloc.add(ZoomInEvent())),
+                          assetName: Paths.plusIconPath,
+                          color: UiConstants.black2Color,
+                          backgroundColor:
+                              UiConstants.whiteColor.withOpacity(.8),
+                          onPressed: () => bloc.add(ZoomInEvent()),
+                        ),
                         SizedBox(height: 4.h),
                         MapButton(
-                            assetName: Paths.minusIconPath,
-                            color: UiConstants.black2Color,
-                            backgroundColor:
-                                UiConstants.whiteColor.withOpacity(.8),
-                            onPressed: () => bloc.add(ZoomOutEvent())),
+                          assetName: Paths.minusIconPath,
+                          color: UiConstants.black2Color,
+                          backgroundColor:
+                              UiConstants.whiteColor.withOpacity(.8),
+                          onPressed: () => bloc.add(ZoomOutEvent()),
+                        ),
                         if (state.showStackWindow)
                           Padding(
                             padding: getMarginOrPadding(top: 16),
-                            child: Builder(builder: (context) {
-                              /*final String address = state.points
-                                      .firstWhereOrNull((e) =>
-                                          e.id.toString() == state.selectedMarkerId)
-                                      ?.data?['address'] ??
-                                  '';
-              
-                              final List<String> addressSplit = address.split(', ');
-              
-                              String city = '';
-                              String street = '';
-              
-                              if (addressSplit.length > 1) {
-                                city = addressSplit.first;
-                                street = addressSplit.skip(1).join(', ');
-                              }*/
+                            child: Builder(
+                              builder: (context) {
+                                final selectedPoint = state.points.firstWhere(
+                                  (e) =>
+                                      e.id.toString() == state.selectedMarkerId,
+                                );
 
-                              return fromProduct
-                                  ? PharmacyProductInfoCard(
-                                      data: selectedPoint.data!,
-                                    )
-                                  : PharmacyInfoCard();
-                            }),
+                                final pharmacy = ProductPharmacyModel.fromJson(
+                                    selectedPoint.data!);
+                                final counter = valueBuyBloc
+                                        .state.counters[pharmacy.pharmacyId] ??
+                                    1;
+
+                                return fromProduct
+                                    ? PharmacyProductInfoCard(
+                                        pharmacy: pharmacy,
+                                        counter: counter,
+                                        onCounterChanged: (newCounter) {
+                                          context
+                                              .read<ValueBuyProductScreenBloc>()
+                                              .add(
+                                                UpdateCounterEvent(
+                                                  pharmacyId:
+                                                      pharmacy.pharmacyId!,
+                                                  counter: newCounter,
+                                                ),
+                                              );
+                                        },
+                                      )
+                                    : const PharmacyInfoCard();
+                              },
+                            ),
                           ),
                       ],
                     ),

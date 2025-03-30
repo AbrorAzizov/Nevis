@@ -28,3 +28,13 @@ class ChangeQueryEvent extends ValueBuyProductScreenEvent {
   const ChangeQueryEvent(this.query);
 }
 
+class PharmacyCardTappedEvent extends ValueBuyProductScreenEvent {
+  final ProductPharmacyEntity pharmacy;
+  const PharmacyCardTappedEvent({required this.pharmacy});
+}
+
+class UpdateCounterEvent extends ValueBuyProductScreenEvent {
+  final int pharmacyId;
+  final int counter;
+  const UpdateCounterEvent({required this.pharmacyId, required this.counter});
+}

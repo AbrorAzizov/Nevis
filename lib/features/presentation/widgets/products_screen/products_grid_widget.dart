@@ -22,7 +22,7 @@ class ProductsGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int itemCount = isLoading ? 8 : products.length;
-    double itemHeight = 380.h;
+    double itemHeight = 382.h;
     double itemWidth = 156.w;
     double blocksSize = itemHeight * (itemCount / 2).round();
     double mainAxisSpacingSize =
@@ -39,11 +39,11 @@ class ProductsGridWidget extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8.w,
-              mainAxisSpacing: 8.w,
-              childAspectRatio: itemWidth / itemHeight,
-            ),
+                crossAxisCount: 2,
+                crossAxisSpacing: 8.w,
+                mainAxisSpacing: 8.w,
+                childAspectRatio: itemWidth / itemHeight,
+                mainAxisExtent: 400.h),
             itemCount: itemCount,
             itemBuilder: (context, index) {
               final product = products[index];

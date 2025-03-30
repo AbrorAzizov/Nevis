@@ -108,7 +108,7 @@ class CustomAppBar extends StatelessWidget {
                     child: Skeleton.shade(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: backgroundColor ?? UiConstants.whiteColor,
+                          color: backgroundColor ?? Colors.transparent,
                           boxShadow: [
                             BoxShadow(
                               color: Color(0xFF144B63).withOpacity(0.1),

@@ -19,9 +19,11 @@ class ValueBuyProductScreenBloc
     required this.getProductPharmaciesUC,
   }) : super(const ValueBuyProductScreenState(isLoading: false)) {
     on<LoadDataEvent>(_onLoadData);
-    on<PharmacyMarkerTappedEvent>(_onSelectPharmacy);
+    on<PharmacyMarkerTappedEvent>(_onSelectPharmacyMarker);
     on<ChangeQueryEvent>(_onChangeQueryEvent);
     on<ChangeSelectorIndexEvent>(_onChangeSelectorIndexEvent);
+    on<PharmacyCardTappedEvent>(_onSelectPharmacyCard);
+    on<UpdateCounterEvent>(_onUpdateCounterEvent);
   }
 
   Future<void> _onLoadData(
@@ -56,9 +58,18 @@ class ValueBuyProductScreenBloc
     );
   }
 
-  void _onSelectPharmacy(PharmacyMarkerTappedEvent event,
+  void _onSelectPharmacyMarker(PharmacyMarkerTappedEvent event,
       Emitter<ValueBuyProductScreenState> emit) {
-    emit(state.copyWith(selectedPharmacy: event.pharmacy));
+    emit(state.copyWith(selectedPharmacyMarker: event.pharmacy));
+  }
+
+  void _onSelectPharmacyCard(
+      PharmacyCardTappedEvent event, Emitter<ValueBuyProductScreenState> emit) {
+    if (event.pharmacy != state.selectedPharmacyCard) {
+      emit(state.copyWith(selectedPharmacyCard: event.pharmacy));
+    } else {
+      emit(state.copyWith(selectedPharmacyCard: null));
+    }
   }
 
   void _onChangeQueryEvent(
@@ -69,7 +80,7 @@ class ValueBuyProductScreenBloc
       emit(state.copyWith(pharmacies: _allPharmacies));
     } else {
       final results = _allPharmacies
-          .where((item) => item.pharmacyAlias.toString().contains(query))
+          .where((item) => item.address.toString().contains(query))
           .toList();
       emit(state.copyWith(
         pharmacies: results,
@@ -81,5 +92,12 @@ class ValueBuyProductScreenBloc
   void _onChangeSelectorIndexEvent(ChangeSelectorIndexEvent event,
       Emitter<ValueBuyProductScreenState> emit) {
     emit(state.copyWith(selectorIndex: event.selectorIndex));
+  }
+
+  void _onUpdateCounterEvent(
+      UpdateCounterEvent event, Emitter<ValueBuyProductScreenState> emit) {
+    final newCounters = Map<int, int>.from(state.counters);
+    newCounters[event.pharmacyId] = event.counter;
+    emit(state.copyWith(counters: newCounters));
   }
 }

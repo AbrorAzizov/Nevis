@@ -1,8 +1,14 @@
-enum LoginScreenType { login, accountExists ,logInWithMessage, logInWithCalls,logInWithYandex}
+enum LoginScreenType {
+  login,
+  accountExists,
+  logInWithMessage,
+  logInWithCalls,
+  logInWithYandex
+}
 
 enum SelectRegionScreenType { signUp, main }
 
-enum CodeScreenType {signUp, reset,logInWithMessage, logInWithCall }
+enum CodeScreenType { signUp, reset, logInWithMessage, logInWithCall }
 
 enum ProductChipType { hit, seasonalOffer, stock, nova }
 
@@ -34,9 +40,9 @@ enum OrderStatus {
   canceled, // Отменен
   received, // Получен
   collected, // Собран
-  collecting, // В сборке 
+  collecting, // В сборке
   courierSearching, // поиск курьера
-  courierWaiting,// Поиск курьера
+  courierWaiting, // Поиск курьера
   accepted,
 }
 
@@ -44,6 +50,6 @@ enum DeliveryZoneType { green, yellow }
 
 enum ProductSortType { popularity, priceDecrease, priceIncrease, alphabet }
 
-enum ProductFilterOrSortType {sort, filter}
+enum ProductFilterOrSortType { sort, filter }
 
 enum GenderType { male, female }
