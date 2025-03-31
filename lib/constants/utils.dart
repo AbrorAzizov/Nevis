@@ -289,51 +289,88 @@ class Utils {
     return formatter.format(price);
   }
 
-  static Future<BitmapDescriptor> createBitmapIcon({int? count}) async {
-    if (count == null) {
-      final ByteData data = await rootBundle.load(Paths.mapPointPath);
-      final Uint8List list = Uint8List.view(data.buffer);
-      return BitmapDescriptor.fromBytes(list);
-    }
-
-    // Загружаем стандартную иконку
-    final ByteData data = await rootBundle.load(Paths.mapPointWithCounterPath);
+  static Future<BitmapDescriptor> createBitmapIcon({
+    int? count,
+    String? price,
+    bool isSelected = false,
+  }) async {
+    final ByteData data = await rootBundle.load(
+        count == null ? Paths.mapPointPath : Paths.mapPointWithCounterPath);
     final Uint8List list = Uint8List.view(data.buffer);
     final ui.Codec codec = await ui.instantiateImageCodec(list);
     final ui.FrameInfo frameInfo = await codec.getNextFrame();
     final ui.Image image = frameInfo.image;
 
-    // Рисуем поверх цифру
     final ui.PictureRecorder recorder = ui.PictureRecorder();
     final ui.Canvas canvas = ui.Canvas(recorder);
     final paint = Paint();
-
-    // Рисуем основное изображение
     canvas.drawImage(image, Offset.zero, paint);
 
-    // Настройки текста
-    final textPainter = TextPainter(
+    if (count != null) {
+      final textPainter = TextPainter(
         text: TextSpan(
           text: count.toString(),
           style: TextStyle(
-              color: UiConstants.white2Color,
-              fontSize: image.height * 0.45,
-              fontWeight: FontWeight.bold),
+            color: UiConstants.white2Color,
+            fontSize: image.height * 0.5, // Сделал текст крупнее
+            fontWeight: FontWeight.bold,
+          ),
         ),
         textAlign: TextAlign.center,
-        textDirection: ui.TextDirection.ltr);
+        textDirection: ui.TextDirection.ltr,
+      );
 
-    textPainter.layout();
-    final offset = Offset(
-      (image.width - textPainter.width) / 2,
-      (image.height - textPainter.height) / 2,
-    );
+      textPainter.layout();
+      final offset = Offset(
+        (image.width - textPainter.width) / 2,
+        (image.height - textPainter.height) / 2,
+      );
+      textPainter.paint(canvas, offset);
+    }
 
-    // Рисуем текст на холсте
-    textPainter.paint(canvas, offset);
+    if (price != null && price.isNotEmpty) {
+      final double backgroundWidth = 120;
+      final double backgroundHeight = 50;
+      final double backgroundX = (image.width - backgroundWidth) / 2;
+      final double backgroundY = image.height + 1;
+
+      final RRect backgroundRect = RRect.fromRectAndRadius(
+        Rect.fromLTWH(
+            backgroundX, backgroundY, backgroundWidth, backgroundHeight),
+        Radius.circular(40), // Сделал скругление больше
+      );
+
+      final Paint backgroundPaint = Paint()
+        ..color = isSelected ? UiConstants.blueColor : UiConstants.whiteColor
+        ..style = PaintingStyle.fill;
+
+      canvas.drawRRect(backgroundRect, backgroundPaint);
+
+      final textPainterPrice = TextPainter(
+        text: TextSpan(
+          text: "$price ₽",
+          style: TextStyle(
+            color: isSelected ? UiConstants.whiteColor : UiConstants.blueColor,
+            fontSize: 24, // Сделал текст еще больше
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        textAlign: TextAlign.center,
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      textPainterPrice.layout(maxWidth: backgroundWidth - 16);
+
+      final priceOffset = Offset(
+        backgroundX + (backgroundWidth - textPainterPrice.width) / 2,
+        backgroundY + (backgroundHeight - textPainterPrice.height) / 2,
+      );
+
+      textPainterPrice.paint(canvas, priceOffset);
+    }
 
     final ui.Image newImage =
-        await recorder.endRecording().toImage(image.width, image.height);
+        await recorder.endRecording().toImage(image.width, image.height + 60);
     final ByteData? newData =
         await newImage.toByteData(format: ui.ImageByteFormat.png);
     final Uint8List newList = newData!.buffer.asUint8List();

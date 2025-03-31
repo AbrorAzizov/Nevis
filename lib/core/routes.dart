@@ -36,6 +36,8 @@ class Routes {
   static const String favoritePharmacy = '/favourite_pharmacy_screen';
   static const String favouriteProducts = '/favourite_products_screen';
   static const String valueBuyProductScreen = '/value_buy_product_screen';
+  static const String valueBuySuccessfullyOrderedScreen =
+      '/value_buy_successfully_ordered_screen';
 
   static List<String> get allRoutes => [
         splashScreen,
@@ -71,7 +73,8 @@ class Routes {
         cancelOrderScreen,
         favoritePharmacy,
         favouriteProducts,
-        valueBuyProductScreen
+        valueBuyProductScreen,
+        valueBuySuccessfullyOrderedScreen
       ];
 
   // Метод для создания анимированного перехода

@@ -49,8 +49,8 @@ class CategoryWidget extends StatelessWidget {
             height: 8.h,
           ),
           Text(title,
-              style: UiConstants.textStyle3
-                  .copyWith(color: UiConstants.darkBlueColor),
+              style: UiConstants.textStyle8
+                  .copyWith(color: UiConstants.black3Color.withOpacity(.6)),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center)

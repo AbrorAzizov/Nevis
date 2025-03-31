@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
+import 'package:nevis/features/presentation/pages/profile/orders/successfully_order/value_buy_successfully_ordered_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 
 class PharmacyProductInfoCard extends StatelessWidget {
@@ -98,8 +100,7 @@ class PharmacyProductInfoCard extends StatelessWidget {
                       ],
                     ),
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      height: 32,
                       decoration: BoxDecoration(
                         border:
                             Border.all(color: Colors.grey.shade300, width: 1.5),
@@ -145,7 +146,18 @@ class PharmacyProductInfoCard extends StatelessWidget {
                         padding: getMarginOrPadding(top: 16),
                         child: AppButtonWidget(
                           text: 'Заберу отсюда',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).push(
+                              Routes.createRoute(
+                                const ValueBuySuccessfullyOrderedScreen(),
+                                settings: RouteSettings(
+                                  name:
+                                      Routes.valueBuySuccessfullyOrderedScreen,
+                                  arguments: {'pharmacy': pharmacy},
+                                ),
+                              ),
+                            );
+                          },
                           backgroundColor: UiConstants.blueColor,
                         ),
                       )

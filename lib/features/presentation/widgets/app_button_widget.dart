@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/ui_constants.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AppButtonWidget extends StatelessWidget {
@@ -56,8 +55,8 @@ class AppButtonWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 13.5.h),
             child: Text(
               text,
-              style: UiConstants.textStyle14.copyWith(
-                height: 1,fontWeight: FontWeight.w700),
+              style: UiConstants.textStyle14
+                  .copyWith(height: 1, fontWeight: FontWeight.w500),
             ),
           ),
         ),

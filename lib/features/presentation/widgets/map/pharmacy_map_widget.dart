@@ -35,8 +35,8 @@ class PharmacyMapWidget extends StatelessWidget {
       child: BlocBuilder<PharmacyMapBloc, PharmacyMapState>(
         builder: (context, state) {
           final bloc = context.read<PharmacyMapBloc>();
-          final valueBuyBloc = context.read<ValueBuyProductScreenBloc>();
-
+          final valueBuyBloc =
+              fromProduct ? context.read<ValueBuyProductScreenBloc>() : null;
           return ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
             child: Container(
@@ -45,7 +45,6 @@ class PharmacyMapWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.r),
               ),
               padding: getMarginOrPadding(
-                bottom: 16,
                 left: fromProduct ? 0 : 20,
                 right: fromProduct ? 0 : 20,
               ),
@@ -68,7 +67,7 @@ class PharmacyMapWidget extends StatelessWidget {
                   ),
                   Positioned(
                     right: 8,
-                    bottom: fromProduct ? 70 : 16,
+                    bottom: 16,
                     left: 8,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -108,27 +107,27 @@ class PharmacyMapWidget extends StatelessWidget {
 
                                 final pharmacy = ProductPharmacyModel.fromJson(
                                     selectedPoint.data!);
-                                final counter = valueBuyBloc
+
+                                if (!fromProduct) {
+                                  return const PharmacyInfoCard();
+                                }
+
+                                final counter = valueBuyBloc!
                                         .state.counters[pharmacy.pharmacyId] ??
                                     1;
 
-                                return fromProduct
-                                    ? PharmacyProductInfoCard(
-                                        pharmacy: pharmacy,
-                                        counter: counter,
-                                        onCounterChanged: (newCounter) {
-                                          context
-                                              .read<ValueBuyProductScreenBloc>()
-                                              .add(
-                                                UpdateCounterEvent(
-                                                  pharmacyId:
-                                                      pharmacy.pharmacyId!,
-                                                  counter: newCounter,
-                                                ),
-                                              );
-                                        },
-                                      )
-                                    : const PharmacyInfoCard();
+                                return PharmacyProductInfoCard(
+                                  pharmacy: pharmacy,
+                                  counter: counter,
+                                  onCounterChanged: (newCounter) {
+                                    valueBuyBloc.add(
+                                      UpdateCounterEvent(
+                                        pharmacyId: pharmacy.pharmacyId!,
+                                        counter: newCounter,
+                                      ),
+                                    );
+                                  },
+                                );
                               },
                             ),
                           ),

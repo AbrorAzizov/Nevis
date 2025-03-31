@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
 import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
@@ -65,26 +64,14 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
     List<PlacemarkMapObject> placemarks = [];
 
     for (MapMarkerModel point in state.points) {
-      final icon = await Utils.createBitmapIcon();
-
       bool isSelected = point.id.toString() == state.selectedMarkerId;
-      final priceColor =
-          isSelected ? UiConstants.whiteColor : UiConstants.blueColor;
-      final int? price = point.data?['price'];
+      final String? price = point.data?['price'].toString();
 
+      final icon =
+          await Utils.createBitmapIcon(price: price, isSelected: isSelected);
       final placemark = PlacemarkMapObject(
         opacity: 1,
         mapId: MapObjectId(point.id.toString()),
-        text: price != null
-            ? PlacemarkText(
-                text: '$price ₽',
-                style: PlacemarkTextStyle(
-                  size: 14,
-                  color: priceColor,
-                  placement: TextStylePlacement.bottom,
-                ),
-              )
-            : null,
         point: Point(
           latitude: point.point.latitude,
           longitude: point.point.longitude,

@@ -144,8 +144,7 @@ class PharmaciesScreen extends StatelessWidget {
                                                     itemCount:
                                                         pharmacies.length)
                                               else
-                                                SizedBox(
-                                                  height: 510.h,
+                                                Expanded(
                                                   child: PharmacyMapWidget(
                                                     points: [],
                                                   ),

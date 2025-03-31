@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/utils.dart';
-import 'package:nevis/core/error/failure.dart';
-import 'package:nevis/features/data/models/profile_model.dart';
 import 'package:nevis/features/domain/usecases/profile/delete_me.dart';
 import 'package:nevis/features/domain/usecases/profile/get_me.dart';
 import 'package:nevis/features/domain/usecases/profile/update_me.dart';
@@ -22,11 +20,14 @@ class PersonalDataScreenBloc
   final UpdateMeUC updateMeUC;
   final DeleteMeUC deleteMeUC;
 
-  TextEditingController fNameController = TextEditingController(text: 'Константин');
+  TextEditingController fNameController =
+      TextEditingController(text: 'Константин');
   TextEditingController sNameController = TextEditingController(text: 'Усиков');
   TextEditingController birthdayController = TextEditingController();
-  TextEditingController phoneController = TextEditingController(text: '7 800 555-35-35');
-  TextEditingController emailController = TextEditingController(text: 'example@mail.ru');
+  TextEditingController phoneController =
+      TextEditingController(text: '7 800 555-35-35');
+  TextEditingController emailController =
+      TextEditingController(text: 'example@mail.ru');
 
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
@@ -184,9 +185,8 @@ class PersonalDataScreenBloc
             gender: GenderType.values
                     .firstWhereOrNull((e) => e.name == profile.gender) ??
                 GenderType.values.first,
-
-            installedPhone: Utils.formatPhoneNumber(profile.phone,
-                toServerFormat: false),
+            installedPhone:
+                Utils.formatPhoneNumber(profile.phone, toServerFormat: false),
           ),
         );
       },

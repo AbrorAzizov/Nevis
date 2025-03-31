@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/pages/cart/cart_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/catalog_screen.dart';
@@ -72,12 +71,7 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return GetMaterialApp(
             title: 'InLek',
-            theme: ThemeData(
-                scaffoldBackgroundColor: UiConstants.whiteColor,
-                focusColor: UiConstants.blue3Color,
-                highlightColor: UiConstants.blue3Color,
-                chipTheme: ChipThemeData(surfaceTintColor: Colors.transparent),
-                fontFamily: 'Nunito'),
+
             //home: HomeScreen(),
             routes: {
               Routes.splashScreen: (context) => const SplashScreen(),

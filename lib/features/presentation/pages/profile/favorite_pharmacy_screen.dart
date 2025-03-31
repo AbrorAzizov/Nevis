@@ -40,50 +40,53 @@ class _FavoritePharmaciesScreenState extends State<FavoritePharmaciesScreen> {
                   child: Skeletonizer(
                     ignorePointers: false,
                     enabled: state.isLoading,
-                    child: Column(
-                      children: [
-                        CustomAppBar(
-                          hintText: 'Поиск аптек',
-                          controller: searchController,
-                          title: 'Аптеки',
-                          showBack: true,
-                          isShowFavoriteButton: false,
-                          onTapCancel: () {
-                            searchController.clear();
-                            bloc.add(ChangeQueryEvent(""));
-                          },
-                          onChangedField: (value) {
-                            bloc.add(ChangeQueryEvent(value));
-                          },
-                        ),
-                        Padding(
-                          padding: getMarginOrPadding(left: 20, right: 20),
-                          child: BlocProvider(
-                            create: (context) =>
-                                SelectorCubit(index: state.selectorIndex),
-                            child: Selector(
-                              titlesList: const ['Карта', 'Список'],
-                              onTap: (int index) =>
-                                  bloc.add(ChangeSelectorIndexEvent(index)),
+                    child: Padding(
+                      padding: getMarginOrPadding(bottom: 94),
+                      child: Column(
+                        children: [
+                          CustomAppBar(
+                            hintText: 'Поиск аптек',
+                            controller: searchController,
+                            title: 'Аптеки',
+                            showBack: true,
+                            isShowFavoriteButton: false,
+                            onTapCancel: () {
+                              searchController.clear();
+                              bloc.add(ChangeQueryEvent(""));
+                            },
+                            onChangedField: (value) {
+                              bloc.add(ChangeQueryEvent(value));
+                            },
+                          ),
+                          Padding(
+                            padding: getMarginOrPadding(left: 20, right: 20),
+                            child: BlocProvider(
+                              create: (context) =>
+                                  SelectorCubit(index: state.selectorIndex),
+                              child: Selector(
+                                titlesList: const ['Карта', 'Список'],
+                                onTap: (int index) =>
+                                    bloc.add(ChangeSelectorIndexEvent(index)),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 16.h),
-                        Expanded(
-                          child: state.selectorIndex != 0
-                              ? ListView.separated(
-                                  padding: getMarginOrPadding(
-                                      bottom: 94, left: 20, right: 20),
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) =>
-                                      PharmacyCard(),
-                                  separatorBuilder: (context, index) =>
-                                      SizedBox(height: 8.h),
-                                  itemCount: state.pharmacies.length,
-                                )
-                              : PharmacyMapWidget(points: state.points),
-                        )
-                      ],
+                          SizedBox(height: 16.h),
+                          Expanded(
+                            child: state.selectorIndex != 0
+                                ? ListView.separated(
+                                    padding: getMarginOrPadding(
+                                        bottom: 94, left: 20, right: 20),
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) =>
+                                        PharmacyCard(),
+                                    separatorBuilder: (context, index) =>
+                                        SizedBox(height: 8.h),
+                                    itemCount: state.pharmacies.length,
+                                  )
+                                : PharmacyMapWidget(points: state.points),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

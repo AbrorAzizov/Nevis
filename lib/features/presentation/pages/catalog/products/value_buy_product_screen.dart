@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/profile/orders/successfully_order/value_buy_successfully_ordered_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
@@ -27,11 +29,13 @@ class ValueBuyProductScreen extends StatefulWidget {
 
 class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
   final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final ProductEntity product = arguments['product'] as ProductEntity;
+
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
         return BlocProvider(
@@ -43,6 +47,7 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
             builder: (context, valueBuyProductState) {
               ValueBuyProductScreenBloc valueBuyProductBloc =
                   context.read<ValueBuyProductScreenBloc>();
+
               return Scaffold(
                 backgroundColor: UiConstants.backgroundColor,
                 body: SafeArea(
@@ -57,8 +62,9 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                         child: Skeletonizer(
                           ignorePointers: false,
                           enabled: valueBuyProductState.isLoading,
-                          child: Padding(
-                            padding: getMarginOrPadding(left: 20, right: 20),
+                          child: SingleChildScrollView(
+                            padding: getMarginOrPadding(
+                                left: 20, right: 20, bottom: 90),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -83,138 +89,114 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                                   ),
                                 ),
                                 SizedBox(height: 16.h),
-                                Builder(builder: (context) {
-                                  if (homeState is InternetUnavailable) {
-                                    return InternetNoInternetConnectionWidget();
-                                  }
-                                  if (valueBuyProductState.selectorIndex == 1) {
-                                    return Expanded(
-                                      child: Column(
-                                        children: [
-                                          CustomAppBar(
-                                            usePadding: false,
-                                            hintText: 'Поиск аптек',
-                                            controller: searchController,
-                                            showBack: false,
-                                            isShowFavoriteButton: false,
-                                            onTapCancel: () {
-                                              searchController.clear();
-                                              valueBuyProductBloc
-                                                  .add(ChangeQueryEvent(""));
-                                            },
-                                            onChangedField: (value) {
-                                              valueBuyProductBloc
-                                                  .add(ChangeQueryEvent(value));
-                                            },
-                                          ),
-                                          Expanded(
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                children: [
-                                                  ListView.separated(
-                                                    shrinkWrap: true,
-                                                    physics:
-                                                        const NeverScrollableScrollPhysics(),
-                                                    itemCount:
-                                                        valueBuyProductState
-                                                                .pharmacies
-                                                                ?.length ??
-                                                            0,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      final pharmacy =
+                                if (homeState is InternetUnavailable)
+                                  InternetNoInternetConnectionWidget()
+                                else if (valueBuyProductState.selectorIndex ==
+                                    1)
+                                  Column(
+                                    children: [
+                                      CustomAppBar(
+                                        usePadding: false,
+                                        hintText: 'Поиск аптек',
+                                        controller: searchController,
+                                        showBack: false,
+                                        isShowFavoriteButton: false,
+                                        onTapCancel: () {
+                                          searchController.clear();
+                                          valueBuyProductBloc
+                                              .add(ChangeQueryEvent(""));
+                                        },
+                                        onChangedField: (value) {
+                                          valueBuyProductBloc
+                                              .add(ChangeQueryEvent(value));
+                                        },
+                                      ),
+                                      ListView.separated(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: valueBuyProductState
+                                                .pharmacies?.length ??
+                                            0,
+                                        itemBuilder: (context, index) {
+                                          final pharmacy = valueBuyProductState
+                                              .pharmacies![index];
+                                          final counter =
+                                              valueBuyProductState.counters[
+                                                      pharmacy.pharmacyId] ??
+                                                  1;
+
+                                          return GestureDetector(
+                                            onTap: () {
+                                              valueBuyProductBloc.add(
+                                                  PharmacyCardTappedEvent(
+                                                      pharmacy:
                                                           valueBuyProductState
                                                                   .pharmacies![
-                                                              index];
-                                                      final counter =
-                                                          valueBuyProductState
-                                                                      .counters[
-                                                                  pharmacy
-                                                                      .pharmacyId] ??
-                                                              1;
-
-                                                      return GestureDetector(
-                                                        onTap: () {
-                                                          valueBuyProductBloc.add(
-                                                              PharmacyCardTappedEvent(
-                                                                  pharmacy: valueBuyProductState
-                                                                          .pharmacies![
-                                                                      index]));
-                                                        },
-                                                        child:
-                                                            PharmacyProductInfoCard(
-                                                                isSelected: valueBuyProductState
-                                                                        .selectedPharmacyCard ==
-                                                                    valueBuyProductState
-                                                                            .pharmacies![
-                                                                        index],
-                                                                isForList: true,
-                                                                pharmacy:
-                                                                    valueBuyProductState
-                                                                            .pharmacies![
-                                                                        index],
-                                                                counter:
-                                                                    counter,
-                                                                onCounterChanged:
-                                                                    (newCounter) {
-                                                                  context
-                                                                      .read<
-                                                                          ValueBuyProductScreenBloc>()
-                                                                      .add(
-                                                                        UpdateCounterEvent(
-                                                                          pharmacyId:
-                                                                              pharmacy.pharmacyId!,
-                                                                          counter:
-                                                                              newCounter,
-                                                                        ),
-                                                                      );
-                                                                }),
-                                                      );
-                                                    },
-                                                    separatorBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      return SizedBox(
-                                                          height: 8.h);
-                                                    },
+                                                              index]));
+                                            },
+                                            child: PharmacyProductInfoCard(
+                                              isSelected: valueBuyProductState
+                                                      .selectedPharmacyCard ==
+                                                  valueBuyProductState
+                                                      .pharmacies![index],
+                                              isForList: true,
+                                              pharmacy: valueBuyProductState
+                                                  .pharmacies![index],
+                                              counter: counter,
+                                              onCounterChanged: (newCounter) {
+                                                valueBuyProductBloc.add(
+                                                  UpdateCounterEvent(
+                                                    pharmacyId:
+                                                        pharmacy.pharmacyId!,
+                                                    counter: newCounter,
                                                   ),
-                                                  SizedBox(
-                                                    height: 16,
-                                                  ),
-                                                  AppButtonWidget(
-                                                    onTap: valueBuyProductState
-                                                                .selectedPharmacyCard !=
-                                                            null
-                                                        ? () {}
-                                                        : null,
-                                                    text: 'Заберу отсюда',
-                                                    backgroundColor:
-                                                        UiConstants.blueColor,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 86,
-                                                  ),
-                                                ],
-                                              ),
+                                                );
+                                              },
                                             ),
-                                          ),
-                                        ],
+                                          );
+                                        },
+                                        separatorBuilder:
+                                            (BuildContext context, int index) {
+                                          return SizedBox(height: 8.h);
+                                        },
                                       ),
-                                    );
-                                  } else if (valueBuyProductState
-                                              .selectorIndex ==
-                                          0 &&
-                                      valueBuyProductState.points.isNotEmpty) {
-                                    return Expanded(
-                                      child: PharmacyMapWidget(
-                                        fromProduct: true,
-                                        points: valueBuyProductState.points,
+                                      SizedBox(height: 16),
+                                      AppButtonWidget(
+                                        onTap: valueBuyProductState
+                                                    .selectedPharmacyCard !=
+                                                null
+                                            ? () {
+                                                Navigator.of(context).push(
+                                                  Routes.createRoute(
+                                                    const ValueBuySuccessfullyOrderedScreen(),
+                                                    settings: RouteSettings(
+                                                      name: Routes
+                                                          .valueBuySuccessfullyOrderedScreen,
+                                                      arguments: {
+                                                        'pharmacy':
+                                                            valueBuyProductState
+                                                                .selectedPharmacyCard
+                                                      },
+                                                    ),
+                                                  ),
+                                                );
+                                                // ValueBuySuccessfullyOrderedScreen
+                                              }
+                                            : null,
+                                        text: 'Заберу отсюда',
+                                        backgroundColor: UiConstants.blueColor,
                                       ),
-                                    );
-                                  } else {
-                                    return const SizedBox.shrink();
-                                  }
-                                })
+                                    ],
+                                  )
+                                else if (valueBuyProductState.selectorIndex ==
+                                        0 &&
+                                    valueBuyProductState.points.isNotEmpty)
+                                  PharmacyMapWidget(
+                                    height: 618.h,
+                                    fromProduct: true,
+                                    points: valueBuyProductState.points,
+                                  ),
                               ],
                             ),
                           ),

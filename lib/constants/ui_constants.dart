@@ -7,7 +7,7 @@ class UiConstants {
   static const Color white3Color = Color(0xFFF5F5F5);
   static const Color white4Color = Color(0xFFE8E9EA);
   static const Color white5Color = Color(0xFFF3F4F4);
-  static const Color backgroundColor = Color(0xFFfcfdff);
+  static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color blackColor = Color(0xFF000000);
   static const Color black2Color = Color(0xFF4E4E4E);
   static const Color black3Color = Color(0xFF222222);
@@ -36,7 +36,6 @@ class UiConstants {
   static Color defaultBorderColor = Color(0xFF222222).withOpacity(0.05);
   static const Color blueColor = Color(0xFF009FE3);
   static const Color blue2Color = Color(0xFFE5F5FC);
-  static const Color blue3Color = Color(0xFFE5F5FC);
   static const Color blue4Color = Color(0xFFCCECF9);
   static const Color red2Color = Color(0xFFFFE8E8);
   static const Color lightGreyColor = Color(0xFFF7F7F7);
@@ -58,7 +57,7 @@ class UiConstants {
   static TextStyle textStyle3 = TextStyle(
     fontSize: 14.sp,
     height: 16.8.sp / 14.sp,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w400,
   );
 
   static TextStyle textStyle4 = TextStyle(
@@ -174,6 +173,8 @@ class UiConstants {
   static TextStyle textStyle19 = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
+    height: 16.8.sp / 14.sp,
     fontFamily: 'Rubik',
+    letterSpacing: 0,
   );
 }

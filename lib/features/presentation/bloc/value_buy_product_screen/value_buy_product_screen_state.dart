@@ -42,7 +42,8 @@ class ValueBuyProductScreenState extends Equatable {
         error: error,
         isLoading: isLoading ?? this.isLoading,
         counters: counters ?? this.counters,
-        selectedPharmacyCard: selectedPharmacyCard);
+        selectedPharmacyCard:
+            selectedPharmacyCard ?? this.selectedPharmacyCard);
   }
 
   @override
