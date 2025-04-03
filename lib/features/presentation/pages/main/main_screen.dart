@@ -1,26 +1,18 @@
-import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
-import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
+import 'package:nevis/features/presentation/pages/main/bonus_cards/activate_bonus_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
-import 'package:nevis/features/presentation/pages/profile/sales_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/select_region_screen.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/categories_grid_widget.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/custom_banner_widget.dart';
+import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
-import 'package:nevis/features/presentation/widgets/sales_screen/sales_horizontal_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -39,9 +31,7 @@ class MainScreen extends StatelessWidget {
             getBannersUC: sl(),
             getCategoriesUC: sl(),
             getDailyProductsUC: sl(),
-          )..add(
-              LoadDataEvent(),
-            ),
+          )..add(LoadDataEvent()),
           child: BlocBuilder<MainScreenBloc, MainScreenState>(
             builder: (context, state) {
               return Scaffold(
@@ -81,108 +71,113 @@ class MainScreen extends StatelessWidget {
                                   : ListView(
                                       shrinkWrap: true,
                                       padding: getMarginOrPadding(
-                                          bottom: 94, top: 16),
+                                          bottom: 94,
+                                          top: 16,
+                                          right: 20,
+                                          left: 20),
                                       children: [
-                                        CustomBannerWidget(
-                                            banners: state.banners ?? [],
-                                            pageController: pageController),
-                                        if (!Skeletonizer.of(context).enabled)
-                                          BlockWidget(
-                                            contentPadding: getMarginOrPadding(
-                                                left: 20, right: 20, top: 32),
-                                            title: 'Товары дня',
-                                            clickableText: 'Все товары',
-                                            onTap: () =>
-                                                Navigator.of(context).push(
-                                              Routes.createRoute(
-                                                ProductsScreen(),
-                                                settings: RouteSettings(
-                                                  name: Routes.productsScreen,
-                                                  arguments: {
-                                                    'title': 'Товары дня',
-                                                    'products':
-                                                        state.daily ?? [],
-                                                  },
-                                                ),
+                                        Container(
+                                          width: 320.w,
+                                          height: 180.h,
+                                          decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Color(0xFF144B63)
+                                                    .withOpacity(0.1),
+                                                blurRadius: 50,
+                                                spreadRadius: -4,
+                                                offset: Offset(-1, -4),
                                               ),
-                                            ),
-                                            child: ProductsListWidget(
-                                              products: state.daily ?? [],
-                                              productsListScreenType:
-                                                  ProductsListScreenType
-                                                      .pharmacy,
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(18.r),
+                                            image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: AssetImage(
+                                                  Paths.bonusCardIconPath),
                                             ),
                                           ),
-                                        if (!Skeletonizer.of(context).enabled)
-                                          Padding(
-                                            padding:
-                                                getMarginOrPadding(top: 32),
-                                            child: BlockWidget(
-                                              contentPadding:
-                                                  getMarginOrPadding(
-                                                      left: 20, right: 20),
-                                              title: 'Акции',
-                                              clickableText: 'Все акции',
-                                              onTap: () async {
-                                                Navigator.of(context).push(
-                                                  Routes.createRoute(
-                                                    const SalesScreen(),
-                                                    settings: RouteSettings(
-                                                        name:
-                                                            Routes.salesScreen),
+                                          child: Padding(
+                                            padding: getMarginOrPadding(
+                                                top: 16, bottom: 16),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: getMarginOrPadding(
+                                                      left: 20),
+                                                  child: Text(
+                                                    'ВАША КАРТА — CASHBACK',
+                                                    style: UiConstants
+                                                        .textStyle4
+                                                        .copyWith(
+                                                      color:
+                                                          UiConstants.blueColor,
+                                                      height: 1,
+                                                    ),
                                                   ),
-                                                );
-                                              },
-                                              child:
-                                                  SalesHorizontalListWidget(),
+                                                ),
+                                                SizedBox(height: 4.h),
+                                                Padding(
+                                                  padding: getMarginOrPadding(
+                                                      left: 20),
+                                                  child: Text(
+                                                    'Карта лояльности',
+                                                    style: UiConstants
+                                                        .textStyle19
+                                                        .copyWith(
+                                                      color: UiConstants
+                                                          .black2Color,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 30.h),
+                                                Padding(
+                                                  padding: getMarginOrPadding(
+                                                      left: 16),
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: 44.h,
+                                                        width: 182.w,
+                                                        child: AppButtonWidget(
+                                                          isExpanded: false,
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                              Routes
+                                                                  .createRoute(
+                                                                ActivateBonusCardScreen(),
+                                                                settings:
+                                                                    RouteSettings(
+                                                                  name: Routes
+                                                                      .activateBonusCardScreen,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                          text:
+                                                              'Активировать карту',
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        if (!Skeletonizer.of(context).enabled)
-                                          SizedBox(height: 32.h),
-                                        BlockWidget(
-                                          contentPadding: getMarginOrPadding(
-                                              left: 20, right: 20),
-                                          title: 'Что у вас болит?',
-                                          clickableText: 'Весь каталог',
-                                          onTap: () => homeBloc.onChangePage(1),
-                                          child: CategoriesGridWidget(
-                                            categories: state.isLoading
-                                                ? List.generate(
-                                                    8,
-                                                    (index) => CategoryEntity(),
-                                                  )
-                                                : state.categories ?? [],
-                                            contentPadding: getMarginOrPadding(
-                                                right: 20, left: 20),
                                           ),
                                         ),
                                       ],
                                     ),
-                            )
+                            ),
                           ],
                         );
                       },
                     ),
                   ),
                 ),
-                floatingActionButton: homeState is HomeScreenInitial
-                    ? Padding(
-                        padding: getMarginOrPadding(bottom: 100, right: 5),
-                        child: BlurryContainer(
-                          blur: 8,
-                          padding: EdgeInsets.zero,
-                          borderRadius: BorderRadius.circular(1000.r),
-                          child: FloatingActionButton(
-                            shape: CircleBorder(),
-                            elevation: 0,
-                            backgroundColor:
-                                UiConstants.purpleColor.withOpacity(.4),
-                            onPressed: () {},
-                            child: SvgPicture.asset(Paths.chatIconPath),
-                          ),
-                        ),
-                      )
-                    : null,
               );
             },
           ),

@@ -53,3 +53,5 @@ enum ProductSortType { popularity, priceDecrease, priceIncrease, alphabet }
 enum ProductFilterOrSortType { sort, filter }
 
 enum GenderType { male, female }
+
+enum BonusCardType { physical, virtual }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/pages/cart/cart_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/catalog_screen.dart';
@@ -14,6 +15,9 @@ import 'package:nevis/features/presentation/pages/catalog/products/products_scre
 import 'package:nevis/features/presentation/pages/catalog/products/value_buy_product_screen.dart';
 import 'package:nevis/features/presentation/pages/home_screen.dart';
 import 'package:nevis/features/presentation/pages/main/banner_screen.dart';
+import 'package:nevis/features/presentation/pages/main/bonus_cards/activate_bonus_screen.dart';
+import 'package:nevis/features/presentation/pages/main/bonus_cards/bonus_card_screen.dart';
+import 'package:nevis/features/presentation/pages/main/bonus_cards/register_bonus_card_screen.dart';
 import 'package:nevis/features/presentation/pages/main/main_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/about_us_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/article_screen.dart';
@@ -71,7 +75,6 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return GetMaterialApp(
             title: 'InLek',
-
             //home: HomeScreen(),
             routes: {
               Routes.splashScreen: (context) => const SplashScreen(),
@@ -117,7 +120,14 @@ class MyApp extends StatelessWidget {
               Routes.favouriteProducts: (context) =>
                   const FavoriteProductsScreen(),
               Routes.valueBuyProductScreen: (context) =>
-                  const ValueBuyProductScreen()
+                  const ValueBuyProductScreen(),
+              Routes.activateBonusCardScreen: (context) =>
+                  const ActivateBonusCardScreen(),
+              Routes.registerBonusCardScreen: (context) =>
+                  const RegisterBonusCardScreen(
+                    cardType: BonusCardType.physical,
+                  ),
+              Routes.bonusCardScreen: (context) => const BonusCardScreen()
             },
             initialRoute: Routes.splashScreen,
             navigatorObservers: [routeObserver],

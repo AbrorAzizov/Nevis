@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:nevis/features/domain/entities/adress_entity.dart';
 
@@ -9,10 +8,12 @@ class ProfileEntity extends Equatable {
   final String? dateOfBirth;
   final String? gender;
   final String? email;
+  final String? card;
   final bool? subscribeToMarketing;
   final AddressEntity? deliveryAddress;
 
   const ProfileEntity({
+    this.card,
     this.firstName,
     this.lastName,
     this.phone,
@@ -30,20 +31,21 @@ class ProfileEntity extends Equatable {
     String? dateOfBirth,
     String? gender,
     String? email,
+    String? card,
     bool? subscribeToMarketing,
     AddressEntity? deliveryAddress,
   }) =>
       ProfileEntity(
-        firstName: firstName ?? this.firstName,
-        lastName: lastName ?? this.lastName,
-        phone: phone ?? this.phone,
-        dateOfBirth: dateOfBirth ?? this.dateOfBirth,
-        gender: gender ?? this.gender,
-        email: email ?? this.email,
-        subscribeToMarketing:
-            subscribeToMarketing ?? this.subscribeToMarketing,
-        deliveryAddress: deliveryAddress ?? this.deliveryAddress,
-      );
+          firstName: firstName ?? this.firstName,
+          lastName: lastName ?? this.lastName,
+          phone: phone ?? this.phone,
+          dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+          gender: gender ?? this.gender,
+          email: email ?? this.email,
+          subscribeToMarketing:
+              subscribeToMarketing ?? this.subscribeToMarketing,
+          deliveryAddress: deliveryAddress ?? this.deliveryAddress,
+          card: card ?? this.card);
 
   @override
   List<Object?> get props => [
@@ -57,4 +59,3 @@ class ProfileEntity extends Equatable {
         deliveryAddress,
       ];
 }
-

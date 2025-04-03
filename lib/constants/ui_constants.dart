@@ -55,23 +55,23 @@ class UiConstants {
   );
 
   static TextStyle textStyle3 = TextStyle(
-    fontSize: 14.sp,
-    height: 16.8.sp / 14.sp,
-    fontWeight: FontWeight.w400,
-  );
+      fontSize: 14.sp,
+      height: 16.8.sp / 14.sp,
+      fontWeight: FontWeight.w400,
+      fontFamily: 'Rubik');
 
   static TextStyle textStyle4 = TextStyle(
-    fontSize: 24.sp,
-    height: 29.05.sp / 24.sp,
-    fontWeight: FontWeight.w600,
-    letterSpacing: 0.1,
-  );
+      fontSize: 24.sp,
+      height: 29.05.sp / 24.sp,
+      fontWeight: FontWeight.w600,
+      letterSpacing: 0.1,
+      fontFamily: 'Rubik');
 
   static TextStyle textStyle5 = TextStyle(
-    fontSize: 18.sp,
-    height: 19.8.sp / 18.sp,
-    fontWeight: FontWeight.w800,
-  );
+      fontSize: 18.sp,
+      height: 1,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Rubik');
 
   static TextStyle textStyle6 = TextStyle(
     fontSize: 10.sp,

@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AppTextFieldWidget extends StatefulWidget {
@@ -115,7 +114,7 @@ class _GidTextFieldState extends State<AppTextFieldWidget> {
                 if (widget.title != null)
                   Text(
                     widget.title ?? '',
-                    style: UiConstants.textStyle2
+                    style: UiConstants.textStyle3
                         .copyWith(color: UiConstants.black3Color),
                   ),
                 if (widget.actionTitle != null)
@@ -161,7 +160,7 @@ class _GidTextFieldState extends State<AppTextFieldWidget> {
               hintMaxLines: widget.hintMaxLines ?? 500,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),
-                borderSide:  BorderSide(color: UiConstants.defaultBorderColor),
+                borderSide: BorderSide(color: UiConstants.defaultBorderColor),
               ),
               disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),

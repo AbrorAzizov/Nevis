@@ -6,7 +6,6 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/custom_cache_manager.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SubcategoryItem extends StatelessWidget {
@@ -31,14 +30,14 @@ class SubcategoryItem extends StatelessWidget {
         padding: getMarginOrPadding(all: 8),
         decoration: BoxDecoration(
           color: UiConstants.whiteColor,
-           boxShadow: [
-      BoxShadow(
-        color: Color(0x19144B63), // #144B63 с 10% прозрачности
-        offset: Offset(-1, 4), // Смещение
-        blurRadius: 50, // Размытие
-        spreadRadius: -4, // Распространение
-      ),
-    ],
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x19144B63),
+              offset: Offset(-1, 4),
+              blurRadius: 50,
+              spreadRadius: -4,
+            ),
+          ],
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Row(
@@ -53,7 +52,6 @@ class SubcategoryItem extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: UiConstants.blue2Color,
                     borderRadius: BorderRadius.circular(8.r),
-                    
                   ),
                   child: imagePath.contains('http')
                       ? CachedNetworkImage(
@@ -106,11 +104,13 @@ class SubcategoryItem extends StatelessWidget {
             Skeleton.ignore(
               child: Transform.flip(
                 flipX: true,
-                child: SvgPicture.asset(Paths.arrowBackIconPath,
-                    color: UiConstants.black3Color.withOpacity(.6),
-                    width: 20.w,
-                    height: 20.w,
-                    fit: BoxFit.contain,),
+                child: SvgPicture.asset(
+                  Paths.arrowBackIconPath,
+                  color: UiConstants.black3Color.withOpacity(.6),
+                  width: 20.w,
+                  height: 20.w,
+                  fit: BoxFit.contain,
+                ),
               ),
             )
           ],

@@ -123,8 +123,19 @@ class Paths {
   static const String cosmeticIconPath = '${_imagesPath}IconCosmetics.svg';
   static const String medicinesIconPath = '${_imagesPath}IconBAD.svg';
   static const String motherAndBabyIconPath = '${_imagesPath}IconBaby.svg';
-  static const String medicineToolsIconPath = '${_imagesPath}IconStetoscope.svg';
-  static const String opticIconPaths= '${_imagesPath}IconGlasses.svg';
-  static const String orthopedicIconPath =  '${_imagesPath}IconOrthopedics.svg';
-  static const String sportIconPath =  '${_imagesPath}IconFitness.svg';
+  static const String medicineToolsIconPath =
+      '${_imagesPath}IconStetoscope.svg';
+  static const String opticIconPaths = '${_imagesPath}IconGlasses.svg';
+  static const String orthopedicIconPath = '${_imagesPath}IconOrthopedics.svg';
+  static const String sportIconPath = '${_imagesPath}IconFitness.svg';
+  static const String bonusCardIconPath = '${_imagesPath}bonus_card.png';
+  static const String pharmacyBonusCardIconPath =
+      '${_imagesPath}pharmacy_bonus_card.png';
+  static const String virtualBonusCardIconPath =
+      '${_imagesPath}virtual_bonus_card.png';
+  static const String bonusCardInstructionIconPath =
+      '${_imagesPath}bonus_card_instruction.png';
+  static const String qrCodeBackgorundIconPath =
+      '${_imagesPath}qr_code_background.png';
+  static const String qrCodeIconPath = '${_imagesPath}qr_code.png';
 }
