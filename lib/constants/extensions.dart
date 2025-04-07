@@ -60,9 +60,9 @@ extension ProductCategoriesExtension on ProductCategories {
     ProductCategories.medicines: 'Лекарства и БАДы',
     ProductCategories.motherAndBaby: 'Мама и малыш',
     ProductCategories.medicineTools: 'Медицинские приборы',
-    ProductCategories.optic : 'Оптика',
-    ProductCategories.orthopedic : 'Ортопедический салон',
-    ProductCategories.sport : 'Спорт и фитнес'
+    ProductCategories.optic: 'Оптика',
+    ProductCategories.orthopedic: 'Ортопедический салон',
+    ProductCategories.sport: 'Спорт и фитнес'
   };
 
   String get title => titles[this] ?? 'Неизвестный способ получения';
@@ -70,13 +70,13 @@ extension ProductCategoriesExtension on ProductCategories {
   static ProductCategories? fromTitle(String? title) {
     return titles.entries
         .firstWhere(
-          (entry) => entry.value == title,     
-          orElse: () =>  MapEntry( ProductCategories.hygiene, 'Средства гигены'),   
-
+          (entry) => entry.value == title,
+          orElse: () => MapEntry(ProductCategories.hygiene, 'Средства гигены'),
         )
         .key;
   }
-   String get categoryImagePath {
+
+  String get categoryImagePath {
     switch (this) {
       case ProductCategories.hygiene:
         return Paths.hygieneIconPath;
@@ -84,19 +84,18 @@ extension ProductCategoriesExtension on ProductCategories {
         return Paths.cosmeticIconPath;
       case ProductCategories.medicineTools:
         return Paths.medicineToolsIconPath;
-      case  ProductCategories.optic:
+      case ProductCategories.optic:
         return Paths.opticIconPaths;
-      case  ProductCategories.motherAndBaby:
+      case ProductCategories.motherAndBaby:
         return Paths.motherAndBabyIconPath;
-       case  ProductCategories.sport:
-        return Paths.sportIconPath;  
+      case ProductCategories.sport:
+        return Paths.sportIconPath;
       case ProductCategories.medicines:
         return Paths.medicinesIconPath;
       case ProductCategories.orthopedic:
         return Paths.orthopedicIconPath;
     }
   }
-
 }
 
 extension PaymentTypeExtension on PaymentType {
@@ -126,5 +125,24 @@ extension ProductSortTypeExtension on ProductSortType {
       case ProductSortType.priceIncrease:
         return 'Дешевле';
     }
+  }
+}
+
+extension TypeOfSpecialOfferExtension on TypeOfSpecialOffer {
+  static const Map<TypeOfSpecialOffer, String> titles = {
+    TypeOfSpecialOffer.onePlusOne: '1+1',
+    TypeOfSpecialOffer.onePlusTwo: '2+1',
+    TypeOfSpecialOffer.onePlusThree: '3+1',
+  };
+
+  String get title => titles[this] ?? 'Неизвестный способ получения';
+
+  static TypeOfSpecialOffer? fromTitle(String? title) {
+    for (final entry in titles.entries) {
+      if (entry.value == title) {
+        return entry.key;
+      }
+    }
+    return null;
   }
 }

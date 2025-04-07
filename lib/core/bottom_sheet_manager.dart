@@ -21,11 +21,9 @@ import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_
 import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/delivery_payment_block.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/delivery_plate_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/online_payment_method_button.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/pharmacy_available_products_chip.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/summary_block/card_summary_block.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
@@ -61,8 +59,8 @@ class BottomSheetManager {
               AppButtonWidget(
                 text: 'Удалить',
                 onTap: () {
-                  homeContext.read<CartScreenBloc>().add(ClearProductsEvent());
-                  Navigator.pop(sheetContext);
+                  // homeContext.read<CartScreenBloc>().add(ClearProductsEvent());
+                  // Navigator.pop(sheetContext);
                 },
               ),
               SizedBox(height: 8.h),
@@ -103,17 +101,17 @@ class BottomSheetManager {
               AppButtonWidget(
                 text: 'Оформить самовывоз',
                 onTap: () {
-                  homeContext.read<CartScreenBloc>().add(
-                        ChangeCartTypeEvent(TypeReceiving.pickup),
-                      );
-                  homeContext.read<CartScreenBloc>().add(
-                        ScrollUpListEvent(),
-                      );
-                  screenContext.read<SelectorCubit>().onSelectorItemTap(
-                        [TypeReceiving.delivery, TypeReceiving.pickup]
-                            .indexOf(TypeReceiving.pickup),
-                      );
-                  Navigator.pop(sheetContext);
+                  // homeContext.read<CartScreenBloc>().add(
+                  //       ChangeCartTypeEvent(TypeReceiving.pickup),
+                  //     );
+                  // homeContext.read<CartScreenBloc>().add(
+                  //       ScrollUpListEvent(),
+                  //     );
+                  // screenContext.read<SelectorCubit>().onSelectorItemTap(
+                  //       [TypeReceiving.delivery, TypeReceiving.pickup]
+                  //           .indexOf(TypeReceiving.pickup),
+                  //     );
+                  // Navigator.pop(sheetContext);
                 },
               ),
               SizedBox(height: 8.h),
@@ -153,9 +151,9 @@ class BottomSheetManager {
                 text: 'Удалить',
                 isFilled: false,
                 onTap: () {
-                  homeContext.read<CartScreenBloc>().add(
-                        DeletePromoCodeEvent(),
-                      );
+                  // homeContext.read<CartScreenBloc>().add(
+                  //       DeletePromoCodeEvent(),
+                  //     );
                   Navigator.pop(sheetContext);
                 },
               ),
@@ -472,12 +470,7 @@ class BottomSheetManager {
                                             ProductPharmacyEntity(), // TODO: доделать
                                         pharmacyListScreenType:
                                             PharmacyListScreenType.cart,
-                                        onButtonTap: () => showPharmacySheet(
-                                              homeContext,
-                                              screenContext,
-                                              cartState
-                                                  .filteredPharmacies[index],
-                                            ),
+                                        onButtonTap: () => (),
                                         screenContext: homeContext),
                                 separatorBuilder: (context, index) =>
                                     SizedBox(height: 8.h),
@@ -497,109 +490,6 @@ class BottomSheetManager {
               ),
             );
           },
-        );
-      },
-    );
-  }
-
-  static showPharmacySheet(
-      BuildContext homeContext, BuildContext screenContext, Pharmacy pharmacy) {
-    showModalBottomSheet(
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: homeContext,
-      builder: (sheetContext) {
-        final cartBloc = homeContext.read<CartScreenBloc>();
-
-        List<ProductEntity> products = cartBloc.state.products;
-        Set<int> selectedProductIds = cartBloc.state.selectedProductIds;
-
-        List<ProductEntity> selectedProducts = products
-            .where((product) => selectedProductIds.contains(product.productId))
-            .toList();
-
-        List<ProductEntity> noAvailableProducts = selectedProducts
-            .where((product) =>
-                !pharmacy.availableProducts.contains(product.productId))
-            .toList();
-
-        // Обновляем свойство inStock для каждого продукта
-        //for (var product in noAvailableProducts) {
-        //  product.inStock = false;
-        //}
-
-        //List<Product> availableProducts = selectedProducts
-        //    .where((product) => pharmacy.availableProducts
-        //        .map((e) => e.id)
-        //        .contains(product.id))
-        //    .toList();
-
-        List<ProductEntity> availableProducts = [];
-
-        return CustomBottomSheet(
-          color: UiConstants.backgroundColor,
-          child: Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              children: [
-                Text(
-                  'Аптека №36 InLek ОДО ДКМ-ФАРМ',
-                  style: UiConstants.textStyle3
-                      .copyWith(color: UiConstants.darkBlueColor),
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  'Минский р-н, аг. Сеница, ул. Зеленая, 1, к. 5 (с/м Гиппо)',
-                  style: UiConstants.textStyle2.copyWith(
-                    color: UiConstants.darkBlueColor,
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                PharmacyAvailableProductsChip(
-                    allProductsAvailable: noAvailableProducts.isEmpty),
-                SizedBox(height: 32.h),
-                // список с законченными товарами
-                if (noAvailableProducts.isNotEmpty)
-                  Padding(
-                    padding: getMarginOrPadding(bottom: 32),
-                    child: ProductsListWidget(
-                        title: 'Товары закончились',
-                        subtitle:
-                            'Эти товары останутся в корзине, их можно будет оформить отдельным заказом в другой аптеке.',
-                        products: noAvailableProducts,
-                        screenContext: homeContext,
-                        productsListScreenType:
-                            ProductsListScreenType.pharmacy),
-                  ),
-                ProductsListWidget(
-                    title: 'В наличии',
-                    products: availableProducts,
-                    screenContext: homeContext,
-                    productsListScreenType: ProductsListScreenType.pharmacy),
-                // подсчёт стоимости
-                if (cartBloc.state.products.isNotEmpty)
-                  Padding(
-                    padding: getMarginOrPadding(bottom: 16, top: 16),
-                    child: CardSummaryBlock(
-                        screenContext: screenContext, canUsePromoCodes: false),
-                  ),
-
-                AppButtonWidget(
-                  text: 'Заберу отсюда',
-                  isActive: true,
-                  onTap: () {
-                    cartBloc.add(SelectPharmacy(pharmacy.id));
-                    Navigator.of(homeContext).popUntil(
-                      (route) {
-                        return route.settings.name == "/";
-                      },
-                    );
-                  },
-                )
-              ],
-            ),
-          ),
         );
       },
     );
@@ -735,27 +625,30 @@ class BottomSheetManager {
                   ),
                   SizedBox(height: 16.h),
                   CustomCheckbox(
+                    onChanged: (isChecked) {},
                     title: Text(
                       'Работает сейчас',
                       style: UiConstants.textStyle2
                           .copyWith(color: UiConstants.darkBlueColor),
                     ),
                     isChecked: state.isShowPharmaciesWorkingNow,
-                    onChanged: (isChecked) => cartBloc.add(
-                      ToggleShowPharmaciesWorkingNowEvent(isChecked),
-                    ),
+                    // onChanged: (isChecked) => cartBloc.add(
+                    //     // ToggleShowPharmaciesWorkingNowEvent(isChecked),
+                    //     ),
                   ),
                   SizedBox(height: 8.h),
                   CustomCheckbox(
+                    onChanged: (isChecked) {},
+
                     title: Text(
                       'Все товары в наличии',
                       style: UiConstants.textStyle2
                           .copyWith(color: UiConstants.darkBlueColor),
                     ),
                     isChecked: state.isShowPharmaciesProductsInStock,
-                    onChanged: (isChecked) => cartBloc.add(
-                      ToggleShowPharmaciesProductsInStockEvent(isChecked),
-                    ),
+                    // onChanged: (isChecked) => cartBloc.add(
+                    //   ToggleShowPharmaciesProductsInStockEvent(isChecked),
+                    // ),
                   ),
                 ],
               ),

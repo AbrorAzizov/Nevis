@@ -11,6 +11,7 @@ import 'package:nevis/features/presentation/bloc/route_observer/route_observer_b
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/bottom_navigation_bar_tile.dart';
 import 'package:nevis/features/presentation/widgets/search_screen/search_screen.dart';
+import 'package:nevis/locator_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => CartScreenBloc()
+        BlocProvider(create: (context) => CartScreenBloc(getCartProducts: sl())
             // ..update(),
             ),
         BlocProvider(

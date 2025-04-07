@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/favorite_button.dart';
+import 'package:nevis/features/presentation/widgets/favorite_button.dart';
 
 class PharmacyInfoCard extends StatelessWidget {
   const PharmacyInfoCard({super.key});

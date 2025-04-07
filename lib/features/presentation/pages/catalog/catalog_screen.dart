@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
-import 'package:nevis/features/presentation/widgets/catalog_screen/stocks_plate_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/categories_grid_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CatalogScreen extends StatelessWidget {
@@ -43,10 +40,8 @@ class CatalogScreen extends StatelessWidget {
                         return Column(
                           children: [
                             SearchProductAppBar(
-                              onTapFavoriteProductsChip: (){},
-                              onTapLocationChip: (){
-
-                              },
+                              onTapFavoriteProductsChip: () {},
+                              onTapLocationChip: () {},
                             ),
                             Expanded(
                               child: homeState is InternetUnavailable

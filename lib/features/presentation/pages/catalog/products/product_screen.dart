@@ -8,10 +8,8 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
-import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/product_screen/product_screen_bloc.dart';
-import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/dropdown_widget.dart';
@@ -22,7 +20,6 @@ import 'package:nevis/features/presentation/widgets/product_screen/product_chara
 import 'package:nevis/features/presentation/widgets/product_screen/product_receiving_methods_widget.dart';
 import 'package:nevis/features/presentation/widgets/product_screen/product_title_widget.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductScreen extends StatelessWidget {
@@ -150,28 +147,14 @@ class ProductScreen extends StatelessWidget {
                                               title: 'Аналоги',
                                               onTap: () {},
                                               child: ProductsListWidget(
-                                                  products: [], productsListScreenType: ProductsListScreenType.pharmacy,),
+                                                products: [],
+                                                productsListScreenType:
+                                                    ProductsListScreenType
+                                                        .pharmacy,
+                                              ),
                                             ),
                                             SizedBox(height: 32.h),
                                           ],
-                                        ),
-                                        Positioned(
-                                          left: 20.w,
-                                          right: 20.w,
-                                          bottom: 94,
-                                          child: (state.pharmacies ?? [])
-                                                  .isEmpty
-                                              ? AppButtonWidget(
-                                                  text:
-                                                      'Сообщить о поступлении',
-                                                  onTap: () => BottomSheetManager
-                                                      .showProductReceiptNotificationSheet(
-                                                          homeBloc.context),
-                                                )
-                                              : AppButtonWidget(
-                                                  text: 'В корзину',
-                                                  onTap: () {},
-                                                ),
                                         ),
                                       ],
                                     ),

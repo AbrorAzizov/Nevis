@@ -7,9 +7,10 @@ import 'package:nevis/constants/utils.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 
 class ProductPrice extends StatelessWidget {
+  final bool fromCart;
   final ProductEntity product;
 
-  const ProductPrice({super.key, required this.product});
+  const ProductPrice({super.key, required this.product, this.fromCart = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +26,7 @@ class ProductPrice extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment
-                .spaceBetween, // Распределяем элементы по краям
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +37,7 @@ class ProductPrice extends StatelessWidget {
                         Text(
                           Utils.formatPrice(product.oldPrice),
                           style: UiConstants.textStyle10.copyWith(
-                            color: UiConstants.darkBlue2Color.withOpacity(.6),
+                            color: UiConstants.black3Color.withOpacity(.6),
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),
@@ -50,27 +50,26 @@ class ProductPrice extends StatelessWidget {
                         ),
                       ],
                     ),
-                 
                 ],
               ),
-            
             ],
           ),
-           Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      FittedBox(
-                        fit: BoxFit.fill,
-                        child: Text(
-                          Utils.formatPrice(product.price ?? 500),
-                          style: UiConstants.textStyle14.copyWith(
-                            color: product.oldPrice != null
-                                ? UiConstants.blueColor
-                                : UiConstants.blackColor,
-                          ),
-                        ),
-                      ),
-                        Container(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              FittedBox(
+                fit: BoxFit.fill,
+                child: Text(
+                  Utils.formatPrice(product.price ?? 500),
+                  style: UiConstants.textStyle14.copyWith(
+                    fontSize: fromCart ? 16.sp : null,
+                    color: product.oldPrice != null
+                        ? UiConstants.blueColor
+                        : UiConstants.blackColor,
+                  ),
+                ),
+              ),
+              Container(
                 height: 22.h,
                 padding: EdgeInsets.symmetric(
                     horizontal: 4.w, vertical: 1.h), // Адаптивные отступы
@@ -80,6 +79,7 @@ class ProductPrice extends StatelessWidget {
                     colors: [Color(0xFFBF80FF), Color(0xFF85C6FF)],
                   ),
                 ),
+
                 child: Row(
                   mainAxisSize:
                       MainAxisSize.min, // Контейнер адаптируется под текст
@@ -95,8 +95,8 @@ class ProductPrice extends StatelessWidget {
                   ],
                 ),
               ),
-                    ],
-                  ),
+            ],
+          ),
         ],
       ),
     );

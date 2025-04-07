@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:nevis/constants/enums.dart';
 
 class ProductEntity extends Equatable {
   final int? productId;
@@ -29,37 +30,38 @@ class ProductEntity extends Equatable {
   final String? productTimeRegister;
   final int? count;
   final int? valueBuy;
+  final TypeOfSpecialOffer? specialOffer;
 
-  const ProductEntity( {
-    this.productId,
-    this.valueBuy,
-    this.mnn,
-    this.mnnLat,
-    this.name,
-    this.description,
-    this.code,
-    this.dose,
-    this.form,
-    this.brand,
-    this.image,
-    this.recipe,
-    this.country,
-    this.delivery,
-    this.price,
-    this.oldPrice,
-    this.discount,
-    this.parent,
-    this.termin,
-    this.temperature,
-    this.releaseForm,
-    this.productInsert,
-    this.productSticker,
-    this.productRegister,
-    this.productTrademark,
-    this.productDateRegister,
-    this.productTimeRegister,
-    this.count,
-  });
+  const ProductEntity(
+      {this.productId,
+      this.valueBuy,
+      this.mnn,
+      this.mnnLat,
+      this.name,
+      this.description,
+      this.code,
+      this.dose,
+      this.form,
+      this.brand,
+      this.image,
+      this.recipe,
+      this.country,
+      this.delivery,
+      this.price,
+      this.oldPrice,
+      this.discount,
+      this.parent,
+      this.termin,
+      this.temperature,
+      this.releaseForm,
+      this.productInsert,
+      this.productSticker,
+      this.productRegister,
+      this.productTrademark,
+      this.productDateRegister,
+      this.productTimeRegister,
+      this.count,
+      this.specialOffer});
 
   @override
   List<Object?> get props => [
@@ -89,6 +91,7 @@ class ProductEntity extends Equatable {
         productTrademark,
         productDateRegister,
         productTimeRegister,
-        count
+        count,
+        specialOffer
       ];
 }

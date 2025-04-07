@@ -55,3 +55,9 @@ enum ProductFilterOrSortType { sort, filter }
 enum GenderType { male, female }
 
 enum BonusCardType { physical, virtual }
+
+enum TypeOfSpecialOffer{
+  onePlusOne,
+  onePlusTwo,
+  onePlusThree
+}

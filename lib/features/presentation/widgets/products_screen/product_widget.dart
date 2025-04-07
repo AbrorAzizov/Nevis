@@ -15,7 +15,7 @@ import 'package:nevis/features/presentation/pages/catalog/products/value_buy_pro
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/product_price.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
-import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/favorite_button.dart';
+import 'package:nevis/features/presentation/widgets/favorite_button.dart';
 
 class ProductWidget extends StatelessWidget {
   final ProductEntity product;

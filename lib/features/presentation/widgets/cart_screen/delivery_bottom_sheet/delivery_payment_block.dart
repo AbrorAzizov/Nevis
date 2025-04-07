@@ -52,10 +52,10 @@ class _DeliveryPaymentBlockState extends State<DeliveryPaymentBlock> {
                 subtitle: 'Картой или наличными',
                 isChecked: paymentType == PaymentType.inPerson,
                 onTap: () {
-                  setState(() => paymentType = PaymentType.inPerson);
-                  cartBloc.add(
-                    ChangePaymentTypeEvent(PaymentType.inPerson),
-                  );
+                  // setState(() => paymentType = PaymentType.inPerson);
+                  // cartBloc.add(
+                  //   ChangePaymentTypeEvent(PaymentType.inPerson),
+                  // );
                 },
               ),
             ),
@@ -66,10 +66,10 @@ class _DeliveryPaymentBlockState extends State<DeliveryPaymentBlock> {
                   title: 'Онлайн',
                   isChecked: paymentType == PaymentType.online,
                   onTap: () {
-                    setState(() => paymentType = PaymentType.online);
-                    cartBloc.add(
-                      ChangePaymentTypeEvent(PaymentType.online),
-                    );
+                    // setState(() => paymentType = PaymentType.online);
+                    // cartBloc.add(
+                    //   ChangePaymentTypeEvent(PaymentType.online),
+                    // );
                   },
                   changedOnlineMethodTap: widget.changedOnlineMethodTap),
             ),

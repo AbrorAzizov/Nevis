@@ -4,7 +4,6 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/cart_product_widget.dart';
 
 class ProductsListWidget extends StatelessWidget {
   const ProductsListWidget({
@@ -44,17 +43,17 @@ class ProductsListWidget extends StatelessWidget {
             ),
           ),
         if (products.isNotEmpty) SizedBox(height: 16.h),
-        ListView.separated(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => CartProductWidget(
-                index: index,
-                product: products[index],
-                productsListScreenType: productsListScreenType,
-                screenContext: screenContext),
-            separatorBuilder: (context, index) => SizedBox(height: 8.h),
-            itemCount: products.length),
+        // ListView.separated(
+        //     padding: EdgeInsets.zero,
+        //     shrinkWrap: true,
+        //     physics: NeverScrollableScrollPhysics(),
+        //     itemBuilder: (context, index) => ProductWidget(
+        //         index: index,
+        //         product: products[index],
+        //         productsListScreenType: productsListScreenType,
+        //         screenContext: screenContext),
+        //     separatorBuilder: (context, index) => SizedBox(height: 8.h),
+        //     itemCount: products.length),
       ],
     );
   }

@@ -282,6 +282,17 @@ class Utils {
     }
   }
 
+  static List<String> specialOfferText(TypeOfSpecialOffer typeOfSpecialOffer) {
+    switch (typeOfSpecialOffer) {
+      case TypeOfSpecialOffer.onePlusOne:
+        return ['1+1', 'при покупке одного, второй'];
+      case TypeOfSpecialOffer.onePlusTwo:
+        return ['2+1', 'при покупке двух, третий'];
+      case TypeOfSpecialOffer.onePlusThree:
+        return ['3+1', 'при покупке трех, четвертый'];
+    }
+  }
+
   static String formatPrice(double? price) {
     if (price == null) return '-';
     final NumberFormat formatter =

@@ -107,7 +107,7 @@ class UiConstants {
   static TextStyle textStyle14 = TextStyle(
     fontSize: 13.sp,
     height: 19.1.sp / 14.sp,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w600,
   );
 
   static TextStyle textStyle11 = TextStyle(

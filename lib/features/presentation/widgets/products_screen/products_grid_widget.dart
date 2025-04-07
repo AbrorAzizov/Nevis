@@ -22,7 +22,7 @@ class ProductsGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int itemCount = isLoading ? 8 : products.length;
-    double itemHeight = 382.h;
+    double itemHeight = 400.h;
     double itemWidth = 156.w;
     double blocksSize = itemHeight * (itemCount / 2).round();
     double mainAxisSpacingSize =

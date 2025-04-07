@@ -4,16 +4,22 @@ class CartScreenState extends Equatable {
   final List<ProductEntity> products;
   final Set<int> selectedProductIds;
   final bool isAllProductsChecked;
-  final List<Pharmacy> pharmacies;
-  final List<Pharmacy> filteredPharmacies;
+  final List<PharmacyEntity> pharmacies;
+  final List<PharmacyEntity> filteredPharmacies;
   final int? selectedPharmacy;
   final bool isShowPharmaciesWorkingNow;
   final bool isShowPharmaciesProductsInStock;
   final List<int> promoCodes;
   final TypeReceiving cartType;
   final PaymentType paymentType;
+  final String? errorMessage;
+  final bool isLoading;
+  final Map<int, int> counters;
 
   const CartScreenState({
+    this.isLoading = true,
+    this.counters = const {},
+    this.errorMessage,
     required this.products,
     required this.selectedProductIds,
     required this.isAllProductsChecked,
@@ -31,30 +37,35 @@ class CartScreenState extends Equatable {
     List<ProductEntity>? products,
     Set<int>? selectedProductIds,
     bool? isAllProductsChecked,
-    List<Pharmacy>? pharmacies,
-    List<Pharmacy>? filteredPharmacies,
+    List<PharmacyEntity>? pharmacies,
+    List<PharmacyEntity>? filteredPharmacies,
     int? selectedPharmacy,
     bool? isShowPharmaciesWorkingNow,
     bool? isShowPharmaciesProductsInStock,
     List<int>? promoCodes,
     TypeReceiving? cartType,
     PaymentType? paymentType,
+    String? errorMessage,
+    bool? isLoading,
+    Map<int, int>? counters,
   }) {
     return CartScreenState(
-      products: products ?? this.products,
-      selectedProductIds: selectedProductIds ?? this.selectedProductIds,
-      isAllProductsChecked: isAllProductsChecked ?? this.isAllProductsChecked,
-      pharmacies: pharmacies ?? this.pharmacies,
-      filteredPharmacies: filteredPharmacies ?? this.filteredPharmacies,
-      selectedPharmacy: selectedPharmacy ?? this.selectedPharmacy,
-      isShowPharmaciesWorkingNow:
-          isShowPharmaciesWorkingNow ?? this.isShowPharmaciesWorkingNow,
-      isShowPharmaciesProductsInStock: isShowPharmaciesProductsInStock ??
-          this.isShowPharmaciesProductsInStock,
-      promoCodes: promoCodes ?? this.promoCodes,
-      cartType: cartType ?? this.cartType,
-      paymentType: paymentType ?? this.paymentType,
-    );
+        products: products ?? this.products,
+        selectedProductIds: selectedProductIds ?? this.selectedProductIds,
+        isAllProductsChecked: isAllProductsChecked ?? this.isAllProductsChecked,
+        pharmacies: pharmacies ?? this.pharmacies,
+        filteredPharmacies: filteredPharmacies ?? this.filteredPharmacies,
+        selectedPharmacy: selectedPharmacy ?? this.selectedPharmacy,
+        isShowPharmaciesWorkingNow:
+            isShowPharmaciesWorkingNow ?? this.isShowPharmaciesWorkingNow,
+        isShowPharmaciesProductsInStock: isShowPharmaciesProductsInStock ??
+            this.isShowPharmaciesProductsInStock,
+        promoCodes: promoCodes ?? this.promoCodes,
+        cartType: cartType ?? this.cartType,
+        counters: counters ?? this.counters,
+        paymentType: paymentType ?? this.paymentType,
+        isLoading: isLoading ?? this.isLoading,
+        errorMessage: errorMessage);
   }
 
   @override
@@ -70,5 +81,8 @@ class CartScreenState extends Equatable {
         promoCodes,
         cartType,
         paymentType,
+        errorMessage,
+        isLoading,
+        counters
       ];
 }

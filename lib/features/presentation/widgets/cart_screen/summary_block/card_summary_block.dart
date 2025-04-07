@@ -59,10 +59,10 @@ class CardSummaryBlock extends StatelessWidget {
                           borderRadius: 12.r,
                           isExpanded: false,
                           onTap: () {
-                            if (controller.text.isNotEmpty) {
-                              cartBloc.add(AddPromoCodeEvent());
-                              controller.clear();
-                            }
+                            // if (controller.text.isNotEmpty) {
+                            //   cartBloc.add(AddPromoCodeEvent());
+                            //   controller.clear();
+                            // }
                           },
                         ),
                       ),

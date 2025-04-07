@@ -6,18 +6,21 @@ import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/auth_remote_data_source_impl.dart';
+import 'package:nevis/features/data/datasources/cart_remote_data_source_implementation.dart';
 import 'package:nevis/features/data/datasources/category_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/content_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/order_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/product_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/profile_remote_data_source_impl.dart';
 import 'package:nevis/features/data/repositories/auth_repository_impl.dart';
+import 'package:nevis/features/data/repositories/cart_repository_impl.dart';
 import 'package:nevis/features/data/repositories/category_repository_impl.dart';
 import 'package:nevis/features/data/repositories/content_repository_impl.dart';
 import 'package:nevis/features/data/repositories/order_repository_impl.dart';
 import 'package:nevis/features/data/repositories/product_repository_impl.dart';
 import 'package:nevis/features/data/repositories/profile_repository_impl.dart';
 import 'package:nevis/features/domain/repositories/auth_repository.dart';
+import 'package:nevis/features/domain/repositories/cart_repository.dart';
 import 'package:nevis/features/domain/repositories/category_repository.dart';
 import 'package:nevis/features/domain/repositories/content_repository.dart';
 import 'package:nevis/features/domain/repositories/order_repository.dart';
@@ -27,6 +30,7 @@ import 'package:nevis/features/domain/usecases/auth/is_phone_exists.dart';
 import 'package:nevis/features/domain/usecases/auth/login.dart';
 import 'package:nevis/features/domain/usecases/auth/logout.dart';
 import 'package:nevis/features/domain/usecases/auth/request_code.dart';
+import 'package:nevis/features/domain/usecases/cart/get_cart.dart';
 import 'package:nevis/features/domain/usecases/category/get_brands.dart';
 import 'package:nevis/features/domain/usecases/category/get_categories.dart';
 import 'package:nevis/features/domain/usecases/category/get_countries.dart';
@@ -216,6 +220,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetOrderHistoryUC(sl()));
   sl.registerLazySingleton(() => GetOneOrderUC(sl()));
 
+  //Cart
+  sl.registerLazySingleton(() => GetCartProducts(sl()));
+
   //// Repository
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
@@ -261,6 +268,11 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton<CartRepository>(
+    () => CartRepositoryImpl(
+        networkInfo: sl(), errorHandler: sl(), cartRemoteDataSource: sl()),
+  );
+
   //// DataSources
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(
@@ -297,6 +309,12 @@ Future<void> init() async {
     () => OrderRemoteDataSourceImpl(
       apiClient: sl(),
       sharedPreferences: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<CartRemoteDataSource>(
+    () => CartRemoteDataSourceImpl(
+      apiClient: sl(),
     ),
   );
 

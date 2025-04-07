@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/favorite_button.dart';
+import 'package:nevis/features/presentation/widgets/favorite_button.dart';
 
 class PharmacyCard extends StatelessWidget {
   const PharmacyCard({super.key});

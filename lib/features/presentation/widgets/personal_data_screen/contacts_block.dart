@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/core/formatters/custom_phone_input_formatter.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
@@ -37,13 +36,14 @@ class _ContactsBlockState extends State<ContactsBlock> {
                   code: personalDataBloc.state.confirmPhoneCode,
                   loginUC: sl()),
               child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
-                listener: (context, state) async 
-                // => switch (state) {
-                //   SuccessPasteState _ => await personalDataBloc.updateProfile(
-                //       confirmedCode: state.correctCode),
-                //   _ => {},
-                // }, 
-                =>(),
+                listener: (context, state) async
+                    // => switch (state) {
+                    //   SuccessPasteState _ => await personalDataBloc.updateProfile(
+                    //       confirmedCode: state.correctCode),
+                    //   _ => {},
+                    // },
+                    =>
+                    (),
                 builder: (context, state) {
                   return AppTextFieldWidget(
                     textStyle: UiConstants.textStyle11,
@@ -72,10 +72,6 @@ class _ContactsBlockState extends State<ContactsBlock> {
                       //         requestedCode: true);
                       //   },
                       // );
-                      BottomSheetManager.showConfirmationCodeSheet(
-                          context.read<HomeScreenBloc>().context,
-                          context,
-                          personalDataBloc);
                     },
                     onChangedField: (_) => setState(() {}),
                   );

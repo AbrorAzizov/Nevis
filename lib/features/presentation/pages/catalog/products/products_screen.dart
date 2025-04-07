@@ -58,12 +58,11 @@ class ProductsScreen extends StatelessWidget {
                   else
                     Expanded(
                       child: SingleChildScrollView(
-                        padding:
-                            getMarginOrPadding(bottom: 94),
+                        padding: getMarginOrPadding(bottom: 94),
                         child: Column(
                           children: [
                             Padding(
-                              padding: getMarginOrPadding(left: 20,right: 20),
+                              padding: getMarginOrPadding(left: 20, right: 20),
                               child: FilterSortContainer(
                                 isFromFav: false,
                                 sortTypes: ProductSortType.values,
@@ -72,7 +71,8 @@ class ProductsScreen extends StatelessWidget {
                                   bloc.add(SelectSortProductsType(
                                       productSortType: sortType));
                                 },
-                                filterOrSortType: state.selectedFilterOrSortType,
+                                filterOrSortType:
+                                    state.selectedFilterOrSortType,
                                 onConfirmFilter: () =>
                                     bloc.add(ShowFilterProductsTypes()),
                               ),
@@ -81,7 +81,7 @@ class ProductsScreen extends StatelessWidget {
                             SizedBox(height: 40.h, child: FilterChips()),
                             SizedBox(height: 16.h),
                             Padding(
-                              padding: getMarginOrPadding(left: 20,right: 20),
+                              padding: getMarginOrPadding(left: 20, right: 20),
                               child: ProductsGridWidget(
                                 isLoading: false,
                                 products: state.products,
