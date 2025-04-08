@@ -6,8 +6,11 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
+import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/cart_product_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
+import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
+import 'package:nevis/features/presentation/widgets/favourite_products_screen/selected_products_price_info_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -82,6 +85,9 @@ class CartScreen extends StatelessWidget {
                                                         )
                                                       ],
                                                     ),
+                                                    SizedBox(
+                                                      height: 16.h,
+                                                    ),
                                                     Column(
                                                         spacing: 8.h,
                                                         children: List.generate(
@@ -92,7 +98,43 @@ class CartScreen extends StatelessWidget {
                                                               product: cartState
                                                                       .products[
                                                                   index]);
-                                                        }))
+                                                        })),
+                                                    SizedBox(
+                                                      height: 16.h,
+                                                    ),
+                                                    SelectedProductsPriceInformationWidget(
+                                                      products:
+                                                          cartState.products,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 32.h,
+                                                    ),
+                                                    Text(
+                                                      'Способ получения заказа',
+                                                      style: UiConstants
+                                                          .textStyle20,
+                                                    ),
+                                                    SizedBox(height: 8.h),
+                                                    Selector(
+                                                      titlesList: const [
+                                                        'Доставка на дом',
+                                                        'Самовывоз'
+                                                      ],
+                                                      onTap: (int index) =>
+                                                          cartBloc.add(
+                                                        ChangeSelectorIndexEvent(
+                                                          TypeReceiving
+                                                              .values[index],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 16.h,
+                                                    ),
+                                                    AppButtonWidget(
+                                                      text: 'Оформить заказ',
+                                                      onTap: () {},
+                                                    )
                                                   ],
                                                 );
                                               },
@@ -104,25 +146,24 @@ class CartScreen extends StatelessWidget {
                                                   left: 20, right: 20, top: 16),
                                               child: Column(
                                                 children: [
-                                                  // селектор доставка/самовывоз
-                                                  // Align(
-                                                  //   alignment:
-                                                  //       AlignmentDirectional
-                                                  //           .center,
-                                                  //   child: Selector(
-                                                  //     titlesList: const [
-                                                  //       'Доставка',
-                                                  //       'Самовывоз'
-                                                  //     ],
-                                                  //     onTap: (int index) =>
-                                                  //         cartBloc.add(
-                                                  //       ChangeCartTypeEvent(
-                                                  //         TypeReceiving
-                                                  //             .values[index],
-                                                  //       ),
-                                                  //     ),
-                                                  //   ),
-                                                  // ),
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional
+                                                            .center,
+                                                    child: Selector(
+                                                      titlesList: const [
+                                                        'Доставка на дом',
+                                                        'Самовывоз'
+                                                      ],
+                                                      onTap: (int index) =>
+                                                          cartBloc.add(
+                                                        ChangeSelectorIndexEvent(
+                                                          TypeReceiving
+                                                              .values[index],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),

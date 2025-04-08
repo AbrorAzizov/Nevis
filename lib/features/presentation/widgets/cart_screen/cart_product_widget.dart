@@ -10,6 +10,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/custom_cache_manager.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
+import 'package:nevis/features/presentation/widgets/cart_screen/as_a_gift_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/product_price.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/special_offer_badge_widget.dart';
 import 'package:nevis/features/presentation/widgets/delete_button_widget.dart';
@@ -104,7 +105,15 @@ class CartProductWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: 14.h),
-                          Text(product.brand ?? 'Производитель'),
+                          Text(
+                            product.brand ?? 'Производитель',
+                            style: UiConstants.textStyle12.copyWith(
+                                height: 1,
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 0,
+                                color: UiConstants.black3Color.withOpacity(.6)),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ],
                       ),
                     ),
@@ -173,14 +182,19 @@ class CartProductWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              product.specialOffer != null
-                  ? Padding(
-                      padding: getMarginOrPadding(top: 8),
-                      child: SpecialOfferBadgeWidget(
-                        typeOfSpecialOffer: product.specialOffer!,
-                      ),
-                    )
-                  : SizedBox.shrink()
+              Padding(
+                padding: getMarginOrPadding(top: 8),
+                child: product.specialOffer != null
+                    ? (count >= product.specialOffer!.count
+                        ? AsGifetWidget(
+                            product: product,
+                            count: counters[product.productId] ?? 1,
+                          )
+                        : SpecialOfferBadgeWidget(
+                            typeOfSpecialOffer: product.specialOffer!,
+                          ))
+                    : SizedBox.shrink(),
+              ),
             ],
           ),
         ),

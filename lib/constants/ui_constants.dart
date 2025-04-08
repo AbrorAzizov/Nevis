@@ -177,4 +177,11 @@ class UiConstants {
     fontFamily: 'Rubik',
     letterSpacing: 0,
   );
+
+  static TextStyle textStyle20 = TextStyle(
+      fontSize: 16.sp,
+      height: 1,
+      fontWeight: FontWeight.w500,
+      fontFamily: 'Rubik',
+      color: UiConstants.black3Color);
 }

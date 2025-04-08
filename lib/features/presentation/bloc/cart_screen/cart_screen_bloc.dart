@@ -47,6 +47,7 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
         ) {
     on<GetCartProductsEvent>(_getCartProducts);
     on<UpdateProductCountEvent>(_updateCounter);
+    on<ChangeSelectorIndexEvent>(_onChangeSelector);
   }
 
   void _getCartProducts(
@@ -64,5 +65,10 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
     final newCounters = Map<int, int>.from(state.counters);
     newCounters[event.productId] = event.count;
     emit(state.copyWith(counters: newCounters));
+  }
+
+  void _onChangeSelector(
+      ChangeSelectorIndexEvent event, Emitter<CartScreenState> emit) {
+    emit(state.copyWith(selectorIndex: event.typeReceiving));
   }
 }

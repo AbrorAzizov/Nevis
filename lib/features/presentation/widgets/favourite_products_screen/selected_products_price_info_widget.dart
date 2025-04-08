@@ -9,13 +9,13 @@ import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SelectedProductsPriceInformationWidget extends StatelessWidget {
-  const SelectedProductsPriceInformationWidget({super.key, required this.products});
+  const SelectedProductsPriceInformationWidget(
+      {super.key, required this.products});
   final List<ProductEntity> products;
   @override
   Widget build(BuildContext context) {
     return Skeleton.unite(
       child: Column(
-        spacing: 8.h,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -32,7 +32,9 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
               ),
             ],
           ),
-         
+          SizedBox(
+            height: 8.h,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -46,6 +48,9 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
                     .copyWith(color: UiConstants.blackColor),
               ),
             ],
+          ),
+          SizedBox(
+            height: 8.h,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,6 +81,13 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
                 ),
               )
             ],
+          ),
+          SizedBox(
+            height: 16.h,
+          ),
+          Divider(),
+          SizedBox(
+            height: 16.h,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,20 +122,20 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
   }
 
   double productsSum() {
-  double toReturn = 0;
-  for (var i in products) {
-    toReturn += i.price ?? 0; 
-  }
-  return toReturn;
-}
-
-double sale() {
-  double totalSale = 0;
-  for (var i in products) {
-    if (i.oldPrice != null && i.price != null) {
-      totalSale += (i.oldPrice! - i.price!);
+    double toReturn = 0;
+    for (var i in products) {
+      toReturn += i.price ?? 0;
     }
+    return toReturn;
   }
-  return totalSale;
-}
+
+  double sale() {
+    double totalSale = 0;
+    for (var i in products) {
+      if (i.oldPrice != null && i.price != null) {
+        totalSale += (i.oldPrice! - i.price!);
+      }
+    }
+    return totalSale;
+  }
 }

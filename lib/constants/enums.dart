@@ -56,8 +56,4 @@ enum GenderType { male, female }
 
 enum BonusCardType { physical, virtual }
 
-enum TypeOfSpecialOffer{
-  onePlusOne,
-  onePlusTwo,
-  onePlusThree
-}
+enum TypeOfSpecialOffer { onePlusOne, onePlusTwo, onePlusThree }

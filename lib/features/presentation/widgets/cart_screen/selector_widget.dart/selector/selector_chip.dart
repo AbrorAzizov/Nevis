@@ -31,15 +31,14 @@ class SelectorChip extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: selected ? UiConstants.blue2Color : Colors.transparent,
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(16.r),
           ),
           child: Text(
             text,
-            style: UiConstants.textStyle2.copyWith(
-              fontSize: 15.sp,
-              color: selected
-                  ? UiConstants.blueColor
-                  : UiConstants.black3Color.withOpacity(.6),
+            style: UiConstants.textStyle12.copyWith(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+              color: selected ? UiConstants.blueColor : UiConstants.black3Color,
             ),
             textAlign: TextAlign.center,
           ),

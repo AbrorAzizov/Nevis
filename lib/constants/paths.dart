@@ -138,4 +138,5 @@ class Paths {
   static const String qrCodeBackgorundIconPath =
       '${_imagesPath}qr_code_background.png';
   static const String qrCodeIconPath = '${_imagesPath}qr_code.png';
+  static const String asAGiftIconPath = '${_imagesPath}as_a_gift.png';
 }

@@ -135,7 +135,15 @@ extension TypeOfSpecialOfferExtension on TypeOfSpecialOffer {
     TypeOfSpecialOffer.onePlusThree: '3+1',
   };
 
+  static const Map<TypeOfSpecialOffer, int> counts = {
+    TypeOfSpecialOffer.onePlusOne: 1,
+    TypeOfSpecialOffer.onePlusTwo: 2,
+    TypeOfSpecialOffer.onePlusThree: 3,
+  };
+
   String get title => titles[this] ?? 'Неизвестный способ получения';
+
+  int get count => counts[this] ?? 1;
 
   static TypeOfSpecialOffer? fromTitle(String? title) {
     for (final entry in titles.entries) {

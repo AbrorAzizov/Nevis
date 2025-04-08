@@ -15,8 +15,10 @@ class CartScreenState extends Equatable {
   final String? errorMessage;
   final bool isLoading;
   final Map<int, int> counters;
+  final TypeReceiving selectorIndex;
 
   const CartScreenState({
+    this.selectorIndex = TypeReceiving.delivery,
     this.isLoading = true,
     this.counters = const {},
     this.errorMessage,
@@ -34,6 +36,7 @@ class CartScreenState extends Equatable {
   });
 
   CartScreenState copyWith({
+    TypeReceiving? selectorIndex,
     List<ProductEntity>? products,
     Set<int>? selectedProductIds,
     bool? isAllProductsChecked,
@@ -50,6 +53,7 @@ class CartScreenState extends Equatable {
     Map<int, int>? counters,
   }) {
     return CartScreenState(
+        selectorIndex: selectorIndex ?? this.selectorIndex,
         products: products ?? this.products,
         selectedProductIds: selectedProductIds ?? this.selectedProductIds,
         isAllProductsChecked: isAllProductsChecked ?? this.isAllProductsChecked,
@@ -83,6 +87,7 @@ class CartScreenState extends Equatable {
         paymentType,
         errorMessage,
         isLoading,
-        counters
+        counters,
+        selectorIndex
       ];
 }

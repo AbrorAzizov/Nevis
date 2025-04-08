@@ -37,14 +37,17 @@ class _SelectorState extends State<Selector> {
         padding: getMarginOrPadding(left: 4, right: 4),
         child: BlocBuilder<SelectorCubit, SelectorState>(
           builder: (context, state) {
-            return Row(
-              children: List.generate(
-                widget.titlesList.length,
-                (index) => SelectorChip(
-                    text: widget.titlesList[index],
-                    selected: state.selectedIndex == index,
-                    index: index,
-                    onTap: widget.onTap),
+            return Padding(
+              padding: const EdgeInsets.all(4),
+              child: Row(
+                children: List.generate(
+                  widget.titlesList.length,
+                  (index) => SelectorChip(
+                      text: widget.titlesList[index],
+                      selected: state.selectedIndex == index,
+                      index: index,
+                      onTap: widget.onTap),
+                ),
               ),
             );
           },

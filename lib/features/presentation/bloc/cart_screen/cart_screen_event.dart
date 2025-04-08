@@ -22,3 +22,8 @@ class UpdateProductCountEvent extends CartScreenEvent {
   final int count;
   const UpdateProductCountEvent({required this.productId, required this.count});
 }
+
+class ChangeSelectorIndexEvent extends CartScreenEvent {
+  final TypeReceiving typeReceiving;
+  const ChangeSelectorIndexEvent(this.typeReceiving);
+}
