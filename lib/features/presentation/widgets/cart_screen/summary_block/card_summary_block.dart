@@ -76,8 +76,8 @@ class CardSummaryBlock extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
                         itemBuilder: (context, index) => PromoCodePlateWidget(
-                              onDelete: () =>
-                                  BottomSheetManager.showDeletePromoCodeSheet(
+                              onDelete: () => BottomSheetManager
+                                  .showWarningAboutNonDeliveryProduct(
                                       homeBloc.context),
                             ),
                         separatorBuilder: (context, index) =>

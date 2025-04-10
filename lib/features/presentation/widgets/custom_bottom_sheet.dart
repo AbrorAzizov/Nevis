@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 
@@ -17,7 +16,11 @@ class CustomBottomSheet extends StatelessWidget {
     return Container(
       height: height,
       width: double.infinity,
-      padding: getMarginOrPadding(left: 20, right: 20, top: 8, bottom: 16),
+      padding: getMarginOrPadding(
+        left: 20,
+        right: 20,
+        top: 8,
+      ),
       decoration: BoxDecoration(
         color: color ?? UiConstants.whiteColor,
         borderRadius: BorderRadius.vertical(
@@ -34,7 +37,9 @@ class CustomBottomSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(200.r),
             ),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(
+            height: 24,
+          ),
           child
         ],
       ),

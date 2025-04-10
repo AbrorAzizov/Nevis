@@ -45,7 +45,9 @@ class ProductPrice extends StatelessWidget {
                         Text(
                           '-${Utils.formatPrice(discount)}',
                           style: UiConstants.textStyle10.copyWith(
-                            color: UiConstants.redColor2,
+                            color: product.availableForDelivery!
+                                ? UiConstants.redColor2
+                                : UiConstants.black3Color.withOpacity(.6),
                           ),
                         ),
                       ],
@@ -62,11 +64,12 @@ class ProductPrice extends StatelessWidget {
                 child: Text(
                   Utils.formatPrice(product.price ?? 500),
                   style: UiConstants.textStyle14.copyWith(
-                    fontSize: fromCart ? 16.sp : null,
-                    color: product.oldPrice != null
-                        ? UiConstants.blueColor
-                        : UiConstants.blackColor,
-                  ),
+                      fontSize: fromCart ? 16.sp : null,
+                      color: product.availableForDelivery!
+                          ? product.oldPrice != null
+                              ? UiConstants.blueColor
+                              : UiConstants.blackColor
+                          : UiConstants.black3Color.withOpacity(.6)),
                 ),
               ),
               Container(
@@ -75,9 +78,13 @@ class ProductPrice extends StatelessWidget {
                     horizontal: 4.w, vertical: 1.h), // Адаптивные отступы
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.r),
-                  gradient: LinearGradient(
-                    colors: [Color(0xFFBF80FF), Color(0xFF85C6FF)],
-                  ),
+                  color: product.availableForDelivery!
+                      ? null
+                      : UiConstants.black3Color.withOpacity(.6),
+                  gradient: product.availableForDelivery!
+                      ? LinearGradient(
+                          colors: [Color(0xFFBF80FF), Color(0xFF85C6FF)])
+                      : null,
                 ),
 
                 child: Row(

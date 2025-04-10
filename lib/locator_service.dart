@@ -221,7 +221,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetOneOrderUC(sl()));
 
   //Cart
-  sl.registerLazySingleton(() => GetCartProducts(sl()));
+  sl.registerLazySingleton(() => GetCartProductsUC(sl()));
 
   //// Repository
   sl.registerLazySingleton<AuthRepository>(

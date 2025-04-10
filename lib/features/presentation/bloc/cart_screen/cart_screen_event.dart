@@ -17,6 +17,10 @@ class GetCartProductsEvent extends CartScreenEvent {
   const GetCartProductsEvent();
 }
 
+class GetProductsEvent extends CartScreenEvent {
+  const GetProductsEvent();
+}
+
 class UpdateProductCountEvent extends CartScreenEvent {
   final int productId;
   final int count;
@@ -26,4 +30,13 @@ class UpdateProductCountEvent extends CartScreenEvent {
 class ChangeSelectorIndexEvent extends CartScreenEvent {
   final TypeReceiving typeReceiving;
   const ChangeSelectorIndexEvent(this.typeReceiving);
+}
+
+class RemoveProductEvent extends CartScreenEvent {
+  final ProductEntity product;
+  const RemoveProductEvent({required this.product});
+}
+
+class ClearCartEvent extends CartScreenEvent {
+  const ClearCartEvent();
 }

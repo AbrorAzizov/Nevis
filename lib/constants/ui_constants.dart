@@ -184,4 +184,12 @@ class UiConstants {
       fontWeight: FontWeight.w500,
       fontFamily: 'Rubik',
       color: UiConstants.black3Color);
+
+  static TextStyle textStyle21 = TextStyle(
+      fontSize: 14.sp,
+      height: 1,
+      fontWeight: FontWeight.w400,
+      fontFamily: 'Rubik',
+      letterSpacing: 0,
+      color: UiConstants.blueColor);
 }

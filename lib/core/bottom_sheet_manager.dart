@@ -34,40 +34,41 @@ import 'package:nevis/features/presentation/widgets/pinput_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class BottomSheetManager {
-  static showClearCartSheet(BuildContext homeContext) {
+  static showClearCartSheet(BuildContext context) {
     showModalBottomSheet(
-      context: homeContext,
+      context: context,
       builder: (sheetContext) {
         return CustomBottomSheet(
-          height: 231.h,
+          height: 228.h,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Удалить все товары?',
+                'Вы дейстивильно хотите очистить корзину?',
                 style: UiConstants.textStyle5
                     .copyWith(color: UiConstants.darkBlueColor),
               ),
-              SizedBox(height: 8.h),
-              Text(
-                'Отменить данное действие будет невозможно',
-                style: UiConstants.textStyle3.copyWith(
-                  color: UiConstants.darkBlue2Color.withOpacity(.6),
-                ),
-              ),
               SizedBox(height: 16.h),
-              AppButtonWidget(
-                text: 'Удалить',
-                onTap: () {
-                  // homeContext.read<CartScreenBloc>().add(ClearProductsEvent());
-                  // Navigator.pop(sheetContext);
-                },
-              ),
-              SizedBox(height: 8.h),
-              AppButtonWidget(
-                text: 'Отменить',
-                isFilled: false,
-                onTap: () => Navigator.pop(sheetContext),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pop(sheetContext);
+                        context.read<CartScreenBloc>().add(ClearCartEvent());
+                      },
+                      child: Text('Очистить')),
+                  SizedBox(
+                    width: 144.w,
+                    child: AppButtonWidget(
+                      onTap: () {
+                        Navigator.pop(sheetContext);
+                      },
+                      text: 'Нет',
+                      backgroundColor: UiConstants.blueColor,
+                    ),
+                  )
+                ],
               ),
             ],
           ),
@@ -127,28 +128,29 @@ class BottomSheetManager {
     );
   }
 
-  static showDeletePromoCodeSheet(BuildContext homeContext) {
+  static showWarningAboutNonDeliveryProduct(BuildContext homeContext) {
     return showModalBottomSheet(
       context: homeContext,
       builder: (sheetContext) {
         return CustomBottomSheet(
-          height: 186.h,
+          height: 283.h,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Удалить промокод?',
+                'В вашей корзине недоступные для доставки товары.\nЗаказ будет оформлен без них.',
                 style: UiConstants.textStyle5
                     .copyWith(color: UiConstants.darkBlueColor),
               ),
               SizedBox(height: 16.h),
               AppButtonWidget(
-                text: 'Оставить',
+                text: 'Продолжить оформление',
                 onTap: () => Navigator.pop(sheetContext),
               ),
               SizedBox(height: 8.h),
               AppButtonWidget(
-                text: 'Удалить',
+                textColor: UiConstants.black3Color.withOpacity(.6),
+                text: 'Редактировать корзину',
                 isFilled: false,
                 onTap: () {
                   // homeContext.read<CartScreenBloc>().add(
@@ -337,7 +339,7 @@ class BottomSheetManager {
       context: homeContext,
       builder: (sheetContext) {
         final List<ProductEntity> cartProducts =
-            homeContext.read<CartScreenBloc>().state.products;
+            homeContext.read<CartScreenBloc>().state.cartProducts;
         final Set<int> selectedProductIds =
             homeContext.read<CartScreenBloc>().state.selectedProductIds;
 

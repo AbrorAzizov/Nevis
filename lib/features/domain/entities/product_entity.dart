@@ -31,9 +31,11 @@ class ProductEntity extends Equatable {
   final int? count;
   final int? valueBuy;
   final TypeOfSpecialOffer? specialOffer;
+  final bool? availableForDelivery;
 
   const ProductEntity(
       {this.productId,
+      this.availableForDelivery,
       this.valueBuy,
       this.mnn,
       this.mnnLat,
@@ -92,6 +94,7 @@ class ProductEntity extends Equatable {
         productDateRegister,
         productTimeRegister,
         count,
-        specialOffer
+        specialOffer,
+        availableForDelivery
       ];
 }

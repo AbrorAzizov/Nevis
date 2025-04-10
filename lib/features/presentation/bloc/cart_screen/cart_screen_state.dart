@@ -1,6 +1,7 @@
 part of 'cart_screen_bloc.dart';
 
 class CartScreenState extends Equatable {
+  final List<ProductEntity> cartProducts;
   final List<ProductEntity> products;
   final Set<int> selectedProductIds;
   final bool isAllProductsChecked;
@@ -18,11 +19,12 @@ class CartScreenState extends Equatable {
   final TypeReceiving selectorIndex;
 
   const CartScreenState({
+    this.products = const [],
     this.selectorIndex = TypeReceiving.delivery,
     this.isLoading = true,
     this.counters = const {},
     this.errorMessage,
-    required this.products,
+    this.cartProducts = const [],
     required this.selectedProductIds,
     required this.isAllProductsChecked,
     required this.pharmacies,
@@ -38,6 +40,7 @@ class CartScreenState extends Equatable {
   CartScreenState copyWith({
     TypeReceiving? selectorIndex,
     List<ProductEntity>? products,
+    List<ProductEntity>? cartProducts,
     Set<int>? selectedProductIds,
     bool? isAllProductsChecked,
     List<PharmacyEntity>? pharmacies,
@@ -54,6 +57,7 @@ class CartScreenState extends Equatable {
   }) {
     return CartScreenState(
         selectorIndex: selectorIndex ?? this.selectorIndex,
+        cartProducts: cartProducts ?? this.cartProducts,
         products: products ?? this.products,
         selectedProductIds: selectedProductIds ?? this.selectedProductIds,
         isAllProductsChecked: isAllProductsChecked ?? this.isAllProductsChecked,
@@ -74,7 +78,7 @@ class CartScreenState extends Equatable {
 
   @override
   List<Object?> get props => [
-        products,
+        cartProducts,
         selectedProductIds,
         isAllProductsChecked,
         pharmacies,

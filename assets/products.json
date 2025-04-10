@@ -30,7 +30,8 @@
             "product_date_register": null,
             "product_time_register": null,
             "product_price_from": "5000",
-            "special_offer": "1+1"
+            "special_offer": null,
+            "is_available_for_delivery": false
         },
         {
             "mnn": "Мультивитамины+Коллаген",
@@ -61,7 +62,8 @@
             "product_date_register": null,
             "product_time_register": null,
             "product_price_from": "400",
-            "special_offer": "2+1"
+            "special_offer": "2+1",
+            "is_available_for_delivery": true
         },
         {
             "mnn": "Мультивитамины+Коллаген",
@@ -92,7 +94,8 @@
             "product_date_register": null,
             "product_time_register": null,
             "product_price_from": "200",
-            "special_offer": "3+1"
+            "special_offer": "3+1",
+            "is_available_for_delivery": true
         },
         {
             "mnn": "Мультивитамины+Коллаген",
@@ -123,7 +126,8 @@
             "product_date_register": null,
             "product_time_register": null,
             "product_price_from": "100",
-            "special_offer": null
+            "special_offer": null,
+            "is_available_for_delivery": true
         }
     ]
 }

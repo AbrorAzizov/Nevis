@@ -31,47 +31,50 @@ class ProductModel extends ProductEntity {
       super.productTimeRegister,
       super.count,
       super.valueBuy,
-      super.specialOffer});
+      super.specialOffer,
+      super.availableForDelivery});
 
   @override
   factory ProductModel.fromJson(Map<String, dynamic> data) {
     Map<String, dynamic> json = data["product_info"] ?? data;
     json = json["product_charachters"] ?? json;
     return ProductModel(
-        productId: json["product_id"],
-        mnn: json["mnn"],
-        mnnLat: json["mnn_lat"],
-        name: json["product_title"],
-        description: json["product_description"],
-        code: json["code"],
-        dose: json["dose"],
-        form: json["form"],
-        brand: json["brand"],
-        image: json["image"],
-        recipe: json["recipe"],
-        country: json["country"],
-        delivery: json["delivery"],
-        price: double.tryParse(json["product_price_from"] ?? ''),
-        oldPrice: double.tryParse(
-          (json["product_price_from_old"] ?? ''),
-        ),
-        discount: int.tryParse(
-          (json["product_price_from_percent"] ?? ''),
-        ),
-        parent: json["parent"],
-        termin: json["termin"],
-        temperature: json["temperature"],
-        releaseForm: json["release_form"],
-        productInsert: json["product_insert"],
-        productSticker: json["product_sticker"],
-        productRegister: json["product_register"],
-        productTrademark: json["product_trademark"],
-        productDateRegister: json["product_date_register"],
-        productTimeRegister: json["product_time_register"],
-        count: json["count"],
-        valueBuy: int.tryParse(json["value_buy_price"] ?? ''),
-        specialOffer:
-            TypeOfSpecialOfferExtension.fromTitle(json["special_offer"]));
+      productId: json["product_id"],
+      mnn: json["mnn"],
+      mnnLat: json["mnn_lat"],
+      name: json["product_title"],
+      description: json["product_description"],
+      code: json["code"],
+      dose: json["dose"],
+      form: json["form"],
+      brand: json["brand"],
+      image: json["image"],
+      recipe: json["recipe"],
+      country: json["country"],
+      delivery: json["delivery"],
+      price: double.tryParse(json["product_price_from"] ?? ''),
+      oldPrice: double.tryParse(
+        (json["product_price_from_old"] ?? ''),
+      ),
+      discount: int.tryParse(
+        (json["product_price_from_percent"] ?? ''),
+      ),
+      parent: json["parent"],
+      termin: json["termin"],
+      temperature: json["temperature"],
+      releaseForm: json["release_form"],
+      productInsert: json["product_insert"],
+      productSticker: json["product_sticker"],
+      productRegister: json["product_register"],
+      productTrademark: json["product_trademark"],
+      productDateRegister: json["product_date_register"],
+      productTimeRegister: json["product_time_register"],
+      count: json["count"],
+      valueBuy: int.tryParse(json["value_buy_price"] ?? ''),
+      availableForDelivery: json['is_available_for_delivery'],
+      specialOffer:
+          TypeOfSpecialOfferExtension.fromTitle(json["special_offer"]),
+    );
   }
 
   Map<String, dynamic> toJson() => {

@@ -65,7 +65,9 @@ class CartProductWidget extends StatelessWidget {
                       SizedBox(
                         width: 12.w,
                       ),
-                      DeleteButton(onPressed: () {}),
+                      DeleteButton(onPressed: () {
+                        bloc.add(RemoveProductEvent(product: product));
+                      }),
                     ],
                   ),
                 ],
@@ -99,8 +101,10 @@ class CartProductWidget extends StatelessWidget {
                         children: [
                           Text(
                             product.name!.orDash(),
-                            style: UiConstants.textStyle19
-                                .copyWith(color: UiConstants.black3Color),
+                            style: UiConstants.textStyle19.copyWith(
+                                color: product.availableForDelivery!
+                                    ? UiConstants.black3Color
+                                    : UiConstants.black2Color),
                             maxLines: 4,
                             overflow: TextOverflow.ellipsis,
                           ),
