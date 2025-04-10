@@ -53,12 +53,11 @@ class EmptyCartWidget extends StatelessWidget {
                     .copyWith(color: UiConstants.black2Color),
               ),
             ),
-            SizedBox(
-              height: 16.h,
-            ),
+            SizedBox(height: 16.h),
             SizedBox(
               height: 390.h,
               child: ListView.builder(
+                  padding: getMarginOrPadding(left: 20, right: 20),
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   itemCount:

@@ -50,23 +50,24 @@ class BottomSheetManager {
               ),
               SizedBox(height: 16.h),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
+                  Expanded(
+                    child: AppButtonWidget(
+                      alignment: Alignment.centerLeft,
                       onTap: () {
                         Navigator.pop(sheetContext);
                         context.read<CartScreenBloc>().add(ClearCartEvent());
                       },
-                      child: Text('Очистить')),
-                  SizedBox(
-                    width: 144.w,
-                    child: AppButtonWidget(
-                      onTap: () {
-                        Navigator.pop(sheetContext);
-                      },
-                      text: 'Нет',
-                      backgroundColor: UiConstants.blueColor,
+                      text: 'Очистить',
+                      backgroundColor: UiConstants.whiteColor,
+                      textColor: UiConstants.black3Color.withOpacity(.6),
                     ),
+                  ),
+                  Expanded(
+                    child: AppButtonWidget(
+                        onTap: () => Navigator.pop(sheetContext),
+                        text: 'Нет',
+                        backgroundColor: UiConstants.blueColor),
                   )
                 ],
               ),
