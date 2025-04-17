@@ -3,6 +3,7 @@ import 'package:nevis/constants/enums.dart';
 
 class ProductEntity extends Equatable {
   final int? productId;
+  final int? bonuses;
   final String? mnn;
   final String? mnnLat;
   final String? name;
@@ -15,8 +16,8 @@ class ProductEntity extends Equatable {
   final String? recipe;
   final String? country;
   final String? delivery;
-  final double? price;
-  final double? oldPrice;
+  final int? price;
+  final int? oldPrice;
   final int? discount;
   final int? parent;
   final String? termin;
@@ -32,10 +33,13 @@ class ProductEntity extends Equatable {
   final int? valueBuy;
   final TypeOfSpecialOffer? specialOffer;
   final bool? availableForDelivery;
+  final List<String>? images;
 
   const ProductEntity(
       {this.productId,
       this.availableForDelivery,
+      this.bonuses,
+      this.images,
       this.valueBuy,
       this.mnn,
       this.mnnLat,
@@ -95,6 +99,8 @@ class ProductEntity extends Equatable {
         productTimeRegister,
         count,
         specialOffer,
-        availableForDelivery
+        availableForDelivery,
+        images,
+        bonuses
       ];
 }

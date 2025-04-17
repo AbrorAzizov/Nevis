@@ -7,43 +7,39 @@ import 'package:nevis/features/presentation/widgets/products_screen/product_widg
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductsGridWidget extends StatelessWidget {
-  final bool isLoading;
   final List<ProductEntity> products;
   final Set<int> selectedProductIds;
   final bool showCheckbox;
 
-  const ProductsGridWidget(
-      {super.key,
-      required this.products,
-      required this.isLoading,
-      required this.selectedProductIds,
-      required this.showCheckbox});
+  const ProductsGridWidget({
+    super.key,
+    required this.products,
+    required this.selectedProductIds,
+    required this.showCheckbox,
+  });
 
   @override
   Widget build(BuildContext context) {
-    int itemCount = isLoading ? 8 : products.length;
+    int itemCount = products.length;
     double itemHeight = 400.h;
     double itemWidth = 156.w;
-    double blocksSize = itemHeight * (itemCount / 2).round();
-    double mainAxisSpacingSize =
-        8.w * ((itemCount / 2 - 1) > 0 ? (itemCount / 2 - 1) : 0).round();
-    //print(
-    //    'Размеры блоков: $itemHeight * ${(countItem / 2).round()} = ${itemHeight * (countItem / 2).round()}');
-    //print(
-    //    'Размеры пробелов: ${8.w} * ${((countItem / 2 - 1) > 0 ? (countItem / 2 - 1) : 0).round()} = ${8.w * ((countItem / 2 - 1) > 0 ? (countItem / 2 - 1) : 0).round()}');
+    int rows = (itemCount / 2).ceil();
+    double blocksSize = itemHeight * rows;
+    double mainAxisSpacingSize = 8.w * (rows - 1);
     return SizedBox(
-      height: (blocksSize + mainAxisSpacingSize),
+      height: blocksSize + mainAxisSpacingSize,
       child: Skeleton.ignorePointer(
         child: Skeleton.shade(
           child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.w,
-                mainAxisSpacing: 8.w,
-                childAspectRatio: itemWidth / itemHeight,
-                mainAxisExtent: 400.h),
+              crossAxisCount: 2,
+              crossAxisSpacing: 8.w,
+              mainAxisSpacing: 8.w,
+              childAspectRatio: itemWidth / itemHeight,
+              mainAxisExtent: 400.h,
+            ),
             itemCount: itemCount,
             itemBuilder: (context, index) {
               final product = products[index];
@@ -53,13 +49,16 @@ class ProductsGridWidget extends StatelessWidget {
                   Routes.createRoute(
                     const ProductScreen(),
                     settings: RouteSettings(
-                        name: Routes.productScreen, arguments: products[index]),
+                      name: Routes.productScreen,
+                      arguments: product.productId,
+                    ),
                   ),
                 ),
                 child: ProductWidget(
-                    product: product,
-                    isSelected: isSelected,
-                    showCheckbox: showCheckbox),
+                  product: product,
+                  isSelected: isSelected,
+                  showCheckbox: showCheckbox,
+                ),
               );
             },
           ),

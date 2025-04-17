@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
@@ -28,12 +29,15 @@ class ProductReceivingMethodsWidget extends StatelessWidget {
               ),
             ),
             onTapArrowButton: () {},
+            icon: Paths.geoIconPath,
           ),
         ),
         SizedBox(width: 8.w),
         Expanded(
           child: ProductReceivingMethodItem(
-              title: 'Самовывоз', subtitle: 'от 30 мин'),
+              icon: Paths.pinatoProductIconPath,
+              title: 'Самовывоз',
+              subtitle: 'Сегодня'),
         ),
       ],
     );

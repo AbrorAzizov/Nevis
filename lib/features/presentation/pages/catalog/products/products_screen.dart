@@ -10,6 +10,7 @@ import 'package:nevis/features/presentation/bloc/products_screen/products_screen
 import 'package:nevis/features/presentation/widgets/filter_and_sort_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/locator_service.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({super.key});
@@ -19,82 +20,90 @@ class ProductsScreen extends StatelessWidget {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final String title = args?['title'];
+    final int categoryId = int.parse(args?['id']);
 
     return BlocProvider(
-      create: (context) => ProductsScreenBloc()..add(LoadProductsEvent()),
+      create: (context) => ProductsScreenBloc(getCategoryProductsUC: sl())
+        ..add(LoadProductsEvent(categoryId: categoryId)),
       child: BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
         builder: (context, state) {
           final bloc = context.read<ProductsScreenBloc>();
           return Scaffold(
             backgroundColor: UiConstants.backgroundColor,
-            body: SafeArea(
-              child: Column(
-                children: [
-                  SearchProductAppBar(
-                    screenContext: context,
-                    onTapFavoriteProductsChip: () {},
-                    onTapLocationChip: () {},
-                  ),
-                  SizedBox(height: 16.h),
-                  Padding(
-                    padding: getMarginOrPadding(left: 20, right: 20),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          child: SvgPicture.asset(Paths.arrowBackIconPath),
-                          onTap: () => Navigator.pop(context),
-                        ),
-                        SizedBox(width: 8),
-                        Text(title, style: UiConstants.textStyle5),
-                      ],
+            body: Padding(
+              padding: getMarginOrPadding(bottom: 0),
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    SearchProductAppBar(
+                      screenContext: context,
+                      onTapFavoriteProductsChip: () {},
+                      onTapLocationChip: () {},
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  if (state.isLoading)
-                    Expanded(child: Center(child: CircularProgressIndicator()))
-                  else if (state.error != null)
-                    Expanded(
-                        child: Center(child: Text("Ошибка загрузки данных")))
-                  else
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: getMarginOrPadding(bottom: 94),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: getMarginOrPadding(left: 20, right: 20),
-                              child: FilterSortContainer(
-                                isFromFav: false,
-                                sortTypes: ProductSortType.values,
-                                selectedSortType: state.selectedSortType,
-                                onSortSelected: (sortType) {
-                                  bloc.add(SelectSortProductsType(
-                                      productSortType: sortType));
-                                },
-                                filterOrSortType:
-                                    state.selectedFilterOrSortType,
-                                onConfirmFilter: () =>
-                                    bloc.add(ShowFilterProductsTypes()),
-                              ),
-                            ),
-                            SizedBox(height: 16.h),
-                            SizedBox(height: 40.h, child: FilterChips()),
-                            SizedBox(height: 16.h),
-                            Padding(
-                              padding: getMarginOrPadding(left: 20, right: 20),
-                              child: ProductsGridWidget(
-                                isLoading: false,
-                                products: state.products,
-                                showCheckbox: false,
-                                selectedProductIds: {},
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
+                    SizedBox(height: 16.h),
+                    Padding(
+                      padding: getMarginOrPadding(left: 20, right: 20),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            child: SvgPicture.asset(Paths.arrowBackIconPath),
+                            onTap: () => Navigator.pop(context),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                              child:
+                                  Text(title, style: UiConstants.textStyle5)),
+                        ],
                       ),
                     ),
-                ],
+                    SizedBox(height: 16),
+                    if (state.isLoading)
+                      Expanded(
+                          child: Center(child: CircularProgressIndicator()))
+                    else if (state.error != null)
+                      Expanded(
+                          child: Center(child: Text("Ошибка загрузки данных")))
+                    else
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: getMarginOrPadding(bottom: 94),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    getMarginOrPadding(left: 20, right: 20),
+                                child: FilterSortContainer(
+                                  isFromFav: false,
+                                  sortTypes: ProductSortType.values,
+                                  selectedSortType: state.selectedSortType,
+                                  onSortSelected: (sortType) {
+                                    bloc.add(SelectSortProductsType(
+                                        productSortType: sortType));
+                                  },
+                                  filterOrSortType:
+                                      state.selectedFilterOrSortType,
+                                  onConfirmFilter: () =>
+                                      bloc.add(ShowFilterProductsTypes()),
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+                              SizedBox(height: 40.h, child: FilterChips()),
+                              SizedBox(height: 16.h),
+                              Padding(
+                                padding:
+                                    getMarginOrPadding(left: 20, right: 20),
+                                child: ProductsGridWidget(
+                                  products: state.products,
+                                  showCheckbox: false,
+                                  selectedProductIds: {},
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           );

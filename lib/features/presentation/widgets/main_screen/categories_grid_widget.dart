@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nevis/constants/enums.dart';
-import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
-import 'package:nevis/features/presentation/pages/catalog/category_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/category_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -21,7 +18,7 @@ class CategoriesGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double itemHeight = 140.w;
+    double itemHeight = 160.w;
     double itemWidth = 100.w;
     double blocksSize = itemHeight * (categories.length / 2).round();
     double mainAxisSpacingSize = 8.w *
@@ -46,18 +43,20 @@ class CategoriesGridWidget extends StatelessWidget {
           itemCount: categories.length, // Количество элементов
           itemBuilder: (context, index) {
             final category = categories[index];
-            final categoryEnum = ProductCategoriesExtension.fromTitle(category.pageTitle);
-            final imagePath = categoryEnum?.categoryImagePath;
             return GestureDetector(
               onTap: () => Navigator.of(context).push(
                 Routes.createRoute(
                   ProductsScreen(),
-                  settings: RouteSettings(name: Routes.productsScreen,
-                  arguments: {'title':category.pageTitle}),
+                  settings: RouteSettings(
+                      name: Routes.productsScreen,
+                      arguments: {
+                        'title': category.pageTitle,
+                        'id': category.categoryId
+                      }),
                 ),
               ),
               child: CategoryWidget(
-                  imagePath: imagePath ?? '',
+                  imagePath: category.image ?? '',
                   title: category.pageTitle ?? ''),
             );
           },

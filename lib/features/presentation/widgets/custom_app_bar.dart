@@ -70,6 +70,8 @@ class CustomAppBar extends StatelessWidget {
                       child: Center(
                         child: Text(title ?? '',
                             style: UiConstants.textStyle5,
+                            maxLines: 1,
+                            overflow: TextOverflow.clip,
                             textAlign: TextAlign.center),
                       ),
                     ),

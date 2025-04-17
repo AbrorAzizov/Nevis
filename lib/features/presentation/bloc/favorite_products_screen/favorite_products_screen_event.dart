@@ -6,6 +6,7 @@ abstract class FavoriteProductsScreenEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
+
 class LoadProductsEvent extends FavoriteProductsScreenEvent {}
 
 class PickAllProductsEvent extends FavoriteProductsScreenEvent {}

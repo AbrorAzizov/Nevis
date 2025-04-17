@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/services.dart';
 import 'package:nevis/core/api_client.dart';
+import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
@@ -13,6 +14,7 @@ abstract class ProductRemoteDataSource {
   Future<ProductModel?> getProductById(int id);
   Future<List<ProductModel>> searchProducts(ProductParam param);
   Future<List<ProductPharmacyModel>> getProductPharmacies(int id);
+  Future<List<ProductModel>> getCategoryProducts(int id);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -44,12 +46,12 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   Future<ProductModel?> getProductById(int id) async {
     try {
       final data = await apiClient.get(
-        endpoint: 'product/$id',
+        endpoint: 'catalog/products/$id',
         callPathNameForLog: '${runtimeType.toString()}.getProductById',
       );
 
-      if (data['data'] != null) {
-        return ProductModel.fromJson(data['data']);
+      if (data != null) {
+        return ProductModel.fromJson(data);
       }
       return null;
     } catch (e) {
@@ -101,6 +103,25 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
           .toList();
     } catch (e) {
       log('Error during getProductPharmacies: $e', level: 1000);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> getCategoryProducts(int id) async {
+    try {
+      final data = await apiClient.get(
+        endpoint: 'catalog/categories/$id/allProducts',
+        exceptions: {
+          401: ServerException(),
+        },
+        callPathNameForLog: '${runtimeType.toString()}.logout',
+      );
+      List<dynamic> dataList = data['products'];
+      return dataList.map((e) => ProductModel.fromJson(e)).toList();
+    } catch (e) {
+      log('Error during logout: $e',
+          name: '${runtimeType.toString()}.logout', level: 1000);
       rethrow;
     }
   }

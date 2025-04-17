@@ -61,9 +61,9 @@ class UiConstants {
       fontFamily: 'Rubik');
 
   static TextStyle textStyle4 = TextStyle(
-      fontSize: 24.sp,
-      height: 29.05.sp / 24.sp,
-      fontWeight: FontWeight.w600,
+      fontSize: 20.sp,
+      height: 1,
+      fontWeight: FontWeight.w500,
       letterSpacing: 0.1,
       fontFamily: 'Rubik');
 
@@ -105,9 +105,10 @@ class UiConstants {
   );
 
   static TextStyle textStyle14 = TextStyle(
-    fontSize: 13.sp,
+    fontSize: 14.sp,
     height: 19.1.sp / 14.sp,
     fontWeight: FontWeight.w600,
+    fontFamily: 'Rubik',
   );
 
   static TextStyle textStyle11 = TextStyle(

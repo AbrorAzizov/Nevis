@@ -2,25 +2,21 @@ import 'dart:convert';
 
 import 'package:nevis/features/domain/entities/category_entity.dart';
 
-
 class CategoryModel extends CategoryEntity {
-  final int? categoryId;
-  final int? parent;
+  @override
+  final String? categoryId;
+  @override
   final String? pageTitle;
-  final String? alias;
+  @override
   final String? image;
 
   const CategoryModel({
     this.categoryId,
-    this.parent,
     this.pageTitle,
-    this.alias,
     this.image,
   }) : super(
           categoryId: categoryId,
-          parent: parent,
           pageTitle: pageTitle,
-          alias: alias,
           image: image,
         );
 
@@ -30,18 +26,14 @@ class CategoryModel extends CategoryEntity {
   String toRawJson() => json.encode(toJson());
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) => CategoryModel(
-        categoryId: json["category_id"],
-        parent: json["parent"],
-        pageTitle: json["pagetitle"],
-        alias: json["alias"],
+        categoryId: json["id"],
+        pageTitle: json["name"],
         image: json["image"],
       );
 
   Map<String, dynamic> toJson() => {
-        "category_id": categoryId,
-        "parent": parent,
-        "pagetitle": pageTitle,
-        "alias": alias,
+        "id": categoryId,
+        "name": pageTitle,
         "image": image,
       };
 }

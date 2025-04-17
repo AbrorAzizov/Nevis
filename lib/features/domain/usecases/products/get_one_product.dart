@@ -4,7 +4,6 @@ import 'package:nevis/core/usecases/usecase.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/repositories/product_repository.dart';
 
-
 class GetOneProductUC extends UseCaseParam<ProductEntity?, int> {
   final ProductRepository productRepository;
 

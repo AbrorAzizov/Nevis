@@ -14,8 +14,6 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 140.h,
-      width: 100.w,
       child: Column(
         children: [
           Container(
@@ -39,9 +37,21 @@ class CategoryWidget extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Padding(
-                  padding: getMarginOrPadding(all: 10),
-                  child: SvgPicture.asset(imagePath, width: 40.w, height: 40.w),
-                ),
+                    padding: getMarginOrPadding(all: 5),
+                    child: SizedBox(
+                      width: 50.w,
+                      height: 50.w,
+                      child: SvgPicture.network(
+                        imagePath,
+                        fit: BoxFit.contain, // Вписывает содержимое в рамки
+                        colorFilter: ColorFilter.mode(
+                            UiConstants.blueColor, BlendMode.srcIn),
+                        placeholderBuilder: (context) =>
+                            const CircularProgressIndicator(
+                          color: UiConstants.blueColor,
+                        ),
+                      ),
+                    )),
               ),
             ),
           ),

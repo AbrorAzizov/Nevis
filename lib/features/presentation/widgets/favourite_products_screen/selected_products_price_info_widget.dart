@@ -121,16 +121,16 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
     }
   }
 
-  double productsSum() {
-    double toReturn = 0;
+  int productsSum() {
+    int toReturn = 0;
     for (var i in products) {
       toReturn += i.price ?? 0;
     }
     return toReturn;
   }
 
-  double sale() {
-    double totalSale = 0;
+  int sale() {
+    int totalSale = 0;
     for (var i in products) {
       if (i.oldPrice != null && i.price != null) {
         totalSale += (i.oldPrice! - i.price!);

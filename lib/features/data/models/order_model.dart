@@ -1,5 +1,3 @@
-
-
 import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
@@ -91,9 +89,7 @@ class OrderModel extends OrderEntity {
       deliverySum: json['delivery_sum'] != null
           ? double.tryParse(json['delivery_sum'].toString())
           : null,
-      totalSum: json['total_sum'] != null
-          ? double.tryParse(json['total_sum'].toString())
-          : null,
+      totalSum: null,
       isPaid: json['is_paid'] == true,
       products: json['order_products_json'] != null
           ? (json['order_products_json'] as List)

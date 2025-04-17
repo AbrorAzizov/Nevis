@@ -123,7 +123,7 @@ class CartPharmacyWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            Utils.formatPrice(pharmacy.price?.toDouble()),
+                            Utils.formatPrice(pharmacy.price),
                             style: UiConstants.textStyle5
                                 .copyWith(color: UiConstants.darkBlueColor),
                           ),

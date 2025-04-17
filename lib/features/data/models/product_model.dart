@@ -32,30 +32,33 @@ class ProductModel extends ProductEntity {
       super.count,
       super.valueBuy,
       super.specialOffer,
+      super.images,
+      super.bonuses,
       super.availableForDelivery});
 
   @override
   factory ProductModel.fromJson(Map<String, dynamic> data) {
     Map<String, dynamic> json = data["product_info"] ?? data;
-    json = json["product_charachters"] ?? json;
     return ProductModel(
-      productId: json["product_id"],
+      bonuses: json['bonuses'],
+      images: (json["images"] as List<dynamic>?)
+          ?.map((item) => item.toString())
+          .toList(),
+      productId: json["id"] ?? json["product_id"],
       mnn: json["mnn"],
       mnnLat: json["mnn_lat"],
-      name: json["product_title"],
-      description: json["product_description"],
+      name: json["name"],
+      description: json["description"],
       code: json["code"],
       dose: json["dose"],
       form: json["form"],
-      brand: json["brand"],
-      image: json["image"],
+      brand: json["manufacturer"],
+      image: json["image_url"],
       recipe: json["recipe"],
       country: json["country"],
       delivery: json["delivery"],
-      price: double.tryParse(json["product_price_from"] ?? ''),
-      oldPrice: double.tryParse(
-        (json["product_price_from_old"] ?? ''),
-      ),
+      price: json["price"],
+      oldPrice: json["price_old"],
       discount: int.tryParse(
         (json["product_price_from_percent"] ?? ''),
       ),

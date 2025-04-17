@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
 import 'package:nevis/features/presentation/widgets/category_screen/subcategory_item.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SubcategoriesList extends StatelessWidget {
@@ -32,8 +30,6 @@ class SubcategoriesList extends StatelessWidget {
                   settings:
                       RouteSettings(name: Routes.productsScreen, arguments: {
                     'title': subcategory.pageTitle,
-                    'productParam':
-                        ProductParam(categoryId: subcategory.categoryId)
                   }),
                 ),
               ),

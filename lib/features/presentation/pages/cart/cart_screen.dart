@@ -30,8 +30,8 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<CartScreenBloc>().add(GetCartProductsEvent());
-    context.read<CartScreenBloc>().add(GetProductsEvent());
+    // context.read<CartScreenBloc>().add(GetCartProductsEvent());
+    // context.read<CartScreenBloc>().add(GetProductsEvent());
   }
 
   @override

@@ -1,18 +1,16 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart';
 import 'package:nevis/constants/enums.dart';
-import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
+import 'package:nevis/features/domain/usecases/products/get_category_products.dart';
 
 part 'products_screen_event.dart';
 part 'products_screen_state.dart';
 
 class ProductsScreenBloc
     extends Bloc<ProductsScreenEvent, ProductsScreenState> {
-  ProductsScreenBloc()
+  final GetCategoryProductsUC getCategoryProductsUC;
+  ProductsScreenBloc({required this.getCategoryProductsUC})
       : super(
           ProductsScreenState(
             selectedSortType: ProductSortType.popularity,
@@ -28,16 +26,16 @@ class ProductsScreenBloc
     on<SelectSortProductsType>(_onSelectSortProductsType);
   }
 
-  Future<void> _onLoadProducts(LoadProductsEvent event,
-      Emitter<ProductsScreenState> emit) async {
+  Future<void> _onLoadProducts(
+      LoadProductsEvent event, Emitter<ProductsScreenState> emit) async {
     emit(state.copyWith(isLoading: true));
     try {
-      String jsonString = await rootBundle.loadString('assets/products.json');
-      final data = jsonDecode(jsonString);
-      List<dynamic> dataList = data['data'];
-      List<ProductEntity> products =
-          dataList.map((e) => ProductModel.fromJson(e)).toList();
-      emit(state.copyWith(products: products, isLoading: false));
+      final failureOrLoads = await getCategoryProductsUC(event.categoryId);
+      failureOrLoads.fold(
+          (_) => emit(
+              state.copyWith(isLoading: false, error: 'Something went wrong')),
+          (products) =>
+              emit(state.copyWith(products: products, isLoading: false)));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
@@ -53,8 +51,8 @@ class ProductsScreenBloc
     }
   }
 
-  void _onShowFilterProductsTypes(ShowFilterProductsTypes event,
-      Emitter<ProductsScreenState> emit) {
+  void _onShowFilterProductsTypes(
+      ShowFilterProductsTypes event, Emitter<ProductsScreenState> emit) {
     if (state.selectedFilterOrSortType == ProductFilterOrSortType.filter) {
       emit(state.copyWith(selectedFilterOrSortType: null));
     } else {
@@ -67,5 +65,4 @@ class ProductsScreenBloc
       SelectSortProductsType event, Emitter<ProductsScreenState> emit) {
     emit(state.copyWith(selectedSortType: event.productSortType));
   }
-
 }

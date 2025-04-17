@@ -57,7 +57,8 @@ class CatalogScreen extends StatelessWidget {
                                         CategoriesGridWidget(
                                             categories: state.isLoading
                                                 ? List.generate(
-                                                    8,
+                                                    state.categories?.length ??
+                                                        0,
                                                     (index) {
                                                       CategoryEntity category =
                                                           CategoryEntity();

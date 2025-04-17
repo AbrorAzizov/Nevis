@@ -57,6 +57,7 @@ class AppButtonWidget extends StatelessWidget {
               text,
               style: UiConstants.textStyle14
                   .copyWith(height: 1, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
             ),
           ),
         ),

@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 
-
 class OrderEntity extends Equatable {
   final int? orderId;
   final int? customerId;
@@ -34,7 +33,7 @@ class OrderEntity extends Equatable {
   final double? sumPricesOld;
   final double? sumPricesSalesOld;
   final double? deliverySum;
-  final double? totalSum;
+  final int? totalSum;
   final bool? isPaid;
   final List<ProductEntity>? products;
   final PaymentType? paymentType;

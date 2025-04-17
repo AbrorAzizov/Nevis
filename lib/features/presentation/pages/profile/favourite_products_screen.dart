@@ -127,7 +127,6 @@ class FavoriteProductsScreen extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           ProductsGridWidget(
-              isLoading: false,
               products: state.products,
               selectedProductIds: state.selectedProductIds,
               showCheckbox: true),

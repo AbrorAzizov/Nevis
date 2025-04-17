@@ -48,4 +48,10 @@ class ProductRepositoryImpl implements ProductRepository {
       await errorHandler.handle(
         () async => await productRemoteDataSource.getProductPharmacies(id),
       );
+
+  @override
+  Future<Either<Failure, List<ProductEntity>>> getCategoryProudcts(
+          int id) async =>
+      await errorHandler.handle(
+          () async => await productRemoteDataSource.getCategoryProducts(id));
 }

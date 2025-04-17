@@ -14,7 +14,7 @@ class ProductPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double discount = (product.oldPrice != null && product.price != null)
+    final int discount = (product.oldPrice != null && product.price != null)
         ? (product.oldPrice! - product.price!)
         : 0;
 
@@ -65,28 +65,33 @@ class ProductPrice extends StatelessWidget {
                   Utils.formatPrice(product.price ?? 500),
                   style: UiConstants.textStyle14.copyWith(
                       fontSize: fromCart ? 16.sp : null,
-                      color: product.availableForDelivery!
-                          ? product.oldPrice != null
+                      color: !fromCart
+                          ? (product.oldPrice != null
                               ? UiConstants.blueColor
-                              : UiConstants.blackColor
-                          : UiConstants.black3Color.withOpacity(.6)),
+                              : UiConstants.black3Color)
+                          : (product.oldPrice != null
+                              ? UiConstants.blackColor
+                              : UiConstants.black3Color.withOpacity(.6))),
                 ),
               ),
               Container(
                 height: 22.h,
-                padding: EdgeInsets.symmetric(
-                    horizontal: 4.w, vertical: 1.h), // Адаптивные отступы
+                padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.r),
-                  color: product.availableForDelivery!
-                      ? null
-                      : UiConstants.black3Color.withOpacity(.6),
-                  gradient: product.availableForDelivery!
-                      ? LinearGradient(
-                          colors: [Color(0xFFBF80FF), Color(0xFF85C6FF)])
+                  color: fromCart
+                      ? (product.availableForDelivery ?? false
+                          ? null
+                          : UiConstants.black3Color.withOpacity(.6))
                       : null,
+                  gradient: fromCart
+                      ? (product.availableForDelivery ?? false
+                          ? LinearGradient(
+                              colors: [Color(0xFFBF80FF), Color(0xFF85C6FF)])
+                          : null)
+                      : LinearGradient(
+                          colors: [Color(0xFFBF80FF), Color(0xFF85C6FF)]),
                 ),
-
                 child: Row(
                   mainAxisSize:
                       MainAxisSize.min, // Контейнер адаптируется под текст

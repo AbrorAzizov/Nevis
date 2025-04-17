@@ -27,8 +27,7 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
         endpoint: 'catalog',
         callPathNameForLog: '${runtimeType.toString()}.getCategories',
       );
-    
-      List<dynamic> dataList = data['data'];
+      List<dynamic> dataList = data['categories'];
       return dataList.map((e) => CategoryModel.fromJson(e)).toList();
     } catch (e) {
       log('Error during getCategories: $e', level: 1000);

@@ -11,56 +11,47 @@ part 'product_screen_event.dart';
 part 'product_screen_state.dart';
 
 class ProductScreenBloc extends Bloc<ProductScreenEvent, ProductScreenState> {
-  final int? productId;
   final GetOneProductUC getOneProductUC;
   final GetProductPharmaciesUC getProductPharmaciesUC;
 
   PageController pageController = PageController();
 
   ProductScreenBloc(
-      {this.productId,
-      required this.getOneProductUC,
-      required this.getProductPharmaciesUC})
+      {required this.getOneProductUC, required this.getProductPharmaciesUC})
       : super(ProductScreenState()) {
     on<LoadDataEvent>(_onLoadData);
   }
-
   void _onLoadData(
       LoadDataEvent event, Emitter<ProductScreenState> emit) async {
     String? error = 'Ошибка получения данных';
     ProductEntity? product;
     List<ProductPharmacyEntity> pharmacies = [];
 
-    if (productId != null) {
-      var data = await Future.wait(
-        [
-          getOneProductUC(productId!),
-          getProductPharmaciesUC(productId!),
-        ],
-      );
+    final data = await Future.wait([
+      getOneProductUC(event.productId),
+    ]);
 
-      data.forEachIndexed(
-        (index, element) {
-          element.fold(
-            (_) {},
-            (result) => switch (index) {
-              0 => product = result as ProductEntity,
-              1 => pharmacies = result as List<ProductPharmacyEntity>,
-              _ => {},
-            },
-          );
-        },
-      );
-
-      if (product != null) error = null;
-    }
-
-    emit(
-      ProductScreenState(
-          isLoading: false,
-          error: error,
-          product: product,
-          pharmacies: pharmacies),
+    data.forEachIndexed(
+      (index, element) {
+        element.fold(
+          (_) {},
+          (result) {
+            switch (index) {
+              case 0:
+                product = result as ProductEntity;
+                break;
+            }
+          },
+        );
+      },
     );
+
+    if (product != null) error = null;
+    emit(state.copyWith(
+      isLoading: false,
+      error: error,
+      product: product,
+      pharmacies: pharmacies,
+    ));
   }
 }
