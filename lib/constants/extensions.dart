@@ -126,6 +126,14 @@ extension ProductSortTypeExtension on ProductSortType {
         return 'Дешевле';
     }
   }
+
+  static const Map<ProductSortType, String> typeOfSortMap = {
+    ProductSortType.alphabet: 'name',
+    ProductSortType.popularity: '', // TO DO change to popularity,
+    ProductSortType.priceIncrease: 'price',
+    ProductSortType.priceDecrease: 'price',
+  };
+  String get typeOfSort => typeOfSortMap[this] ?? '';
 }
 
 extension TypeOfSpecialOfferExtension on TypeOfSpecialOffer {

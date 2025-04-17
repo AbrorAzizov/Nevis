@@ -12,18 +12,27 @@ class ProductBannerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = product?.images?.first;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(16.r),
-      child: CachedNetworkImage(
-        imageUrl: product!.images!.first,
-        fit: BoxFit.fill,
-        cacheManager: CustomCacheManager(),
-        errorWidget: (context, url, error) =>
-            Icon(Icons.image, size: 56.w, color: UiConstants.whiteColor),
-        progressIndicatorBuilder: (context, url, progress) => Center(
-          child: CircularProgressIndicator(color: UiConstants.blueColor),
-        ),
-      ),
+      child: imageUrl == null
+          ? Center(
+              child:
+                  Icon(Icons.image, size: 56.w, color: UiConstants.whiteColor),
+            )
+          : CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.fill,
+              cacheManager: CustomCacheManager(),
+              errorWidget: (context, url, error) => Center(
+                child: Icon(Icons.image,
+                    size: 56.w, color: UiConstants.whiteColor),
+              ),
+              progressIndicatorBuilder: (context, url, progress) => Center(
+                child: CircularProgressIndicator(color: UiConstants.blueColor),
+              ),
+            ),
     );
   }
 }

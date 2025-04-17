@@ -59,7 +59,7 @@ class ProductBannerWidget extends StatelessWidget {
               padding: getMarginOrPadding(top: 8),
               child: SmoothPageIndicator(
                 controller: pageController,
-                count: product?.images?.length ?? 1,
+                count: product?.images?.length ?? 0,
                 axisDirection: Axis.horizontal,
                 effect: WormEffect(
                     spacing: 4.w,

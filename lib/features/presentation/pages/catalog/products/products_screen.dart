@@ -6,6 +6,7 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/filter_and_sort_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
@@ -23,7 +24,10 @@ class ProductsScreen extends StatelessWidget {
     final int categoryId = int.parse(args?['id']);
 
     return BlocProvider(
-      create: (context) => ProductsScreenBloc(getCategoryProductsUC: sl())
+      create: (context) => ProductsScreenBloc(
+          getCategoryProductsUC: sl(),
+          getSortCategoryProductsUC: sl(),
+          getSubCategoriesUC: sl())
         ..add(LoadProductsEvent(categoryId: categoryId)),
       child: BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
         builder: (context, state) {
@@ -33,40 +37,36 @@ class ProductsScreen extends StatelessWidget {
             body: Padding(
               padding: getMarginOrPadding(bottom: 0),
               child: SafeArea(
-                child: Column(
-                  children: [
-                    SearchProductAppBar(
-                      screenContext: context,
-                      onTapFavoriteProductsChip: () {},
-                      onTapLocationChip: () {},
-                    ),
-                    SizedBox(height: 16.h),
-                    Padding(
-                      padding: getMarginOrPadding(left: 20, right: 20),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            child: SvgPicture.asset(Paths.arrowBackIconPath),
-                            onTap: () => Navigator.pop(context),
-                          ),
-                          SizedBox(width: 8),
-                          Expanded(
-                              child:
-                                  Text(title, style: UiConstants.textStyle5)),
-                        ],
+                child: Padding(
+                  padding: getMarginOrPadding(bottom: 71),
+                  child: Column(
+                    children: [
+                      SearchProductAppBar(
+                        screenContext: context,
+                        onTapFavoriteProductsChip: () {},
+                        onTapLocationChip: () {},
                       ),
-                    ),
-                    SizedBox(height: 16),
-                    if (state.isLoading)
-                      Expanded(
-                          child: Center(child: CircularProgressIndicator()))
-                    else if (state.error != null)
-                      Expanded(
-                          child: Center(child: Text("Ошибка загрузки данных")))
-                    else
+                      SizedBox(height: 16.h),
+                      Padding(
+                        padding: getMarginOrPadding(left: 20, right: 20),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              child: SvgPicture.asset(Paths.arrowBackIconPath),
+                              onTap: () => Navigator.pop(context),
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                                child:
+                                    Text(title, style: UiConstants.textStyle5)),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16),
+
+                      // Прокручиваемая часть
                       Expanded(
                         child: SingleChildScrollView(
-                          padding: getMarginOrPadding(bottom: 94),
                           child: Column(
                             children: [
                               Padding(
@@ -78,7 +78,9 @@ class ProductsScreen extends StatelessWidget {
                                   selectedSortType: state.selectedSortType,
                                   onSortSelected: (sortType) {
                                     bloc.add(SelectSortProductsType(
-                                        productSortType: sortType));
+                                      productSortType: sortType,
+                                      categoryId: categoryId,
+                                    ));
                                   },
                                   filterOrSortType:
                                       state.selectedFilterOrSortType,
@@ -87,22 +89,50 @@ class ProductsScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: 16.h),
-                              SizedBox(height: 40.h, child: FilterChips()),
-                              SizedBox(height: 16.h),
-                              Padding(
-                                padding:
-                                    getMarginOrPadding(left: 20, right: 20),
-                                child: ProductsGridWidget(
-                                  products: state.products,
-                                  showCheckbox: false,
-                                  selectedProductIds: {},
+                              SizedBox(
+                                height: 33.h,
+                                child: FilterChips(
+                                  categories: state.subCategories,
+                                  selectedCategory: state.selectedSubCategory,
+                                  onSelected: (category) {
+                                    bloc.add(SelectSubCategoryEvent(
+                                        subCategory: category));
+                                  },
                                 ),
                               ),
+                              SizedBox(height: 16.h),
+                              // Ваш контент
+                              if (state.isLoading)
+                                Center(child: CircularProgressIndicator())
+                              else if (state.error != null)
+                                Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Ошибка загрузки данных"),
+                                    ],
+                                  ),
+                                )
+                              else if (state.products.isEmpty)
+                                Center(
+                                    child:
+                                        Text("Нет товаров в выбранной группе"))
+                              else
+                                Padding(
+                                  padding:
+                                      getMarginOrPadding(left: 20, right: 20),
+                                  child: ProductsGridWidget(
+                                    products: state.products,
+                                    showCheckbox: false,
+                                    selectedProductIds: {},
+                                  ),
+                                ),
                             ],
                           ),
                         ),
                       ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -113,64 +143,68 @@ class ProductsScreen extends StatelessWidget {
   }
 }
 
-class FilterChips extends StatefulWidget {
-  const FilterChips({super.key});
+class FilterChips extends StatelessWidget {
+  final List<CategoryEntity> categories;
+  final CategoryEntity? selectedCategory;
+  final Function(CategoryEntity category) onSelected;
 
-  @override
-  _FilterChipsState createState() => _FilterChipsState();
-}
-
-class _FilterChipsState extends State<FilterChips> {
-  int _selectedIndex = 0;
-  final List<String> categories = ['Аллергия', 'Антибиотики', 'Астма'];
-
-  final ScrollController _scrollController = ScrollController();
-
-  void _scrollToSelectedChip(int index) {
-    double chipWidth = 100.0;
-    double scrollOffset = index * chipWidth;
-
-    _scrollController.animateTo(
-      scrollOffset,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
+  const FilterChips({
+    super.key,
+    required this.categories,
+    required this.selectedCategory,
+    required this.onSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController();
+
     return SingleChildScrollView(
-      controller: _scrollController,
-      padding: EdgeInsets.zero,
+      controller: scrollController,
       scrollDirection: Axis.horizontal,
-      child: Row(
-        spacing: 22.w,
-        children: List.generate(categories.length, (index) {
-          final bool isSelected = _selectedIndex == index;
-          return ChoiceChip(
-            selectedColor: UiConstants.blueColor,
-            backgroundColor: UiConstants.whiteColor,
-            labelStyle: UiConstants.textStyle19.copyWith(
-              color: isSelected ? Colors.white : Colors.black,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            ),
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(16.r),
-            ),
-            showCheckmark: false,
-            label: Text(categories[index]),
-            selected: isSelected,
-            onSelected: (bool selected) {
-              if (selected) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-                _scrollToSelectedChip(index);
-              }
-            },
-          );
-        }),
+      child: Container(
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+            color: Color(0xFF144B63).withOpacity(0.1),
+            blurRadius: 50,
+            spreadRadius: -4,
+            offset: Offset(-1, -4),
+          ),
+        ]),
+        child: Padding(
+          padding: getMarginOrPadding(left: 20),
+          child: Row(
+            children: categories.map((category) {
+              final bool isSelected =
+                  selectedCategory?.categoryId == category.categoryId;
+              return Padding(
+                padding: EdgeInsets.only(right: 12),
+                child: Container(
+                  child: ChoiceChip(
+                    selectedColor: UiConstants.blueColor,
+                    backgroundColor: UiConstants.whiteColor,
+                    labelStyle: UiConstants.textStyle19.copyWith(
+                      color: isSelected ? Colors.white : Colors.black,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                        side: BorderSide(color: Colors.transparent)), // <--),
+                    showCheckmark: false,
+                    label: Text(category.pageTitle ?? ''),
+                    selected: isSelected,
+                    onSelected: (bool selected) {
+                      if (selected) {
+                        onSelected(category);
+                      }
+                    },
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
       ),
     );
   }

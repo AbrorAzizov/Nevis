@@ -5,8 +5,10 @@ import 'package:nevis/features/domain/entities/category_entity.dart';
 class CategoryModel extends CategoryEntity {
   @override
   final String? categoryId;
+
   @override
   final String? pageTitle;
+
   @override
   final String? image;
 

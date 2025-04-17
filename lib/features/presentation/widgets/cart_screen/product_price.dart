@@ -62,7 +62,7 @@ class ProductPrice extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.fill,
                 child: Text(
-                  Utils.formatPrice(product.price ?? 500),
+                  Utils.formatPrice(product.price),
                   style: UiConstants.textStyle14.copyWith(
                       fontSize: fromCart ? 16.sp : null,
                       color: !fromCart

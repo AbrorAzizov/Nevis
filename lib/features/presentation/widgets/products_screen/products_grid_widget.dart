@@ -24,10 +24,12 @@ class ProductsGridWidget extends StatelessWidget {
     double itemHeight = 400.h;
     double itemWidth = 156.w;
     int rows = (itemCount / 2).ceil();
+
     double blocksSize = itemHeight * rows;
-    double mainAxisSpacingSize = 8.w * (rows - 1);
+    double mainAxisSpacingSize = rows > 1 ? 8.w * (rows - 1) : 0;
+
     return SizedBox(
-      height: blocksSize + mainAxisSpacingSize,
+      height: (blocksSize + mainAxisSpacingSize).clamp(0.0, double.infinity),
       child: Skeleton.ignorePointer(
         child: Skeleton.shade(
           child: GridView.builder(
@@ -38,7 +40,7 @@ class ProductsGridWidget extends StatelessWidget {
               crossAxisSpacing: 8.w,
               mainAxisSpacing: 8.w,
               childAspectRatio: itemWidth / itemHeight,
-              mainAxisExtent: 400.h,
+              mainAxisExtent: itemHeight,
             ),
             itemCount: itemCount,
             itemBuilder: (context, index) {

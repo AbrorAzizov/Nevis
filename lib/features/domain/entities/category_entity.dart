@@ -4,7 +4,6 @@ class CategoryEntity extends Equatable {
   final String? categoryId;
   final String? pageTitle;
   final String? image;
-
   const CategoryEntity({
     this.categoryId,
     this.pageTitle,

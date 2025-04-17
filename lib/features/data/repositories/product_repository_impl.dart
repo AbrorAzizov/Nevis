@@ -4,8 +4,10 @@ import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/product_remote_data_source_impl.dart';
+import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
+import 'package:nevis/features/domain/params/category_params.dart';
 import 'package:nevis/features/domain/repositories/product_repository.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
@@ -54,4 +56,17 @@ class ProductRepositoryImpl implements ProductRepository {
           int id) async =>
       await errorHandler.handle(
           () async => await productRemoteDataSource.getCategoryProducts(id));
+
+  @override
+  Future<Either<Failure, List<ProductEntity>>> getSortCategoryProducts(
+          CategoryParams params) async =>
+      await errorHandler.handle(() async =>
+          await productRemoteDataSource.getSortCategoryProducts(params));
+
+  @override
+  Future<Either<Failure, List<CategoryEntity>>> getSubCategories(
+          int id) async =>
+      await errorHandler.handle(
+          () async => await productRemoteDataSource.getSubCategories(id));
 }
+//getSubCategories
