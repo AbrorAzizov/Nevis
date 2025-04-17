@@ -29,7 +29,6 @@ class AsGifetWidget extends StatelessWidget {
     }
 
     return Container(
-      height: 160,
       decoration: BoxDecoration(
           image: DecorationImage(
               fit: BoxFit.fill, image: AssetImage(Paths.asAGiftIconPath))),

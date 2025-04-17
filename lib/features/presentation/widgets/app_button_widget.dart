@@ -13,6 +13,7 @@ class AppButtonWidget extends StatelessWidget {
   final bool showBorder;
   final Color? textColor;
   final Color? backgroundColor;
+  final AlignmentGeometry alignment;
 
   const AppButtonWidget({
     super.key,
@@ -25,6 +26,7 @@ class AppButtonWidget extends StatelessWidget {
     this.showBorder = false,
     this.textColor,
     this.backgroundColor,
+    this.alignment = Alignment.center,
   });
 
   @override
@@ -35,6 +37,8 @@ class AppButtonWidget extends StatelessWidget {
         child: ElevatedButton(
           onPressed: isActive ? onTap : null,
           style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.zero,
+            alignment: alignment,
             elevation: 0,
             disabledForegroundColor: UiConstants.darkBlue2Color.withOpacity(.6),
             foregroundColor: textColor ??
@@ -57,7 +61,11 @@ class AppButtonWidget extends StatelessWidget {
               text,
               style: UiConstants.textStyle14
                   .copyWith(height: 1, fontWeight: FontWeight.w500),
+<<<<<<< HEAD
               textAlign: TextAlign.center,
+=======
+              textAlign: TextAlign.start,
+>>>>>>> 97f38b5ab50d84a23db74643bd16e7178c6f3d58
             ),
           ),
         ),

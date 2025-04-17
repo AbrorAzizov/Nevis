@@ -44,8 +44,6 @@ class ActivateBonusCardScreen extends StatelessWidget {
                                   bottom: 94, top: 16, right: 20, left: 20),
                               children: [
                                 Container(
-                                  width: 320.w,
-                                  height: 184.h,
                                   decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -136,8 +134,6 @@ class ActivateBonusCardScreen extends StatelessWidget {
                                   height: 16.h,
                                 ),
                                 Container(
-                                  width: 320.w,
-                                  height: 180.h,
                                   decoration: BoxDecoration(
                                       boxShadow: [],
                                       borderRadius: BorderRadius.circular(18.r),
