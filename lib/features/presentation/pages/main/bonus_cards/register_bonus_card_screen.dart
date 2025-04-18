@@ -191,7 +191,7 @@ class RegisterBonusCardScreen extends StatelessWidget {
                                       AppButtonWidget(
                                         isActive: state.isButtonActive,
                                         text: cardType == BonusCardType.physical
-                                            ? 'Зарегестрировать карту'
+                                            ? 'Зарегистрировать карту'
                                             : 'Получить виртуальную карту',
                                         onTap: () {
                                           // context

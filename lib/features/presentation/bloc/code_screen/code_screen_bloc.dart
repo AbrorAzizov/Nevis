@@ -37,6 +37,7 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
     on<CodeChangedEvent>(_onCodeChanged);
     on<TimerTickEvent>(_onTimerTick);
     on<SubmitCodeEvent>(_onSubmitCode);
+    on<RequestNewCodeEvent>(_onRequestNewCode);
 
     // Навешивание листенера на TextEditingController
     codeController.addListener(_codeListener);
@@ -115,47 +116,39 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
       {Future<String?> Function()? requestCodeFun, String? phone}) async {
     _timer?.cancel();
 
-    // Вызываем функцию, если она предоставлена, иначе используем _requestCode
-    String? codeOrMsg = requestCodeFun != null
-        ? await requestCodeFun() // Вызов функции
-        : null;
-    //await _requestCode(); // Вызов метода _requestCode
+    String? codeOrMsg;
 
-    if (double.tryParse(codeOrMsg!) != null ||
-        (phone == state.phone && state.correctCode != null)) {
-      emit(
-        state.copyWith(
-          phone: phone,
-          correctCode: phone == state.phone && state.correctCode != null
-              ? state.correctCode
-              : codeOrMsg,
-          secondsLeft: phone == state.phone && state.correctCode != null
-              ? state.secondsLeft
-              : _initialTimerValue,
-          canRequestNewCode:
-              false, // Сброс таймера и запрет на запрос нового кода
-        ),
-      );
+    // Фолбэк на дефолтную реализацию, если такая есть
+    final result = await requestCodeUC(
+      AuthenticationParams(phone: state.phone ?? ''),
+    );
+    codeOrMsg = result.fold(
+      (failure) => failure.toString(),
+      (code) => '',
+    );
 
-      _timer = Timer.periodic(
-        const Duration(seconds: 1),
-        (timer) {
-          final newTime = state.secondsLeft - 1;
-          add(TimerTickEvent(
-              newTime)); // Генерация события для каждого тика таймера
-        },
-      );
-    } else if (codeOrMsg != 'null') {
-      // Показ диалогового окна с крестиком и сообщением
-      Utils.showCustomDialog(
-        screenContext: context,
-        text: codeOrMsg,
-        action: (_) {
-          Navigator.of(screenContext).pop();
-          Navigator.of(screenContext).pop();
-        },
-      );
-    }
+    emit(
+      state.copyWith(
+        phone: phone,
+        correctCode: phone == state.phone && state.correctCode != null
+            ? state.correctCode
+            : codeOrMsg,
+        secondsLeft: phone == state.phone && state.correctCode != null
+            ? state.secondsLeft
+            : _initialTimerValue,
+        canRequestNewCode:
+            false, // Сброс таймера и запрет на запрос нового кода
+      ),
+    );
+
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        final newTime = state.secondsLeft - 1;
+        add(TimerTickEvent(
+            newTime)); // Генерация события для каждого тика таймера
+      },
+    );
   }
 
   Future reset({String? phone}) async {

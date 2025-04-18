@@ -27,8 +27,9 @@ class ProductsScreen extends StatelessWidget {
       create: (context) => ProductsScreenBloc(
           getCategoryProductsUC: sl(),
           getSortCategoryProductsUC: sl(),
-          getSubCategoriesUC: sl())
-        ..add(LoadProductsEvent(categoryId: categoryId)),
+          getSubCategoriesUC: sl(),
+          categoryId: categoryId)
+        ..add(LoadProductsEvent()),
       child: BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
         builder: (context, state) {
           final bloc = context.read<ProductsScreenBloc>();
@@ -42,10 +43,9 @@ class ProductsScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       SearchProductAppBar(
-                        screenContext: context,
-                        onTapFavoriteProductsChip: () {},
-                        onTapLocationChip: () {},
-                      ),
+                          screenContext: context,
+                          showFavoriteProductsChip: true,
+                          showLocationChip: true),
                       SizedBox(height: 16.h),
                       Padding(
                         padding: getMarginOrPadding(left: 20, right: 20),
@@ -67,6 +67,7 @@ class ProductsScreen extends StatelessWidget {
                       // Прокручиваемая часть
                       Expanded(
                         child: SingleChildScrollView(
+                          controller: bloc.productsController,
                           child: Column(
                             children: [
                               Padding(
@@ -104,16 +105,8 @@ class ProductsScreen extends StatelessWidget {
                               // Ваш контент
                               if (state.isLoading)
                                 Center(child: CircularProgressIndicator())
-                              else if (state.error != null)
-                                Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Ошибка загрузки данных"),
-                                    ],
-                                  ),
-                                )
-                              else if (state.products.isEmpty)
+                              else if ((state.searchProducts?.products ?? [])
+                                  .isEmpty)
                                 Center(
                                     child:
                                         Text("Нет товаров в выбранной группе"))
@@ -123,7 +116,8 @@ class ProductsScreen extends StatelessWidget {
                                       getMarginOrPadding(left: 20, right: 20),
                                   child: ProductsGridWidget(
                                     categryId: categoryId,
-                                    products: state.products,
+                                    products:
+                                        (state.searchProducts?.products ?? []),
                                     showCheckbox: false,
                                     selectedProductIds: {},
                                   ),

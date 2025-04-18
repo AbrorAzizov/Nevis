@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
@@ -9,8 +8,6 @@ import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/main/bonus_cards/activate_bonus_screen.dart';
-import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
-import 'package:nevis/features/presentation/pages/starts/select_region_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
@@ -45,26 +42,9 @@ class MainScreen extends StatelessWidget {
                         return Column(
                           children: [
                             SearchProductAppBar(
-                              onTapFavoriteProductsChip: () {
-                                FocusScope.of(context).unfocus();
-                                Navigator.of(context).push(
-                                  Routes.createRoute(
-                                    const FavoriteProductsScreen(),
-                                  ),
-                                );
-                              },
-                              screenContext: context,
-                              onTapLocationChip: () {
-                                FocusScope.of(context).unfocus();
-                                Navigator.of(context, rootNavigator: true).push(
-                                  Routes.createRoute(
-                                    const SelectRegionScreen(
-                                        selectRegionScreenType:
-                                            SelectRegionScreenType.main),
-                                  ),
-                                );
-                              },
-                            ),
+                                showFavoriteProductsChip: true,
+                                showLocationChip: true,
+                                screenContext: context),
                             Expanded(
                               child: homeState is InternetUnavailable
                                   ? InternetNoInternetConnectionWidget()

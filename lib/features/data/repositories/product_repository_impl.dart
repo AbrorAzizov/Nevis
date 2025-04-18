@@ -7,6 +7,7 @@ import 'package:nevis/features/data/datasources/product_remote_data_source_impl.
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
+import 'package:nevis/features/domain/entities/search_products_entity.dart';
 import 'package:nevis/features/domain/params/category_params.dart';
 import 'package:nevis/features/domain/repositories/product_repository.dart';
 
@@ -52,13 +53,13 @@ class ProductRepositoryImpl implements ProductRepository {
       );
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> getCategoryProudcts(
+  Future<Either<Failure, SearchProductsEntity>> getCategoryProudcts(
           int id) async =>
       await errorHandler.handle(
           () async => await productRemoteDataSource.getCategoryProducts(id));
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> getSortCategoryProducts(
+  Future<Either<Failure, SearchProductsEntity>> getSortCategoryProducts(
           CategoryParams params) async =>
       await errorHandler.handle(() async =>
           await productRemoteDataSource.getSortCategoryProducts(params));
@@ -70,7 +71,7 @@ class ProductRepositoryImpl implements ProductRepository {
           () async => await productRemoteDataSource.getSubCategories(id));
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> getRecomendationProducts(
+  Future<Either<Failure, SearchProductsEntity>> getRecomendationProducts(
           int id) async =>
       await errorHandler.handle(
           () async => await productRemoteDataSource.getCategoryProducts(id));

@@ -2,24 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
+import 'package:nevis/features/presentation/pages/starts/select_region_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SearchProductAppBar extends StatelessWidget {
   const SearchProductAppBar({
     super.key,
-    this.onTapLocationChip,
+    this.showLocationChip = false,
     this.onTapBack,
     this.screenContext,
-    this.onTapFavoriteProductsChip,
+    this.showFavoriteProductsChip = false,
   });
 
-  final Function()? onTapLocationChip;
-  final Function()? onTapFavoriteProductsChip;
+  final bool showLocationChip;
+  final bool showFavoriteProductsChip;
   final Function()? onTapBack;
   final BuildContext? screenContext;
 
@@ -38,10 +42,19 @@ class SearchProductAppBar extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  if (onTapLocationChip != null && !state.isExpanded)
+                  if (!state.isExpanded)
                     Skeleton.replace(
                       child: GestureDetector(
-                        onTap: onTapLocationChip,
+                        onTap: () {
+                          FocusScope.of(context).unfocus();
+                          Navigator.of(context, rootNavigator: true).push(
+                            Routes.createRoute(
+                              const SelectRegionScreen(
+                                  selectRegionScreenType:
+                                      SelectRegionScreenType.main),
+                            ),
+                          );
+                        },
                         child: Padding(
                           padding: getMarginOrPadding(right: 8),
                           child: SvgPicture.asset(Paths.locationIconPath,
@@ -103,12 +116,19 @@ class SearchProductAppBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (onTapFavoriteProductsChip != null && !state.isExpanded)
+                  if (showFavoriteProductsChip && !state.isExpanded)
                     Padding(
                       padding: getMarginOrPadding(left: 12),
                       child: Skeleton.replace(
                         child: GestureDetector(
-                          onTap: onTapFavoriteProductsChip,
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
+                            Navigator.of(context).push(
+                              Routes.createRoute(
+                                const FavoriteProductsScreen(),
+                              ),
+                            );
+                          },
                           child: Padding(
                             padding: getMarginOrPadding(right: 8),
                             child: SvgPicture.asset(

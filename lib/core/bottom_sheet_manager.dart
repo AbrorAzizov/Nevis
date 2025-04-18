@@ -587,7 +587,7 @@ class BottomSheetManager {
                                 child: Text(
                                   'Запросить код снова',
                                   style: UiConstants.textStyle3
-                                      .copyWith(color: UiConstants.purpleColor),
+                                      .copyWith(color: UiConstants.blueColor),
                                 ),
                               )
                             : Text(

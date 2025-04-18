@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/features/presentation/bloc/select_region_screen/select_region_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_screen/search_history_item.dart';
@@ -17,6 +18,7 @@ class PopularityCitiesWidget extends StatelessWidget {
     return BlocBuilder<SelectRegionScreenBloc, SelectRegionScreenState>(
       builder: (context, state) {
         return BlockWidget(
+          contentPadding: getMarginOrPadding(bottom: 8),
           title: 'Популярные города',
           child: Align(
             alignment: Alignment.topLeft,

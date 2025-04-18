@@ -6,10 +6,10 @@ class ProductScreenState extends Equatable {
 
   final ProductEntity? product;
   final List<ProductPharmacyEntity>? pharmacies;
-  final List<ProductEntity> recomendationProducts;
+  final SearchProductsEntity? recomendationProducts;
 
   const ProductScreenState({
-    this.recomendationProducts = const [],
+    this.recomendationProducts,
     this.isLoading = true,
     this.error,
     this.product,
@@ -21,7 +21,7 @@ class ProductScreenState extends Equatable {
       String? error,
       ProductEntity? product,
       List<ProductPharmacyEntity>? pharmacies,
-      List<ProductEntity>? recomendationProducts}) {
+      SearchProductsEntity? recomendationProducts}) {
     return ProductScreenState(
         isLoading: isLoading ?? this.isLoading,
         error: error ?? this.error,

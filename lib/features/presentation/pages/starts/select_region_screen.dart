@@ -14,7 +14,6 @@ import 'package:nevis/features/presentation/widgets/app_template.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/delivery_plate_widget.dart';
 import 'package:nevis/features/presentation/widgets/select_region_screen/popularity_cities_widget.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SelectRegionScreen extends StatelessWidget {
@@ -44,7 +43,7 @@ class SelectRegionScreen extends StatelessWidget {
                         width: 24.w, height: 24.w),
                     SizedBox(width: 8.w),
                     Text(
-                      'Минск',
+                      'Санкт-Петербург и ЛО',
                       style: UiConstants.textStyle5
                           .copyWith(color: UiConstants.darkBlueColor),
                     ),

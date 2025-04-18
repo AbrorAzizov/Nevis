@@ -153,29 +153,33 @@ class ProductScreen extends StatelessWidget {
                                     SizedBox(
                                       height: 16.h,
                                     ),
-                                    SizedBox(
-                                      height: 390.h,
-                                      child: ListView.builder(
-                                          padding: getMarginOrPadding(
-                                              left: 20, right: 20),
-                                          scrollDirection: Axis.horizontal,
-                                          shrinkWrap: true,
-                                          itemCount: context
-                                              .read<ProductScreenBloc>()
-                                              .state
-                                              .recomendationProducts
-                                              .length,
-                                          itemBuilder: (context, index) {
-                                            return ProductWidget(
-                                                categoryId: categoryId,
-                                                product: context
-                                                    .read<ProductScreenBloc>()
-                                                    .state
-                                                    .recomendationProducts[index],
-                                                isSelected: false,
-                                                showCheckbox: false);
-                                          }),
-                                    ),
+                                    if ((state.recomendationProducts
+                                                ?.products ??
+                                            [])
+                                        .isNotEmpty)
+                                      SizedBox(
+                                        height: 390.h,
+                                        child: ListView.builder(
+                                            padding: getMarginOrPadding(
+                                                left: 20, right: 20),
+                                            scrollDirection: Axis.horizontal,
+                                            shrinkWrap: true,
+                                            itemCount: (state
+                                                        .recomendationProducts
+                                                        ?.products ??
+                                                    [])
+                                                .length,
+                                            itemBuilder: (context, index) {
+                                              return ProductWidget(
+                                                  categoryId: categoryId,
+                                                  product: (state
+                                                          .recomendationProducts
+                                                          ?.products ??
+                                                      [])[index],
+                                                  isSelected: false,
+                                                  showCheckbox: false);
+                                            }),
+                                      ),
                                     SizedBox(
                                       height: 16.h,
                                     )

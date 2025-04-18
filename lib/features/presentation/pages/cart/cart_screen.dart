@@ -59,9 +59,8 @@ class _CartScreenState extends State<CartScreen> {
                             return Column(
                               children: [
                                 SearchProductAppBar(
-                                  onTapLocationChip: () {},
-                                  onTapFavoriteProductsChip: () {},
-                                ),
+                                    showFavoriteProductsChip: true,
+                                    showLocationChip: true),
                                 homeState is InternetUnavailable
                                     ? InternetNoInternetConnectionWidget()
                                     : cartState.cartProducts.isNotEmpty

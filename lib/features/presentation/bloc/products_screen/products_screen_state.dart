@@ -1,53 +1,62 @@
 part of 'products_screen_bloc.dart';
 
 class ProductsScreenState extends Equatable {
-  final List<ProductEntity> products;
+  final SearchProductsEntity? searchProducts;
   final List<CategoryEntity> subCategories;
   final ProductSortType? selectedSortType;
   final ProductFilterOrSortType? selectedFilterOrSortType;
   final bool isLoading;
-  final String? error;
+  final bool isLoadingProducts;
+  final String error;
   final CategoryEntity? selectedSubCategory;
+  final int? categoryId;
 
   const ProductsScreenState({
-    required this.error,
-    required this.selectedSubCategory,
-    required this.subCategories,
-    required this.products,
-    required this.selectedFilterOrSortType,
-    required this.selectedSortType,
-    required this.isLoading,
+    this.error = '',
+    this.selectedSubCategory,
+    this.subCategories = const [],
+    this.searchProducts,
+    this.selectedFilterOrSortType,
+    this.selectedSortType = ProductSortType.popularity,
+    this.isLoading = true,
+    this.isLoadingProducts = true,
+    this.categoryId,
   });
 
   ProductsScreenState copyWith({
-    List<ProductEntity>? products,
+    SearchProductsEntity? searchProducts,
     List<CategoryEntity>? subCategories,
     ProductSortType? selectedSortType,
     ProductFilterOrSortType? selectedFilterOrSortType,
     bool? isLoading,
+    bool? isLoadingProducts,
     CategoryEntity? selectedSubCategory,
     String? error,
+    int? categoryId,
   }) {
     return ProductsScreenState(
-      products: products ?? this.products,
+      searchProducts: searchProducts ?? this.searchProducts,
       subCategories: subCategories ?? this.subCategories,
       selectedSortType: selectedSortType ?? this.selectedSortType,
-      selectedFilterOrSortType:
-          selectedFilterOrSortType ?? this.selectedFilterOrSortType,
+      selectedFilterOrSortType: selectedFilterOrSortType,
       isLoading: isLoading ?? this.isLoading,
+      isLoadingProducts: isLoadingProducts ?? this.isLoadingProducts,
       selectedSubCategory: selectedSubCategory ?? this.selectedSubCategory,
       error: error ?? this.error,
+      categoryId: categoryId ?? this.categoryId,
     );
   }
 
   @override
   List<Object?> get props => [
-        products,
+        searchProducts,
         selectedSortType,
         selectedFilterOrSortType,
         isLoading,
+        isLoadingProducts,
         error,
         selectedSubCategory,
-        subCategories
+        subCategories,
+        categoryId,
       ];
 }

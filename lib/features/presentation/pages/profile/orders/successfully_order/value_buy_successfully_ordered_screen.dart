@@ -33,9 +33,8 @@ class ValueBuySuccessfullyOrderedScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       SearchProductAppBar(
-                        onTapLocationChip: () {},
-                        onTapFavoriteProductsChip: () {},
-                      ),
+                          showFavoriteProductsChip: true,
+                          showLocationChip: true),
                       SizedBox(
                         height: 16.h,
                       ),

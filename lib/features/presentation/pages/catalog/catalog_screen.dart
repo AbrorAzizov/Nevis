@@ -40,9 +40,8 @@ class CatalogScreen extends StatelessWidget {
                         return Column(
                           children: [
                             SearchProductAppBar(
-                              onTapFavoriteProductsChip: () {},
-                              onTapLocationChip: () {},
-                            ),
+                                showFavoriteProductsChip: true,
+                                showLocationChip: true),
                             Expanded(
                               child: homeState is InternetUnavailable
                                   ? InternetNoInternetConnectionWidget()

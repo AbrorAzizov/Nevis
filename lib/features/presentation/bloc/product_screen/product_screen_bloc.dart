@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
+import 'package:nevis/features/domain/entities/search_products_entity.dart';
 import 'package:nevis/features/domain/usecases/products/get_one_product.dart';
 import 'package:nevis/features/domain/usecases/products/get_product_pharmacies.dart';
 import 'package:nevis/features/domain/usecases/products/get_recomendation_products.dart';
@@ -29,7 +30,7 @@ class ProductScreenBloc extends Bloc<ProductScreenEvent, ProductScreenState> {
       LoadDataEvent event, Emitter<ProductScreenState> emit) async {
     String? error = 'Ошибка получения данных';
     ProductEntity? product;
-    List<ProductEntity>? recomendationProducts;
+    SearchProductsEntity? recomendationProducts;
     List<ProductPharmacyEntity> pharmacies = [];
 
     final data = await Future.wait([
@@ -47,7 +48,7 @@ class ProductScreenBloc extends Bloc<ProductScreenEvent, ProductScreenState> {
                 product = result as ProductEntity;
                 break;
               case 1:
-                recomendationProducts = result as List<ProductEntity>;
+                recomendationProducts = result as SearchProductsEntity;
             }
           },
         );

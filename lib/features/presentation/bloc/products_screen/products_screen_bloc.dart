@@ -1,11 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
+import 'package:nevis/features/domain/entities/search_products_entity.dart';
 import 'package:nevis/features/domain/params/category_params.dart';
 import 'package:nevis/features/domain/usecases/products/get_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_sort_category_products.dart';
@@ -19,51 +21,86 @@ class ProductsScreenBloc
   final GetCategoryProductsUC getCategoryProductsUC;
   final GetSortCategoryProductsUC getSortCategoryProductsUC;
   final GetSubCategoriesUC getSubCategoriesUC;
-  ProductsScreenBloc(
-      {required this.getSubCategoriesUC,
-      required this.getCategoryProductsUC,
-      required this.getSortCategoryProductsUC})
-      : super(
-          ProductsScreenState(
-            selectedSortType: ProductSortType.popularity,
-            selectedFilterOrSortType: null,
-            products: [],
-            isLoading: true,
-            selectedSubCategory: null,
-            error: null,
-            subCategories: [],
-          ),
-        ) {
+
+  final int? categoryId;
+  final List<ProductEntity>? products;
+
+  ScrollController productsController = ScrollController();
+
+  ProductsScreenBloc({
+    required this.getSubCategoriesUC,
+    required this.getCategoryProductsUC,
+    required this.getSortCategoryProductsUC,
+    this.products,
+    this.categoryId,
+  }) : super(ProductsScreenState(categoryId: categoryId)) {
     on<LoadProductsEvent>(_onLoadProducts);
     on<ShowSortProductsTypes>(_onShowSortProductsTypes);
     on<ShowFilterProductsTypes>(_onShowFilterProductsTypes);
     on<SelectSortProductsType>(_onSelectSortProductsType);
     on<LoadSubCategoriesEvent>(_onLoadSubCategories);
     on<SelectSubCategoryEvent>(_onSelectSubCategory);
+
+    // Добавляем слушатель для скролла
+    if (products == null) productsController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    print("ScrollListener triggered"); // Печатаем, чтобы проверить срабатывание
+    // Если скроллинг достиг нижней границы, загружаем следующую страницу
+    if (productsController.position.pixels ==
+        productsController.position.maxScrollExtent) {
+      if (state.searchProducts!.currentPage < state.searchProducts!.totalPage) {
+        // Загружаем следующую страницу
+        add(LoadProductsEvent(page: state.searchProducts!.currentPage + 1));
+      }
+    }
   }
 
   Future<void> _onLoadProducts(
       LoadProductsEvent event, Emitter<ProductsScreenState> emit) async {
-    emit(state.copyWith(isLoading: true));
-
     try {
+      int currentPage = event.page ?? (state.searchProducts?.currentPage ?? 1);
+      List<ProductEntity> oldProducts = [];
+
+      if (currentPage != 1) {
+        emit(state.copyWith(isLoadingProducts: true));
+        oldProducts = state.searchProducts?.products ?? [];
+      }
+
       final results = await Future.wait([
-        getCategoryProductsUC(event.categoryId),
-        getSubCategoriesUC(event.categoryId),
+        getSortCategoryProductsUC(CategoryParams(
+            categotyId:
+                int.tryParse(state.selectedSubCategory?.categoryId ?? '') ??
+                    state.categoryId!,
+            sortBy: state.selectedSortType == ProductSortType.priceDecrease
+                ? 'desc'
+                : 'asc',
+            typeOfSort: state.selectedSortType!.typeOfSort,
+            page: currentPage)),
+        getSubCategoriesUC(state.categoryId!),
       ]);
 
       final failureOrProducts =
-          results[0] as Either<Failure, List<ProductEntity>>;
+          results[0] as Either<Failure, SearchProductsEntity?>;
       final failureOrSubCategories =
           results[1] as Either<Failure, List<CategoryEntity>>;
 
       String? error;
-      List<ProductEntity> products = [];
+      SearchProductsEntity? searchProducts;
       List<CategoryEntity> subCategories = [];
 
       failureOrProducts.fold(
         (l) => error = 'Ошибка загрузки продуктов',
-        (r) => products = r,
+        (r) {
+          searchProducts = r;
+
+          // Объединяем старые продукты с новыми
+          final updatedProducts = List<ProductEntity>.from(oldProducts)
+            ..addAll(r?.products ?? []);
+
+          searchProducts = searchProducts?.copyWith(products: updatedProducts);
+        },
       );
 
       failureOrSubCategories.fold(
@@ -73,8 +110,9 @@ class ProductsScreenBloc
 
       emit(state.copyWith(
         isLoading: false,
+        isLoadingProducts: false,
         error: error,
-        products: products,
+        searchProducts: searchProducts,
         subCategories: subCategories,
       ));
     } catch (e) {
@@ -122,17 +160,22 @@ class ProductsScreenBloc
     emit(state.copyWith(
         selectedSortType: event.productSortType, isLoading: true));
     try {
-      final failureOrLoads = await getSortCategoryProductsUC(CategoryParams(
-          categotyId: event.categoryId,
-          sortBy: event.productSortType == ProductSortType.priceDecrease
-              ? 'desc'
-              : 'asc',
-          typeOfSort: event.productSortType.typeOfSort));
+      final failureOrLoads = await getSortCategoryProductsUC(
+        CategoryParams(
+            categotyId:
+                int.tryParse(state.selectedSubCategory?.categoryId ?? '') ??
+                    event.categoryId,
+            sortBy: event.productSortType == ProductSortType.priceDecrease
+                ? 'desc'
+                : 'asc',
+            typeOfSort: event.productSortType.typeOfSort,
+            page: 1),
+      );
       failureOrLoads.fold(
           (_) => emit(
               state.copyWith(isLoading: false, error: 'Something went wrong')),
           (products) =>
-              emit(state.copyWith(products: products, isLoading: false)));
+              emit(state.copyWith(searchProducts: products, isLoading: false)));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
@@ -147,19 +190,21 @@ class ProductsScreenBloc
       try {
         final failureOrProducts = await getSortCategoryProductsUC(
           CategoryParams(
-            categotyId: int.parse(event.subCategory.categoryId ?? '0'),
-            sortBy: state.selectedSortType == ProductSortType.priceDecrease
-                ? 'desc'
-                : 'asc',
-            typeOfSort: state.selectedSortType?.typeOfSort ?? '',
-          ),
+              categotyId:
+                  int.tryParse(state.selectedSubCategory?.categoryId ?? '') ??
+                      state.categoryId!,
+              sortBy: state.selectedSortType == ProductSortType.priceDecrease
+                  ? 'desc'
+                  : 'asc',
+              typeOfSort: state.selectedSortType?.typeOfSort ?? '',
+              page: 1),
         );
 
         failureOrProducts.fold(
           (_) =>
               emit(state.copyWith(isLoading: false, error: 'Ошибка загрузки')),
           (products) =>
-              emit(state.copyWith(products: products, isLoading: false)),
+              emit(state.copyWith(searchProducts: products, isLoading: false)),
         );
       } catch (e) {
         emit(state.copyWith(isLoading: false, error: e.toString()));

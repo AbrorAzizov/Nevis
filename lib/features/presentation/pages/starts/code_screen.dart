@@ -31,9 +31,7 @@ class CodeScreen extends StatelessWidget {
         requestCodeUC: sl(),
         phone: args['phone'],
         loginUC: sl(),
-      )
-      // ..startTimer(context),
-      ,
+      )..startTimer(context),
       child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
         listener: (context, state) {
           if (state.showError) {
@@ -130,7 +128,7 @@ class CodeScreen extends StatelessWidget {
                           child: Text(
                             'Запросить звонок снова',
                             style: UiConstants.textStyle3
-                                .copyWith(color: UiConstants.purpleColor),
+                                .copyWith(color: UiConstants.blueColor),
                           ),
                         )
                       else

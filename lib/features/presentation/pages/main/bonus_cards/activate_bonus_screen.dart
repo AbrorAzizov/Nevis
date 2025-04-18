@@ -121,7 +121,7 @@ class ActivateBonusCardScreen extends StatelessWidget {
                                                         ),
                                                       );
                                                     },
-                                                    text: 'Зарегестрировать'),
+                                                    text: 'Зарегистрировать'),
                                               ),
                                             ),
                                           ],
@@ -130,9 +130,7 @@ class ActivateBonusCardScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 16.h,
-                                ),
+                                SizedBox(height: 16.h),
                                 Container(
                                   decoration: BoxDecoration(
                                       boxShadow: [],
@@ -142,10 +140,8 @@ class ActivateBonusCardScreen extends StatelessWidget {
                                           image: AssetImage(
                                               Paths.virtualBonusCardIconPath))),
                                   child: Padding(
-                                    padding: getMarginOrPadding(
-                                      bottom: 10,
-                                      top: 20,
-                                    ),
+                                    padding:
+                                        getMarginOrPadding(top: 20, bottom: 18),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -173,9 +169,7 @@ class ActivateBonusCardScreen extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 16.h,
-                                        ),
+                                        SizedBox(height: 16.h),
                                         Padding(
                                           padding: getMarginOrPadding(left: 20),
                                           child: Text(
@@ -186,9 +180,7 @@ class ActivateBonusCardScreen extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 26.h,
-                                        ),
+                                        SizedBox(height: 26.h),
                                         Padding(
                                           padding: getMarginOrPadding(left: 15),
                                           child: Row(

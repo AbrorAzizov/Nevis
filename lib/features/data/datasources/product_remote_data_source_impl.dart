@@ -8,6 +8,7 @@ import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/features/data/models/category_model.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
+import 'package:nevis/features/data/models/search_products_model.dart';
 import 'package:nevis/features/domain/params/category_params.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,8 +17,8 @@ abstract class ProductRemoteDataSource {
   Future<ProductModel?> getProductById(int id);
   Future<List<ProductModel>> searchProducts(ProductParam param);
   Future<List<ProductPharmacyModel>> getProductPharmacies(int id);
-  Future<List<ProductModel>> getCategoryProducts(int id);
-  Future<List<ProductModel>> getSortCategoryProducts(CategoryParams params);
+  Future<SearchProductsModel> getCategoryProducts(int id);
+  Future<SearchProductsModel> getSortCategoryProducts(CategoryParams params);
   Future<List<CategoryModel>> getSubCategories(int id);
 }
 
@@ -112,17 +113,17 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<List<ProductModel>> getCategoryProducts(int id) async {
+  Future<SearchProductsModel> getCategoryProducts(int id) async {
     try {
       final data = await apiClient.get(
         endpoint: 'catalog/categories/$id/allProducts',
         exceptions: {
           401: ServerException(),
         },
-        callPathNameForLog: '${runtimeType.toString()}.allProducts',
+        callPathNameForLog: '${runtimeType.toString()}.getCategoryProducts',
       );
-      List<dynamic> dataList = data['products'];
-      return dataList.map((e) => ProductModel.fromJson(e)).toList();
+
+      return SearchProductsModel.fromJson(data);
     } catch (e) {
       log('Error during logout: $e',
           name: '${runtimeType.toString()}.allProducts', level: 1000);
@@ -131,19 +132,18 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<List<ProductModel>> getSortCategoryProducts(
+  Future<SearchProductsModel> getSortCategoryProducts(
       CategoryParams params) async {
     try {
       final data = await apiClient.get(
         endpoint:
-            'catalog/categories/${params.categotyId}/allProducts?sort=${params.typeOfSort}&order=${params.sortBy}',
+            'catalog/categories/${params.categotyId}/allProducts?sort=${params.typeOfSort}&order=${params.sortBy}&page=${params.page}',
         exceptions: {
           401: ServerException(),
         },
         callPathNameForLog: '${runtimeType.toString()}.sortCategoryProducts',
       );
-      List<dynamic> dataList = data['products'];
-      return dataList.map((e) => ProductModel.fromJson(e)).toList();
+      return SearchProductsModel.fromJson(data);
     } catch (e) {
       log('Error during logout: $e',
           name: '${runtimeType.toString()}.sortCategoryProducts', level: 1000);

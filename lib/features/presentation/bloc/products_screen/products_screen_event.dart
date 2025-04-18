@@ -8,8 +8,8 @@ abstract class ProductsScreenEvent extends Equatable {
 }
 
 class LoadProductsEvent extends ProductsScreenEvent {
-  final int categoryId;
-  const LoadProductsEvent({required this.categoryId});
+  final int? page;
+  const LoadProductsEvent({this.page});
 }
 
 class ShowSortProductsTypes extends ProductsScreenEvent {}

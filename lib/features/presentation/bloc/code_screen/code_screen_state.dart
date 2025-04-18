@@ -17,7 +17,7 @@ class CodeScreenState extends Equatable {
     this.code = '',
     this.isButtonActive = false,
     this.canRequestNewCode = false,
-    this.secondsLeft = 30,
+    this.secondsLeft = 60,
     this.showError = false,
   });
 
