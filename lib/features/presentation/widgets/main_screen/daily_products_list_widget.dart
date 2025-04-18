@@ -16,8 +16,12 @@ class ProductsListWidget extends StatelessWidget {
       child: ListView.separated(
           padding: getMarginOrPadding(left: 20, right: 20),
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) =>
-              ProductWidget(product: products[index], isSelected: false, showCheckbox: false,),
+          itemBuilder: (context, index) => ProductWidget(
+                product: products[index],
+                isSelected: false,
+                showCheckbox: false,
+                categoryId: 0,
+              ),
           separatorBuilder: (context, index) => SizedBox(width: 8.w),
           itemCount: products.length),
     );

@@ -122,6 +122,7 @@ class ProductsScreen extends StatelessWidget {
                                   padding:
                                       getMarginOrPadding(left: 20, right: 20),
                                   child: ProductsGridWidget(
+                                    categryId: categoryId,
                                     products: state.products,
                                     showCheckbox: false,
                                     selectedProductIds: {},
@@ -184,13 +185,13 @@ class FilterChips extends StatelessWidget {
                     selectedColor: UiConstants.blueColor,
                     backgroundColor: UiConstants.whiteColor,
                     labelStyle: UiConstants.textStyle19.copyWith(
-                      color: isSelected ? Colors.white : Colors.black,
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
+                      color: isSelected
+                          ? UiConstants.whiteColor
+                          : UiConstants.blueColor,
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16.r),
-                        side: BorderSide(color: Colors.transparent)), // <--),
+                        side: BorderSide(color: Colors.transparent)),
                     showCheckmark: false,
                     label: Text(category.pageTitle ?? ''),
                     selected: isSelected,

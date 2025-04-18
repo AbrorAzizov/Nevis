@@ -53,27 +53,30 @@ class ProductBannerWidget extends StatelessWidget {
           ),
         ),
         Skeleton.ignore(
-          child: Align(
-            alignment: AlignmentDirectional.center,
-            child: Padding(
-              padding: getMarginOrPadding(top: 8),
-              child: SmoothPageIndicator(
-                controller: pageController,
-                count: product?.images?.length ?? 0,
-                axisDirection: Axis.horizontal,
-                effect: WormEffect(
-                    spacing: 4.w,
-                    dotWidth: 24.w,
-                    dotHeight: 6.w,
-                    dotColor: UiConstants.white4Color,
-                    activeDotColor: UiConstants.blueColor.withOpacity(.6)),
-                onDotClicked: (index) => pageController.animateToPage(index,
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.linear),
-              ),
-            ),
-          ),
-        )
+            child: (product?.images?.length ?? 0) > 1
+                ? Align(
+                    alignment: AlignmentDirectional.center,
+                    child: Padding(
+                      padding: getMarginOrPadding(top: 8),
+                      child: SmoothPageIndicator(
+                        controller: pageController,
+                        count: product?.images?.length ?? 0,
+                        axisDirection: Axis.horizontal,
+                        effect: WormEffect(
+                            spacing: 4.w,
+                            dotWidth: 24.w,
+                            dotHeight: 6.w,
+                            dotColor: UiConstants.white4Color,
+                            activeDotColor:
+                                UiConstants.blueColor.withOpacity(.6)),
+                        onDotClicked: (index) => pageController.animateToPage(
+                            index,
+                            duration: Duration(milliseconds: 200),
+                            curve: Curves.linear),
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink())
       ],
     );
   }

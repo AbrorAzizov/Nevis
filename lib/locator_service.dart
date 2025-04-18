@@ -50,6 +50,7 @@ import 'package:nevis/features/domain/usecases/products/get_category_products.da
 import 'package:nevis/features/domain/usecases/products/get_daily_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_one_product.dart';
 import 'package:nevis/features/domain/usecases/products/get_product_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/products/get_recomendation_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_sort_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_subcategories_products.dart';
 import 'package:nevis/features/domain/usecases/products/search_products.dart';
@@ -162,6 +163,7 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => ProductScreenBloc(
+      getRecomendationProductsUC: sl<GetRecomendationProductsUC>(),
       getOneProductUC: sl<GetOneProductUC>(),
       getProductPharmaciesUC: sl<GetProductPharmaciesUC>(),
     ),
@@ -217,6 +219,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetCategoryProductsUC(sl()));
   sl.registerLazySingleton(() => GetSortCategoryProductsUC(sl()));
   sl.registerLazySingleton(() => GetSubCategoriesUC(sl()));
+  sl.registerLazySingleton(() => GetRecomendationProductsUC(sl()));
   // Category
   sl.registerLazySingleton(() => GetCategoriesUC(sl()));
   sl.registerLazySingleton(() => GetSubcategoriesUC(sl()));

@@ -15,6 +15,7 @@ abstract class ProductRepository {
       int id);
   Future<Either<Failure, List<CategoryEntity>>> getSubCategories(int id);
   Future<Either<Failure, List<ProductEntity>>> getCategoryProudcts(int id);
+  Future<Either<Failure, List<ProductEntity>>> getRecomendationProducts(int id);
   Future<Either<Failure, List<ProductEntity>>> getSortCategoryProducts(
       CategoryParams params);
   // Future<Either<Failure, List<

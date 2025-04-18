@@ -16,6 +16,7 @@ import 'package:nevis/features/presentation/widgets/main_screen/internet_no_inte
 import 'package:nevis/features/presentation/widgets/product_screen/product_banner_widget.dart';
 import 'package:nevis/features/presentation/widgets/product_screen/product_receiving_methods_widget.dart';
 import 'package:nevis/features/presentation/widgets/product_screen/product_title_widget.dart';
+import 'package:nevis/features/presentation/widgets/products_screen/product_widget.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -24,7 +25,10 @@ class ProductScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productId = ModalRoute.of(context)!.settings.arguments as int;
+    final arguments =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final productId = arguments['productId'];
+    final categoryId = arguments['categoryId'];
 
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
@@ -32,11 +36,11 @@ class ProductScreen extends StatelessWidget {
           create: (_) => ProductScreenBloc(
             getOneProductUC: sl(),
             getProductPharmaciesUC: sl(),
-          )..add(LoadDataEvent(productId: productId)),
+            getRecomendationProductsUC: sl(),
+          )..add(LoadDataEvent(productId: productId, categoryId: categoryId)),
           child: BlocBuilder<ProductScreenBloc, ProductScreenState>(
             builder: (context, state) {
               final productBloc = context.read<ProductScreenBloc>();
-
               return Scaffold(
                 backgroundColor: UiConstants.whiteColor,
                 body: SafeArea(
@@ -47,7 +51,7 @@ class ProductScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         CustomAppBar(
-                          title: state.product?.name ?? 'Товар',
+                          title: state.product?.name ?? '',
                           showBack: true,
                           action: SvgPicture.asset(Paths.shareIconPath),
                         ),
@@ -55,7 +59,7 @@ class ProductScreen extends StatelessWidget {
                           child: homeState is InternetUnavailable
                               ? InternetNoInternetConnectionWidget()
                               : ListView(
-                                  padding: getMarginOrPadding(bottom: 120),
+                                  padding: getMarginOrPadding(bottom: 71),
                                   children: [
                                     SizedBox(height: 16.h),
                                     if (state.product != null)
@@ -134,6 +138,47 @@ class ProductScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                    SizedBox(
+                                      height: 16.h,
+                                    ),
+                                    Padding(
+                                      padding: getMarginOrPadding(left: 20),
+                                      child: Text(
+                                        'C этим товаром покупают',
+                                        style: UiConstants.textStyle5.copyWith(
+                                          color: UiConstants.black2Color,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 16.h,
+                                    ),
+                                    SizedBox(
+                                      height: 390.h,
+                                      child: ListView.builder(
+                                          padding: getMarginOrPadding(
+                                              left: 20, right: 20),
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemCount: context
+                                              .read<ProductScreenBloc>()
+                                              .state
+                                              .recomendationProducts
+                                              .length,
+                                          itemBuilder: (context, index) {
+                                            return ProductWidget(
+                                                categoryId: categoryId,
+                                                product: context
+                                                    .read<ProductScreenBloc>()
+                                                    .state
+                                                    .recomendationProducts[index],
+                                                isSelected: false,
+                                                showCheckbox: false);
+                                          }),
+                                    ),
+                                    SizedBox(
+                                      height: 16.h,
+                                    )
                                   ],
                                 ),
                         ),

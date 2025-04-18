@@ -68,5 +68,11 @@ class ProductRepositoryImpl implements ProductRepository {
           int id) async =>
       await errorHandler.handle(
           () async => await productRemoteDataSource.getSubCategories(id));
+
+  @override
+  Future<Either<Failure, List<ProductEntity>>> getRecomendationProducts(
+          int id) async =>
+      await errorHandler.handle(
+          () async => await productRemoteDataSource.getCategoryProducts(id));
 }
 //getSubCategories

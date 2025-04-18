@@ -10,12 +10,14 @@ class ProductsGridWidget extends StatelessWidget {
   final List<ProductEntity> products;
   final Set<int> selectedProductIds;
   final bool showCheckbox;
+  final int categryId;
 
   const ProductsGridWidget({
     super.key,
     required this.products,
     required this.selectedProductIds,
     required this.showCheckbox,
+    required this.categryId,
   });
 
   @override
@@ -52,7 +54,10 @@ class ProductsGridWidget extends StatelessWidget {
                     const ProductScreen(),
                     settings: RouteSettings(
                       name: Routes.productScreen,
-                      arguments: product.productId,
+                      arguments: {
+                        'productId': product.productId,
+                        'categoryId': categryId,
+                      },
                     ),
                   ),
                 ),
@@ -60,6 +65,7 @@ class ProductsGridWidget extends StatelessWidget {
                   product: product,
                   isSelected: isSelected,
                   showCheckbox: showCheckbox,
+                  categoryId: categryId,
                 ),
               );
             },

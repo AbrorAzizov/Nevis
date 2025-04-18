@@ -37,7 +37,6 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
   CartScreenBloc({required this.getCartProducts})
       : super(
           CartScreenState(
-              cartProducts: [],
               isAllProductsChecked: false,
               selectedProductIds: {},
               pharmacies: [],

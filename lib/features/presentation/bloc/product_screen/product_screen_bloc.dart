@@ -6,6 +6,7 @@ import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/domain/usecases/products/get_one_product.dart';
 import 'package:nevis/features/domain/usecases/products/get_product_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/products/get_recomendation_products.dart';
 
 part 'product_screen_event.dart';
 part 'product_screen_state.dart';
@@ -13,11 +14,14 @@ part 'product_screen_state.dart';
 class ProductScreenBloc extends Bloc<ProductScreenEvent, ProductScreenState> {
   final GetOneProductUC getOneProductUC;
   final GetProductPharmaciesUC getProductPharmaciesUC;
+  final GetRecomendationProductsUC getRecomendationProductsUC;
 
   PageController pageController = PageController();
 
   ProductScreenBloc(
-      {required this.getOneProductUC, required this.getProductPharmaciesUC})
+      {required this.getOneProductUC,
+      required this.getRecomendationProductsUC,
+      required this.getProductPharmaciesUC})
       : super(ProductScreenState()) {
     on<LoadDataEvent>(_onLoadData);
   }
@@ -25,10 +29,12 @@ class ProductScreenBloc extends Bloc<ProductScreenEvent, ProductScreenState> {
       LoadDataEvent event, Emitter<ProductScreenState> emit) async {
     String? error = 'Ошибка получения данных';
     ProductEntity? product;
+    List<ProductEntity>? recomendationProducts;
     List<ProductPharmacyEntity> pharmacies = [];
 
     final data = await Future.wait([
       getOneProductUC(event.productId),
+      getRecomendationProductsUC(event.categoryId)
     ]);
 
     data.forEachIndexed(
@@ -40,17 +46,20 @@ class ProductScreenBloc extends Bloc<ProductScreenEvent, ProductScreenState> {
               case 0:
                 product = result as ProductEntity;
                 break;
+              case 1:
+                recomendationProducts = result as List<ProductEntity>;
             }
           },
         );
       },
     );
 
-    if (product != null) error = null;
+    if (product != null && recomendationProducts != null) error = null;
     emit(state.copyWith(
       isLoading: false,
       error: error,
       product: product,
+      recomendationProducts: recomendationProducts,
       pharmacies: pharmacies,
     ));
   }
