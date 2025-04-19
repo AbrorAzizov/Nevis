@@ -20,4 +20,5 @@ abstract class ProductRepository {
       int id);
   Future<Either<Failure, SearchProductsEntity>> getSortCategoryProducts(
       CategoryParams params);
+  Future<Either<Failure, List<ProductEntity>>> getFavoriteProducts();
 }

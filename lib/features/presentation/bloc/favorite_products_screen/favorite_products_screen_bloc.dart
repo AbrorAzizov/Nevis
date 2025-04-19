@@ -1,18 +1,16 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/services.dart';
 import 'package:nevis/constants/enums.dart';
-import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
+import 'package:nevis/features/domain/usecases/products/get_favorite_products.dart';
 
 part 'favorite_products_screen_event.dart';
 part 'favorite_products_screen_state.dart';
 
 class FavoriteProductsScreenBloc
     extends Bloc<FavoriteProductsScreenEvent, FavoriteProductsScreenState> {
-  FavoriteProductsScreenBloc()
+  final GetFavoriteProductsUC getFavoriteProductsUC;
+  FavoriteProductsScreenBloc({required this.getFavoriteProductsUC})
       : super(
           FavoriteProductsScreenState(
             isAllProductsChecked: false,
@@ -24,7 +22,7 @@ class FavoriteProductsScreenBloc
             error: null,
           ),
         ) {
-    on<LoadProductsEvent>(_onLoadProducts);
+    on<LoadFavoriteProductsEvent>(_onLoadProducts);
     on<PickAllProductsEvent>(_onPickAllProducts);
     on<ShowSortProductsTypes>(_onShowSortProductsTypes);
     on<ShowFilterProductsTypes>(_onShowFilterProductsTypes);
@@ -32,16 +30,17 @@ class FavoriteProductsScreenBloc
     on<ToggleProductSelection>(_onToggleProductSelection);
   }
 
-  Future<void> _onLoadProducts(LoadProductsEvent event,
+  Future<void> _onLoadProducts(LoadFavoriteProductsEvent event,
       Emitter<FavoriteProductsScreenState> emit) async {
     emit(state.copyWith(isLoading: true));
+
     try {
-      String jsonString = await rootBundle.loadString('assets/products.json');
-      final data = jsonDecode(jsonString);
-      List<dynamic> dataList = data['data'];
-      List<ProductEntity> products =
-          dataList.map((e) => ProductModel.fromJson(e)).toList();
-      emit(state.copyWith(products: products, isLoading: false));
+      final failureOrLoads = await getFavoriteProductsUC();
+      failureOrLoads.fold(
+          (_) => emit(state.copyWith(
+              error: 'Ошибка загрузки данных', isLoading: false, products: [])),
+          (favoriteProducts) => emit(
+              state.copyWith(products: favoriteProducts, isLoading: false)));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }

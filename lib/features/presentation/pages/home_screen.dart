@@ -6,6 +6,7 @@ import 'package:nevis/app_route_observer.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/route_observer/route_observer_bloc.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
@@ -27,6 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+            create: (context) =>
+                FavoriteProductsScreenBloc(getFavoriteProductsUC: sl())
+                  ..add(LoadFavoriteProductsEvent())),
         BlocProvider(create: (context) => CartScreenBloc(getCartProducts: sl())
             // ..update(),
             ),
@@ -169,7 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: 70.h,
                                   decoration: BoxDecoration(
                                     color: UiConstants.whiteColor,
-                                  
                                   ),
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.end,

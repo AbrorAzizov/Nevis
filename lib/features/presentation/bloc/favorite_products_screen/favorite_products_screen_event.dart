@@ -7,7 +7,7 @@ abstract class FavoriteProductsScreenEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadProductsEvent extends FavoriteProductsScreenEvent {}
+class LoadFavoriteProductsEvent extends FavoriteProductsScreenEvent {}
 
 class PickAllProductsEvent extends FavoriteProductsScreenEvent {}
 
