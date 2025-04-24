@@ -57,16 +57,17 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
         ));
         failureOrLoads.fold(
           (failure) => switch (failure) {
+            TooManyRequestsFailure _ => emit(state.copyWith(
+                showError: true,
+                phoneErrorText:
+                    'Слишком много попыток входа , попробуйте позже')),
             PhoneDontFoundFailure _ => emit(state.copyWith(
                 showError: true,
-                passwordErrorText: 'Неправильный номер или пароль')),
-            UncorrectedPasswordFailure _ => emit(state.copyWith(
-                showError: true,
-                passwordErrorText: 'Неправильный номер или пароль')),
+                phoneErrorText: 'Неправильный номер или пароль')),
             ServerFailure _ => emit(state.copyWith(
-                showError: true, passwordErrorText: 'Неизвестная ошибка')),
+                showError: true, phoneErrorText: 'Неизвестная ошибка')),
             _ => emit(state.copyWith(
-                showError: true, passwordErrorText: 'Неизвестная ошибка')),
+                showError: true, phoneErrorText: 'Неизвестная ошибка')),
           },
           (_) {
             emit(state.copyWith(showError: false));

@@ -30,7 +30,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           'phone_number': phone,
           'verification_code': code,
         },
-        
         exceptions: {
           401: ConfirmationCodeWrongException(),
           429: TooManyRequestsException(),
@@ -81,6 +80,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         body: {'phone_number': phone},
         exceptions: {
           409: SendingCodeTooOftenException(),
+          429: TooManyRequestsException()
         },
         callPathNameForLog: '${runtimeType.toString()}.requestCode',
       );

@@ -37,9 +37,11 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
     on<CodeChangedEvent>(_onCodeChanged);
     on<TimerTickEvent>(_onTimerTick);
     on<SubmitCodeEvent>(_onSubmitCode);
+    on<RequestNewCodeEvent>(_requestNewCode);
 
     // Навешивание листенера на TextEditingController
     codeController.addListener(_codeListener);
+    startTimer(screenContext);
   }
 
   // Листенер для отслеживания изменений в коде
@@ -91,6 +93,30 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
     );
   }
 
+  void _requestNewCode(
+      RequestNewCodeEvent event, Emitter<CodeScreenState> emit) async {
+    final failureOrLoads = await requestCodeUC(AuthenticationParams(
+      phone: Utils.formatPhoneNumber(state.phone),
+    ));
+    failureOrLoads.fold(
+      (failure) => switch (failure) {
+        PhoneDontFoundFailure _ => emit(state.copyWith(
+            showError: true, codeErrorText: 'Неправильный номер или пароль')),
+        UncorrectedPasswordFailure _ => emit(state.copyWith(
+            showError: true, codeErrorText: 'Неправильный номер или пароль')),
+        ServerFailure _ => emit(state.copyWith(
+            showError: true, codeErrorText: 'Неизвестная ошибка')),
+        _ => emit(state.copyWith(
+            showError: true, codeErrorText: 'Неизвестная ошибка')),
+      },
+      (_) {
+        emit(state.copyWith(showError: false));
+        reset();
+        startTimer(screenContext);
+      },
+    );
+  }
+
   // Обработка каждого тика таймера
   void _onTimerTick(TimerTickEvent event, Emitter<CodeScreenState> emit) {
     if (event.secondsLeft == 0) {
@@ -104,44 +130,33 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
   }
 
 // Функция запуска таймера
-  // Future<void> startTimer(BuildContext context,
-  //     {Future<String?> Function()? requestCodeFun, String? phone}) async {
-  //   _timer?.cancel();
+  Future<void> startTimer(BuildContext context,
+      {Future<String?> Function()? requestCodeFun, String? phone}) async {
+    _timer?.cancel();
+    String? codeOrMsg;
+    emit(
+      state.copyWith(
+        phone: phone,
+        correctCode: phone == state.phone && state.correctCode != null
+            ? state.correctCode
+            : codeOrMsg,
+        secondsLeft: phone == state.phone && state.correctCode != null
+            ? state.secondsLeft
+            : _initialTimerValue,
+        canRequestNewCode:
+            false, // Сброс таймера и запрет на запрос нового кода
+      ),
+    );
 
-  //   String? codeOrMsg;
-
-  //   // Фолбэк на дефолтную реализацию, если такая есть
-  //   final result = await requestCodeUC(
-  //     AuthenticationParams(phone: state.phone ?? ''),
-  //   );
-  //   codeOrMsg = result.fold(
-  //     (failure) => failure.toString(),
-  //     (code) => '',
-  //   );
-
-  //   emit(
-  //     state.copyWith(
-  //       phone: phone,
-  //       correctCode: phone == state.phone && state.correctCode != null
-  //           ? state.correctCode
-  //           : codeOrMsg,
-  //       secondsLeft: phone == state.phone && state.correctCode != null
-  //           ? state.secondsLeft
-  //           : _initialTimerValue,
-  //       canRequestNewCode:
-  //           false, // Сброс таймера и запрет на запрос нового кода
-  //     ),
-  //   );
-
-  //   _timer = Timer.periodic(
-  //     const Duration(seconds: 1),
-  //     (timer) {
-  //       final newTime = state.secondsLeft - 1;
-  //       add(TimerTickEvent(
-  //           newTime)); // Генерация события для каждого тика таймера
-  //     },
-  //   );
-  // }
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        final newTime = state.secondsLeft - 1;
+        add(TimerTickEvent(
+            newTime)); // Генерация события для каждого тика таймера
+      },
+    );
+  }
 
   Future reset({String? phone}) async {
     if (phone == state.phone && state.correctCode != null) _timer?.cancel();
