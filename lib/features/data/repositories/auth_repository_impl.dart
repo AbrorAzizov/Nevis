@@ -23,6 +23,13 @@ class AuthRepositoryImpl implements AuthRepository {
         () async => await authRemoteDataSource.login(phone, code),
       );
 
+  // 📌 Рефреш токен
+  @override
+  Future<Either<Failure, void>> refreshToken() async =>
+      await errorHandler.handle(
+        () async => await authRemoteDataSource.refreshToken(),
+      );
+
   // 📌 Логаут
   @override
   Future<Either<Failure, void>> logout() async => await errorHandler

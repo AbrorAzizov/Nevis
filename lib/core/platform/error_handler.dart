@@ -17,61 +17,34 @@ class ErrorHandlerImpl implements ErrorHandler {
     if (await networkInfo.isConnected) {
       try {
         return Right(await fun());
-      } on TooManyRequestsException {
-        return Left(TooManyRequestsFailure());
-      } on ServerException {
-        return Left(ServerFailure());
-      } on SendingCodeTooOftenException {
-        return Left(SendingCodeTooOftenFailure());
-      } on ConfirmationCodeWrongException {
-        return Left(ConfirmationCodeWrongFailure());
-      } on PhoneDontFoundException {
-        return Left(PhoneDontFoundFailure());
-      } on PhoneAlreadyTakenException {
-        return Left(PhoneAlreadyTakenFailure());
-      } on UncorrectedPasswordException {
-        return Left(UncorrectedPasswordFailure());
-      } on PasswordMatchesPreviousOneException {
-        return Left(PasswordMatchesPreviousOneFailure());
-      } on InvalidFormatException {
-        return Left(InvalidFormatFailure());
-      } on AccountDontExistsException {
-        return Left(AccountDontExistsFailure());
-      } on AcceptPersonalDataException {
-        return Left(AcceptPersonalDataFailure());
+      } on TooManyRequestsException catch (e) {
+        return Left(TooManyRequestsFailure(message: e.message));
+      } on ServerException catch (e) {
+        return Left(ServerFailure(message: e.message));
+      } on SendingCodeTooOftenException catch (e) {
+        return Left(SendingCodeTooOftenFailure(message: e.message));
+      } on ConfirmationCodeWrongException catch (e) {
+        return Left(ConfirmationCodeWrongFailure(message: e.message));
+      } on PhoneDontFoundException catch (e) {
+        return Left(PhoneDontFoundFailure(message: e.message));
+      } on PhoneAlreadyTakenException catch (e) {
+        return Left(PhoneAlreadyTakenFailure(message: e.message));
+      } on UncorrectedPasswordException catch (e) {
+        return Left(UncorrectedPasswordFailure(message: e.message));
+      } on PasswordMatchesPreviousOneException catch (e) {
+        return Left(PasswordMatchesPreviousOneFailure(message: e.message));
+      } on InvalidFormatException catch (e) {
+        return Left(InvalidFormatFailure(message: e.message));
+      } on AccountDontExistsException catch (e) {
+        return Left(AccountDontExistsFailure(message: e.message));
+      } on AcceptPersonalDataException catch (e) {
+        return Left(AcceptPersonalDataFailure(message: e.message));
       } catch (e) {
-        return Left(ServerFailure());
+        return Left(ServerFailure(message: e.toString()));
       }
     } else {
-      return Left(InternetConnectionFailure());
+      return Left(
+          InternetConnectionFailure(message: 'Нет подключения к интернету'));
     }
   }
 }
-  //final NetworkInfo networkInfo;
-//
-  //ErrorHandler(this.networkInfo);
-//
-  //Future<Either<Failure, T>> handle<T>(Future<T> Function() fun) async {
-  //  if (await networkInfo.isConnected) {
-  //    try {
-  //      return Right(await fun());
-  //    } on ServerException {
-  //      return Left(ServerFailure());
-  //    } on SendingCodeTooOftenException {
-  //      return Left(SendingCodeTooOftenFailure());
-  //    } on ConfirmationCodeWrongException {
-  //      return Left(ConfirmationCodeWrongFailure());
-  //    } on PhoneDontFoundException {
-  //      return Left(PhoneDontFoundFailure());
-  //    } on PhoneAlreadyTakenException {
-  //      return Left(PhoneAlreadyTakenFailure());
-  //    } on UncorrectedPasswordException {
-  //      return Left(UncorrectedPasswordFailure());
-  //    } catch (e) {
-  //      return Left(ServerFailure());
-  //    }
-  //  } else {
-  //    return Left(InternetConnectionFailure());
-  //  }
-  //}
-

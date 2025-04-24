@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            lazy: false,
             create: (context) => sl<FavoriteProductsScreenBloc>()
               ..add(LoadFavoriteProductsEvent())),
         BlocProvider(create: (context) => CartScreenBloc(getCartProducts: sl())

@@ -77,8 +77,9 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
         phone: Utils.formatPhoneNumber(state.phone), code: state.code));
     failureOrLoads.fold(
       (failure) => switch (failure) {
-        TooManyRequestsFailure _ => emit(state.copyWith(
-            showError: true, codeErrorText: 'Слишком много запросов')),
+        TooManyRequestsFailure e => emit(state.copyWith(
+            showError: true,
+            codeErrorText: e.message ?? 'Слишком много запросов')),
         ConfirmationCodeWrongFailure _ =>
           emit(state.copyWith(showError: true, codeErrorText: 'Неверный код')),
         ServerFailure _ => emit(state.copyWith(

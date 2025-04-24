@@ -57,9 +57,9 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
         ));
         failureOrLoads.fold(
           (failure) => switch (failure) {
-            TooManyRequestsFailure _ => emit(state.copyWith(
+            TooManyRequestsFailure e => emit(state.copyWith(
                 showError: true,
-                phoneErrorText:
+                phoneErrorText: e.message ??
                     'Слишком много попыток входа , попробуйте позже')),
             PhoneDontFoundFailure _ => emit(state.copyWith(
                 showError: true,

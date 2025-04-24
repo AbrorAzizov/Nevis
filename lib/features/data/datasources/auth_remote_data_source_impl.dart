@@ -9,6 +9,7 @@ abstract class AuthRemoteDataSource {
   Future<bool?> isPhoneExists(String phone);
   Future<void> requestCode(String phone);
   Future<void> login(String phone, String password);
+  Future<void> refreshToken();
   Future<void> logout();
 }
 
@@ -35,6 +36,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           429: TooManyRequestsException(),
         },
         callPathNameForLog: '${runtimeType.toString()}.login',
+      );
+
+      if (data.containsKey('access_token')) {
+        await sharedPreferences.setString(
+            SharedPreferencesKeys.accessToken, data['access_token']['token']);
+        await sharedPreferences.setString(
+            SharedPreferencesKeys.refreshToken, data['refresh_token']['token']);
+      } else {
+        throw ConfirmationCodeWrongException();
+      }
+    } catch (e) {
+      log('Error during login: $e',
+          name: '${runtimeType.toString()}.login', level: 1000);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> refreshToken() async {
+    try {
+      final data = await apiClient.post(
+        endpoint: 'auth/refresh-token',
+        body: {
+          'refresh_token':
+              sharedPreferences.getString(SharedPreferencesKeys.refreshToken),
+        },
+        callPathNameForLog: '${runtimeType.toString()}.refreshToken',
       );
 
       if (data.containsKey('access_token')) {
