@@ -158,12 +158,13 @@ class ProductScreen extends StatelessWidget {
                                                 ?.products ??
                                             [])
                                         .isNotEmpty)
-                                      BlocBuilder<FavoriteProductsScreenBloc,
-                                          FavoriteProductsScreenState>(
-                                        builder: (context, favoriteState) {
-                                          return SizedBox(
-                                            height: 390.h,
-                                            child: ListView.builder(
+                                      SizedBox(
+                                        height: 390.h,
+                                        child: BlocBuilder<
+                                            FavoriteProductsScreenBloc,
+                                            FavoriteProductsScreenState>(
+                                          builder: (context, favState) {
+                                            return ListView.builder(
                                                 padding: getMarginOrPadding(
                                                     left: 20, right: 20),
                                                 scrollDirection:
@@ -183,9 +184,9 @@ class ProductScreen extends StatelessWidget {
                                                           [])[index],
                                                       isSelected: false,
                                                       showCheckbox: false);
-                                                }),
-                                          );
-                                        },
+                                                });
+                                          },
+                                        ),
                                       ),
                                     SizedBox(
                                       height: 16.h,

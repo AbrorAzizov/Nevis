@@ -59,7 +59,7 @@ class ProductModel extends ProductEntity {
       recipe: json["recipe"],
       country: json["country"],
       delivery: json["delivery"],
-      price: int.tryParse(json["price"]?.toString() ?? '') ?? 0,
+      price: (double.tryParse(json["price"]?.toString() ?? '')?.toInt()) ?? 0,
       oldPrice: json["price_old"],
       discount: int.tryParse(
         (json["product_price_from_percent"] ?? ''),

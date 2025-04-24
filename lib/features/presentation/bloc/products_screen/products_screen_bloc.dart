@@ -12,8 +12,6 @@ import 'package:nevis/features/domain/params/category_params.dart';
 import 'package:nevis/features/domain/usecases/products/get_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_sort_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_subcategories_products.dart';
-import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
-import 'package:nevis/locator_service.dart';
 
 part 'products_screen_event.dart';
 part 'products_screen_state.dart';
@@ -99,17 +97,7 @@ class ProductsScreenBloc
 
           // Объединяем старые продукты с новыми
           final updatedProducts = List<ProductEntity>.from(oldProducts)
-            ..addAll(
-              (r?.products ?? []).map((product) {
-                print(sl<FavoriteProductsScreenBloc>().state.isLoading);
-                bool? isFav = sl<FavoriteProductsScreenBloc>()
-                    .state
-                    .products
-                    .any((favProduct) =>
-                        favProduct.productId == product.productId);
-                return product.copyWith(isFav: isFav);
-              }),
-            );
+            ..addAll((r?.products ?? []));
 
           searchProducts = searchProducts?.copyWith(products: updatedProducts);
         },

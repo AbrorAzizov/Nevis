@@ -82,6 +82,11 @@ class ProductRepositoryImpl implements ProductRepository {
           () async => await productRemoteDataSource.getFavoriteProducts());
 
   @override
+  Future<Either<Failure, void>> deleteFromFavoriteProducts(int id) async =>
+      await errorHandler.handle(() async =>
+          await productRemoteDataSource.deleteFromFavoriteProducts(id));
+
+  @override
   Future<Either<Failure, void>> updateFavoriteProducts(int id) async =>
       await errorHandler.handle(
           () async => await productRemoteDataSource.updateFavoriteProducts(id));

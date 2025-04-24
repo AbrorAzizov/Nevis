@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
+import 'package:nevis/features/domain/usecases/products/delete_from_favorite_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_favorite_products.dart';
 import 'package:nevis/features/domain/usecases/products/update_favorite_products.dart';
 
@@ -11,9 +12,11 @@ part 'favorite_products_screen_state.dart';
 class FavoriteProductsScreenBloc
     extends Bloc<FavoriteProductsScreenEvent, FavoriteProductsScreenState> {
   final GetFavoriteProductsUC getFavoriteProductsUC;
+  final DeleteProductFromFavoriteProductsUC deleteProductFromFavoriteProductsUC;
   final UpdateFavoriteProductsUC updateFavoriteProductsUC;
   FavoriteProductsScreenBloc(
       {required this.getFavoriteProductsUC,
+      required this.deleteProductFromFavoriteProductsUC,
       required this.updateFavoriteProductsUC})
       : super(
           FavoriteProductsScreenState(
@@ -33,6 +36,9 @@ class FavoriteProductsScreenBloc
     on<SelectSortProductsType>(_onSelectSortProductsType);
     on<ToggleProductSelection>(_onToggleProductSelection);
     on<UpdateFavoriteProducts>(_updateFavoriteProducts);
+    on<DeleteFavoriteProduct>(_deleteFavoriteProduct);
+
+    //DeleteFavoriteProduct
   }
 
   Future<void> _onLoadProducts(LoadFavoriteProductsEvent event,
@@ -47,11 +53,8 @@ class FavoriteProductsScreenBloc
           products: [],
         )),
         (favoriteProducts) {
-          final updatedProducts = favoriteProducts
-              .map((product) => product.copyWith(isFav: true))
-              .toList();
           emit(state.copyWith(
-            products: updatedProducts,
+            products: favoriteProducts,
             isLoading: false,
           ));
         },
@@ -84,11 +87,39 @@ class FavoriteProductsScreenBloc
             isLoading: false,
           )),
           (products) {
-            final updatedProducts = products
-                .map((product) => product.copyWith(isFav: true))
-                .toList();
             emit(state.copyWith(
-              products: updatedProducts,
+              products: products,
+              isLoading: false,
+            ));
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteFavoriteProduct(
+    DeleteFavoriteProduct event,
+    Emitter<FavoriteProductsScreenState> emit,
+  ) async {
+    final result = await deleteProductFromFavoriteProductsUC(event.productId);
+
+    await result.fold(
+      (failure) async {
+        emit(state.copyWith(
+          error: 'Ошибка при обновлении избранных',
+          isLoading: false,
+        ));
+      },
+      (r) async {
+        final refreshed = await getFavoriteProductsUC();
+        refreshed.fold(
+          (failure) => emit(state.copyWith(
+            error: 'Ошибка при получении обновлённого списка избранных',
+            isLoading: false,
+          )),
+          (products) {
+            emit(state.copyWith(
+              products: products,
               isLoading: false,
             ));
           },

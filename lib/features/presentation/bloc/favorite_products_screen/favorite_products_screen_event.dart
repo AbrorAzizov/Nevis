@@ -29,3 +29,8 @@ class UpdateFavoriteProducts extends FavoriteProductsScreenEvent {
   final int productId;
   const UpdateFavoriteProducts({required this.productId});
 }
+
+class DeleteFavoriteProduct extends FavoriteProductsScreenEvent {
+  final int productId;
+  const DeleteFavoriteProduct({required this.productId});
+}

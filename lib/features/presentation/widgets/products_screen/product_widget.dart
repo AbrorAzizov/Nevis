@@ -96,15 +96,23 @@ class ProductWidget extends StatelessWidget {
                                 .toList()
                                 .contains(product.productId),
                             onPressed: () {
-                              if (product.isFav != null) {
-                                if (product.isFav!) {
+                              if (product.productId != null) {
+                                if (context
+                                    .read<FavoriteProductsScreenBloc>()
+                                    .state
+                                    .products
+                                    .map((e) => e.productId)
+                                    .toList()
+                                    .contains(product.productId)) {
+                                  context
+                                      .read<FavoriteProductsScreenBloc>()
+                                      .add(DeleteFavoriteProduct(
+                                          productId: product.productId!));
                                 } else {
-                                  if (product.productId != null) {
-                                    context
-                                        .read<FavoriteProductsScreenBloc>()
-                                        .add(UpdateFavoriteProducts(
-                                            productId: product.productId!));
-                                  }
+                                  context
+                                      .read<FavoriteProductsScreenBloc>()
+                                      .add(UpdateFavoriteProducts(
+                                          productId: product.productId!));
                                 }
                               }
                             },
