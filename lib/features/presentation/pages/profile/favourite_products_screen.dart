@@ -113,11 +113,17 @@ class FavoriteProductsScreen extends StatelessWidget {
                                     bloc.add(PickAllProductsEvent()),
                               ),
                               SizedBox(height: 16.h),
-                              ProductsGridWidget(
-                                categryId: 0,
-                                products: state.products,
-                                selectedProductIds: state.selectedProductIds,
-                                showCheckbox: true,
+                              BlocBuilder<FavoriteProductsScreenBloc,
+                                  FavoriteProductsScreenState>(
+                                builder: (context, state) {
+                                  return ProductsGridWidget(
+                                    categryId: 0,
+                                    products: state.products,
+                                    selectedProductIds:
+                                        state.selectedProductIds,
+                                    showCheckbox: true,
+                                  );
+                                },
                               ),
                               SizedBox(height: 10.h),
                               if (state.selectedProductIds.isNotEmpty)

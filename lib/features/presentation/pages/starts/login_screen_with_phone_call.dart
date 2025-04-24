@@ -35,7 +35,6 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
       child: BlocConsumer<LoginScreenBloc, LoginScreenState>(
         listener: (context, state) async {
           if (state is CodeSuccesefullyDelivired) {
-            print('filini');
             Navigator.of(context).push(
               Routes.createRoute(
                 const CodeScreen(),

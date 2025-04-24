@@ -46,5 +46,6 @@ class FavoriteProductsScreenState extends Equatable {
         selectedSortType,
         selectedFilterOrSortType,
         isLoading,
+        error,
       ];
 }

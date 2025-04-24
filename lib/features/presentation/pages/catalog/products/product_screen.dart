@@ -7,6 +7,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
+import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/product_screen/product_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
@@ -157,28 +158,34 @@ class ProductScreen extends StatelessWidget {
                                                 ?.products ??
                                             [])
                                         .isNotEmpty)
-                                      SizedBox(
-                                        height: 390.h,
-                                        child: ListView.builder(
-                                            padding: getMarginOrPadding(
-                                                left: 20, right: 20),
-                                            scrollDirection: Axis.horizontal,
-                                            shrinkWrap: true,
-                                            itemCount: (state
-                                                        .recomendationProducts
-                                                        ?.products ??
-                                                    [])
-                                                .length,
-                                            itemBuilder: (context, index) {
-                                              return ProductWidget(
-                                                  categoryId: categoryId,
-                                                  product: (state
-                                                          .recomendationProducts
-                                                          ?.products ??
-                                                      [])[index],
-                                                  isSelected: false,
-                                                  showCheckbox: false);
-                                            }),
+                                      BlocBuilder<FavoriteProductsScreenBloc,
+                                          FavoriteProductsScreenState>(
+                                        builder: (context, favoriteState) {
+                                          return SizedBox(
+                                            height: 390.h,
+                                            child: ListView.builder(
+                                                padding: getMarginOrPadding(
+                                                    left: 20, right: 20),
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    (state.recomendationProducts
+                                                                ?.products ??
+                                                            [])
+                                                        .length,
+                                                itemBuilder: (context, index) {
+                                                  return ProductWidget(
+                                                      categoryId: categoryId,
+                                                      product: (state
+                                                              .recomendationProducts
+                                                              ?.products ??
+                                                          [])[index],
+                                                      isSelected: false,
+                                                      showCheckbox: false);
+                                                }),
+                                          );
+                                        },
                                       ),
                                     SizedBox(
                                       height: 16.h,

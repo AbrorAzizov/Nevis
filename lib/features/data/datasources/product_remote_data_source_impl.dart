@@ -21,6 +21,7 @@ abstract class ProductRemoteDataSource {
   Future<SearchProductsModel> getSortCategoryProducts(CategoryParams params);
   Future<List<CategoryModel>> getSubCategories(int id);
   Future<List<ProductModel>> getFavoriteProducts();
+  Future<void> updateFavoriteProducts(int id);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -183,6 +184,26 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       );
       List<dynamic> dataList = data['favorites'] ?? [];
       return dataList.map((e) => ProductModel.fromJson(e)).toList();
+    } catch (e) {
+      log('Error during logout: $e',
+          name: '${runtimeType.toString()}.getFavoriteProducts', level: 1000);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateFavoriteProducts(int id) async {
+    try {
+      await apiClient.post(
+        body: {
+          'product_id': [id]
+        },
+        endpoint: 'favorites/products',
+        exceptions: {
+          401: ServerException(),
+        },
+        callPathNameForLog: '${runtimeType.toString()}.getFavoriteProducts',
+      );
     } catch (e) {
       log('Error during logout: $e',
           name: '${runtimeType.toString()}.getSubCategories', level: 1000);

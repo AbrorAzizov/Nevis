@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -52,9 +53,8 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
     on<SendCodeEvent>(
       (event, emit) async {
         final failureOrLoads = await requestCodeUC(AuthenticationParams(
-            phone: Utils.formatPhoneNumber(phoneController.text),
-           ));
-           
+          phone: Utils.formatPhoneNumber(phoneController.text),
+        ));
         failureOrLoads.fold(
           (failure) => switch (failure) {
             PhoneDontFoundFailure _ => emit(state.copyWith(
@@ -76,7 +76,6 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
       },
     );
   }
-
   @override
   Future<void> close() {
     phoneController.dispose();

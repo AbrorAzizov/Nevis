@@ -24,3 +24,8 @@ class ToggleProductSelection extends FavoriteProductsScreenEvent {
   final int productId;
   const ToggleProductSelection(this.productId);
 }
+
+class UpdateFavoriteProducts extends FavoriteProductsScreenEvent {
+  final int productId;
+  const UpdateFavoriteProducts({required this.productId});
+}

@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/usecases/products/get_favorite_products.dart';
+import 'package:nevis/features/domain/usecases/products/update_favorite_products.dart';
 
 part 'favorite_products_screen_event.dart';
 part 'favorite_products_screen_state.dart';
@@ -10,7 +11,10 @@ part 'favorite_products_screen_state.dart';
 class FavoriteProductsScreenBloc
     extends Bloc<FavoriteProductsScreenEvent, FavoriteProductsScreenState> {
   final GetFavoriteProductsUC getFavoriteProductsUC;
-  FavoriteProductsScreenBloc({required this.getFavoriteProductsUC})
+  final UpdateFavoriteProductsUC updateFavoriteProductsUC;
+  FavoriteProductsScreenBloc(
+      {required this.getFavoriteProductsUC,
+      required this.updateFavoriteProductsUC})
       : super(
           FavoriteProductsScreenState(
             isAllProductsChecked: false,
@@ -28,22 +32,69 @@ class FavoriteProductsScreenBloc
     on<ShowFilterProductsTypes>(_onShowFilterProductsTypes);
     on<SelectSortProductsType>(_onSelectSortProductsType);
     on<ToggleProductSelection>(_onToggleProductSelection);
+    on<UpdateFavoriteProducts>(_updateFavoriteProducts);
   }
 
   Future<void> _onLoadProducts(LoadFavoriteProductsEvent event,
       Emitter<FavoriteProductsScreenState> emit) async {
     emit(state.copyWith(isLoading: true));
-
     try {
       final failureOrLoads = await getFavoriteProductsUC();
       failureOrLoads.fold(
-          (_) => emit(state.copyWith(
-              error: 'Ошибка загрузки данных', isLoading: false, products: [])),
-          (favoriteProducts) => emit(
-              state.copyWith(products: favoriteProducts, isLoading: false)));
+        (_) => emit(state.copyWith(
+          error: 'Ошибка загрузки данных abkt',
+          isLoading: false,
+          products: [],
+        )),
+        (favoriteProducts) {
+          final updatedProducts = favoriteProducts
+              .map((product) => product.copyWith(isFav: true))
+              .toList();
+          emit(state.copyWith(
+            products: updatedProducts,
+            isLoading: false,
+          ));
+        },
+      );
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
+  }
+
+  Future<void> _updateFavoriteProducts(
+    UpdateFavoriteProducts event,
+    Emitter<FavoriteProductsScreenState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+
+    final result = await updateFavoriteProductsUC(event.productId);
+
+    await result.fold(
+      (failure) async {
+        emit(state.copyWith(
+          error: 'Ошибка при обновлении избранных',
+          isLoading: false,
+        ));
+      },
+      (r) async {
+        final refreshed = await getFavoriteProductsUC();
+        refreshed.fold(
+          (failure) => emit(state.copyWith(
+            error: 'Ошибка при получении обновлённого списка избранных',
+            isLoading: false,
+          )),
+          (products) {
+            final updatedProducts = products
+                .map((product) => product.copyWith(isFav: true))
+                .toList();
+            emit(state.copyWith(
+              products: updatedProducts,
+              isLoading: false,
+            ));
+          },
+        );
+      },
+    );
   }
 
   void _onPickAllProducts(

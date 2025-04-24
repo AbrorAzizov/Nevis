@@ -61,7 +61,9 @@ class CartProductWidget extends StatelessWidget {
                     TypeOfferWidget(specialOffer: product.specialOffer),
                   Row(
                     children: [
-                      FavoriteButton(onPressed: () {}),
+                      FavoriteButton(
+                        onPressed: () {},
+                      ),
                       SizedBox(
                         width: 12.w,
                       ),

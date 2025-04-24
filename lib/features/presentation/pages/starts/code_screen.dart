@@ -31,7 +31,7 @@ class CodeScreen extends StatelessWidget {
         requestCodeUC: sl(),
         phone: args['phone'],
         loginUC: sl(),
-      )..startTimer(context),
+      ),
       child: BlocConsumer<CodeScreenBloc, CodeScreenState>(
         listener: (context, state) {
           if (state.showError) {

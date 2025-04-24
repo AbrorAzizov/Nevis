@@ -55,6 +55,7 @@ import 'package:nevis/features/domain/usecases/products/get_recomendation_produc
 import 'package:nevis/features/domain/usecases/products/get_sort_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_subcategories_products.dart';
 import 'package:nevis/features/domain/usecases/products/search_products.dart';
+import 'package:nevis/features/domain/usecases/products/update_favorite_products.dart';
 import 'package:nevis/features/domain/usecases/profile/delete_me.dart';
 import 'package:nevis/features/domain/usecases/profile/get_me.dart';
 import 'package:nevis/features/domain/usecases/profile/update_me.dart';
@@ -63,6 +64,7 @@ import 'package:nevis/features/presentation/bloc/articles_screen/articles_screen
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/category_screen/category_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/info_about_order_screen/info_about_order_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/login_screen/login_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
@@ -190,6 +192,13 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton(
+    () => FavoriteProductsScreenBloc(
+      updateFavoriteProductsUC: sl<UpdateFavoriteProductsUC>(),
+      getFavoriteProductsUC: sl<GetFavoriteProductsUC>(),
+    ),
+  );
+
   //// UseCases
   // Auth
   sl.registerLazySingleton(() => LoginUC(sl()));
@@ -222,6 +231,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetSubCategoriesUC(sl()));
   sl.registerLazySingleton(() => GetRecomendationProductsUC(sl()));
   sl.registerLazySingleton(() => GetFavoriteProductsUC(sl()));
+  sl.registerLazySingleton(() => UpdateFavoriteProductsUC(sl()));
   // Category
   sl.registerLazySingleton(() => GetCategoriesUC(sl()));
   sl.registerLazySingleton(() => GetSubcategoriesUC(sl()));

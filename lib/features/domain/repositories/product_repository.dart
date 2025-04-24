@@ -21,4 +21,5 @@ abstract class ProductRepository {
   Future<Either<Failure, SearchProductsEntity>> getSortCategoryProducts(
       CategoryParams params);
   Future<Either<Failure, List<ProductEntity>>> getFavoriteProducts();
+  Future<Either<Failure, void>> updateFavoriteProducts(int id);
 }

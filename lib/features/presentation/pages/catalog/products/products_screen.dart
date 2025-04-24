@@ -7,6 +7,8 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
+import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart'
+    as fv;
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/filter_and_sort_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
@@ -114,12 +116,20 @@ class ProductsScreen extends StatelessWidget {
                                 Padding(
                                   padding:
                                       getMarginOrPadding(left: 20, right: 20),
-                                  child: ProductsGridWidget(
-                                    categryId: categoryId,
-                                    products:
-                                        (state.searchProducts?.products ?? []),
-                                    showCheckbox: false,
-                                    selectedProductIds: {},
+                                  child: BlocBuilder<
+                                      fv.FavoriteProductsScreenBloc,
+                                      fv.FavoriteProductsScreenState>(
+                                    builder: (context, favState) {
+                                      print(favState.products);
+                                      return ProductsGridWidget(
+                                        categryId: categoryId,
+                                        products:
+                                            (state.searchProducts?.products ??
+                                                []),
+                                        showCheckbox: false,
+                                        selectedProductIds: {},
+                                      );
+                                    },
                                   ),
                                 ),
                             ],

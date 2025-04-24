@@ -4,10 +4,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/paths.dart';
 
 class FavoriteButton extends StatelessWidget {
-  final Function() onPressed;
+  final bool? isFav;
+  final VoidCallback onPressed;
 
-  const FavoriteButton({super.key, required this.onPressed});
-
+  const FavoriteButton({
+    super.key,
+    this.isFav,
+    required this.onPressed,
+  });
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -15,16 +19,22 @@ class FavoriteButton extends StatelessWidget {
       width: 24.w,
       child: IconButton(
         onPressed: onPressed,
-        icon: SvgPicture.asset(
-          Paths.favouriteProductsIconPath,
-          width: 13.w,
-          height: 13.h,
-        ),
-        style: ElevatedButton.styleFrom(
+        icon: isFav ?? false
+            ? SvgPicture.asset(
+                Paths.isFav,
+                width: 13.w,
+                height: 13.h,
+              )
+            : SvgPicture.asset(
+                Paths.notFav,
+                width: 13.w,
+                height: 13.h,
+              ),
+        style: IconButton.styleFrom(
           padding: EdgeInsets.zero,
           elevation: 0,
-          backgroundColor: Color(0xFF222222).withOpacity(.05),
-          shape: CircleBorder(),
+          backgroundColor: const Color(0xFF222222).withOpacity(.05),
+          shape: const CircleBorder(),
         ),
       ),
     );

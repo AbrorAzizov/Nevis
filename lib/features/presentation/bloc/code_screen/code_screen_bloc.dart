@@ -37,7 +37,6 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
     on<CodeChangedEvent>(_onCodeChanged);
     on<TimerTickEvent>(_onTimerTick);
     on<SubmitCodeEvent>(_onSubmitCode);
-    on<RequestNewCodeEvent>(_onRequestNewCode);
 
     // Навешивание листенера на TextEditingController
     codeController.addListener(_codeListener);
@@ -92,13 +91,6 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
     );
   }
 
-  // Обработка запроса нового кода
-  void _onRequestNewCode(
-      RequestNewCodeEvent event, Emitter<CodeScreenState> emit) {
-    _timer?.cancel(); // Остановка предыдущего таймера
-    startTimer(screenContext); // Запуск нового таймера
-  }
-
   // Обработка каждого тика таймера
   void _onTimerTick(TimerTickEvent event, Emitter<CodeScreenState> emit) {
     if (event.secondsLeft == 0) {
@@ -112,44 +104,44 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
   }
 
 // Функция запуска таймера
-  Future<void> startTimer(BuildContext context,
-      {Future<String?> Function()? requestCodeFun, String? phone}) async {
-    _timer?.cancel();
+  // Future<void> startTimer(BuildContext context,
+  //     {Future<String?> Function()? requestCodeFun, String? phone}) async {
+  //   _timer?.cancel();
 
-    String? codeOrMsg;
+  //   String? codeOrMsg;
 
-    // Фолбэк на дефолтную реализацию, если такая есть
-    final result = await requestCodeUC(
-      AuthenticationParams(phone: state.phone ?? ''),
-    );
-    codeOrMsg = result.fold(
-      (failure) => failure.toString(),
-      (code) => '',
-    );
+  //   // Фолбэк на дефолтную реализацию, если такая есть
+  //   final result = await requestCodeUC(
+  //     AuthenticationParams(phone: state.phone ?? ''),
+  //   );
+  //   codeOrMsg = result.fold(
+  //     (failure) => failure.toString(),
+  //     (code) => '',
+  //   );
 
-    emit(
-      state.copyWith(
-        phone: phone,
-        correctCode: phone == state.phone && state.correctCode != null
-            ? state.correctCode
-            : codeOrMsg,
-        secondsLeft: phone == state.phone && state.correctCode != null
-            ? state.secondsLeft
-            : _initialTimerValue,
-        canRequestNewCode:
-            false, // Сброс таймера и запрет на запрос нового кода
-      ),
-    );
+  //   emit(
+  //     state.copyWith(
+  //       phone: phone,
+  //       correctCode: phone == state.phone && state.correctCode != null
+  //           ? state.correctCode
+  //           : codeOrMsg,
+  //       secondsLeft: phone == state.phone && state.correctCode != null
+  //           ? state.secondsLeft
+  //           : _initialTimerValue,
+  //       canRequestNewCode:
+  //           false, // Сброс таймера и запрет на запрос нового кода
+  //     ),
+  //   );
 
-    _timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) {
-        final newTime = state.secondsLeft - 1;
-        add(TimerTickEvent(
-            newTime)); // Генерация события для каждого тика таймера
-      },
-    );
-  }
+  //   _timer = Timer.periodic(
+  //     const Duration(seconds: 1),
+  //     (timer) {
+  //       final newTime = state.secondsLeft - 1;
+  //       add(TimerTickEvent(
+  //           newTime)); // Генерация события для каждого тика таймера
+  //     },
+  //   );
+  // }
 
   Future reset({String? phone}) async {
     if (phone == state.phone && state.correctCode != null) _timer?.cancel();
