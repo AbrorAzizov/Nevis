@@ -10,7 +10,6 @@ import 'package:nevis/core/custom_cache_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/product_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/value_buy_product_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
@@ -89,7 +88,13 @@ class ProductWidget extends StatelessWidget {
                         child: Align(
                           alignment: Alignment.topRight,
                           child: FavoriteButton(
-                            isFav: product.isFav,
+                            isFav: context
+                                .read<FavoriteProductsScreenBloc>()
+                                .state
+                                .products
+                                .map((e) => e.productId)
+                                .toList()
+                                .contains(product.productId),
                             onPressed: () {
                               if (product.isFav != null) {
                                 if (product.isFav!) {
@@ -99,14 +104,6 @@ class ProductWidget extends StatelessWidget {
                                         .read<FavoriteProductsScreenBloc>()
                                         .add(UpdateFavoriteProducts(
                                             productId: product.productId!));
-                                    context.read<ProductsScreenBloc>().add(
-                                        LoadProductsEvent(
-                                            page: context
-                                                    .read<ProductsScreenBloc>()
-                                                    .state
-                                                    .searchProducts!
-                                                    .currentPage +
-                                                1));
                                   }
                                 }
                               }

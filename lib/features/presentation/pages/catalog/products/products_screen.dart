@@ -120,7 +120,6 @@ class ProductsScreen extends StatelessWidget {
                                       fv.FavoriteProductsScreenBloc,
                                       fv.FavoriteProductsScreenState>(
                                     builder: (context, favState) {
-                                      print(favState.products);
                                       return ProductsGridWidget(
                                         categryId: categoryId,
                                         products:
