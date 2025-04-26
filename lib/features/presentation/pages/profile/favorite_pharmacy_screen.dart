@@ -29,8 +29,9 @@ class _FavoritePharmaciesScreenState extends State<FavoritePharmaciesScreen> {
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
         return BlocProvider(
-          create: (context) => FavoritePharmaciesBloc(getPharmaciesUC: sl())
-            ..add(LoadDataEvent()),
+          create: (context) =>
+              FavoritePharmaciesBloc(getFavoritePharmaciesUC: sl())
+                ..add(LoadDataEvent()),
           child: BlocBuilder<FavoritePharmaciesBloc, FavoritePharmaciesState>(
             builder: (context, state) {
               final bloc = context.read<FavoritePharmaciesBloc>();

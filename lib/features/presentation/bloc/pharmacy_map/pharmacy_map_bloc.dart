@@ -65,10 +65,9 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
 
     for (MapMarkerModel point in state.points) {
       bool isSelected = point.id.toString() == state.selectedMarkerId;
-      final String? price = point.data?['price'].toString();
 
       final icon =
-          await Utils.createBitmapIcon(price: price, isSelected: isSelected);
+          await Utils.createBitmapIcon(price: '', isSelected: isSelected);
       final placemark = PlacemarkMapObject(
         opacity: 1,
         mapId: MapObjectId(point.id.toString()),

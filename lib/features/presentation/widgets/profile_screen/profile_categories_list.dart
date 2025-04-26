@@ -74,7 +74,7 @@ class ProfileCategoriesList extends StatelessWidget {
           SubcategoryItem(
             title: 'Любимые аптеки',
             titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.documnetsAndInstructionsIconPath,
+            imagePath: Paths.favPharmaciesIconPath,
             onTap: () => Navigator.of(context).push(
               Routes.createRoute(
                 const FavoritePharmaciesScreen(),

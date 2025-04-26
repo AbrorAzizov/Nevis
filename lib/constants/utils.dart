@@ -359,7 +359,7 @@ class Utils {
 
       final textPainterPrice = TextPainter(
         text: TextSpan(
-          text: "$price ₽",
+          text: "",
           style: TextStyle(
             color: isSelected ? UiConstants.whiteColor : UiConstants.blueColor,
             fontSize: 24, // Сделал текст еще больше

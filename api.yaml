@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: 'API документация для авторизации пользователей'
-  description: 'API для авторизации пользователей через телефон и сторонние сервисы'
+  title: 'API документация Nevis'
+  description: 'API документация для мобильного приложения сети аптек Nevis'
   version: 1.0.0
 paths:
   /api/app/auth/verification-code:
@@ -807,6 +807,151 @@ paths:
       security:
         -
           bearerAuth: []
+  /api/app/loyalty-card/register:
+    post:
+      tags:
+        - 'Карты лояльности'
+      summary: 'Регистрация карты лояльности'
+      description: 'Регистрирует физическую или виртуальную карту лояльности в системе'
+      operationId: 462c3171b95414672441dc0d2ff1242e
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                card_number:
+                  description: '13 цифр (для физической карты)'
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                phone_number:
+                  description: 'Формат +7 9XX XXX XX XX'
+                  type: string
+                birth_date:
+                  description: 'Формат YYYY-MM-DD'
+                  type: string
+                gender:
+                  description: 'М или Ж'
+                  type: string
+                email:
+                  description: Email
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string }
+                  card_number: { type: string }
+                  type: { description: 'physical или virtual', type: string }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '401':
+          description: 'Не авторизован'
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
+  '/api/app/loyalty-card/{card_id}/qr-code':
+    get:
+      tags:
+        - 'Карты лояльности'
+      summary: 'Получение QR-кода карты лояльности'
+      description: 'Генерирует QR-код для зарегистрированной карты лояльности'
+      operationId: 7f0975acfb9809aaba40f426f6bda7a1
+      parameters:
+        -
+          name: card_id
+          in: path
+          description: 'Идентификатор карты лояльности'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string }
+                  qr_code: { description: 'Base64 код', type: string }
+                  card_number: { type: string }
+                  bonus_points: { type: integer }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '404':
+          description: 'Карта не найдена'
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
+  '/api/app/loyalty-card/{card_id}':
+    get:
+      tags:
+        - 'Карты лояльности'
+      summary: 'Получение информации о карте лояльности'
+      description: 'Возвращает данные о карте лояльности'
+      operationId: 7c153788bf83b0bdb492b7abf351ba9c
+      parameters:
+        -
+          name: card_id
+          in: path
+          description: 'Идентификатор карты лояльности'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  card_number: { type: string }
+                  card_type: { description: 'physical или virtual', type: string }
+                  bonus_balance: { type: integer }
+                  is_active: { type: boolean }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '404':
+          description: 'Карта не найдена'
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
   /api/app/orders:
     get:
       tags:
@@ -1223,6 +1368,87 @@ paths:
                 type: object
         '404':
           description: 'Акция не найдена'
+  /api/app/regions:
+    get:
+      tags:
+        - Регионы
+      summary: 'Получение списка регионов'
+      description: 'Возвращает список доступных регионов для выбора пользователем'
+      operationId: ab6d6ee59707b6dee0136e037a950f89
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  regions: { type: array, items: { properties: { region_id: { type: integer }, region_name: { type: string }, default: { type: boolean } }, type: object } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+  /api/app/region:
+    post:
+      tags:
+        - Регионы
+      summary: 'Выбор региона'
+      description: 'Устанавливает выбранный пользователем регион. Если регион не выбран, то по умолчанию ставит region_id:2 - Санкт-Петербург'
+      operationId: f731d2b1cc9b2358da4fb0e56d451420
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                region_id:
+                  description: 'ID выбранного региона'
+                  type: integer
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string }
+                  region_id: { type: integer }
+                type: object
+        '400':
+          description: 'Некорректный запрос'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '403':
+          description: 'Доступ запрещен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                type: object
+      security:
+        -
+          bearerAuth: []
   /api/app/stories:
     get:
       tags:
@@ -1565,6 +1791,9 @@ tags:
     name: Избранное
     description: Избранное
   -
+    name: 'Карты лояльности'
+    description: 'Карты лояльности'
+  -
     name: Заказы
     description: Заказы
   -
@@ -1573,6 +1802,9 @@ tags:
   -
     name: Акции
     description: Акции
+  -
+    name: Регионы
+    description: Регионы
   -
     name: Сториз
     description: Сториз

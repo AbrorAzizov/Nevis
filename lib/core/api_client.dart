@@ -24,7 +24,7 @@ class ApiClient {
   ) async {
     http.Response response = await request();
 
-    if (response.statusCode == 401) {
+    if (response.statusCode == 401 || response.statusCode == 403) {
       log('🔁 Token expired. Trying to refresh...',
           name: callPathNameForLog ?? '');
       try {

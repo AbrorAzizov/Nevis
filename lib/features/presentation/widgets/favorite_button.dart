@@ -21,12 +21,12 @@ class FavoriteButton extends StatelessWidget {
         onPressed: onPressed,
         icon: isFav ?? false
             ? SvgPicture.asset(
-                Paths.isFav,
+                Paths.isFavIconPath,
                 width: 13.w,
                 height: 13.h,
               )
             : SvgPicture.asset(
-                Paths.notFav,
+                Paths.notFavIconPath,
                 width: 13.w,
                 height: 13.h,
               ),

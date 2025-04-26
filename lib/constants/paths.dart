@@ -141,6 +141,7 @@ class Paths {
   static const String asAGiftIconPath = '${_imagesPath}as_a_gift.png';
   static const String emptyProductsCartIconPath = '${_imagesPath}cart.png';
   static const String pinatoProductIconPath = '${_imagesPath}pinato.svg';
-  static const String isFav = '${_imagesPath}fav.svg';
-  static const String notFav = '${_imagesPath}notFav.svg';
+  static const String isFavIconPath = '${_imagesPath}fav.svg';
+  static const String notFavIconPath = '${_imagesPath}notFav.svg';
+  static const String favPharmaciesIconPath = '${_imagesPath}favPharmacies.svg';
 }

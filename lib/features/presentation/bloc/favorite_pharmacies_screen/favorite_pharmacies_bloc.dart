@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
 import 'package:nevis/features/data/models/pharmacy_model.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
-import 'package:nevis/features/domain/usecases/content/get_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/pharmacies/get_favorite_pharmacies.dart';
 import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
 
 part 'favorite_pharmacies_event.dart';
@@ -11,10 +11,10 @@ part 'favorite_pharmacies_state.dart';
 
 class FavoritePharmaciesBloc
     extends Bloc<FavoritePharmaciesEvent, FavoritePharmaciesState> {
-  final GetPharmaciesUC getPharmaciesUC;
+  final GetFavoritePharmaciesUC getFavoritePharmaciesUC;
   List<PharmacyEntity> _allPharmacies = [];
 
-  FavoritePharmaciesBloc({required this.getPharmaciesUC})
+  FavoritePharmaciesBloc({required this.getFavoritePharmaciesUC})
       : super(const FavoritePharmaciesState(isLoading: false)) {
     on<LoadDataEvent>(_onLoadData);
     on<PharmacyMarkerTappedEvent>(_onSelectPharmacy);
@@ -26,7 +26,7 @@ class FavoritePharmaciesBloc
       LoadDataEvent event, Emitter<FavoritePharmaciesState> emit) async {
     emit(state.copyWith(isLoading: true));
 
-    final failureOrLoads = await getPharmaciesUC('');
+    final failureOrLoads = await getFavoritePharmaciesUC();
     List<MapMarkerModel> points = [];
 
     failureOrLoads.fold(
@@ -34,7 +34,6 @@ class FavoritePharmaciesBloc
           errorMessage: 'Something went wrong', isLoading: false)),
       (pharmacies) {
         _allPharmacies = pharmacies;
-
         points = pharmacies.map((pharmacy) {
           final coordinates = pharmacy.coordinates!.split(', ');
           return MapMarkerModel(
