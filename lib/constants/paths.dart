@@ -144,4 +144,6 @@ class Paths {
   static const String isFavIconPath = '${_imagesPath}fav.svg';
   static const String notFavIconPath = '${_imagesPath}notFav.svg';
   static const String favPharmaciesIconPath = '${_imagesPath}favPharmacies.svg';
+  static const String filledLocationIconPath =
+      '${_imagesPath}filledLocation.svg';
 }

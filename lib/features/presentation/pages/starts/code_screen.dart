@@ -118,7 +118,6 @@ class CodeScreen extends StatelessWidget {
                           isActive: state.isButtonActive,
                           text: 'Войти',
                           onTap: () {
-                            print('fifi');
                             // bloc.add()
                           }),
                       SizedBox(height: 16.h),

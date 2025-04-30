@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
           create: (context) => HomeScreenBloc(context: context),
         ),
         BlocProvider(
-          create: (context) => SearchScreenBloc(),
+          create: (context) => sl<SearchScreenBloc>()..add(GetRegionsEvent()),
         ),
         BlocProvider(
           create: (context) => RouteObserverBloc(),
@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             if (searchState.isExpanded)
                               Positioned(
-                                top: 60.h,
+                                top: 50.h,
                                 child: SearchScreen(
                                   homeContext: context,
                                   onRedirect: () async => FocusScope.of(bloc
@@ -165,38 +165,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                            if (!searchState.isExpanded)
-                              Positioned(
-                                child: Container(
-                                  padding:
-                                      getMarginOrPadding(left: 20, right: 20),
-                                  height: 70.h,
-                                  decoration: BoxDecoration(
-                                    color: UiConstants.whiteColor,
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: List.generate(
-                                      bloc.screens.length,
-                                      (index) => BottomNavigationBarTile(
-                                          icon: bloc.iconsPaths[index],
-                                          title: bloc.iconsNames[index],
-                                          countChatMessage:
-                                              index == 2 ? 99 : null,
-                                          onTap: () {
-                                            bloc.navigatorKeys[selectedIndex]
-                                                .currentState!
-                                                .popUntil(
-                                                    (route) => route.isFirst);
-                                            bloc.onChangePage(index);
-                                          },
-                                          isActive: selectedIndex == index),
-                                    ),
+                            Positioned(
+                              child: Container(
+                                padding:
+                                    getMarginOrPadding(left: 20, right: 20),
+                                height: 70.h,
+                                decoration: BoxDecoration(
+                                  color: UiConstants.whiteColor,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    bloc.screens.length,
+                                    (index) => BottomNavigationBarTile(
+                                        icon: bloc.iconsPaths[index],
+                                        title: bloc.iconsNames[index],
+                                        countChatMessage:
+                                            index == 2 ? 99 : null,
+                                        onTap: () {
+                                          bloc.navigatorKeys[selectedIndex]
+                                              .currentState!
+                                              .popUntil(
+                                                  (route) => route.isFirst);
+                                          bloc.onChangePage(index);
+                                        },
+                                        isActive: selectedIndex == index),
                                   ),
                                 ),
                               ),
+                            ),
                           ],
                         ),
                       ),

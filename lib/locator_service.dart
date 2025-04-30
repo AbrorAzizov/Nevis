@@ -13,6 +13,7 @@ import 'package:nevis/features/data/datasources/order_remote_data_source_impl.da
 import 'package:nevis/features/data/datasources/pharmacy_remote_data_soruce_impl.dart';
 import 'package:nevis/features/data/datasources/product_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/profile_remote_data_source_impl.dart';
+import 'package:nevis/features/data/datasources/region_remote_soruce.dart';
 import 'package:nevis/features/data/repositories/auth_repository_impl.dart';
 import 'package:nevis/features/data/repositories/cart_repository_impl.dart';
 import 'package:nevis/features/data/repositories/category_repository_impl.dart';
@@ -21,6 +22,7 @@ import 'package:nevis/features/data/repositories/order_repository_impl.dart';
 import 'package:nevis/features/data/repositories/pharmacy_repository_impl.dart';
 import 'package:nevis/features/data/repositories/product_repository_impl.dart';
 import 'package:nevis/features/data/repositories/profile_repository_impl.dart';
+import 'package:nevis/features/data/repositories/region_respository_impl.dart';
 import 'package:nevis/features/domain/repositories/auth_repository.dart';
 import 'package:nevis/features/domain/repositories/cart_repository.dart';
 import 'package:nevis/features/domain/repositories/category_repository.dart';
@@ -29,6 +31,7 @@ import 'package:nevis/features/domain/repositories/order_repository.dart';
 import 'package:nevis/features/domain/repositories/pharmacy_repository.dart';
 import 'package:nevis/features/domain/repositories/product_repository.dart';
 import 'package:nevis/features/domain/repositories/profile_repository.dart';
+import 'package:nevis/features/domain/repositories/region_repository.dart';
 import 'package:nevis/features/domain/usecases/auth/is_phone_exists.dart';
 import 'package:nevis/features/domain/usecases/auth/login.dart';
 import 'package:nevis/features/domain/usecases/auth/logout.dart';
@@ -65,6 +68,8 @@ import 'package:nevis/features/domain/usecases/products/update_favorite_products
 import 'package:nevis/features/domain/usecases/profile/delete_me.dart';
 import 'package:nevis/features/domain/usecases/profile/get_me.dart';
 import 'package:nevis/features/domain/usecases/profile/update_me.dart';
+import 'package:nevis/features/domain/usecases/regions/get_regions.dart';
+import 'package:nevis/features/domain/usecases/regions/select_region.dart';
 import 'package:nevis/features/presentation/bloc/article_screen/article_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/articles_screen/articles_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
@@ -82,6 +87,7 @@ import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_d
 import 'package:nevis/features/presentation/bloc/product_screen/product_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/profile_screen/profile_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/sign_up_screen/sign_up_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/splash_screen/splash_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
@@ -207,7 +213,16 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton(
+    () => SearchScreenBloc(getRegionsUC: sl(), selectRegionUC: sl()),
+  );
+
   //// UseCases
+
+  // Regions
+  sl.registerLazySingleton(() => GetRegionsUC(sl()));
+  sl.registerLazySingleton(() => SelectRegionUC(sl()));
+
   // Auth
   sl.registerLazySingleton(() => LoginUC(sl()));
   sl.registerLazySingleton(() => LogoutUC(sl()));
@@ -267,6 +282,14 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton<RegionRepository>(
+    () => RegionRespositoryImpl(
+      regionRemoteDataSource: sl(),
+      networkInfo: sl(),
+      errorHandler: sl(),
+    ),
+  );
+
   sl.registerLazySingleton<PharmacyRepository>(
     () => PharmacyRepositoryImpl(
         networkInfo: sl(), errorHandler: sl(), pharmacyRemoteDataSource: sl()),
@@ -317,6 +340,12 @@ Future<void> init() async {
   );
 
   //// DataSources
+  sl.registerLazySingleton<RegionRemoteDataSource>(
+    () => RegionRemoteDataSourceImpl(
+      apiClient: sl(),
+    ),
+  );
+
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(
       apiClient: sl(),

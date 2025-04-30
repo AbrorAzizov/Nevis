@@ -1,183 +1,104 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:nevis/features/domain/entities/region_entity.dart';
+import 'package:nevis/features/domain/usecases/regions/get_regions.dart';
+import 'package:nevis/features/domain/usecases/regions/select_region.dart';
 
 part 'search_screen_event.dart';
 part 'search_screen_state.dart';
 
 class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
-  TextEditingController searchController = TextEditingController();
-  TextEditingController minValueController = TextEditingController();
-  TextEditingController maxValueController = TextEditingController();
-
+  TextEditingController searchProductController = TextEditingController();
+  TextEditingController searchRegionController = TextEditingController();
+  final GetRegionsUC getRegionsUC;
+  final SelectRegionUC selectRegionUC;
   FocusNode focusNode = FocusNode();
 
-  SearchScreenBloc()
+  SearchScreenBloc({required this.getRegionsUC, required this.selectRegionUC})
       : super(
           SearchScreenState(
-            minAllowedPrice: 0,
-            maxAllowedPrice: 50,
-            minSelectedPrice: 0,
-            maxSelectedPrice: 50,
-            releaseForms: [
-              'Гранулы',
-              'Гранулы для приема внутрь',
-              'Капли',
-              'Суппозитории'
-            ],
-            selectedReleaseFormsId: {},
-            manufacturers: [
-              'Белмедпрепараты',
-              'Зеленая Дубрава',
-              'Нижфарм',
-              'Рубикон',
-              'Рускерн',
-              'Bayer'
-            ],
-            selectedManufacturersId: {},
-            countries: ['Беларусь', 'Германия', 'Индия', 'Россия'],
-            selectedCountriesId: {},
-            isWithoutPrescription: false,
-            isParticipatesInCampaign: false,
-            isDeliveryPossible: false,
             isExpanded: false,
             query: '',
-            suggestions: [
-              'Терафлю',
-              'Виши',
-              'Солгар',
-              'Термометр',
-              'Хлоргексидина биклюконат',
-              'Биодерма',
-              'Ля Рош Позе',
-              'Урьяж'
-            ],
+            regionSuggestions: const [],
+            regions: const [],
+            isLoading: false,
+            errorMessage: null,
+            regionSelectionPressed: false,
           ),
         ) {
-    on<ChangePriceEvent>(_onChangePrice);
-    on<SelectReleaseFormEvent>(_onSelectReleaseForm);
-    on<SelectManufacturerEvent>(_onSelectManufacturer);
-    on<SelectCountryEvent>(_onSelectCountry);
-    on<ToggleWithoutPrescriptionEvent>(_onToggleWithoutPrescription);
-    on<ToggleParticipatesInCampaignEvent>(_onToggleParticipatesInCampaign);
-    on<ToggleDeliveryPossibleEvent>(_onToggleDeliveryPossible);
-    on<ClearEvent>(_onClear);
     on<ToggleExpandCollapseEvent>(_onToggleExpandCollapse);
     on<ClearQueryEvent>(_onClearQuery);
     on<ChangeQueryEvent>(_onChangeQuery);
     on<SelectSuggestionsEvent>(_onSelectSuggestions);
-
-    minValueController.text = '0';
-    maxValueController.text = '50';
+    on<GetRegionsEvent>(_getRegions);
+    on<ChangeControllerEvent>(_changeController);
+    on<SelectRegionEvent>(_selectRegion);
   }
 
   void _onChangeQuery(ChangeQueryEvent event, Emitter<SearchScreenState> emit) {
-    emit(state.copyWith(query: event.text));
+    final query = event.query;
+    if (query.isEmpty) {
+      emit(state.copyWith(
+        query: query,
+        regionSuggestions: state.regions,
+        errorMessage: null,
+      ));
+    } else {
+      final results = state.regions
+          .where((item) => item.name.toString().contains(query))
+          .toList();
+      emit(state.copyWith(
+        query: query,
+        regionSuggestions: results,
+        errorMessage: results.isEmpty ? 'Нет совпадений' : null,
+      ));
+    }
   }
 
   void _onSelectSuggestions(
       SelectSuggestionsEvent event, Emitter<SearchScreenState> emit) {
-    searchController.clear();
+    searchProductController.clear();
     emit(state.copyWith(isExpanded: false, query: ''));
   }
 
   void _onClearQuery(ClearQueryEvent event, Emitter<SearchScreenState> emit) {
-    searchController.clear();
-    emit(state.copyWith(isExpanded: false, query: ''));
+    searchProductController.clear();
+    emit(state.copyWith(
+        isExpanded: false, query: '', regionSelectionPressed: false));
   }
 
   void _onToggleExpandCollapse(
       ToggleExpandCollapseEvent event, Emitter<SearchScreenState> emit) {
-    emit(state.copyWith(isExpanded: event.isExpanded));
-  }
-
-  void _onChangePrice(ChangePriceEvent event, Emitter<SearchScreenState> emit) {
-    if (event.newPrice == null) return;
-
-    // Ограничиваем цену в рамках допустимых значений
-    final clampedPrice =
-        event.newPrice!.clamp(state.minAllowedPrice, state.maxAllowedPrice);
-
-    if (event.isMinPrice == true) {
-      minValueController.text = clampedPrice.round().toString();
-      emit(state.copyWith(minSelectedPrice: clampedPrice));
-    } else {
-      maxValueController.text = clampedPrice.round().toString();
-      emit(state.copyWith(maxSelectedPrice: clampedPrice));
-    }
-  }
-
-  void _onSelectReleaseForm(
-      SelectReleaseFormEvent event, Emitter<SearchScreenState> emit) {
-    final updatedReleaseForms = Set<int>.from(state.selectedReleaseFormsId);
-    if (event.isChecked == true) {
-      updatedReleaseForms.add(event.releaseFormId);
-    } else {
-      updatedReleaseForms.remove(event.releaseFormId);
-    }
-    emit(state.copyWith(selectedReleaseFormsId: updatedReleaseForms));
-  }
-
-  void _onSelectManufacturer(
-      SelectManufacturerEvent event, Emitter<SearchScreenState> emit) {
-    final updatedManufacturers = Set<int>.from(state.selectedManufacturersId);
-    if (event.isChecked == true) {
-      updatedManufacturers.add(event.manufacturerId);
-    } else {
-      updatedManufacturers.remove(event.manufacturerId);
-    }
-    emit(state.copyWith(selectedManufacturersId: updatedManufacturers));
-  }
-
-  void _onSelectCountry(
-      SelectCountryEvent event, Emitter<SearchScreenState> emit) {
-    final updatedCountries = Set<int>.from(state.selectedCountriesId);
-    if (event.isChecked == true) {
-      updatedCountries.add(event.countryId);
-    } else {
-      updatedCountries.remove(event.countryId);
-    }
-    emit(state.copyWith(selectedCountriesId: updatedCountries));
-  }
-
-  void _onToggleWithoutPrescription(
-      ToggleWithoutPrescriptionEvent event, Emitter<SearchScreenState> emit) {
-    emit(state.copyWith(isWithoutPrescription: event.isWithoutPrescription));
-  }
-
-  void _onToggleParticipatesInCampaign(ToggleParticipatesInCampaignEvent event,
-      Emitter<SearchScreenState> emit) {
     emit(state.copyWith(
-        isParticipatesInCampaign: event.isParticipatesInCampaign));
+      isExpanded: event.isExpanded,
+    ));
   }
 
-  void _onToggleDeliveryPossible(
-      ToggleDeliveryPossibleEvent event, Emitter<SearchScreenState> emit) {
-    emit(state.copyWith(isDeliveryPossible: event.isDeliveryPossible));
+  void _getRegions(
+      GetRegionsEvent event, Emitter<SearchScreenState> emit) async {
+    final failureOrLoads = await getRegionsUC();
+
+    failureOrLoads.fold(
+        (_) => emit(state.copyWith(
+            isLoading: false, errorMessage: 'Ошибка загрузки данных')),
+        (regions) => emit(state.copyWith(regions: regions)));
   }
 
-  void _onClear(ClearEvent event, Emitter<SearchScreenState> emit) {
-    minValueController.text = '0';
-    maxValueController.text = '50';
-    emit(
-      state.copyWith(
-          selectedCountriesId: {},
-          selectedManufacturersId: {},
-          selectedReleaseFormsId: {},
-          isDeliveryPossible: false,
-          isParticipatesInCampaign: false,
-          isWithoutPrescription: false,
-          minSelectedPrice: 0,
-          maxSelectedPrice: 50),
-    );
+  void _selectRegion(
+      SelectRegionEvent event, Emitter<SearchScreenState> emit) async {
+    final failureOrLoads = await selectRegionUC(event.id);
+
+    failureOrLoads.fold(
+        (_) => emit(state.copyWith(
+            isLoading: false, errorMessage: 'Ошибка загрузки данных')), (_) {
+      add(GetRegionsEvent());
+    });
   }
 
-  @override
-  Future<void> close() {
-    // Clean up the controller and focus node when the bloc is closed
-    minValueController.dispose();
-    maxValueController.dispose();
-
-    return super.close();
+  void _changeController(
+      ChangeControllerEvent event, Emitter<SearchScreenState> emit) {
+    final bool pressed = !state.regionSelectionPressed;
+    emit(state.copyWith(regionSelectionPressed: pressed, isExpanded: pressed));
   }
 }

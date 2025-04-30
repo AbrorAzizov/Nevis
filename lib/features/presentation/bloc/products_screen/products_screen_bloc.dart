@@ -46,7 +46,6 @@ class ProductsScreenBloc
   }
 
   void _scrollListener() {
-    print("ScrollListener triggered"); // Печатаем, чтобы проверить срабатывание
     // Если скроллинг достиг нижней границы, загружаем следующую страницу
     if (productsController.position.pixels ==
         productsController.position.maxScrollExtent) {

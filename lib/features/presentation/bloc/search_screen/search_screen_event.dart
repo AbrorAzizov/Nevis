@@ -91,8 +91,8 @@ class SelectSuggestionsEvent extends SearchScreenEvent {
 }
 
 class ChangeQueryEvent extends SearchScreenEvent {
-  final String text;
-  const ChangeQueryEvent(this.text);
+  final String query;
+  const ChangeQueryEvent(this.query);
 
   @override
   List<Object?> get props => [];
@@ -103,4 +103,17 @@ class ClearQueryEvent extends SearchScreenEvent {
 
   @override
   List<Object?> get props => [];
+}
+
+class GetRegionsEvent extends SearchScreenEvent {
+  const GetRegionsEvent();
+}
+
+class ChangeControllerEvent extends SearchScreenEvent {
+  const ChangeControllerEvent();
+}
+
+class SelectRegionEvent extends SearchScreenEvent {
+  final int id;
+  const SelectRegionEvent({required this.id});
 }
