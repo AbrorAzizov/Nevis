@@ -23,6 +23,7 @@ abstract class ProductRemoteDataSource {
   Future<List<ProductModel>> getFavoriteProducts();
   Future<void> updateFavoriteProducts(int id);
   Future<void> deleteFromFavoriteProducts(int id);
+  Future<void> updateSeveralFavoriteProducts(List<int> ids);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -230,6 +231,28 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     } catch (e) {
       log('Error during logout: $e',
           name: '${runtimeType.toString()}.deleteFromFavoriteProducts',
+          level: 1000);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateSeveralFavoriteProducts(List<int> ids) async {
+    try {
+      await apiClient.post(
+        body: {
+          'product_id': ids,
+        },
+        endpoint: 'favorites/products',
+        exceptions: {
+          401: ServerException(),
+        },
+        callPathNameForLog:
+            '${runtimeType.toString()}.updateSeveralFavoriteProducts',
+      );
+    } catch (e) {
+      log('Error during logout: $e',
+          name: '${runtimeType.toString()}.updateSeveralFavoriteProducts',
           level: 1000);
       rethrow;
     }

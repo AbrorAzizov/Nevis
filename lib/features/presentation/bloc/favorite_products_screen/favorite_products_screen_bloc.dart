@@ -48,7 +48,7 @@ class FavoriteProductsScreenBloc
       final failureOrLoads = await getFavoriteProductsUC();
       failureOrLoads.fold(
         (_) => emit(state.copyWith(
-          error: 'Ошибка загрузки данных abkt',
+          error: 'Ошибка загрузки данных',
           isLoading: false,
           products: [],
         )),
@@ -69,9 +69,7 @@ class FavoriteProductsScreenBloc
     Emitter<FavoriteProductsScreenState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-
-    final result = await updateFavoriteProductsUC(event.productId);
-
+    final result = await updateFavoriteProductsUC(event.product);
     await result.fold(
       (failure) async {
         emit(state.copyWith(

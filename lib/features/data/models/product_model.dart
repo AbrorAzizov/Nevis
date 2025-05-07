@@ -81,39 +81,42 @@ class ProductModel extends ProductEntity {
           TypeOfSpecialOfferExtension.fromTitle(json["special_offer"]),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "product_id": productId,
-        "product_info": {
-          "product_id": productId,
-          "product_charachters": {
-            "mnn": mnn,
-            "mnn_lat": mnnLat,
-            "product_title": name,
-            "product_description": description,
-            "code": code,
-            "dose": dose,
-            "form": form,
-            "brand": brand,
-            "image": image,
-            "recipe": recipe,
-            "country": country,
-            "delivery": delivery,
-            "product_price_from": price,
-            "product_price_from_old": oldPrice,
-            "product_price_from_percent": discount,
-            "parent": parent,
-            "termin": termin,
-            "temperature": temperature,
-            "release_form": releaseForm,
-            "product_insert": productInsert,
-            "product_sticker": productSticker,
-            "product_register": productRegister,
-            "product_trademark": productTrademark,
-            "product_date_register": productDateRegister,
-            "product_time_register": productTimeRegister,
-            'count': count,
-          }
-        }
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      "product_info": {
+        "id": productId,
+        "mnn": mnn,
+        "mnn_lat": mnnLat,
+        "name": name,
+        "description": description,
+        "code": code,
+        "dose": dose,
+        "form": form,
+        "manufacturer": brand,
+        "image_url": image,
+        "recipe": recipe,
+        "country": country,
+        "delivery": delivery,
+        "price": price,
+        "price_old": oldPrice,
+        "product_price_from_percent": discount,
+        "parent": parent,
+        "termin": termin,
+        "temperature": temperature,
+        "release_form": releaseForm,
+        "product_insert": productInsert,
+        "product_sticker": productSticker,
+        "product_register": productRegister,
+        "product_trademark": productTrademark,
+        "product_date_register": productDateRegister,
+        "product_time_register": productTimeRegister,
+        "count": count,
+        "value_buy_price": valueBuy,
+        "is_available_for_delivery": availableForDelivery,
+        "special_offer": "1+1",
+        "bonuses": bonuses,
+        "images": images,
+      },
+    };
+  }
 }

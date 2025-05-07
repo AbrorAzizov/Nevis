@@ -80,8 +80,8 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
         TooManyRequestsFailure e => emit(state.copyWith(
             showError: true,
             codeErrorText: e.message ?? 'Слишком много запросов')),
-        ConfirmationCodeWrongFailure _ =>
-          emit(state.copyWith(showError: true, codeErrorText: 'Неверный код')),
+        ConfirmationCodeWrongFailure e =>
+          emit(state.copyWith(showError: true, codeErrorText: e.message)),
         ServerFailure _ => emit(state.copyWith(
             showError: true, codeErrorText: 'Неизвестная ошибка')),
         _ => emit(state.copyWith(

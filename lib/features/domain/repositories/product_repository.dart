@@ -22,5 +22,6 @@ abstract class ProductRepository {
       CategoryParams params);
   Future<Either<Failure, List<ProductEntity>>> getFavoriteProducts();
   Future<Either<Failure, void>> deleteFromFavoriteProducts(int id);
-  Future<Either<Failure, void>> updateFavoriteProducts(int id);
+  Future<Either<Failure, void>> updateFavoriteProducts(ProductEntity product);
+  Future<Either<Failure, void>> syncFavoriteProductsFromLocal(List<int> ids);
 }

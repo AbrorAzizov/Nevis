@@ -112,7 +112,7 @@ class ProductWidget extends StatelessWidget {
                                   context
                                       .read<FavoriteProductsScreenBloc>()
                                       .add(UpdateFavoriteProducts(
-                                          productId: product.productId!));
+                                          product: product));
                                 }
                               }
                             },

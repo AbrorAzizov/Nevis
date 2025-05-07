@@ -18,13 +18,13 @@ class ApiClient {
   ApiClient({required this.client, required this.sharedPreferences});
 
   Future<dynamic> _handleResponseWithRetry(
-    Future<http.Response> Function() request,
-    Map<int, ApiException>? exceptions,
-    String? callPathNameForLog,
-  ) async {
+      Future<http.Response> Function() request,
+      Map<int, ApiException>? exceptions,
+      String? callPathNameForLog,
+      {required bool isRetryRequest}) async {
     http.Response response = await request();
 
-    if (response.statusCode == 401 || response.statusCode == 403) {
+    if (response.statusCode == 403 && isRetryRequest) {
       log('🔁 Token expired. Trying to refresh...',
           name: callPathNameForLog ?? '');
       try {
@@ -32,8 +32,12 @@ class ApiClient {
         RefreshTokenUC refreshTokenUC = sl<RefreshTokenUC>();
         await refreshTokenUC();
 
-        // Повторяем запрос
-        response = await request();
+        // Повторяем запрос с новыми заголовками
+        final headers = await _authHeaders();
+        final originalRequest = response.request!;
+        final streamedResponse =
+            await client.send(originalRequest..headers.addAll(headers));
+        response = await http.Response.fromStream(streamedResponse);
       } catch (_) {
         throw UnauthorizedException(); // не смогли обновить токен
       }
@@ -68,15 +72,14 @@ class ApiClient {
     required String endpoint,
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
+    bool isRetryRequest = true,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint');
     final headers = await _authHeaders();
 
     return _handleResponseWithRetry(
-      () => client.get(url, headers: headers),
-      exceptions,
-      callPathNameForLog,
-    );
+        () => client.get(url, headers: headers), exceptions, callPathNameForLog,
+        isRetryRequest: isRetryRequest);
   }
 
   Future<dynamic> post({
@@ -84,16 +87,17 @@ class ApiClient {
     Map<String, dynamic>? body,
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
+    bool isRetryRequest = true,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint');
     final headers = await _authHeaders();
     final bodyString = jsonEncode(body);
 
     return _handleResponseWithRetry(
-      () => client.post(url, headers: headers, body: bodyString),
-      exceptions,
-      callPathNameForLog,
-    );
+        () => client.post(url, headers: headers, body: bodyString),
+        exceptions,
+        callPathNameForLog,
+        isRetryRequest: isRetryRequest);
   }
 
   Future<dynamic> put({
@@ -101,16 +105,17 @@ class ApiClient {
     Map<String, dynamic>? body,
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
+    bool isRetryRequest = true,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint');
     final headers = await _authHeaders();
     final bodyString = jsonEncode(body);
 
     return _handleResponseWithRetry(
-      () => client.put(url, headers: headers, body: bodyString),
-      exceptions,
-      callPathNameForLog,
-    );
+        () => client.put(url, headers: headers, body: bodyString),
+        exceptions,
+        callPathNameForLog,
+        isRetryRequest: isRetryRequest);
   }
 
   Future<dynamic> delete({
@@ -118,16 +123,17 @@ class ApiClient {
     Map<String, dynamic>? body,
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
+    bool isRetryRequest = true,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint');
     final headers = await _authHeaders();
     final bodyString = jsonEncode(body);
 
     return _handleResponseWithRetry(
-      () => client.delete(url, headers: headers, body: bodyString),
-      exceptions,
-      callPathNameForLog,
-    );
+        () => client.delete(url, headers: headers, body: bodyString),
+        exceptions,
+        callPathNameForLog,
+        isRetryRequest: isRetryRequest);
   }
 
   Future<Map<String, String>> _authHeaders() async {

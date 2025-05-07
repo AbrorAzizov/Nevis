@@ -3,6 +3,8 @@ import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
+import 'package:nevis/core/shared_preferences_keys.dart';
+import 'package:nevis/features/data/datasources/product_local_data_soruce.dart';
 import 'package:nevis/features/data/datasources/product_remote_data_source_impl.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
@@ -10,16 +12,21 @@ import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/domain/entities/search_products_entity.dart';
 import 'package:nevis/features/domain/params/category_params.dart';
 import 'package:nevis/features/domain/repositories/product_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final ProductRemoteDataSource productRemoteDataSource;
+  final ProductLocaleDataSource productLocaleDataSource;
   final NetworkInfo networkInfo;
   final ErrorHandler errorHandler;
+  final SharedPreferences sharedPreferences;
 
   const ProductRepositoryImpl({
+    required this.productLocaleDataSource,
     required this.productRemoteDataSource,
     required this.networkInfo,
     required this.errorHandler,
+    required this.sharedPreferences,
   });
 
   // 📌 Получение списка ежедневных продуктов
@@ -77,17 +84,65 @@ class ProductRepositoryImpl implements ProductRepository {
           () async => await productRemoteDataSource.getCategoryProducts(id));
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> getFavoriteProducts() async =>
-      await errorHandler.handle(
+  Future<Either<Failure, List<ProductEntity>>> getFavoriteProducts() async {
+    if (sharedPreferences.getString(SharedPreferencesKeys.accessToken) !=
+        null) {
+      final localFavorites =
+          await productLocaleDataSource.getFavoriteProducts();
+      if (localFavorites.isNotEmpty) {
+        final ids =
+            localFavorites.map((e) => e.productId).whereType<int>().toList();
+        if (ids.isNotEmpty) {
+          await syncFavoriteProductsFromLocal(ids);
+          final result = await syncFavoriteProductsFromLocal(ids);
+          if (result.isRight()) {
+            await productLocaleDataSource.clearLocalFavoriteProducts();
+          }
+        }
+      }
+      return await errorHandler.handle(
           () async => await productRemoteDataSource.getFavoriteProducts());
+    } else {
+      return await errorHandler.handle(
+          () async => await productLocaleDataSource.getFavoriteProducts());
+    }
+  }
 
   @override
-  Future<Either<Failure, void>> deleteFromFavoriteProducts(int id) async =>
-      await errorHandler.handle(() async =>
-          await productRemoteDataSource.deleteFromFavoriteProducts(id));
+  Future<Either<Failure, void>> deleteFromFavoriteProducts(int id) async {
+    if (sharedPreferences.getString(SharedPreferencesKeys.accessToken) ==
+        null) {
+      return await errorHandler.handle(() async {
+        return await productLocaleDataSource.deleteFromFavoriteProducts(id);
+      });
+    } else {
+      return await errorHandler.handle(() async {
+        return await productRemoteDataSource.deleteFromFavoriteProducts(id);
+      });
+    }
+  }
 
   @override
-  Future<Either<Failure, void>> updateFavoriteProducts(int id) async =>
-      await errorHandler.handle(
-          () async => await productRemoteDataSource.updateFavoriteProducts(id));
+  Future<Either<Failure, void>> updateFavoriteProducts(
+      ProductEntity product) async {
+    if (sharedPreferences.getString(SharedPreferencesKeys.accessToken) ==
+        null) {
+      return await errorHandler.handle(() async {
+        return await productLocaleDataSource.updateFavoriteProducts(product);
+      });
+    } else {
+      return await errorHandler.handle(() async {
+        return await productRemoteDataSource
+            .updateFavoriteProducts(product.productId!);
+      });
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> syncFavoriteProductsFromLocal(
+      List<int> ids) async {
+    return await errorHandler.handle(() async {
+      return await productRemoteDataSource.updateSeveralFavoriteProducts(ids);
+    });
+  }
 }

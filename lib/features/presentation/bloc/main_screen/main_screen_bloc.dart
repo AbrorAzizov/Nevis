@@ -31,9 +31,9 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
 
     var data = await Future.wait(
       [
-        getBannersUC(),
+        // getBannersUC(),
         getCategoriesUC(),
-        getDailyProductsUC(),
+        // getDailyProductsUC(),
       ],
     );
 
@@ -42,9 +42,9 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
         element.fold(
           (_) {},
           (result) => switch (index) {
-            0 => banners = result as List<BannerEntity>,
-            1 => categories = result as List<CategoryEntity>,
-            2 => daily = result as List<ProductEntity>,
+            // 0 => banners = result as List<BannerEntity>,
+            1 => categories = result,
+            // 2 => daily = result as List<ProductEntity>,
             _ => {},
           },
         );

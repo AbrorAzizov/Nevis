@@ -87,8 +87,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
 
   void _selectRegion(
       SelectRegionEvent event, Emitter<SearchScreenState> emit) async {
+    emit(state.copyWith(isExpanded: false, regionSelectionPressed: false));
     final failureOrLoads = await selectRegionUC(event.id);
-
     failureOrLoads.fold(
         (_) => emit(state.copyWith(
             isLoading: false, errorMessage: 'Ошибка загрузки данных')), (_) {

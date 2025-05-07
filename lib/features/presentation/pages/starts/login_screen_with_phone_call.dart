@@ -53,7 +53,7 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
         builder: (context, state) {
           final bloc = context.read<LoginScreenBloc>();
           return AppTemplate(
-            canBack: loginScreenType == LoginScreenType.accountExists,
+            canBack: true,
             title: 'Авторизация',
             subTitleText:
                 'Войдите, чтобы совершать покупки,\nкопить бонусы и иметь быстрый доступ к карте лояльности',

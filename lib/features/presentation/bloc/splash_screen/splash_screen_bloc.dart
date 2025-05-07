@@ -18,9 +18,7 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
       await Future.delayed(Duration(seconds: 2));
       String? token =
           sharedPreferences.getString(SharedPreferencesKeys.accessToken);
-      print(token);
       if (token != null) {
-        //bool isSuccessFetchData = await _getUserData();
         bool isSuccessFetchData = await _getUserData();
         if (isSuccessFetchData) {
           emit(SplashScreenNavigateHome());

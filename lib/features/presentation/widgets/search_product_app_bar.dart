@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
+import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SearchProductAppBar extends StatelessWidget {
@@ -120,11 +124,29 @@ class SearchProductAppBar extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             FocusScope.of(context).unfocus();
-                            Navigator.of(context).push(
-                              Routes.createRoute(
-                                const FavoriteProductsScreen(),
-                              ),
-                            );
+                            SharedPreferences.getInstance().then((preference) {
+                              String? token = preference
+                                  .getString(SharedPreferencesKeys.accessToken);
+                              if (token == null) {
+                                Navigator.of(context).push(
+                                  Routes.createRoute(
+                                    const LoginScreenWithPhoneCall(),
+                                    settings: RouteSettings(
+                                      name: Routes.loginScreenPhoneCall,
+                                      arguments: {
+                                        'redirect_type': LoginScreenType.login
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                Navigator.of(context).push(
+                                  Routes.createRoute(
+                                    const FavoriteProductsScreen(),
+                                  ),
+                                );
+                              }
+                            });
                           },
                           child: Padding(
                             padding: getMarginOrPadding(right: 8),

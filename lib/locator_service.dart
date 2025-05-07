@@ -11,6 +11,7 @@ import 'package:nevis/features/data/datasources/category_remote_data_source_impl
 import 'package:nevis/features/data/datasources/content_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/order_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/pharmacy_remote_data_soruce_impl.dart';
+import 'package:nevis/features/data/datasources/product_local_data_soruce.dart';
 import 'package:nevis/features/data/datasources/product_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/profile_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/region_remote_soruce.dart';
@@ -256,6 +257,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetFavoriteProductsUC(sl()));
   sl.registerLazySingleton(() => UpdateFavoriteProductsUC(sl()));
   sl.registerLazySingleton(() => DeleteProductFromFavoriteProductsUC(sl()));
+  sl.registerLazySingleton(() => UpdateSeveralFavoriteProductsUC(sl()));
   // Category
   sl.registerLazySingleton(() => GetCategoriesUC(sl()));
   sl.registerLazySingleton(() => GetSubcategoriesUC(sl()));
@@ -315,7 +317,9 @@ Future<void> init() async {
     () => ProductRepositoryImpl(
       productRemoteDataSource: sl(),
       networkInfo: sl(),
+      sharedPreferences: sl(),
       errorHandler: sl(),
+      productLocaleDataSource: sl(),
     ),
   );
   sl.registerLazySingleton<CategoryRepository>(
@@ -343,6 +347,12 @@ Future<void> init() async {
   sl.registerLazySingleton<RegionRemoteDataSource>(
     () => RegionRemoteDataSourceImpl(
       apiClient: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<ProductLocaleDataSource>(
+    () => ProductLocalDataSourceImpl(
+      sharedPreferences: sl(),
     ),
   );
 
