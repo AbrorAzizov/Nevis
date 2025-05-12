@@ -24,6 +24,7 @@ class ProfileScreen extends StatelessWidget {
 
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
+        HomeScreenBloc homeBloc = context.read<HomeScreenBloc>();
         return BlocProvider(
           create: (context) => ProfileScreenBloc(
             logoutUC: sl(),
@@ -40,41 +41,46 @@ class ProfileScreen extends StatelessWidget {
               return Scaffold(
                 backgroundColor: UiConstants.whiteColor,
                 body: SafeArea(
-                  child: Column(
-                    children: [
-                      CustomAppBar(
-                          backgroundColor: UiConstants.whiteColor,
-                          title: 'Профиль',
-                          action: prefs.getString(
-                                      SharedPreferencesKeys.accessToken) !=
-                                  null
-                              ? GestureDetector(
-                                  onTap: () {
-                                    bloc.add(LogoutEvent());
-                                  },
-                                  child: SvgPicture.asset(
-                                    Paths.exitIconPath,
-                                    height: 24.w,
-                                    width: 24.w,
+                  child: Builder(
+                    builder: (context) {
+                      return Column(
+                        children: [
+                          CustomAppBar(
+                              backgroundColor: UiConstants.whiteColor,
+                              title: 'Профиль',
+                              action: prefs.getString(
+                                          SharedPreferencesKeys.accessToken) !=
+                                      null
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        bloc.add(LogoutEvent());
+                                      },
+                                      child: SvgPicture.asset(
+                                        Paths.exitIconPath,
+                                        height: 24.w,
+                                        width: 24.w,
+                                      ),
+                                    )
+                                  : null),
+                          Expanded(
+                            child: homeState is InternetUnavailable
+                                ? InternetNoInternetConnectionWidget()
+                                : ListView(
+                                    shrinkWrap: true,
+                                    padding: getMarginOrPadding(
+                                      bottom: 94,
+                                      right: 20,
+                                      left: 20,
+                                      top: 16,
+                                    ),
+                                    children: [
+                                      ProfileCategoriesList(),
+                                    ],
                                   ),
-                                )
-                              : null),
-                      Expanded(
-                        child: homeState is InternetUnavailable
-                            ? InternetNoInternetConnectionWidget()
-                            : ListView(
-                                padding: getMarginOrPadding(
-                                  bottom: 94,
-                                  right: 20,
-                                  left: 20,
-                                  top: 16,
-                                ),
-                                children: [
-                                  ProfileCategoriesList(),
-                                ],
-                              ),
-                      ),
-                    ],
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               );

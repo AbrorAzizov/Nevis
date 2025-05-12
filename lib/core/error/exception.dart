@@ -1,7 +1,7 @@
 abstract class ApiException implements Exception {
-  final String message;
+  final String? message;
 
-  ApiException(this.message);
+  ApiException({this.message});
 
   ApiException copyWith({String? message});
 
@@ -10,7 +10,7 @@ abstract class ApiException implements Exception {
 }
 
 class ServerException extends ApiException {
-  ServerException([super.message = 'Ошибка сервера']);
+  ServerException([message = 'Ошибка сервера']);
 
   @override
   ServerException copyWith({String? message}) {
@@ -19,7 +19,7 @@ class ServerException extends ApiException {
 }
 
 class CacheException extends ApiException {
-  CacheException([super.message = 'Ошибка кеша']);
+  CacheException([message = 'Ошибка кеша']);
 
   @override
   CacheException copyWith({String? message}) {
@@ -28,8 +28,7 @@ class CacheException extends ApiException {
 }
 
 class SendingCodeTooOftenException extends ApiException {
-  SendingCodeTooOftenException(
-      [super.message = 'Слишком частая отправка кода']);
+  SendingCodeTooOftenException([message = 'Слишком частая отправка кода']);
 
   @override
   SendingCodeTooOftenException copyWith({String? message}) {
@@ -38,8 +37,7 @@ class SendingCodeTooOftenException extends ApiException {
 }
 
 class ConfirmationCodeWrongException extends ApiException {
-  ConfirmationCodeWrongException(
-      [super.message = 'Неверный код подтверждения']);
+  ConfirmationCodeWrongException([message = 'Неверный код подтверждения']);
 
   @override
   ConfirmationCodeWrongException copyWith({String? message}) {
@@ -48,7 +46,7 @@ class ConfirmationCodeWrongException extends ApiException {
 }
 
 class PhoneDontFoundException extends ApiException {
-  PhoneDontFoundException([super.message = 'Телефон не найден']);
+  PhoneDontFoundException([message = 'Телефон не найден']);
 
   @override
   PhoneDontFoundException copyWith({String? message}) {
@@ -57,7 +55,7 @@ class PhoneDontFoundException extends ApiException {
 }
 
 class PhoneAlreadyTakenException extends ApiException {
-  PhoneAlreadyTakenException([super.message = 'Телефон уже занят']);
+  PhoneAlreadyTakenException([message = 'Телефон уже занят']);
 
   @override
   PhoneAlreadyTakenException copyWith({String? message}) {
@@ -66,7 +64,7 @@ class PhoneAlreadyTakenException extends ApiException {
 }
 
 class UncorrectedPasswordException extends ApiException {
-  UncorrectedPasswordException([super.message = 'Некорректный пароль']);
+  UncorrectedPasswordException([message = 'Некорректный пароль']);
 
   @override
   UncorrectedPasswordException copyWith({String? message}) {
@@ -76,7 +74,7 @@ class UncorrectedPasswordException extends ApiException {
 
 class PasswordMatchesPreviousOneException extends ApiException {
   PasswordMatchesPreviousOneException(
-      [super.message = 'Пароль совпадает с предыдущим']);
+      [message = 'Пароль совпадает с предыдущим']);
 
   @override
   PasswordMatchesPreviousOneException copyWith({String? message}) {
@@ -85,7 +83,7 @@ class PasswordMatchesPreviousOneException extends ApiException {
 }
 
 class SessionExpiredException extends ApiException {
-  SessionExpiredException([super.message = 'Сессия истекла']);
+  SessionExpiredException([message = 'Сессия истекла']);
 
   @override
   SessionExpiredException copyWith({String? message}) {
@@ -94,7 +92,7 @@ class SessionExpiredException extends ApiException {
 }
 
 class InvalidFormatException extends ApiException {
-  InvalidFormatException([super.message = 'Неверный формат']);
+  InvalidFormatException([message = 'Неверный формат']);
 
   @override
   InvalidFormatException copyWith({String? message}) {
@@ -103,7 +101,7 @@ class InvalidFormatException extends ApiException {
 }
 
 class AccountDontExistsException extends ApiException {
-  AccountDontExistsException([super.message = 'Аккаунт не существует']);
+  AccountDontExistsException([message = 'Аккаунт не существует']);
 
   @override
   AccountDontExistsException copyWith({String? message}) {
@@ -113,7 +111,7 @@ class AccountDontExistsException extends ApiException {
 
 class AcceptPersonalDataException extends ApiException {
   AcceptPersonalDataException(
-      [super.message = 'Необходимо принять соглашение на обработку данных']);
+      [message = 'Необходимо принять соглашение на обработку данных']);
 
   @override
   AcceptPersonalDataException copyWith({String? message}) {
@@ -122,10 +120,19 @@ class AcceptPersonalDataException extends ApiException {
 }
 
 class TooManyRequestsException extends ApiException {
-  TooManyRequestsException([super.message = 'Слишком много запросов']);
+  TooManyRequestsException([message = 'Слишком много запросов']);
 
   @override
   TooManyRequestsException copyWith({String? message}) {
     return TooManyRequestsException(message ?? this.message);
+  }
+}
+
+class EmptyOrdersException extends ApiException {
+  EmptyOrdersException([String? message]) : super(message: message);
+
+  @override
+  ApiException copyWith({String? message}) {
+    return EmptyOrdersException(message ?? this.message);
   }
 }

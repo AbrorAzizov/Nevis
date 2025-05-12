@@ -24,3 +24,7 @@ class PasswordChangedEvent extends LoginScreenEvent {
 }
 
 class SendCodeEvent extends LoginScreenEvent {}
+
+class LoginByYandexEvent extends LoginScreenEvent {}
+
+class LoginByVkEvent extends LoginScreenEvent {}

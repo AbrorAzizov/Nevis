@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nevis/constants/enums.dart';
+import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/domain/usecases/orders/get_order_history.dart';
 
@@ -24,7 +25,12 @@ class OrdersScreenBloc extends Bloc<OrdersScreenEvent, OrdersScreenState> {
 
     final failureOrLoads = await getOrderHistoryUC();
     failureOrLoads.fold(
-      (_) => emit(OrdersScreenError(error: 'Ошибка загрузки данных')),
+      (failure) => switch (failure) {
+        EmptyOrdersFailure _ =>
+          emit(OrdersScreenLoadedSuccessfully(orders: [])),
+        ServerFailure e => emit(OrdersScreenError(error: e.message)),
+        _ => emit(OrdersScreenError(error: 'Ошибка загрузки данных')),
+      },
       (history) {
         _allOrders = history; // Сохраняем оригинальный список заказов
         emit(OrdersScreenLoadedSuccessfully(orders: _allOrders));
@@ -69,4 +75,4 @@ class OrdersScreenBloc extends Bloc<OrdersScreenEvent, OrdersScreenState> {
     emit(OrdersScreenLoadedSuccessfully(
         orders: filteredOrders, selectorIndex: event.selectorIndex));
   }
-} 
+}

@@ -39,6 +39,8 @@ class ErrorHandlerImpl implements ErrorHandler {
         return Left(AccountDontExistsFailure(message: e.message));
       } on AcceptPersonalDataException catch (e) {
         return Left(AcceptPersonalDataFailure(message: e.message));
+      } on EmptyOrdersException catch (e) {
+        return Left(EmptyOrdersFailure(e.message));
       } catch (e) {
         return Left(ServerFailure(message: e.toString()));
       }

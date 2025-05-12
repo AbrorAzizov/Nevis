@@ -130,3 +130,11 @@ class TooManyRequestsFailure extends Failure {
   TooManyRequestsFailure copyWith({String? message}) =>
       TooManyRequestsFailure(message: message ?? this.message);
 }
+
+class EmptyOrdersFailure extends Failure {
+  const EmptyOrdersFailure([String? message]) : super(message: message);
+
+  @override
+  Failure copyWith({String? message}) =>
+      EmptyOrdersFailure(message ?? this.message);
+}

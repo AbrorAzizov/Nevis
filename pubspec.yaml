@@ -36,7 +36,7 @@ dependencies:
   connectivity_plus: ^6.0.5
   change_app_package_name: ^1.4.0
   intl: ^0.19.0
-  http: ^1.2.2
+  http: ^1.3.0
   pinput: ^5.0.0
   mask_text_input_formatter: ^2.9.0
   getwidget: ^5.0.0
@@ -49,6 +49,9 @@ dependencies:
   yandex_mapkit_lite: ^2.0.2
   blurrycontainer: ^2.1.0
   get: ^4.7.2
+  flutter_login_yandex:
+    path: ./packages/flutter_login_yandex
+  flutter_login_vk: ^3.0.0
 
 dev_dependencies:
   flutter_test:

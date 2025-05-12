@@ -168,8 +168,10 @@ class _GidTextFieldState extends State<AppTextFieldWidget> {
                     const BorderSide(width: 3, color: Colors.transparent),
               ),
               focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                  borderSide: BorderSide.none),
+                borderRadius: BorderRadius.circular(12.r),
+                borderSide: BorderSide(
+                    width: 3, color: UiConstants.blueColor.withOpacity(.6)),
+              ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),
                 borderSide:

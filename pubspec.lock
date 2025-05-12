@@ -366,6 +366,21 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  flutter_login_vk:
+    dependency: "direct main"
+    description:
+      name: flutter_login_vk
+      sha256: f363d7f586106ac75e44e41020851d14036421903741ed086e91709d64a047ec
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  flutter_login_yandex:
+    dependency: "direct main"
+    description:
+      path: "packages/flutter_login_yandex"
+      relative: true
+    source: path
+    version: "0.0.5"
   flutter_native_splash:
     dependency: "direct main"
     description:

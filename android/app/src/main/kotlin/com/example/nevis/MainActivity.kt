@@ -1,4 +1,4 @@
-package com.example.nevis
+package com.apteka.nevis
 
 import io.flutter.embedding.android.FlutterActivity
 

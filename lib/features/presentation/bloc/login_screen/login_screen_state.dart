@@ -44,3 +44,5 @@ class LoginScreenState extends Equatable {
 }
 
 class CodeSuccesefullyDelivired extends LoginScreenState {}
+
+class LoginServiceSuccessfully extends LoginScreenState {}

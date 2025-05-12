@@ -14,7 +14,7 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.nevis"
+    namespace = "com.apteka.nevis"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -27,23 +27,63 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8
     }
 
+    // Чтение первого файла с ключами
+    def releaseKeystoreProperties = new Properties()
+    def releaseKeystorePropertiesFile = rootProject.file("key_upload.properties")
+    if (releaseKeystorePropertiesFile.exists()) {
+        releaseKeystoreProperties.load(new FileInputStream(releaseKeystorePropertiesFile))
+    }
+
+    // Чтение второго файла с ключами
+    def debugKeystoreProperties = new Properties()
+    def debugKeystorePropertiesFile = rootProject.file("key_debug.properties")
+    if (debugKeystorePropertiesFile.exists()) {
+        debugKeystoreProperties.load(new FileInputStream(debugKeystorePropertiesFile))
+    }
+
+    // Чтение с ключом яндекс
+    def yandexKeystoreProperties = new Properties()
+    def yandexKeystorePropertiesFile = rootProject.file("yandex.properties")
+    if (yandexKeystorePropertiesFile.exists()) {
+        yandexKeystoreProperties.load(new FileInputStream(yandexKeystorePropertiesFile))
+    }
+
     defaultConfig {
-    
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.nevis"
+        applicationId = "com.apteka.nevis"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 21
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders['YANDEX_CLIENT_ID'] = yandexKeystoreProperties['yandexClientId']
     }
 
+    signingConfigs {
+        release {
+            storeFile file(releaseKeystoreProperties['storeFile'])
+            keyAlias releaseKeystoreProperties['keyAlias']
+            keyPassword releaseKeystoreProperties['keyPassword']
+            storePassword releaseKeystoreProperties['storePassword']
+        }
+        debug {
+            storeFile file(debugKeystoreProperties['storeFile'])
+            keyAlias debugKeystoreProperties['keyAlias']
+            keyPassword debugKeystoreProperties['keyPassword']
+            storePassword debugKeystoreProperties['storePassword']
+        }
+    }
+    
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+        debug {
+            signingConfig signingConfigs.debug
         }
     }
 }

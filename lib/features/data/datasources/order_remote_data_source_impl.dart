@@ -23,9 +23,9 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   Future<List<OrderModel>> getOrderHistory() async {
     try {
       final data = await apiClient.get(
-          endpoint: '/orders',
+          endpoint: 'orders',
           callPathNameForLog: '${runtimeType.toString()}.getOrderHistory',
-          exceptions: {401: ServerException(), 500: ServerException()});
+          exceptions: {400: EmptyOrdersException()});
 
       List<dynamic> dataList = data['data'];
       return dataList.map((e) => OrderModel.fromJson(e)).toList();

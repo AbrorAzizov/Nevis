@@ -1,4 +1,4 @@
-package com.example.nevis
+package com.apteka.nevis
 
 import android.app.Application
 import com.yandex.mapkit.MapKitFactory

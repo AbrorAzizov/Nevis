@@ -154,7 +154,7 @@ class Utils {
       PaymentType? paymentType, TypeReceiving typeReceipt,
       {OrderStatus? orderStatus}) {
     List<OrderStatus> statuses = [];
-
+    print(typeReceipt);
     if (orderStatus == OrderStatus.canceled) {
       statuses = [
         OrderStatus.canceled,
@@ -359,7 +359,7 @@ class Utils {
 
       final textPainterPrice = TextPainter(
         text: TextSpan(
-          text: "",
+          text: "$price ₽",
           style: TextStyle(
             color: isSelected ? UiConstants.whiteColor : UiConstants.blueColor,
             fontSize: 24, // Сделал текст еще больше

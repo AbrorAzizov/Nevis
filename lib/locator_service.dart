@@ -35,6 +35,7 @@ import 'package:nevis/features/domain/repositories/profile_repository.dart';
 import 'package:nevis/features/domain/repositories/region_repository.dart';
 import 'package:nevis/features/domain/usecases/auth/is_phone_exists.dart';
 import 'package:nevis/features/domain/usecases/auth/login.dart';
+import 'package:nevis/features/domain/usecases/auth/login_by_service.dart';
 import 'package:nevis/features/domain/usecases/auth/logout.dart';
 import 'package:nevis/features/domain/usecases/auth/refresh_token.dart';
 import 'package:nevis/features/domain/usecases/auth/request_code.dart';
@@ -107,6 +108,7 @@ Future<void> init() async {
   sl.registerFactory(
     () => LoginScreenBloc(
       requestCodeUC: sl<RequestCodeUC>(),
+      loginByService: sl<LoginByServiceUC>(),
     ),
   );
   sl.registerFactory(
@@ -225,10 +227,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SelectRegionUC(sl()));
 
   // Auth
+  sl.registerLazySingleton(() => LoginByServiceUC(sl()));
   sl.registerLazySingleton(() => LoginUC(sl()));
   sl.registerLazySingleton(() => LogoutUC(sl()));
   sl.registerLazySingleton(() => RequestCodeUC(sl()));
   sl.registerLazySingleton(() => IsPhoneExistsUC(sl()));
+  sl.registerLazySingleton(() => RefreshTokenUC(sl()));
 
   // Profile
   sl.registerLazySingleton(() => GetMeUC(sl()));

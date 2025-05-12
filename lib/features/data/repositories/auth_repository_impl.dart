@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:nevis/core/error/failure.dart';
+import 'package:nevis/core/params/login_servece_param.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/auth_remote_data_source_impl.dart';
@@ -49,5 +50,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, bool?>> isPhoneExists(String phone) async =>
       await errorHandler.handle(
         () async => await authRemoteDataSource.isPhoneExists(phone),
+      );
+
+  @override
+  Future<Either<Failure, void>> loginByService(
+          LoginServiceParam loginServiceParam) async =>
+      await errorHandler.handle(
+        () async =>
+            await authRemoteDataSource.loginByService(loginServiceParam),
       );
 }

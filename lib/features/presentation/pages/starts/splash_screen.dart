@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/splash_screen/splash_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/home_screen.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/locator_service.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -40,9 +42,18 @@ class _SplashScreenState extends State<SplashScreen> {
       )..add(SplashScreenStarted()),
       child: BlocListener<SplashScreenBloc, SplashScreenState>(
         listener: (context, state) {
-          if (state is SplashScreenNavigateLogin ||
-              state is SplashScreenNavigateHome) {
-            Navigator.of(context).push(
+          if (state is SplashScreenNavigateLogin) {
+            Navigator.of(context).pushReplacement(
+              Routes.createRoute(
+                const LoginScreenWithPhoneCall(),
+                settings: RouteSettings(
+                  name: Routes.loginScreenPhoneCall,
+                  arguments: {'redirect_type': LoginScreenType.login},
+                ),
+              ),
+            );
+          } else if (state is SplashScreenNavigateHome) {
+            Navigator.of(context).pushReplacement(
               Routes.createRoute(
                 const HomeScreen(),
                 settings: RouteSettings(name: Routes.homeScreen),
@@ -100,18 +111,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-  //  if (state is SplashScreenNavigateLogin ||
-  //             state is SplashScreenNavigateHome) {
-  //           Navigator.of(context).pushReplacement(
-  //             Routes.createRoute(const HomeScreen(),
-  //                 settings: RouteSettings(name: Routes.homeScreen)),
-  //           );
-  //         }
-  //         // else if (state is SplashScreenNavigateHome) {
-  //         //   Navigator.of(context).pushReplacement(
-  //         //     Routes.createRoute(
-  //         //       const HomeScreen(),
-  //         //       settings: RouteSettings(name: Routes.homeScreen),
-  //         //     ),
-  //         //   );
-  //         // }

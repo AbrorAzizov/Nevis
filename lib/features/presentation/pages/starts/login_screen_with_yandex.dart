@@ -27,6 +27,7 @@ class LoginScreenWithYandex extends StatelessWidget {
       create: (context) => LoginScreenBloc(
         args: args,
         requestCodeUC: sl(),
+        loginByService: sl(),
       ),
       child: BlocConsumer<LoginScreenBloc, LoginScreenState>(
         listener: (context, state) async {

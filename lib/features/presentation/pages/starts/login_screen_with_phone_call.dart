@@ -10,8 +10,8 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/formatters/custom_phone_input_formatter.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/login_screen/login_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/home_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/code_screen.dart';
-import 'package:nevis/features/presentation/pages/starts/login_screen_with_yandex.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/app_template.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
@@ -32,6 +32,7 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
       create: (context) => LoginScreenBloc(
         args: args,
         requestCodeUC: sl(),
+        loginByService: sl(),
       ),
       child: BlocConsumer<LoginScreenBloc, LoginScreenState>(
         listener: (context, state) async {
@@ -47,6 +48,13 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
                         context.read<LoginScreenBloc>().phoneController.text
                   },
                 ),
+              ),
+            );
+          } else if (state is LoginServiceSuccessfully) {
+            Navigator.of(context).push(
+              Routes.createRoute(
+                const HomeScreen(),
+                settings: RouteSettings(name: Routes.homeScreen),
               ),
             );
           }
@@ -97,7 +105,8 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
                   children: [
                     GestureDetector(
                         onTap: () {
-                          Navigator.of(context).push(
+                          bloc.add(LoginByYandexEvent());
+                          /*Navigator.of(context).push(
                             Routes.createRoute(
                               const LoginScreenWithYandex(),
                               settings: RouteSettings(
@@ -108,13 +117,15 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
                                 },
                               ),
                             ),
-                          );
+                          );*/
                         },
                         child: SvgPicture.asset(Paths.yandexLogInIconPath)),
                     SizedBox(
                       width: 12.w,
                     ),
-                    SvgPicture.asset(Paths.vkLogInIconPath)
+                    GestureDetector(
+                        onTap: () => bloc.add(LoginByVkEvent()),
+                        child: SvgPicture.asset(Paths.vkLogInIconPath))
                   ],
                 ),
                 SizedBox(
