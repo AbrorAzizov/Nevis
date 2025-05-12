@@ -4,7 +4,9 @@ abstract class ProfileScreenEvent extends Equatable {
   const ProfileScreenEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class LogoutEvent extends ProfileScreenEvent {}
+class LogoutEvent extends ProfileScreenEvent {
+  const LogoutEvent();
+}

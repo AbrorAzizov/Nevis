@@ -28,15 +28,17 @@ class PersonalDataScreen extends StatelessWidget {
               context: context.read<HomeScreenBloc>().context,
               getMeUC: sl(),
               updateMeUC: sl(),
-              deleteMeUC: sl())..getProfile(),
-          
+              deleteMeUC: sl())
+            ..getProfile(),
           child: BlocConsumer<PersonalDataScreenBloc, PersonalDataScreenState>(
             listener: (context, state) => switch (state) {
               DeleteAccountState _ =>
                 Navigator.of(context.read<HomeScreenBloc>().context)
                     .pushAndRemoveUntil(
                         Routes.createRoute(
-                          const LoginScreenWithPhoneCall(),
+                          const LoginScreenWithPhoneCall(
+                            canBack: true,
+                          ),
                           settings: RouteSettings(
                             name: Routes.loginScreenPhoneCall,
                             arguments: {'redirect_type': LoginScreenType.login},
@@ -52,7 +54,6 @@ class PersonalDataScreen extends StatelessWidget {
                 body: SafeArea(
                   child: Skeletonizer(
                     ignorePointers: false,
-                    
                     enabled: state.isLoading,
                     child: Builder(
                       builder: (context) {

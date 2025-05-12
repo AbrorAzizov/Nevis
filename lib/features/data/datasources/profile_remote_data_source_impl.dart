@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
@@ -28,7 +29,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         callPathNameForLog: '${runtimeType.toString()}.getMe',
       );
 
-      //final person = data;
+      final person = data;
+      print(data);
       return ProfileModel();
     } catch (e) {
       log('Error during getMe: $e', level: 1000);

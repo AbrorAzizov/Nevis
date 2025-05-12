@@ -1,10 +1,12 @@
-part of 'profile_screen_bloc.dart';
-
-class ProfileScreenState extends Equatable {
-  const ProfileScreenState();
-
-  @override
-  List<Object> get props => [];
+abstract class ProfileScreenState {
+  final bool canQuit;
+  const ProfileScreenState({required this.canQuit});
 }
 
-class NavigateLoginState extends ProfileScreenState {}
+class ProfileInitial extends ProfileScreenState {
+  const ProfileInitial({required super.canQuit});
+}
+
+class SuccessfullyQuitedFromProfileState extends ProfileScreenState {
+  const SuccessfullyQuitedFromProfileState() : super(canQuit: false);
+}

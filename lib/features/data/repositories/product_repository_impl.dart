@@ -93,7 +93,6 @@ class ProductRepositoryImpl implements ProductRepository {
         final ids =
             localFavorites.map((e) => e.productId).whereType<int>().toList();
         if (ids.isNotEmpty) {
-          await syncFavoriteProductsFromLocal(ids);
           final result = await syncFavoriteProductsFromLocal(ids);
           if (result.isRight()) {
             await productLocaleDataSource.clearLocalFavoriteProducts();

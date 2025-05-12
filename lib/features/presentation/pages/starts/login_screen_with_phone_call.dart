@@ -19,7 +19,8 @@ import 'package:nevis/features/presentation/widgets/policy_text_widget.dart';
 import 'package:nevis/locator_service.dart';
 
 class LoginScreenWithPhoneCall extends StatelessWidget {
-  const LoginScreenWithPhoneCall({super.key});
+  final bool canBack;
+  const LoginScreenWithPhoneCall({super.key, this.canBack = true});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class LoginScreenWithPhoneCall extends StatelessWidget {
         builder: (context, state) {
           final bloc = context.read<LoginScreenBloc>();
           return AppTemplate(
-            canBack: true,
+            canBack: canBack,
             title: 'Авторизация',
             subTitleText:
                 'Войдите, чтобы совершать покупки,\nкопить бонусы и иметь быстрый доступ к карте лояльности',

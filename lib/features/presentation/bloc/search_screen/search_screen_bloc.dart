@@ -46,7 +46,8 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
       ));
     } else {
       final results = state.regions
-          .where((item) => item.name.toString().contains(query))
+          .where((item) =>
+              item.name.toString().toLowerCase().contains(query.toLowerCase()))
           .toList();
       emit(state.copyWith(
         query: query,

@@ -90,8 +90,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
         callPathNameForLog: '${runtimeType.toString()}.logout',
       );
-
-      // Clear token after successful logout
       sharedPreferences.remove(SharedPreferencesKeys.accessToken);
     } catch (e) {
       log('Error during logout: $e',

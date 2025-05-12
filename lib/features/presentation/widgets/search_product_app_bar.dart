@@ -130,7 +130,9 @@ class SearchProductAppBar extends StatelessWidget {
                               if (token == null) {
                                 Navigator.of(context).push(
                                   Routes.createRoute(
-                                    const LoginScreenWithPhoneCall(),
+                                    const LoginScreenWithPhoneCall(
+                                      canBack: true,
+                                    ),
                                     settings: RouteSettings(
                                       name: Routes.loginScreenPhoneCall,
                                       arguments: {
