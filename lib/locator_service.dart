@@ -301,8 +301,6 @@ Future<void> init() async {
         networkInfo: sl(), errorHandler: sl(), pharmacyRemoteDataSource: sl()),
   );
 
-  sl.registerLazySingleton(() => RefreshTokenUC(sl()));
-
   sl.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(
       profileRemoteDataSource: sl(),
