@@ -145,6 +145,8 @@ class SearchProductAppBar extends StatelessWidget {
                                 Navigator.of(context).push(
                                   Routes.createRoute(
                                     const FavoriteProductsScreen(),
+                                    settings: RouteSettings(
+                                        name: Routes.favouriteProducts),
                                   ),
                                 );
                               }

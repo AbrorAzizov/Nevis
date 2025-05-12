@@ -27,7 +27,7 @@ class ProfileScreen extends StatelessWidget {
     final accessToken = prefs.getString(SharedPreferencesKeys.accessToken);
     if (accessToken == null || accessToken.isEmpty) {
       Future.microtask(() {
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context.read<HomeScreenBloc>().context).push(
           Routes.createRoute(
             const LoginScreenWithPhoneCall(
               canBack: false,
@@ -41,11 +41,6 @@ class ProfileScreen extends StatelessWidget {
           ),
         );
       });
-
-      // Пока навигатор переключается, можно отдать пустой экран
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
     }
 
     // Если токен есть, отображаем обычный профиль
