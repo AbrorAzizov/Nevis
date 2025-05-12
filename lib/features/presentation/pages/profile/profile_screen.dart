@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/routes.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/profile_screen/profile_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/profile_screen/profile_screen_state.dart';
-import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/profile_screen/profile_categories_list.dart';
@@ -24,30 +21,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prefs = sl<SharedPreferences>();
-    final accessToken = prefs.getString(SharedPreferencesKeys.accessToken);
-    if (accessToken == null || accessToken.isEmpty) {
-      Future.microtask(() {
-        Navigator.of(context.read<HomeScreenBloc>().context).push(
-          Routes.createRoute(
-            const LoginScreenWithPhoneCall(
-              canBack: false,
-            ),
-            settings: RouteSettings(
-              name: Routes.loginScreenPhoneCall,
-              arguments: {
-                'redirect_type': LoginScreenType.logInWithCalls,
-              },
-            ),
-          ),
-        );
-      });
-    }
 
-    // Если токен есть, отображаем обычный профиль
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
-        bool canQuit = true;
-
         return BlocProvider(
           create: (context) => ProfileScreenBloc(
             logoutUC: sl(),
@@ -56,6 +32,7 @@ class ProfileScreen extends StatelessWidget {
             listener: (context, state) async {
               if (state is SuccessfullyQuitedFromProfileState) {
                 await prefs.remove(SharedPreferencesKeys.accessToken);
+                await prefs.remove(SharedPreferencesKeys.refreshToken);
               }
             },
             builder: (context, state) {
@@ -66,21 +43,22 @@ class ProfileScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomAppBar(
-                        backgroundColor: UiConstants.whiteColor,
-                        title: 'Профиль',
-                        action: canQuit
-                            ? GestureDetector(
-                                onTap: () {
-                                  bloc.add(LogoutEvent());
-                                },
-                                child: SvgPicture.asset(
-                                  Paths.exitIconPath,
-                                  height: 24.w,
-                                  width: 24.w,
-                                ),
-                              )
-                            : SizedBox.shrink(),
-                      ),
+                          backgroundColor: UiConstants.whiteColor,
+                          title: 'Профиль',
+                          action: prefs.getString(
+                                      SharedPreferencesKeys.accessToken) !=
+                                  null
+                              ? GestureDetector(
+                                  onTap: () {
+                                    bloc.add(LogoutEvent());
+                                  },
+                                  child: SvgPicture.asset(
+                                    Paths.exitIconPath,
+                                    height: 24.w,
+                                    width: 24.w,
+                                  ),
+                                )
+                              : null),
                       Expanded(
                         child: homeState is InternetUnavailable
                             ? InternetNoInternetConnectionWidget()

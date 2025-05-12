@@ -70,29 +70,12 @@ class FavoriteProductsScreenBloc
   ) async {
     emit(state.copyWith(isLoading: true));
     final result = await updateFavoriteProductsUC(event.product);
-    await result.fold(
-      (failure) async {
-        emit(state.copyWith(
-          error: 'Ошибка при обновлении избранных',
-          isLoading: false,
-        ));
-      },
-      (r) async {
-        final refreshed = await getFavoriteProductsUC();
-        refreshed.fold(
-          (failure) => emit(state.copyWith(
-            error: 'Ошибка при получении обновлённого списка избранных',
-            isLoading: false,
-          )),
-          (products) {
-            emit(state.copyWith(
-              products: products,
-              isLoading: false,
-            ));
-          },
-        );
-      },
-    );
+    result.fold((failure) async {
+      emit(state.copyWith(
+        error: 'Ошибка при обновлении избранных',
+        isLoading: false,
+      ));
+    }, (_) => add(LoadFavoriteProductsEvent()));
   }
 
   Future<void> _deleteFavoriteProduct(
