@@ -16,6 +16,10 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchScreenBloc, SearchScreenState>(
       builder: (searchContext, searchState) {
+        final searchBloc = context.read<SearchScreenBloc>();
+        if (searchState.regions.isEmpty) {
+          searchBloc.add(GetRegionsEvent());
+        }
         if (searchState.regionSelectionPressed) {
           return Padding(
             padding: getMarginOrPadding(right: 10),

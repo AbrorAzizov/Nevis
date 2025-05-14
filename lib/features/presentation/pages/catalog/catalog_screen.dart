@@ -6,7 +6,6 @@ import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/categories_grid_widget.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -43,30 +42,24 @@ class CatalogScreen extends StatelessWidget {
                                 showFavoriteProductsChip: true,
                                 showLocationChip: true),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ListView(
-                                      shrinkWrap: true,
-                                      padding: getMarginOrPadding(
-                                          bottom: 94,
-                                          right: 20,
-                                          left: 20,
-                                          top: 16),
-                                      children: [
-                                        CategoriesGridWidget(
-                                            categories: state.isLoading
-                                                ? List.generate(
-                                                    state.categories?.length ??
-                                                        0,
-                                                    (index) {
-                                                      CategoryEntity category =
-                                                          CategoryEntity();
-                                                      return category;
-                                                    },
-                                                  )
-                                                : state.categories ?? [])
-                                      ],
-                                    ),
+                              child: ListView(
+                                shrinkWrap: true,
+                                padding: getMarginOrPadding(
+                                    bottom: 94, right: 20, left: 20, top: 16),
+                                children: [
+                                  CategoriesGridWidget(
+                                      categories: state.isLoading
+                                          ? List.generate(
+                                              state.categories?.length ?? 0,
+                                              (index) {
+                                                CategoryEntity category =
+                                                    CategoryEntity();
+                                                return category;
+                                              },
+                                            )
+                                          : state.categories ?? [])
+                                ],
+                              ),
                             )
                           ],
                         );

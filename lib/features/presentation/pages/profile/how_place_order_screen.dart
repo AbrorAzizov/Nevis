@@ -11,8 +11,6 @@ import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/how_place_order_screen/add_product_to_cart_block.dart';
 import 'package:nevis/features/presentation/widgets/how_place_order_screen/pick_up_order_block.dart';
 import 'package:nevis/features/presentation/widgets/how_place_order_screen/select_product_block.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class HowPlaceOrderScreen extends StatefulWidget {
@@ -72,23 +70,18 @@ class _HowPlaceOrderScreenState extends State<HowPlaceOrderScreen> {
                                 title: 'Как сделать заказ?',
                                 backgroundColor: UiConstants.backgroundColor),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ListView(
-                                      padding: getMarginOrPadding(
-                                          top: 16,
-                                          bottom: 94,
-                                          left: 20,
-                                          right: 20),
-                                      shrinkWrap: true,
-                                      children: [
-                                        SelectProductBlock(),
-                                        SizedBox(height: 16.h),
-                                        AddProductToCartBlock(),
-                                        SizedBox(height: 16.h),
-                                        PickUpOrderBlock(),
-                                      ],
-                                    ),
+                              child: ListView(
+                                padding: getMarginOrPadding(
+                                    top: 16, bottom: 94, left: 20, right: 20),
+                                shrinkWrap: true,
+                                children: [
+                                  SelectProductBlock(),
+                                  SizedBox(height: 16.h),
+                                  AddProductToCartBlock(),
+                                  SizedBox(height: 16.h),
+                                  PickUpOrderBlock(),
+                                ],
+                              ),
                             ),
                           ],
                         );

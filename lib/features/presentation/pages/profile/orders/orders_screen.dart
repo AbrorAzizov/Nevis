@@ -8,7 +8,6 @@ import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_blo
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_item.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -95,9 +94,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             Expanded(
                               child: Builder(
                                 builder: (context) {
-                                  if (homeState is InternetUnavailable) {
-                                    return InternetNoInternetConnectionWidget();
-                                  }
                                   if (ordersState
                                           is OrdersScreenLoadedSuccessfully &&
                                       ordersState.orders.isEmpty) {

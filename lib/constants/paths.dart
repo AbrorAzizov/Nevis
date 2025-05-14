@@ -12,7 +12,7 @@ class Paths {
   static const String noFoundAccountIconPath =
       '${_imagesPath}no_found_account.png';
   static const String noInternetConnectionIconPath =
-      '${_imagesPath}no_internet_connection.png';
+      '${_imagesPath}no_internet.svg';
   static const String profileIconPath = '${_imagesPath}profile.svg';
   static const String searchIconPath = '${_imagesPath}search.svg';
   static const String visibilityOffIconPath =

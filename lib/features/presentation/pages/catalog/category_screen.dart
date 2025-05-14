@@ -7,7 +7,6 @@ import 'package:nevis/features/presentation/bloc/category_screen/category_screen
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/category_screen/subcategories_list.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -54,30 +53,22 @@ class CategoryScreen extends StatelessWidget {
                                 showBack: true,
                                 isShowFavoriteButton: true),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ListView(
-                                      shrinkWrap: true,
-                                      padding: getMarginOrPadding(
-                                          bottom: 94,
-                                          right: 20,
-                                          left: 20,
-                                          top: 16),
-                                      children: [
-                                        Text(
-                                          categoryTitle ?? '',
-                                          style: UiConstants.textStyle1
-                                              .copyWith(
-                                                  color: UiConstants
-                                                      .darkBlueColor),
-                                        ),
-                                        SizedBox(height: 16.h),
-                                        SubcategoriesList(
-                                          subcategories:
-                                              state.subcategories ?? [],
-                                        )
-                                      ],
-                                    ),
+                              child: ListView(
+                                shrinkWrap: true,
+                                padding: getMarginOrPadding(
+                                    bottom: 94, right: 20, left: 20, top: 16),
+                                children: [
+                                  Text(
+                                    categoryTitle ?? '',
+                                    style: UiConstants.textStyle1.copyWith(
+                                        color: UiConstants.darkBlueColor),
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  SubcategoriesList(
+                                    subcategories: state.subcategories ?? [],
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         );

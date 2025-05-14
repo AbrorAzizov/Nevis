@@ -17,9 +17,7 @@ import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/date_icon_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/banner_item.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ArticleScreen extends StatelessWidget {
@@ -59,78 +57,70 @@ class ArticleScreen extends StatelessWidget {
                               action: SvgPicture.asset(Paths.shareIconPath),
                             ),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ListView(
-                                      shrinkWrap: true,
-                                      padding: getMarginOrPadding(
-                                          bottom: 94,
-                                          top: 16,
-                                          left: 20,
-                                          right: 20),
-                                      children: [
-                                        BannerItem(
-                                          height: 200.h,
-                                          url:
-                                              '${dotenv.env['PUBLIC_URL']!}${state.article?.image}',
-                                        ),
-                                        SizedBox(height: 16.h),
-                                        DateIconWidget(
-                                          date: DateTime.now(),
-                                        ),
-                                        SizedBox(height: 8.h),
-                                        Text(
-                                          state.article?.pageTitle ?? '',
-                                          style: UiConstants.textStyle5
-                                              .copyWith(
-                                                  color: UiConstants
-                                                      .darkBlueColor),
-                                        ),
-                                        if (Skeletonizer.of(context).enabled)
-                                          SizedBox(height: 16.h),
-                                        Skeleton.replace(
-                                          child: Html(
-                                            data: state.isLoading
-                                                ? Utils.mockHtml
-                                                : state.article?.content ?? '',
-                                            style: {
-                                              "p": Utils.htmlStyle,
-                                              "li": Utils.htmlStyle,
-                                              "*": Style(
-                                                margin: Margins(
-                                                  blockStart: Margin(0),
-                                                  blockEnd: Margin(0),
-                                                  left: Margin(0),
-                                                  right: Margin(0),
-                                                ),
-                                                padding: HtmlPaddings(
-                                                  blockStart: HtmlPadding(0),
-                                                  blockEnd: HtmlPadding(0),
-                                                ),
-                                              ),
-                                            },
+                              child: ListView(
+                                shrinkWrap: true,
+                                padding: getMarginOrPadding(
+                                    bottom: 94, top: 16, left: 20, right: 20),
+                                children: [
+                                  BannerItem(
+                                    height: 200.h,
+                                    url:
+                                        '${dotenv.env['PUBLIC_URL']!}${state.article?.image}',
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  DateIconWidget(
+                                    date: DateTime.now(),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  Text(
+                                    state.article?.pageTitle ?? '',
+                                    style: UiConstants.textStyle5.copyWith(
+                                        color: UiConstants.darkBlueColor),
+                                  ),
+                                  if (Skeletonizer.of(context).enabled)
+                                    SizedBox(height: 16.h),
+                                  Skeleton.replace(
+                                    child: Html(
+                                      data: state.isLoading
+                                          ? Utils.mockHtml
+                                          : state.article?.content ?? '',
+                                      style: {
+                                        "p": Utils.htmlStyle,
+                                        "li": Utils.htmlStyle,
+                                        "*": Style(
+                                          margin: Margins(
+                                            blockStart: Margin(0),
+                                            blockEnd: Margin(0),
+                                            left: Margin(0),
+                                            right: Margin(0),
+                                          ),
+                                          padding: HtmlPaddings(
+                                            blockStart: HtmlPadding(0),
+                                            blockEnd: HtmlPadding(0),
                                           ),
                                         ),
-                                        SizedBox(height: 32.h),
-                                        BlockWidget(
-                                          title: 'Читайте также',
-                                          clickableText: 'Все статьи',
-                                          onTap: () =>
-                                              Navigator.of(context).popUntil(
-                                            (route) {
-                                              return route.settings.name ==
-                                                  Routes.articlesScreen;
-                                            },
-                                          ),
-                                          child: ArticlesListWidget(
-                                              parentArticleId: id,
-                                              articles: articles ?? [],
-                                              padding: EdgeInsets.zero,
-                                              physics:
-                                                  NeverScrollableScrollPhysics()),
-                                        )
-                                      ],
+                                      },
                                     ),
+                                  ),
+                                  SizedBox(height: 32.h),
+                                  BlockWidget(
+                                    title: 'Читайте также',
+                                    clickableText: 'Все статьи',
+                                    onTap: () => Navigator.of(context).popUntil(
+                                      (route) {
+                                        return route.settings.name ==
+                                            Routes.articlesScreen;
+                                      },
+                                    ),
+                                    child: ArticlesListWidget(
+                                        parentArticleId: id,
+                                        articles: articles ?? [],
+                                        padding: EdgeInsets.zero,
+                                        physics:
+                                            NeverScrollableScrollPhysics()),
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         );

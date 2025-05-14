@@ -13,7 +13,6 @@ import 'package:nevis/features/presentation/widgets/about_us_screen/legal_addres
 import 'package:nevis/features/presentation/widgets/about_us_screen/online_pharm_block.dart';
 import 'package:nevis/features/presentation/widgets/about_us_screen/social_network_block.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AboutUsScreen extends StatefulWidget {
@@ -73,27 +72,22 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                                 title: 'Информация о нас',
                                 backgroundColor: UiConstants.backgroundColor),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ListView(
-                                      padding: getMarginOrPadding(
-                                          top: 16,
-                                          bottom: 94,
-                                          left: 20,
-                                          right: 20),
-                                      shrinkWrap: true,
-                                      children: [
-                                        OnlinePharmBlock(),
-                                        SizedBox(height: 16.h),
-                                        LegalAddressBlock(),
-                                        SizedBox(height: 16.h),
-                                        GosfarmnadzorBlock(),
-                                        SizedBox(height: 16.h),
-                                        SocialNetworkBlock(),
-                                        SizedBox(height: 16.h),
-                                        BookCommentsBlock(),
-                                      ],
-                                    ),
+                              child: ListView(
+                                padding: getMarginOrPadding(
+                                    top: 16, bottom: 94, left: 20, right: 20),
+                                shrinkWrap: true,
+                                children: [
+                                  OnlinePharmBlock(),
+                                  SizedBox(height: 16.h),
+                                  LegalAddressBlock(),
+                                  SizedBox(height: 16.h),
+                                  GosfarmnadzorBlock(),
+                                  SizedBox(height: 16.h),
+                                  SocialNetworkBlock(),
+                                  SizedBox(height: 16.h),
+                                  BookCommentsBlock(),
+                                ],
+                              ),
                             ),
                           ],
                         );

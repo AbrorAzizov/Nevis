@@ -11,7 +11,6 @@ import 'package:nevis/features/presentation/widgets/cart_screen/cart_pharmacy_wi
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/map/pharmacy_map_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -87,70 +86,62 @@ class PharmaciesScreen extends StatelessWidget {
                                 ),
                               ),
                               Expanded(
-                                child: homeState is InternetUnavailable
-                                    ? InternetNoInternetConnectionWidget()
-                                    : pharmacies.isEmpty
-                                        ? Center(
-                                            child: Text(
-                                              'По выбранным фильтрам аптек нет',
-                                              style: UiConstants.textStyle3
-                                                  .copyWith(
-                                                      color: UiConstants
-                                                          .darkBlueColor,
-                                                      fontWeight:
-                                                          FontWeight.w800),
-                                            ),
-                                          )
-                                        : ListView(
-                                            shrinkWrap: true,
-                                            padding: getMarginOrPadding(
-                                                bottom: 94,
-                                                right: 20,
-                                                left: 20,
-                                                top: 16),
-                                            children: [
-                                              Selector(
-                                                titlesList: const [
-                                                  'Список',
-                                                  'Карта'
-                                                ],
-                                                onTap: (int index) =>
-                                                    pharmaciesBloc.add(
-                                                  ChangeSelectorIndexEvent(
-                                                      index),
-                                                ),
-                                              ),
-                                              SizedBox(height: 16.h),
-                                              if (pharmaciesState
-                                                      .selectorIndex ==
-                                                  0)
-                                                ListView.separated(
-                                                    physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                    padding: EdgeInsets.zero,
-                                                    shrinkWrap: true,
-                                                    itemBuilder: (context,
-                                                            index) =>
-                                                        CartPharmacyWidget(
-                                                            pharmacy:
-                                                                pharmacies[
-                                                                    index],
-                                                            pharmacyListScreenType:
-                                                                PharmacyListScreenType
-                                                                    .product),
-                                                    separatorBuilder: (context,
-                                                            index) =>
-                                                        SizedBox(height: 8.h),
-                                                    itemCount:
-                                                        pharmacies.length)
-                                              else
-                                                Expanded(
-                                                  child: PharmacyMapWidget(
-                                                    points: [],
-                                                  ),
-                                                ),
+                                child: pharmacies.isEmpty
+                                    ? Center(
+                                        child: Text(
+                                          'По выбранным фильтрам аптек нет',
+                                          style: UiConstants.textStyle3
+                                              .copyWith(
+                                                  color:
+                                                      UiConstants.darkBlueColor,
+                                                  fontWeight: FontWeight.w800),
+                                        ),
+                                      )
+                                    : ListView(
+                                        shrinkWrap: true,
+                                        padding: getMarginOrPadding(
+                                            bottom: 94,
+                                            right: 20,
+                                            left: 20,
+                                            top: 16),
+                                        children: [
+                                          Selector(
+                                            titlesList: const [
+                                              'Список',
+                                              'Карта'
                                             ],
+                                            onTap: (int index) =>
+                                                pharmaciesBloc.add(
+                                              ChangeSelectorIndexEvent(index),
+                                            ),
                                           ),
+                                          SizedBox(height: 16.h),
+                                          if (pharmaciesState.selectorIndex ==
+                                              0)
+                                            ListView.separated(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                padding: EdgeInsets.zero,
+                                                shrinkWrap: true,
+                                                itemBuilder: (context, index) =>
+                                                    CartPharmacyWidget(
+                                                        pharmacy:
+                                                            pharmacies[index],
+                                                        pharmacyListScreenType:
+                                                            PharmacyListScreenType
+                                                                .product),
+                                                separatorBuilder:
+                                                    (context, index) =>
+                                                        SizedBox(height: 8.h),
+                                                itemCount: pharmacies.length)
+                                          else
+                                            Expanded(
+                                              child: PharmacyMapWidget(
+                                                points: [],
+                                              ),
+                                            ),
+                                        ],
+                                      ),
                               )
                             ],
                           );

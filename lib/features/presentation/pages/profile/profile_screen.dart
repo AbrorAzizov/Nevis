@@ -10,7 +10,6 @@ import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.da
 import 'package:nevis/features/presentation/bloc/profile_screen/profile_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/profile_screen/profile_screen_state.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/profile_screen/profile_categories_list.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,19 +59,17 @@ class ProfileScreen extends StatelessWidget {
                                 )
                               : null),
                       Expanded(
-                        child: homeState is InternetUnavailable
-                            ? InternetNoInternetConnectionWidget()
-                            : ListView(
-                                padding: getMarginOrPadding(
-                                  bottom: 94,
-                                  right: 20,
-                                  left: 20,
-                                  top: 16,
-                                ),
-                                children: [
-                                  ProfileCategoriesList(),
-                                ],
-                              ),
+                        child: ListView(
+                          padding: getMarginOrPadding(
+                            bottom: 94,
+                            right: 20,
+                            left: 20,
+                            top: 16,
+                          ),
+                          children: [
+                            ProfileCategoriesList(),
+                          ],
+                        ),
                       ),
                     ],
                   ),
