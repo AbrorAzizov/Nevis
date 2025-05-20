@@ -15,7 +15,8 @@ import 'package:nevis/features/presentation/widgets/orders_screen/order_item_sta
 import 'package:skeletonizer/skeletonizer.dart';
 
 class OrderItem extends StatelessWidget {
-  const OrderItem({super.key, required this.order});
+  final bool canNavigate;
+  const OrderItem({super.key, required this.order, this.canNavigate = true});
 
   final OrderEntity order;
 
@@ -23,13 +24,17 @@ class OrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Skeleton.ignorePointer(
       child: GestureDetector(
-        onTap: () => Navigator.of(context).push(
-          Routes.createRoute(
-            const OrderScreen(),
-            settings: RouteSettings(
-                name: Routes.orderScreen, arguments: order.orderId),
-          ),
-        ),
+        onTap: () {
+          if (canNavigate) {
+            Navigator.of(context).push(
+              Routes.createRoute(
+                const OrderScreen(),
+                settings: RouteSettings(
+                    name: Routes.orderScreen, arguments: order.orderId),
+              ),
+            );
+          }
+        },
         child: Container(
           decoration: BoxDecoration(
             color: UiConstants.whiteColor,

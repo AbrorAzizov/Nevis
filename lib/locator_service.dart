@@ -9,6 +9,7 @@ import 'package:nevis/features/data/datasources/auth_remote_data_source_impl.dar
 import 'package:nevis/features/data/datasources/cart_remote_data_source_implementation.dart';
 import 'package:nevis/features/data/datasources/category_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/content_remote_data_source_impl.dart';
+import 'package:nevis/features/data/datasources/order_local_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/order_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/pharmacy_remote_data_soruce_impl.dart';
 import 'package:nevis/features/data/datasources/product_local_data_soruce.dart';
@@ -83,7 +84,6 @@ import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.da
 import 'package:nevis/features/presentation/bloc/news_internal_screen/news_internal_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/news_screen/news_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/product_screen/product_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
@@ -189,11 +189,7 @@ Future<void> init() async {
       getProductPharmaciesUC: sl<GetProductPharmaciesUC>(),
     ),
   );
-  sl.registerFactory(
-    () => OrdersScreenBloc(
-      getOrderHistoryUC: sl<GetOrderHistoryUC>(),
-    ),
-  );
+
   sl.registerFactory(
     () => OrderScreenBloc(
       getOneOrderUC: sl<GetOneOrderUC>(),
@@ -332,6 +328,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton<OrderRepository>(
     () => OrderRepositoryImpl(
+      orderLocalDataSource: sl(),
       orderRemoteDataSource: sl(),
       networkInfo: sl(),
       errorHandler: sl(),
@@ -348,6 +345,10 @@ Future<void> init() async {
     () => RegionRemoteDataSourceImpl(
       apiClient: sl(),
     ),
+  );
+
+  sl.registerLazySingleton<OrderLocalDataSource>(
+    () => OrderLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
   sl.registerLazySingleton<ProductLocaleDataSource>(

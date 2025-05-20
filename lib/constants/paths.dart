@@ -146,4 +146,5 @@ class Paths {
   static const String favPharmaciesIconPath = '${_imagesPath}favPharmacies.svg';
   static const String filledLocationIconPath =
       '${_imagesPath}filledLocation.svg';
+  static const String noPharmaciesIconPath = '${_imagesPath}no_pharmacies.png';
 }

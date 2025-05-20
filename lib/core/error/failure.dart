@@ -130,3 +130,11 @@ class TooManyRequestsFailure extends Failure {
   TooManyRequestsFailure copyWith({String? message}) =>
       TooManyRequestsFailure(message: message ?? this.message);
 }
+
+class UnauthorizedFailure extends Failure {
+  const UnauthorizedFailure({super.message});
+
+  @override
+  UnauthorizedFailure copyWith({String? message}) =>
+      UnauthorizedFailure(message: message ?? this.message);
+}

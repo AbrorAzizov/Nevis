@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/routes.dart';
+import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
+import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/profile/favorite_pharmacy_screen.dart';
+import 'package:nevis/features/presentation/widgets/orders_screen/order_item.dart';
 
-class InternetNoInternetConnectionWidget extends StatelessWidget {
-  const InternetNoInternetConnectionWidget({super.key});
+class NoInternetConnectionWidget extends StatelessWidget {
+  const NoInternetConnectionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +136,78 @@ class InternetNoInternetConnectionWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 16.h),
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.r),
+                color: UiConstants.whiteColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFF144B63).withOpacity(0.1),
+                    blurRadius: 50,
+                    spreadRadius: -4,
+                    offset: Offset(-1, -4),
+                  ),
+                ]),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(Routes.createRoute(
+                  const FavoritePharmaciesScreen(),
+                  settings: RouteSettings(
+                      name: Routes.favoritePharmacy,
+                      arguments: <ProductPharmacyEntity>[]),
+                ));
+              },
+              child: Padding(
+                padding: getMarginOrPadding(all: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          Paths.geoIconPath,
+                          width: 24,
+                          height: 24,
+                        ),
+                        SizedBox(
+                          width: 12.w,
+                        ),
+                        Text('Найти аптеку на карте',
+                            style: UiConstants.textStyle3.copyWith(
+                              color: UiConstants.black3Color,
+                            ))
+                      ],
+                    ),
+                    RotatedBox(
+                        quarterTurns: 2,
+                        child: SvgPicture.asset(Paths.arrowBackIconPath))
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 16.h,
+          ),
+          BlocBuilder<OrdersScreenBloc, OrdersScreenState>(
+              builder: (context, ordersState) {
+            if (ordersState is OrdersScreenLoadedSuccessfully) {
+              return Expanded(
+                child: ListView.separated(
+                    physics: BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => OrderItem(
+                          canNavigate: false,
+                          order: ordersState.orders[index],
+                        ),
+                    separatorBuilder: (context, index) => SizedBox(height: 8.h),
+                    itemCount: ordersState.orders.length),
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          })
         ],
       ),
     );

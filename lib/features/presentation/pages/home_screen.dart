@@ -8,6 +8,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/route_observer/route_observer_bloc.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/bottom_navigation_bar_tile.dart';
@@ -32,9 +33,14 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocProvider(
             create: (context) => sl<FavoriteProductsScreenBloc>()
               ..add(LoadFavoriteProductsEvent())),
-        BlocProvider(create: (context) => CartScreenBloc(getCartProducts: sl())
-            // ..update(),
-            ),
+        BlocProvider(
+            create: (context) => CartScreenBloc(getCartProducts: sl())),
+        BlocProvider(
+            create: (context) => OrdersScreenBloc(getOrderHistoryUC: sl())
+              ..add(LoadDataEvent())),
+        BlocProvider(
+            create: (context) => sl<FavoriteProductsScreenBloc>()
+              ..add(LoadFavoriteProductsEvent())),
         BlocProvider(
           create: (context) => HomeScreenBloc(context: context),
         ),
@@ -83,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           surfaceTintColor: Colors.transparent),
                       body: SafeArea(
                         child: homeState is InternetUnavailable
-                            ? InternetNoInternetConnectionWidget()
+                            ? NoInternetConnectionWidget()
                             : Stack(
                                 alignment: Alignment.bottomCenter,
                                 children: [

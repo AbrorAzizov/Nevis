@@ -23,7 +23,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   Future<List<OrderModel>> getOrderHistory() async {
     try {
       final data = await apiClient.get(
-          endpoint: '/orders',
+          endpoint: 'orders',
           callPathNameForLog: '${runtimeType.toString()}.getOrderHistory',
           exceptions: {401: ServerException(), 500: ServerException()});
 

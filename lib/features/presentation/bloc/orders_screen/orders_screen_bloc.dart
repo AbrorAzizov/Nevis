@@ -21,7 +21,6 @@ class OrdersScreenBloc extends Bloc<OrdersScreenEvent, OrdersScreenState> {
 
   void _onLoadData(LoadDataEvent event, Emitter<OrdersScreenState> emit) async {
     emit(OrdersScreenIsLoading());
-
     final failureOrLoads = await getOrderHistoryUC();
     failureOrLoads.fold(
       (_) => emit(OrdersScreenError(error: 'Ошибка загрузки данных')),
@@ -69,4 +68,4 @@ class OrdersScreenBloc extends Bloc<OrdersScreenEvent, OrdersScreenState> {
     emit(OrdersScreenLoadedSuccessfully(
         orders: filteredOrders, selectorIndex: event.selectorIndex));
   }
-} 
+}

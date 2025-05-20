@@ -5,7 +5,7 @@ class PersonalDataScreenState extends Equatable {
   final bool isButtonActive;
   final GenderType? gender;
   final bool isCheckedNotificationCheckbox;
-  final bool isCheckedPolicyCheckbox;
+  final bool isCheckedNotifictaionAboutApplication;
   final String? passwordErrorText;
   final bool showError;
   final String? confirmPhoneCode;
@@ -16,7 +16,7 @@ class PersonalDataScreenState extends Equatable {
     this.isButtonActive = true,
     this.gender = GenderType.male,
     this.isCheckedNotificationCheckbox = false,
-    this.isCheckedPolicyCheckbox = false,
+    this.isCheckedNotifictaionAboutApplication = false,
     this.passwordErrorText,
     this.showError = false,
     this.confirmPhoneCode,
@@ -40,8 +40,8 @@ class PersonalDataScreenState extends Equatable {
       gender: gender ?? this.gender,
       isCheckedNotificationCheckbox:
           isCheckedNotificationCheckbox ?? this.isCheckedNotificationCheckbox,
-      isCheckedPolicyCheckbox:
-          isCheckedPolicyCheckbox ?? this.isCheckedPolicyCheckbox,
+      isCheckedNotifictaionAboutApplication:
+          isCheckedPolicyCheckbox ?? this.isCheckedNotifictaionAboutApplication,
       passwordErrorText: passwordErrorText,
       showError: showError ?? this.showError,
       confirmPhoneCode: confirmPhoneCode,
@@ -55,7 +55,7 @@ class PersonalDataScreenState extends Equatable {
         isButtonActive,
         gender,
         isCheckedNotificationCheckbox,
-        isCheckedPolicyCheckbox,
+        isCheckedNotifictaionAboutApplication,
         passwordErrorText,
         showError,
         confirmPhoneCode,

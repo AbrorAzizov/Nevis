@@ -27,7 +27,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   // 📌 Обновление данных профиля
   @override
-  Future<Either<Failure, String?>> updateMe(ProfileModel profile) async =>
+  Future<Either<Failure, void>> updateMe(ProfileModel profile) async =>
       await errorHandler.handle(
         () async => await profileRemoteDataSource.updateMe(profile),
       );

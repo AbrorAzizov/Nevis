@@ -129,3 +129,22 @@ class TooManyRequestsException extends ApiException {
     return TooManyRequestsException(message ?? this.message);
   }
 }
+
+class UnauthorizedException extends ApiException {
+  UnauthorizedException([super.message = 'Пользователь не авторизирован']);
+
+  @override
+  UnauthorizedException copyWith({String? message}) {
+    return UnauthorizedException(message ?? this.message);
+  }
+}
+
+class NoFavoritePharmaciesException extends ApiException {
+  NoFavoritePharmaciesException(
+      [super.message = 'Список любимых аптек пуст не авторизирован']);
+
+  @override
+  NoFavoritePharmaciesException copyWith({String? message}) {
+    return NoFavoritePharmaciesException(message ?? this.message);
+  }
+}
