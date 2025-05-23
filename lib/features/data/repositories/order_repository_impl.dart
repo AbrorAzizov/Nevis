@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:nevis/core/error/failure.dart';
+import 'package:nevis/core/params/cart_params.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/order_local_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/order_remote_data_source_impl.dart';
 import 'package:nevis/features/data/models/order_model.dart';
+import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 import 'package:nevis/features/domain/repositories/order_repository.dart';
 
 class OrderRepositoryImpl implements OrderRepository {
@@ -41,5 +43,12 @@ class OrderRepositoryImpl implements OrderRepository {
   Future<Either<Failure, OrderModel?>> getOrderById(int id) async =>
       await errorHandler.handle(
         () async => await orderRemoteDataSource.getOrderById(id),
+      );
+
+  @override
+  Future<Either<Failure, List<PharmacyEntity>>> getAvialablePharmacies(
+          List<CartParams> cart) async =>
+      await errorHandler.handle(
+        () async => await orderRemoteDataSource.getAvialablePharmacies(cart),
       );
 }

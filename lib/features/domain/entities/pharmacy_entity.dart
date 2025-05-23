@@ -2,43 +2,79 @@ import 'package:equatable/equatable.dart';
 
 class PharmacyEntity extends Equatable {
   final int? pharmacyId;
+  final String? title;
   final String? alias;
   final String? address;
   final String? coordinates;
   final String? schedule;
+  final String? metro;
+  final int? optics;
+  final int? discounter;
+  final int? roundtheclock;
+  final String? iconHref;
+  final String? phone;
+  final String? brand;
+  final String? textCloseTime;
+  final String? classCloseTime;
+  final int? storeId;
+  final String? storeXmlId;
+  final double? gpsN;
+  final double? gpsS;
+  final Map<String, dynamic>? amounts;
+  final String? ufRegion;
+  final Map<String, dynamic>? sum;
+  final List<String>? raspisanie;
 
   const PharmacyEntity({
     this.pharmacyId,
+    this.title,
     this.alias,
     this.address,
     this.coordinates,
     this.schedule,
+    this.metro,
+    this.optics,
+    this.discounter,
+    this.roundtheclock,
+    this.iconHref,
+    this.phone,
+    this.brand,
+    this.textCloseTime,
+    this.classCloseTime,
+    this.storeId,
+    this.storeXmlId,
+    this.gpsN,
+    this.gpsS,
+    this.amounts,
+    this.ufRegion,
+    this.sum,
+    this.raspisanie,
   });
-
-  PharmacyEntity copyWith({
-    int? pharmacyId,
-    String? pageTitle,
-    String? alias,
-    String? address,
-    String? coordinates,
-    String? image,
-    bool? isFavorite,
-    String? schedule,
-  }) =>
-      PharmacyEntity(
-        pharmacyId: pharmacyId ?? this.pharmacyId,
-        alias: alias ?? this.alias,
-        address: address ?? this.address,
-        coordinates: coordinates ?? this.coordinates,
-        schedule: schedule ?? this.schedule,
-      );
 
   @override
   List<Object?> get props => [
         pharmacyId,
+        title,
         alias,
         address,
         coordinates,
         schedule,
+        metro,
+        optics,
+        discounter,
+        roundtheclock,
+        iconHref,
+        phone,
+        brand,
+        textCloseTime,
+        classCloseTime,
+        storeId,
+        storeXmlId,
+        gpsN,
+        gpsS,
+        amounts,
+        ufRegion,
+        sum,
+        raspisanie,
       ];
 }

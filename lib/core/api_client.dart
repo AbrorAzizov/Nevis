@@ -84,7 +84,7 @@ class ApiClient {
 
   Future<dynamic> post({
     required String endpoint,
-    Map<String, dynamic>? body,
+    dynamic body,
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
     bool isRetryRequest = true,

@@ -1,13 +1,15 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/services.dart';
 import 'package:nevis/core/api_client.dart';
-import 'package:nevis/features/data/models/pharmacy_model.dart';
+import 'package:nevis/core/error/exception.dart';
+import 'package:nevis/core/params/cart_params.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 
 abstract class CartRemoteDataSource {
   Future<List<ProductModel>> getCartProducts();
-  Future<List<PharmacyModel>> getPharmaciesForPickup();
+  Future<void> addProductToCart(CartParams product);
 }
 
 class CartRemoteDataSourceImpl implements CartRemoteDataSource {
@@ -16,31 +18,12 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   CartRemoteDataSourceImpl({required this.apiClient});
   @override
   Future<List<ProductModel>> getCartProducts() async {
-    // try {
-    //   final data = await apiClient.get(
-    //     endpoint: 'cart',
-    //     exceptions: {
-    //       401: UnauthorizedException(),
-    //       400: ServerException(),
-    //       500: ServerException()
-    //     },
-    //     callPathNameForLog: '${runtimeType.toString()}.cart',
-    //   );
-
-    //   List<dynamic> dataList = data['cart_items'];
-    //   return dataList.map((e) => ProductModel.fromJson(e)).toList();
-    // } catch (e) {
-    //   log('Error during cart: $e',
-    //       name: '${runtimeType.toString()}.cart', level: 1000);
-    //   rethrow;
-    // }
     try {
       String jsonString = await rootBundle.loadString('assets/products.json');
       final data = jsonDecode(jsonString);
       List<dynamic> dataList = data['data'];
       List<ProductModel> products =
           dataList.map((e) => ProductModel.fromJson(e)).toList();
-      print(products);
       return products;
     } catch (e) {
       return [];
@@ -48,5 +31,20 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   }
 
   @override
-  Future<List<PharmacyModel>> getPharmaciesForPickup() async {}
+  Future<void> addProductToCart(CartParams product) async {
+    try {
+      await apiClient.post(
+        endpoint: 'cart',
+        body: product.toJsonForAddProductToCart(),
+        exceptions: {
+          500: ServerException(),
+        },
+        callPathNameForLog: '${runtimeType.toString()}.addProductsToCart',
+      );
+    } catch (e) {
+      log('Error during addProductsToCart: $e',
+          name: '${runtimeType.toString()}.addProductsToCart', level: 1000);
+      rethrow;
+    }
+  }
 }

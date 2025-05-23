@@ -14,7 +14,6 @@ class ProductTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(product?.bonuses);
     final oldPrice = product?.oldPrice ?? 0;
     final price = product?.price ?? 0;
     final discount = oldPrice - price;

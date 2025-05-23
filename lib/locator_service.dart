@@ -39,6 +39,7 @@ import 'package:nevis/features/domain/usecases/auth/login.dart';
 import 'package:nevis/features/domain/usecases/auth/logout.dart';
 import 'package:nevis/features/domain/usecases/auth/refresh_token.dart';
 import 'package:nevis/features/domain/usecases/auth/request_code.dart';
+import 'package:nevis/features/domain/usecases/cart/add_product_to_cart.dart';
 import 'package:nevis/features/domain/usecases/cart/get_cart.dart';
 import 'package:nevis/features/domain/usecases/category/get_brands.dart';
 import 'package:nevis/features/domain/usecases/category/get_categories.dart';
@@ -53,6 +54,7 @@ import 'package:nevis/features/domain/usecases/content/get_one_action.dart';
 import 'package:nevis/features/domain/usecases/content/get_one_article.dart';
 import 'package:nevis/features/domain/usecases/content/get_one_news.dart';
 import 'package:nevis/features/domain/usecases/content/get_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/order/get_pharmacies_by_cart.dart';
 import 'package:nevis/features/domain/usecases/orders/get_one_order.dart';
 import 'package:nevis/features/domain/usecases/orders/get_order_history.dart';
 import 'package:nevis/features/domain/usecases/pharmacies/get_favorite_pharmacies.dart';
@@ -74,6 +76,7 @@ import 'package:nevis/features/domain/usecases/regions/get_regions.dart';
 import 'package:nevis/features/domain/usecases/regions/select_region.dart';
 import 'package:nevis/features/presentation/bloc/article_screen/article_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/articles_screen/articles_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/category_screen/category_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
@@ -214,6 +217,10 @@ Future<void> init() async {
     () => SearchScreenBloc(getRegionsUC: sl(), selectRegionUC: sl()),
   );
 
+  sl.registerLazySingleton(
+    () => CartScreenBloc(getCartProducts: sl(), addProductToCart: sl()),
+  );
+
   //// UseCases
 
   // Regions
@@ -264,9 +271,13 @@ Future<void> init() async {
   // Order
   sl.registerLazySingleton(() => GetOrderHistoryUC(sl()));
   sl.registerLazySingleton(() => GetOneOrderUC(sl()));
+  sl.registerLazySingleton(() => GetPharmaciesByCartUC(sl()));
 
   //Cart
   sl.registerLazySingleton(() => GetCartProductsUC(sl()));
+  sl.registerLazySingleton(() => AddProductToCartUC(
+        sl(),
+      ));
 
   // Pharmacy
   sl.registerLazySingleton(() => GetFavoritePharmaciesUC(sl()));

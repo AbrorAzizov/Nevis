@@ -1,9 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:nevis/core/error/failure.dart';
+import 'package:nevis/core/params/cart_params.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
-
+import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 
 abstract class OrderRepository {
   Future<Either<Failure, List<OrderEntity>>> getOrderHistory();
   Future<Either<Failure, OrderEntity?>> getOrderById(int id);
+  Future<Either<Failure, List<PharmacyEntity>>> getAvialablePharmacies(
+      List<CartParams> cart);
 }

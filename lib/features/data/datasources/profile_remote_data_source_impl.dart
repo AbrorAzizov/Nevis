@@ -39,7 +39,6 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<void> updateMe(ProfileModel profile) async {
     try {
-      print(profile.toJson());
       await apiClient.put(
         endpoint: 'users/profile',
         exceptions: {500: ServerException()},

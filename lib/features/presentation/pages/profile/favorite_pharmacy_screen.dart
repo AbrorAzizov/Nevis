@@ -9,7 +9,6 @@ import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/pharmacy_card.dart';
 import 'package:nevis/features/presentation/widgets/map/pharmacy_map_widget.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -81,7 +80,8 @@ class _FavoritePharmaciesScreenState extends State<FavoritePharmaciesScreen> {
                                             bottom: 94, left: 20, right: 20),
                                         shrinkWrap: true,
                                         itemBuilder: (context, index) =>
-                                            PharmacyCard(),
+                                            SizedBox(),
+                                        // PharmacyCard(),
                                         separatorBuilder: (context, index) =>
                                             SizedBox(height: 8.h),
                                         itemCount: state.pharmacies.length,

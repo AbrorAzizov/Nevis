@@ -7,12 +7,14 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
+import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/order/order_pickup_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/cart_pharmacy_widget.dart';
@@ -129,9 +131,9 @@ class BottomSheetManager {
     );
   }
 
-  static showWarningAboutNonDeliveryProduct(BuildContext homeContext) {
+  static showWarningAboutNonDeliveryProduct(BuildContext context) {
     return showModalBottomSheet(
-      context: homeContext,
+      context: context,
       builder: (sheetContext) {
         return CustomBottomSheet(
           height: 283.h,
@@ -146,7 +148,24 @@ class BottomSheetManager {
               SizedBox(height: 16.h),
               AppButtonWidget(
                 text: 'Продолжить оформление',
-                onTap: () => Navigator.pop(sheetContext),
+                onTap: () {
+                  final bool unavailableForDeliviry = context
+                      .read<CartScreenBloc>()
+                      .state
+                      .cartProducts
+                      .any((p) => p.availableForDelivery == false);
+                  if (unavailableForDeliviry) {
+                    Navigator.pop(sheetContext);
+                    Navigator.of(context).push(
+                      Routes.createRoute(
+                        const OrderPickupScreen(),
+                        settings: RouteSettings(
+                          name: Routes.orderPickupScreen,
+                        ),
+                      ),
+                    );
+                  }
+                },
               ),
               SizedBox(height: 8.h),
               AppButtonWidget(
@@ -154,9 +173,6 @@ class BottomSheetManager {
                 text: 'Редактировать корзину',
                 isFilled: false,
                 onTap: () {
-                  // homeContext.read<CartScreenBloc>().add(
-                  //       DeletePromoCodeEvent(),
-                  //     );
                   Navigator.pop(sheetContext);
                 },
               ),

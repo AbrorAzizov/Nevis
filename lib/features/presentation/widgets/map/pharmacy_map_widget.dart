@@ -7,6 +7,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
+import 'package:nevis/features/data/models/pharmacy_model.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/presentation/bloc/pharmacy_map/pharmacy_map_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
@@ -109,7 +110,10 @@ class PharmacyMapWidget extends StatelessWidget {
                                     selectedPoint.data!);
 
                                 if (!fromProduct) {
-                                  return const PharmacyInfoCard();
+                                  return PharmacyInfoCard(
+                                    pharmacy: PharmacyModel.fromJson(
+                                        selectedPoint.data!),
+                                  );
                                 }
 
                                 final counter = valueBuyBloc!

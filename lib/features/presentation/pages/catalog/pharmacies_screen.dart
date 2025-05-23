@@ -13,8 +13,8 @@ import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/map/pharmacy_map_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class PharmaciesScreen extends StatelessWidget {
-  const PharmaciesScreen({super.key});
+class ProductPharmaciesScreen extends StatelessWidget {
+  const ProductPharmaciesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
