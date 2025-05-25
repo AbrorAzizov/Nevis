@@ -13,6 +13,7 @@ import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.da
 import 'package:nevis/features/presentation/widgets/cart_screen/as_a_gift_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/product_price.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/special_offer_badge_widget.dart';
+import 'package:nevis/features/presentation/widgets/counter_widget.dart';
 import 'package:nevis/features/presentation/widgets/delete_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/favorite_button.dart';
 import 'package:nevis/features/presentation/widgets/sale_offer_widget.dart';
@@ -138,52 +139,17 @@ class CartProductWidget extends StatelessWidget {
                   SizedBox(
                     width: 16.w,
                   ),
-                  Container(
+                  SizedBox(
                     height: 32,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey.shade300,
-                        width: 1.5,
-                      ),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.remove, color: Colors.grey.shade700),
-                          onPressed: () {
-                            if (count > 1) {
-                              bloc.add(UpdateProductCountEvent(
-                                productId: productId,
-                                count: count - 1,
-                              ));
-                            }
-                          },
-                          splashRadius: 20,
-                          constraints: const BoxConstraints(),
-                          padding: EdgeInsets.zero,
-                        ),
-                        Text(
-                          '$count',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.add, color: Colors.grey.shade700),
-                          onPressed: () {
-                            bloc.add(UpdateProductCountEvent(
-                              productId: productId,
-                              count: count + 1,
-                            ));
-                          },
-                          splashRadius: 20,
-                          constraints: const BoxConstraints(),
-                          padding: EdgeInsets.zero,
-                        ),
-                      ],
+                    child: CounterWidget(
+                      count: count,
+                      productId: productId,
+                      onCountChanged: (id, newCount) {
+                        bloc.add(UpdateProductCountEvent(
+                          productId: id,
+                          count: newCount,
+                        ));
+                      },
                     ),
                   ),
                 ],

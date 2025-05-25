@@ -15,6 +15,7 @@ import 'package:nevis/features/presentation/pages/catalog/products/product_scree
 import 'package:nevis/features/presentation/pages/catalog/products/value_buy_product_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/product_price.dart';
+import 'package:nevis/features/presentation/widgets/counter_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
 import 'package:nevis/features/presentation/widgets/favorite_button.dart';
 
@@ -292,16 +293,43 @@ class ProductWidget extends StatelessWidget {
                   children: [
                     ProductPrice(product: product),
                     SizedBox(height: 8.h),
-                    AppButtonWidget(
-                      isFilled: false,
-                      showBorder: true,
-                      isActive: true,
-                      text: 'В корзину',
-                      textColor: UiConstants.blueColor,
-                      onTap: () {
-                        context
-                            .read<CartScreenBloc>()
-                            .add(AddProductToCart(product: product));
+                    BlocBuilder<CartScreenBloc, CartScreenState>(
+                      builder: (context, state) {
+                        final counters = state.counters;
+                        final productId = product.productId!;
+                        final count = counters[productId] ?? 1;
+                        if (state.counters[product.productId] == null) {
+                          return AppButtonWidget(
+                            isFilled: false,
+                            showBorder: true,
+                            isActive: true,
+                            text: 'В корзину',
+                            textColor: UiConstants.blueColor,
+                            onTap: () {
+                              context
+                                  .read<CartScreenBloc>()
+                                  .add(AddProductToCart(product: product));
+                            },
+                          );
+                        }
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: CounterWidget(
+                                count: count,
+                                productId: productId,
+                                onCountChanged: (id, newCount) {
+                                  context
+                                      .read<CartScreenBloc>()
+                                      .add(UpdateProductCountEvent(
+                                        productId: id,
+                                        count: newCount,
+                                      ));
+                                },
+                              ),
+                            ),
+                          ],
+                        );
                       },
                     ),
                     SizedBox(height: 8.h),

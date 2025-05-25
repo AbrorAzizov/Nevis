@@ -34,9 +34,7 @@ extension OrderStatusExtension on OrderStatus {
 
 extension TypeReceivingExtension on TypeReceiving {
   static const Map<TypeReceiving, String> titles = {
-    TypeReceiving.all: 'Все',
     TypeReceiving.delivery: 'Доставка',
-    TypeReceiving.pickupFromWareHouse: 'Доставка со склада',
     TypeReceiving.pickup: 'Самовывоз',
   };
 

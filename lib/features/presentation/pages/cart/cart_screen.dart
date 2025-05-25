@@ -7,7 +7,9 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/bottom_sheet_manager.dart';
+import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/order/order_pickup_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/cart_product_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/empty_cart_widget.dart';
@@ -63,7 +65,6 @@ class CartScreen extends StatelessWidget {
                                   padding: getMarginOrPadding(
                                       bottom: 94, right: 20, left: 20, top: 16),
                                   children: [
-                                    // Заголовок и кнопка очистки
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -85,7 +86,6 @@ class CartScreen extends StatelessWidget {
                                       ],
                                     ),
                                     SizedBox(height: 16.h),
-
                                     ...availableProducts
                                         .map((product) => Padding(
                                               padding:
@@ -93,7 +93,6 @@ class CartScreen extends StatelessWidget {
                                               child: CartProductWidget(
                                                   product: product),
                                             )),
-
                                     if (hasUnavailable) ...[
                                       SizedBox(height: 32.h),
                                       Text('Недоступны для доставки',
@@ -173,10 +172,7 @@ class CartScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ],
-
                                     SizedBox(height: 16.h),
-
-                                    // Цена
                                     SelectedProductsPriceInformationWidget(
                                       totalPrice: cartState.totalPrice ?? 0,
                                       totalDiscounts:
@@ -186,7 +182,6 @@ class CartScreen extends StatelessWidget {
                                           cartState.cartProducts.length,
                                     ),
                                     SizedBox(height: 16.h),
-
                                     if (hasUnavailable)
                                       Text(
                                         'Доставка на дом недоступна для некоторых товаров',
@@ -203,18 +198,19 @@ class CartScreen extends StatelessWidget {
                                               style: UiConstants.textStyle20),
                                           SizedBox(height: 8.h),
                                           Selector(
-                                            titlesList: const [
-                                              'Доставка на дом',
-                                              'Самовывоз'
-                                            ],
-                                            onTap: (int index) => cartBloc.add(
-                                              ChangeSelectorIndexEvent(
-                                                  TypeReceiving.values[index]),
-                                            ),
-                                          ),
+                                              titlesList: const [
+                                                'Доставка на дом',
+                                                'Самовывоз'
+                                              ],
+                                              onTap: (int index) {
+                                                cartBloc.add(
+                                                  ChangeSelectorIndexEvent(
+                                                      TypeReceiving
+                                                          .values[index]),
+                                                );
+                                              }),
                                         ],
                                       ),
-
                                     if (cartState.counters.values
                                         .any((count) => count >= 50))
                                       Padding(
@@ -240,6 +236,19 @@ class CartScreen extends StatelessWidget {
                                               .any((count) => count >= 50)
                                           ? null
                                           : () {
+                                              print(cartState.cartType);
+                                              if (cartState.cartType ==
+                                                  TypeReceiving.pickup) {
+                                                Navigator.of(context).push(
+                                                  Routes.createRoute(
+                                                    const OrderPickupScreen(),
+                                                    settings: RouteSettings(
+                                                      name: Routes
+                                                          .orderPickupScreen,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
                                               if (hasUnavailable) {
                                                 BottomSheetManager
                                                     .showWarningAboutNonDeliveryProduct(

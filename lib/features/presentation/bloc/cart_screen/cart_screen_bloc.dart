@@ -108,28 +108,43 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
   }
 
   void _updateCounter(
-      UpdateProductCountEvent event, Emitter<CartScreenState> emit) {
+      UpdateProductCountEvent event, Emitter<CartScreenState> emit) async {
     final newCounters = Map<int, int>.from(state.counters);
     newCounters[event.productId] = event.count;
     emit(state.copyWith(counters: newCounters));
+    final failureOrSuccess = await addProductToCart(
+      CartParams(quantity: event.count, id: event.productId),
+    );
+    failureOrSuccess.fold(
+      (failure) => emit(
+        state.copyWith(errorMessage: 'Ошибка обновления количества товара'),
+      ),
+      (_) => add(GetCartProductsEvent()),
+    );
   }
 
   void _onChangeSelector(
       ChangeSelectorIndexEvent event, Emitter<CartScreenState> emit) {
-    emit(state.copyWith(selectorIndex: event.typeReceiving));
+    emit(state.copyWith(cartType: event.typeReceiving));
   }
 
-  void _onRemoveItem(RemoveProductEvent event, Emitter<CartScreenState> emit) {
-    final updatedProducts = List<ProductEntity>.from(state.cartProducts)
-      ..remove(event.product);
+  void _onRemoveItem(
+      RemoveProductEvent event, Emitter<CartScreenState> emit) async {
+    if (event.product.productId == null) return;
 
-    final updatedCounters = Map<int, int>.from(state.counters)
-      ..remove(event.product.productId);
+    final productId = event.product.productId!;
 
-    emit(state.copyWith(
-      cartProducts: updatedProducts,
-      counters: updatedCounters,
-    ));
+    // Вызываем добавление товара с количеством 0 для удаления
+    final failureOrSuccess = await addProductToCart(
+      CartParams(quantity: 0, id: productId),
+    );
+
+    failureOrSuccess.fold(
+      (failure) => emit(
+          state.copyWith(errorMessage: 'Ошибка удаления товара из корзины')),
+      (_) => add(
+          GetCartProductsEvent()), // после успешного удаления обновляем корзину
+    );
   }
 
   void _clearCart(ClearCartEvent event, Emitter<CartScreenState> emit) {
@@ -141,7 +156,6 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
     if (event.product.productId != null) {
       final productId = event.product.productId!;
       final currentCount = state.counters[productId] ?? 0;
-      print(currentCount);
       final newCount = currentCount + 1;
 
       final failureOrLoads = await addProductToCart(

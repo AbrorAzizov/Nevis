@@ -154,13 +154,11 @@ class Utils {
       PaymentType? paymentType, TypeReceiving typeReceipt,
       {OrderStatus? orderStatus}) {
     List<OrderStatus> statuses = [];
-    print(typeReceipt);
     if (orderStatus == OrderStatus.canceled) {
       statuses = [
         OrderStatus.canceled,
       ];
-    } else if (typeReceipt == TypeReceiving.pickup ||
-        typeReceipt == TypeReceiving.pickupFromWareHouse) {
+    } else if (typeReceipt == TypeReceiving.pickup) {
       statuses = [
         typeReceipt == TypeReceiving.pickup
             ? OrderStatus.accepted

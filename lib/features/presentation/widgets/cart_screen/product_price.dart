@@ -71,7 +71,7 @@ class ProductPrice extends StatelessWidget {
                               : UiConstants.black3Color)
                           : (product.oldPrice != null
                               ? UiConstants.blackColor
-                              : UiConstants.black3Color.withOpacity(.6))),
+                              : UiConstants.black3Color)),
                 ),
               ),
               Container(

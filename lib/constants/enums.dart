@@ -12,7 +12,7 @@ enum CodeScreenType { signUp, reset, logInWithMessage, logInWithCall }
 
 enum ProductChipType { hit, seasonalOffer, stock, nova }
 
-enum TypeReceiving { all, delivery, pickup, pickupFromWareHouse }
+enum TypeReceiving { delivery, pickup, all }
 
 enum PaymentType { inPerson, online }
 
