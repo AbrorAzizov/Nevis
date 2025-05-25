@@ -10,7 +10,6 @@ import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_d
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/personal_data_screen/checkboxed_block.dart';
 import 'package:nevis/features/presentation/widgets/personal_data_screen/general_information_block.dart';
 import 'package:nevis/locator_service.dart';
@@ -64,41 +63,36 @@ class PersonalDataScreen extends StatelessWidget {
                                 title: 'Личные данные',
                                 showBack: true),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ListView(
-                                      shrinkWrap: true,
-                                      padding: getMarginOrPadding(
-                                          bottom: 94,
-                                          right: 20,
-                                          left: 20,
-                                          top: 16),
-                                      children: [
-                                        GeneralInformationBlock(
-                                            screenContext: context),
-                                        SizedBox(height: 16.h),
-                                        CheckboxesBlock(screenContext: context),
-                                        SizedBox(height: 32.h),
-                                        AppButtonWidget(
-                                          isActive: state.isButtonActive,
-                                          text: 'Сохранить',
-                                          onTap: () {
-                                            personalDataBloc.add(
-                                              SubmitEvent(),
-                                            );
-                                          },
-                                        ),
-                                        SizedBox(height: 8.h),
-                                        AppButtonWidget(
-                                          text: 'Удалить аккаунт',
-                                          backgroundColor:
-                                              UiConstants.backgroundColor,
-                                          textColor: UiConstants.darkBlueColor,
-                                          onTap: () => personalDataBloc
-                                              .add(DeleteAccountEvent()),
-                                        ),
-                                      ],
-                                    ),
+                              child: ListView(
+                                shrinkWrap: true,
+                                padding: getMarginOrPadding(
+                                    bottom: 94, right: 20, left: 20, top: 16),
+                                children: [
+                                  GeneralInformationBlock(
+                                      screenContext: context),
+                                  SizedBox(height: 16.h),
+                                  CheckboxesBlock(screenContext: context),
+                                  SizedBox(height: 32.h),
+                                  AppButtonWidget(
+                                    isActive: state.isButtonActive,
+                                    text: 'Сохранить',
+                                    onTap: () {
+                                      personalDataBloc.add(
+                                        SubmitEvent(),
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  AppButtonWidget(
+                                    text: 'Удалить аккаунт',
+                                    backgroundColor:
+                                        UiConstants.backgroundColor,
+                                    textColor: UiConstants.darkBlueColor,
+                                    onTap: () => personalDataBloc
+                                        .add(DeleteAccountEvent()),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         );

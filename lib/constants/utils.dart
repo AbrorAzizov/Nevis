@@ -293,7 +293,7 @@ class Utils {
     }
   }
 
-  static String formatPrice(int? price) {
+  static String formatPrice(dynamic price) {
     if (price == null) return '-';
     final NumberFormat formatter =
         NumberFormat.currency(locale: 'ru_RU', symbol: '₽', decimalDigits: 0);

@@ -136,3 +136,23 @@ class EmptyOrdersException extends ApiException {
     return EmptyOrdersException(message ?? this.message);
   }
 }
+
+class UnauthorizedException extends ApiException {
+  UnauthorizedException([String? message])
+      : super(message: message ?? 'Пользователь не авторизирован');
+
+  @override
+  UnauthorizedException copyWith({String? message}) {
+    return UnauthorizedException(message ?? this.message);
+  }
+}
+
+class NoFavoritePharmaciesException extends ApiException {
+  NoFavoritePharmaciesException([String? message])
+      : super(message: message ?? 'Список любимых аптек пуст не авторизирован');
+
+  @override
+  NoFavoritePharmaciesException copyWith({String? message}) {
+    return NoFavoritePharmaciesException(message ?? this.message);
+  }
+}

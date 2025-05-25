@@ -4,12 +4,12 @@ import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
+import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/features/data/models/category_model.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/data/models/search_products_model.dart';
-import 'package:nevis/features/domain/params/category_params.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ProductRemoteDataSource {

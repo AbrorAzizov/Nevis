@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:nevis/core/error/failure.dart';
+import 'package:nevis/core/params/cart_params.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/cart_remote_data_source_implementation.dart';
-import 'package:nevis/features/domain/entities/product_entity.dart';
+import 'package:nevis/features/domain/entities/cart_entity.dart';
 import 'package:nevis/features/domain/repositories/cart_repository.dart';
 
 class CartRepositoryImpl extends CartRepository {
@@ -16,7 +17,12 @@ class CartRepositoryImpl extends CartRepository {
       required this.errorHandler,
       required this.cartRemoteDataSource});
   @override
-  Future<Either<Failure, List<ProductEntity>>> getCartProducts() async =>
+  Future<Either<Failure, CartEntity>> getCartProducts() async =>
       await errorHandler
           .handle(() async => await cartRemoteDataSource.getCartProducts());
+
+  @override
+  Future<Either<Failure, void>> addProductToCart(CartParams product) async =>
+      await errorHandler.handle(
+          () async => await cartRemoteDataSource.addProductToCart(product));
 }

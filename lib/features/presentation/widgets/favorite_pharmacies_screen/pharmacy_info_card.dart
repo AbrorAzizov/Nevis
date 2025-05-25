@@ -4,10 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 import 'package:nevis/features/presentation/widgets/favorite_button.dart';
 
 class PharmacyInfoCard extends StatelessWidget {
-  const PharmacyInfoCard({super.key});
+  final PharmacyEntity pharmacy;
+  const PharmacyInfoCard({super.key, required this.pharmacy});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,7 @@ class PharmacyInfoCard extends StatelessWidget {
                                     color: UiConstants.black3Color
                                         .withOpacity(.6))),
                             TextSpan(
-                                text: 'Аптека №7 InLek ООО Сеть аптек',
+                                text: pharmacy.address,
                                 style: UiConstants.textStyle10
                                     .copyWith(color: UiConstants.black3Color)),
                           ],
@@ -99,7 +101,8 @@ class PharmacyInfoCard extends StatelessWidget {
                                 color:
                                     UiConstants.black3Color.withOpacity(.6))),
                         TextSpan(
-                            text: 'ПН-ПТ: 09:40-21:40\r\nСБ-ВС: 09:20-21:20',
+                            text:
+                                '${pharmacy.schedule}\n${pharmacy.textCloseTime}',
                             style: UiConstants.textStyle10
                                 .copyWith(color: UiConstants.black3Color)),
                       ])),
@@ -138,7 +141,7 @@ class PharmacyInfoCard extends StatelessWidget {
                                     color: UiConstants.black3Color
                                         .withOpacity(.6))),
                             TextSpan(
-                                text: '+7 (812) 490 92 70\n',
+                                text: '${pharmacy.phone}\n',
                                 style: UiConstants.textStyle10
                                     .copyWith(color: UiConstants.black3Color)),
                             TextSpan(

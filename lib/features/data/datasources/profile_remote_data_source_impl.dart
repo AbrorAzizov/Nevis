@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
@@ -7,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<ProfileModel> getMe();
-  Future<String?> updateMe(ProfileModel profile);
+  Future<void> updateMe(ProfileModel profile);
   Future<void> deleteMe();
 }
 
@@ -24,12 +25,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<ProfileModel> getMe() async {
     try {
       final data = await apiClient.get(
-        endpoint: 'profile',
+        endpoint: 'users/profile',
         callPathNameForLog: '${runtimeType.toString()}.getMe',
       );
-
-      //final person = data;
-      return ProfileModel();
+      final person = data;
+      return ProfileModel.fromJson(person);
     } catch (e) {
       log('Error during getMe: $e', level: 1000);
       rethrow;
@@ -37,28 +37,14 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<String?> updateMe(ProfileModel profile) async {
+  Future<void> updateMe(ProfileModel profile) async {
     try {
-      final data = await apiClient.put(
-        endpoint: 'profile/update',
+      await apiClient.put(
+        endpoint: 'users/profile',
+        exceptions: {500: ServerException()},
         body: profile.toJson(),
         callPathNameForLog: '${runtimeType.toString()}.updateMe',
       );
-
-      switch (data['statusCode']) {
-        case 200:
-          return data['data']['code'];
-        case 409:
-          final error = data['data']['error'];
-          if (error.toString().contains('SMS')) {
-            return data['data']['code'].toString();
-          } else if (error.toString().contains('СМС')) {
-            throw SendingCodeTooOftenException();
-          }
-          throw AcceptPersonalDataException();
-        default:
-          throw ServerException();
-      }
     } catch (e) {
       log('Error during updateMe: $e', level: 1000);
       rethrow;

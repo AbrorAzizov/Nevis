@@ -34,6 +34,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
     on<GetRegionsEvent>(_getRegions);
     on<ChangeControllerEvent>(_changeController);
     on<SelectRegionEvent>(_selectRegion);
+    add(GetRegionsEvent());
   }
 
   void _onChangeQuery(ChangeQueryEvent event, Emitter<SearchScreenState> emit) {

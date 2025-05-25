@@ -64,7 +64,7 @@ class ProfileScreen extends StatelessWidget {
                                   : null),
                           Expanded(
                             child: homeState is InternetUnavailable
-                                ? InternetNoInternetConnectionWidget()
+                                ? NoInternetConnectionWidget()
                                 : ListView(
                                     shrinkWrap: true,
                                     padding: getMarginOrPadding(

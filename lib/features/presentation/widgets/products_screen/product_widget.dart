@@ -9,6 +9,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/custom_cache_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
+import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/product_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/value_buy_product_screen.dart';
@@ -297,7 +298,11 @@ class ProductWidget extends StatelessWidget {
                       isActive: true,
                       text: 'В корзину',
                       textColor: UiConstants.blueColor,
-                      onTap: () {},
+                      onTap: () {
+                        context
+                            .read<CartScreenBloc>()
+                            .add(AddProductToCart(product: product));
+                      },
                     ),
                     SizedBox(height: 8.h),
                   ],

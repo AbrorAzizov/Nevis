@@ -23,7 +23,7 @@ class ProductReceivingMethodsWidget extends StatelessWidget {
                 'в ${pharmacies.length} ${Utils.getPharmacyLabel(pharmacies.length)}',
             onTap: () => Navigator.of(context).push(
               Routes.createRoute(
-                const PharmaciesScreen(),
+                const ProductPharmaciesScreen(),
                 settings: RouteSettings(
                     name: Routes.pharmaciesScreen, arguments: pharmacies),
               ),

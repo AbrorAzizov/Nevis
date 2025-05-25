@@ -20,13 +20,16 @@ class PharmacyRemoteDataSourceImpl implements PharmacyRemoteDataSource {
         endpoint: 'favorites/pharmacies',
         exceptions: {
           401: ServerException(),
+          400: NoFavoritePharmaciesException()
         },
         callPathNameForLog: '${runtimeType.toString()}.getFavoritePharmacies',
       );
-      List<dynamic> dataList = data['data'];
+      List<dynamic> dataList = data['data'] ?? [];
+      return [];
+    } on NoFavoritePharmaciesException {
       return [];
     } catch (e) {
-      log('Error during logout: $e',
+      log('Error during getFavoritePharmacies: $e',
           name: '${runtimeType.toString()}.getFavoritePharmacies', level: 1000);
       rethrow;
     }

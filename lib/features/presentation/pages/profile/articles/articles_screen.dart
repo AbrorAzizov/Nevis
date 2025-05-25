@@ -5,9 +5,7 @@ import 'package:nevis/features/presentation/bloc/articles_screen/articles_screen
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/articles_screen/articles_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ArticlesScreen extends StatelessWidget {
@@ -42,11 +40,9 @@ class ArticlesScreen extends StatelessWidget {
                                 title: 'Полезные статьи',
                                 backgroundColor: UiConstants.backgroundColor),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ArticlesListWidget(
-                                      articles: state.articles ?? [],
-                                    ),
+                              child: ArticlesListWidget(
+                                articles: state.articles ?? [],
+                              ),
                             ),
                           ],
                         );

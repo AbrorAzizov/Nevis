@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/utils.dart';
+import 'package:nevis/features/data/models/profile_model.dart';
 import 'package:nevis/features/domain/usecases/profile/delete_me.dart';
 import 'package:nevis/features/domain/usecases/profile/get_me.dart';
 import 'package:nevis/features/domain/usecases/profile/update_me.dart';
@@ -20,14 +21,11 @@ class PersonalDataScreenBloc
   final UpdateMeUC updateMeUC;
   final DeleteMeUC deleteMeUC;
 
-  TextEditingController fNameController =
-      TextEditingController(text: 'Константин');
-  TextEditingController sNameController = TextEditingController(text: 'Усиков');
+  TextEditingController fNameController = TextEditingController(text: '');
+  TextEditingController sNameController = TextEditingController(text: '');
   TextEditingController birthdayController = TextEditingController();
-  TextEditingController phoneController =
-      TextEditingController(text: '7 800 555-35-35');
-  TextEditingController emailController =
-      TextEditingController(text: 'example@mail.ru');
+  TextEditingController phoneController = TextEditingController(text: '');
+  TextEditingController emailController = TextEditingController(text: '');
 
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
@@ -92,8 +90,9 @@ class PersonalDataScreenBloc
       (event, emit) {
         emit(
           state.copyWith(
-              isCheckedNotificationCheckbox:
-                  event.isCheckedNotificationCheckbox),
+            isCheckedNotificationCheckbox: event.isCheckedNotificationCheckbox,
+            isCheckedPolicyCheckbox: event.isCheckedNotificationCheckbox,
+          ),
         );
       },
     );
@@ -102,11 +101,12 @@ class PersonalDataScreenBloc
       (event, emit) {
         emit(
           state.copyWith(
-              isCheckedPolicyCheckbox: event.isCheckedPolicyCheckbox),
+            isCheckedPolicyCheckbox: event.isCheckedPolicyCheckbox,
+            isCheckedNotificationCheckbox: event.isCheckedPolicyCheckbox,
+          ),
         );
       },
     );
-
     on<ChangeGenderEvent>(
       (event, emit) {
         emit(
@@ -123,22 +123,22 @@ class PersonalDataScreenBloc
       },
     );
 
-    // on<SubmitEvent>(
-    //   (event, emit) async {
-    //     final isValidPhone = Utils.phoneRegexp.hasMatch(phoneController.text);
-    //     if (state.installedPhone != phoneController.text && isValidPhone) {
-    //       Utils.showCustomDialog(
-    //         screenContext: screenContext!,
-    //         text: 'Номер телефона не подтверждён',
-    //         action: (context) {
-    //           Navigator.of(context).pop();
-    //         },
-    //       );
-    //     } else {
-    //       await updateProfile();
-    //     }
-    //   },
-    // );
+    on<SubmitEvent>(
+      (event, emit) async {
+        final failureOrLoads = await updateMeUC(ProfileModel(
+          firstName: fNameController.text,
+          lastName: sNameController.text,
+          email: emailController.text,
+          gender: GenderType.values.firstWhere((e) => e == state.gender).name,
+          subscribeToMarketing: state.isCheckedNotificationCheckbox,
+        ));
+        failureOrLoads.fold((_) => emit(state.copyWith(showError: true)),
+            (_) async {
+          emit(state.copyWith(isLoading: true));
+          await getProfile();
+        });
+      },
+    );
 
     on<DeleteAccountEvent>(
       (event, emit) async {
@@ -178,7 +178,7 @@ class PersonalDataScreenBloc
             : '';
         phoneController.text =
             Utils.formatPhoneNumber(profile.phone, toServerFormat: false);
-        emailController.text = profile.phone ?? '';
+        emailController.text = profile.email ?? '';
         emit(
           PersonalDataScreenState(
             isLoading: false,

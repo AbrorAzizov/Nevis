@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
+import 'package:get/get_connect/http/src/exceptions/exceptions.dart' as gc;
 import 'package:http/http.dart' as http;
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
@@ -39,7 +39,7 @@ class ApiClient {
             await client.send(originalRequest..headers.addAll(headers));
         response = await http.Response.fromStream(streamedResponse);
       } catch (_) {
-        throw UnauthorizedException(); // не смогли обновить токен
+        throw gc.UnauthorizedException(); // не смогли обновить токен
       }
     }
 
@@ -84,7 +84,7 @@ class ApiClient {
 
   Future<dynamic> post({
     required String endpoint,
-    Map<String, dynamic>? body,
+    dynamic body,
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
     bool isRetryRequest = true,
@@ -112,10 +112,11 @@ class ApiClient {
     final bodyString = jsonEncode(body);
 
     return _handleResponseWithRetry(
-        () => client.put(url, headers: headers, body: bodyString),
-        exceptions,
-        callPathNameForLog,
-        isRetryRequest: isRetryRequest);
+      () => client.put(url, headers: headers, body: bodyString),
+      exceptions,
+      callPathNameForLog,
+      isRetryRequest: isRetryRequest,
+    );
   }
 
   Future<dynamic> delete({

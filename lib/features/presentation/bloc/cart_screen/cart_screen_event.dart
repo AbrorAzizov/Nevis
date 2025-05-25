@@ -40,3 +40,9 @@ class RemoveProductEvent extends CartScreenEvent {
 class ClearCartEvent extends CartScreenEvent {
   const ClearCartEvent();
 }
+
+class AddProductToCart extends CartScreenEvent {
+  final ProductEntity product;
+
+  const AddProductToCart({required this.product});
+}

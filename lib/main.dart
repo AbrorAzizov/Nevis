@@ -91,7 +91,8 @@ class MyApp extends StatelessWidget {
               Routes.productsScreen: (context) => const ProductsScreen(),
               Routes.bannerScreen: (context) => const BannerScreen(),
               Routes.productScreen: (context) => const ProductScreen(),
-              Routes.pharmaciesScreen: (context) => const PharmaciesScreen(),
+              Routes.pharmaciesScreen: (context) =>
+                  const ProductPharmaciesScreen(),
               Routes.profileScreen: (context) => const ProfileScreen(),
               Routes.personalDataScreen: (context) =>
                   const PersonalDataScreen(),

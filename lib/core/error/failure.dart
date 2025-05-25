@@ -138,3 +138,11 @@ class EmptyOrdersFailure extends Failure {
   Failure copyWith({String? message}) =>
       EmptyOrdersFailure(message ?? this.message);
 }
+
+class UnauthorizedFailure extends Failure {
+  const UnauthorizedFailure(String? message) : super(message: message);
+
+  @override
+  Failure copyWith({String? message}) =>
+      UnauthorizedFailure(message ?? this.message);
+}

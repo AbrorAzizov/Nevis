@@ -12,7 +12,6 @@ class OrderStatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(orderStatus);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

@@ -17,8 +17,6 @@ import 'package:nevis/features/presentation/widgets/cart_screen/products_list_wi
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/banner_item.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class BannerScreen extends StatefulWidget {
@@ -87,68 +85,66 @@ class _BannerScreenState extends State<BannerScreen> {
                               action: SvgPicture.asset(Paths.shareIconPath),
                             ),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ListView(
-                                      shrinkWrap: true,
+                              child: ListView(
+                                shrinkWrap: true,
+                                padding:
+                                    getMarginOrPadding(bottom: 94, top: 16),
+                                children: [
+                                  Padding(
+                                    padding:
+                                        getMarginOrPadding(left: 20, right: 20),
+                                    child: BannerItem(),
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  Padding(
+                                    padding:
+                                        getMarginOrPadding(left: 20, right: 20),
+                                    child: Text(
+                                      'Избавляемся от высыпаний с косметикой URIAGE прямиком из Франции!',
+                                      style: UiConstants.textStyle5.copyWith(
+                                          color: UiConstants.darkBlueColor),
+                                    ),
+                                  ),
+                                  if (Skeletonizer.of(context).enabled)
+                                    SizedBox(height: 16.h),
+                                  Skeleton.replace(
+                                    child: Padding(
                                       padding: getMarginOrPadding(
-                                          bottom: 94, top: 16),
-                                      children: [
-                                        Padding(
-                                          padding: getMarginOrPadding(
-                                              left: 20, right: 20),
-                                          child: BannerItem(),
-                                        ),
-                                        SizedBox(height: 16.h),
-                                        Padding(
-                                          padding: getMarginOrPadding(
-                                              left: 20, right: 20),
-                                          child: Text(
-                                            'Избавляемся от высыпаний с косметикой URIAGE прямиком из Франции!',
-                                            style: UiConstants.textStyle5
-                                                .copyWith(
-                                                    color: UiConstants
-                                                        .darkBlueColor),
-                                          ),
-                                        ),
-                                        if (Skeletonizer.of(context).enabled)
-                                          SizedBox(height: 16.h),
-                                        Skeleton.replace(
-                                          child: Padding(
-                                            padding: getMarginOrPadding(
-                                                left: 20, right: 20),
-                                            child: Html(
-                                              data: _htmlContent ?? '',
-                                              style: {
-                                                "p": Utils.htmlStyle,
-                                                "li": Utils.htmlStyle,
-                                                "*": Style(
-                                                  margin: Margins(
-                                                    blockStart: Margin(0),
-                                                    blockEnd: Margin(0),
-                                                    left: Margin(0),
-                                                    right: Margin(0),
-                                                  ),
-                                                  padding: HtmlPaddings(
-                                                    blockStart: HtmlPadding(0),
-                                                    blockEnd: HtmlPadding(0),
-                                                  ),
-                                                ),
-                                              },
+                                          left: 20, right: 20),
+                                      child: Html(
+                                        data: _htmlContent ?? '',
+                                        style: {
+                                          "p": Utils.htmlStyle,
+                                          "li": Utils.htmlStyle,
+                                          "*": Style(
+                                            margin: Margins(
+                                              blockStart: Margin(0),
+                                              blockEnd: Margin(0),
+                                              left: Margin(0),
+                                              right: Margin(0),
+                                            ),
+                                            padding: HtmlPaddings(
+                                              blockStart: HtmlPadding(0),
+                                              blockEnd: HtmlPadding(0),
                                             ),
                                           ),
-                                        ),
-                                        BlockWidget(
-                                          contentPadding: getMarginOrPadding(
-                                              left: 20, right: 20),
-                                          title: 'Рекомендуемые товары',
-                                          onTap: () {},
-                                          child: ProductsListWidget(
-                                            products: [], productsListScreenType: ProductsListScreenType.pharmacy,
-                                          ),
-                                        )
-                                      ],
+                                        },
+                                      ),
                                     ),
+                                  ),
+                                  BlockWidget(
+                                    contentPadding:
+                                        getMarginOrPadding(left: 20, right: 20),
+                                    title: 'Рекомендуемые товары',
+                                    onTap: () {},
+                                    child: ProductsListWidget(
+                                      products: [],
+                                      productsListScreenType:
+                                          ProductsListScreenType.pharmacy,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                         );

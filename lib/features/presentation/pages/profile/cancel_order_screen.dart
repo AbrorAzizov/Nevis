@@ -8,7 +8,6 @@ import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cancel_order_screen/cutted_order_info.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -44,106 +43,96 @@ class CancelOrderScreen extends StatelessWidget {
                               backgroundColor: UiConstants.backgroundColor,
                             ),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : orderState.error != null
-                                      ? Center(
-                                          child: Text(
-                                            orderState.error ?? '',
-                                            style: UiConstants.textStyle3
-                                                .copyWith(
-                                                    color: UiConstants
-                                                        .darkBlueColor,
-                                                    fontWeight:
-                                                        FontWeight.w800),
+                              child: orderState.error != null
+                                  ? Center(
+                                      child: Text(
+                                        orderState.error ?? '',
+                                        style: UiConstants.textStyle3.copyWith(
+                                            color: UiConstants.darkBlueColor,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                    )
+                                  : ListView(
+                                      shrinkWrap: true,
+                                      padding: getMarginOrPadding(
+                                          bottom: 94,
+                                          right: 20,
+                                          left: 20,
+                                          top: 16),
+                                      children: [
+                                        if (!orderState.isLoading)
+                                          Text(
+                                            'Вы уверены, что хотите отменить заказ #${orderState.order?.orderId}',
+                                            style: UiConstants.textStyle17,
                                           ),
-                                        )
-                                      : ListView(
-                                          shrinkWrap: true,
-                                          padding: getMarginOrPadding(
-                                              bottom: 94,
-                                              right: 20,
-                                              left: 20,
-                                              top: 16),
+                                        SizedBox(
+                                          height: 16.h,
+                                        ),
+                                        Text(
+                                          'Отмена заказа необратима',
+                                          style: UiConstants.textStyle11
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w500),
+                                        ),
+                                        SizedBox(
+                                          height: 16.h,
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            if (!orderState.isLoading)
-                                              Text(
-                                                'Вы уверены, что хотите отменить заказ #${orderState.order?.orderId}',
-                                                style: UiConstants.textStyle17,
+                                            Expanded(
+                                              child: AppButtonWidget(
+                                                text: 'Отменить заказ',
+                                                showBorder: true,
+                                                textColor:
+                                                    UiConstants.blueColor,
+                                                backgroundColor:
+                                                    UiConstants.backgroundColor,
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
                                               ),
-                                            SizedBox(
-                                              height: 16.h,
-                                            ),
-                                            Text(
-                                              'Отмена заказа необратима',
-                                              style: UiConstants.textStyle11
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w500),
                                             ),
                                             SizedBox(
-                                              height: 16.h,
+                                              width: 8.w,
                                             ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  child: AppButtonWidget(
-                                                    text: 'Отменить заказ',
-                                                    showBorder: true,
-                                                    textColor:
-                                                        UiConstants.blueColor,
-                                                    backgroundColor: UiConstants
-                                                        .backgroundColor,
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 8.w,
-                                                ),
-                                                Expanded(
-                                                  child: AppButtonWidget(
-                                                    text: 'Вернуться',
-                                                    showBorder: true,
-                                                    isFilled: true,
-                                                    textColor:
-                                                        UiConstants.white2Color,
-                                                    backgroundColor:
-                                                        UiConstants.blueColor,
-                                                    onTap: () =>
-                                                        Navigator.pop(context),
-                                                  ),
-                                                ),
-                                              ],
+                                            Expanded(
+                                              child: AppButtonWidget(
+                                                text: 'Вернуться',
+                                                showBorder: true,
+                                                isFilled: true,
+                                                textColor:
+                                                    UiConstants.white2Color,
+                                                backgroundColor:
+                                                    UiConstants.blueColor,
+                                                onTap: () =>
+                                                    Navigator.pop(context),
+                                              ),
                                             ),
-                                            SizedBox(
-                                              height: 16.h,
-                                            ),
-                                            if (!orderState.isLoading)
-                                              ListView.separated(
-                                                  padding: EdgeInsets.zero,
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  itemBuilder: (context,
-                                                          index) =>
-                                                      CuttedOrderInfo(
-                                                        product: orderState
-                                                            .order!
-                                                            .products![index],
-                                                      ),
-                                                  separatorBuilder:
-                                                      (context, index) =>
-                                                          Divider(),
-                                                  itemCount: orderState
-                                                      .order!.products!.length),
                                           ],
                                         ),
+                                        SizedBox(
+                                          height: 16.h,
+                                        ),
+                                        if (!orderState.isLoading)
+                                          ListView.separated(
+                                              padding: EdgeInsets.zero,
+                                              shrinkWrap: true,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemBuilder: (context, index) =>
+                                                  CuttedOrderInfo(
+                                                    product: orderState.order!
+                                                        .products![index],
+                                                  ),
+                                              separatorBuilder:
+                                                  (context, index) => Divider(),
+                                              itemCount: orderState
+                                                  .order!.products!.length),
+                                      ],
+                                    ),
                             )
                           ],
                         );

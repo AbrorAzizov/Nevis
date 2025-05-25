@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,9 +13,7 @@ import 'package:nevis/features/presentation/widgets/info_about_order_screen/cour
 import 'package:nevis/features/presentation/widgets/info_about_order_screen/courier_delivery_zones_block.dart';
 import 'package:nevis/features/presentation/widgets/info_about_order_screen/orders_with_delivery_accepted_block.dart';
 import 'package:nevis/features/presentation/widgets/info_about_order_screen/types_delivery_block.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class InfoAboutOrderScreen extends StatefulWidget {
@@ -55,33 +52,28 @@ class _InfoAboutOrderScreenState extends State<InfoAboutOrderScreen> {
                                 title: 'Информация о получении заказа',
                                 backgroundColor: UiConstants.backgroundColor),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ListView(
-                                      padding: getMarginOrPadding(
-                                          top: 16,
-                                          bottom: 94,
-                                          left: 20,
-                                          right: 20),
-                                      shrinkWrap: true,
-                                      children: [
-                                        InfoPlateWidget(
-                                            text:
-                                                'Доставка производится только по Минску и Минскому району'),
-                                        SizedBox(height: 16.h),
-                                        TypesDeliveryBlock(),
-                                        SizedBox(height: 16.h),
-                                        CostCourierDeliveryBlock(),
-                                        SizedBox(height: 16.h),
-                                        CourierDeliveryTimeBlock(),
-                                        SizedBox(height: 16.h),
-                                        OrdersWithDeliveryAcceptedBlock(),
-                                        SizedBox(height: 16.h),
-                                        CourierDeliveryTermsBlock(),
-                                        SizedBox(height: 16.h),
-                                        CourierDeliveryZonesBlock(),
-                                      ],
-                                    ),
+                              child: ListView(
+                                padding: getMarginOrPadding(
+                                    top: 16, bottom: 94, left: 20, right: 20),
+                                shrinkWrap: true,
+                                children: [
+                                  InfoPlateWidget(
+                                      text:
+                                          'Доставка производится только по Минску и Минскому району'),
+                                  SizedBox(height: 16.h),
+                                  TypesDeliveryBlock(),
+                                  SizedBox(height: 16.h),
+                                  CostCourierDeliveryBlock(),
+                                  SizedBox(height: 16.h),
+                                  CourierDeliveryTimeBlock(),
+                                  SizedBox(height: 16.h),
+                                  OrdersWithDeliveryAcceptedBlock(),
+                                  SizedBox(height: 16.h),
+                                  CourierDeliveryTermsBlock(),
+                                  SizedBox(height: 16.h),
+                                  CourierDeliveryZonesBlock(),
+                                ],
+                              ),
                             ),
                           ],
                         );

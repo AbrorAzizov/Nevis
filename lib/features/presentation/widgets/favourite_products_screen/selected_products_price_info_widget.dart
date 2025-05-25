@@ -5,13 +5,20 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
-import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SelectedProductsPriceInformationWidget extends StatelessWidget {
-  const SelectedProductsPriceInformationWidget(
-      {super.key, required this.products});
-  final List<ProductEntity> products;
+  const SelectedProductsPriceInformationWidget({
+    super.key,
+    required this.totalPrice,
+    required this.totalDiscounts,
+    required this.totalBonuses,
+    required this.productsTotalCount,
+  });
+  final double totalPrice;
+  final double totalDiscounts;
+  final int totalBonuses;
+  final int productsTotalCount;
   @override
   Widget build(BuildContext context) {
     return Skeleton.unite(
@@ -22,11 +29,11 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                pluralize(products.length),
+                pluralize(productsTotalCount),
                 style: UiConstants.textStyle11,
               ),
               Text(
-                Utils.formatPrice(productsSum()),
+                Utils.formatPrice(totalPrice),
                 style: UiConstants.textStyle11
                     .copyWith(color: UiConstants.blackColor),
               ),
@@ -43,7 +50,7 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
                 style: UiConstants.textStyle11,
               ),
               Text(
-                Utils.formatPrice(sale()),
+                Utils.formatPrice(totalPrice - totalDiscounts),
                 style: UiConstants.textStyle11
                     .copyWith(color: UiConstants.blackColor),
               ),
@@ -72,10 +79,13 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
                     children: [
                       SvgPicture.asset(Paths.bonusIcon2Path),
                       Expanded(
-                          child: Text(' +35',
-                              style: UiConstants.textStyle12.copyWith(
-                                color: UiConstants.whiteColor,
-                              )))
+                          child: Text(
+                        '$totalBonuses',
+                        style: UiConstants.textStyle12.copyWith(
+                          color: UiConstants.whiteColor,
+                        ),
+                        textAlign: TextAlign.center,
+                      ))
                     ],
                   ),
                 ),
@@ -97,7 +107,7 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
                 style: UiConstants.textStyle18,
               ),
               Text(
-                Utils.formatPrice(productsSum()),
+                Utils.formatPrice(totalPrice),
                 style: UiConstants.textStyle18
                     .copyWith(color: UiConstants.blackColor),
               ),
@@ -119,23 +129,5 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
     } else {
       return "$count ${forms[2]}";
     }
-  }
-
-  int productsSum() {
-    int toReturn = 0;
-    for (var i in products) {
-      toReturn += i.price ?? 0;
-    }
-    return toReturn;
-  }
-
-  int sale() {
-    int totalSale = 0;
-    for (var i in products) {
-      if (i.oldPrice != null && i.price != null) {
-        totalSale += (i.oldPrice! - i.price!);
-      }
-    }
-    return totalSale;
   }
 }

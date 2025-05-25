@@ -5,7 +5,6 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/docs_and_instructions/docs_and_instructions_categories_list.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 
 class DocumentsAndInstructionsScreen extends StatelessWidget {
   const DocumentsAndInstructionsScreen({super.key});
@@ -27,14 +26,12 @@ class DocumentsAndInstructionsScreen extends StatelessWidget {
                       showBack: true,
                     ),
                     Expanded(
-                      child: homeState is InternetUnavailable
-                          ? InternetNoInternetConnectionWidget()
-                          : ListView(
-                              shrinkWrap: true,
-                              padding: getMarginOrPadding(
-                                  bottom: 94, right: 20, left: 20, top: 16),
-                              children: [DocsAndInstructionsCategoriesList()],
-                            ),
+                      child: ListView(
+                        shrinkWrap: true,
+                        padding: getMarginOrPadding(
+                            bottom: 94, right: 20, left: 20, top: 16),
+                        children: [DocsAndInstructionsCategoriesList()],
+                      ),
                     ),
                   ],
                 );

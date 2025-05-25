@@ -99,10 +99,11 @@ class ProductPrice extends StatelessWidget {
                     SvgPicture.asset(Paths.bonusIcon2Path),
                     SizedBox(width: 4.w),
                     Text(
-                      '+125', // Динамически передаваемые баллы
+                      '+ ${product.bonuses} ', // Динамически передаваемые баллы
                       style: UiConstants.textStyle12.copyWith(
                         color: UiConstants.whiteColor,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),

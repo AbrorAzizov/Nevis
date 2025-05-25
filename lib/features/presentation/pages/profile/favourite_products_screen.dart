@@ -9,7 +9,6 @@ import 'package:nevis/features/presentation/bloc/favorite_products_screen/favori
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
-import 'package:nevis/features/presentation/widgets/favourite_products_screen/selected_products_price_info_widget.dart';
 import 'package:nevis/features/presentation/widgets/filter_and_sort_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -123,13 +122,14 @@ class FavoriteProductsScreen extends StatelessWidget {
                               if (state.selectedProductIds.isNotEmpty)
                                 Column(
                                   children: [
-                                    SelectedProductsPriceInformationWidget(
-                                      products: state.products
-                                          .where((product) => state
-                                              .selectedProductIds
-                                              .contains(product.productId))
-                                          .toList(),
-                                    ),
+                                    // SelectedProductsPriceInformationWidget(
+                                    //   products: state.products
+                                    //       .where((product) => state
+                                    //           .selectedProductIds
+                                    //           .contains(product.productId))
+                                    //       .toList(),
+
+                                    // ),
                                     SizedBox(height: 16.h),
                                     AppButtonWidget(
                                       text: 'Добавить 2 товара в корзину',

@@ -22,7 +22,6 @@ class OrdersScreenBloc extends Bloc<OrdersScreenEvent, OrdersScreenState> {
 
   void _onLoadData(LoadDataEvent event, Emitter<OrdersScreenState> emit) async {
     emit(OrdersScreenIsLoading());
-
     final failureOrLoads = await getOrderHistoryUC();
     failureOrLoads.fold(
       (failure) => switch (failure) {

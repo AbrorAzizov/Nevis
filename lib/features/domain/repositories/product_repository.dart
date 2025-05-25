@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:nevis/core/error/failure.dart';
+import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/domain/entities/search_products_entity.dart';
-import 'package:nevis/features/domain/params/category_params.dart';
 
 abstract class ProductRepository {
   Future<Either<Failure, List<ProductEntity>>> getDailyProducts();

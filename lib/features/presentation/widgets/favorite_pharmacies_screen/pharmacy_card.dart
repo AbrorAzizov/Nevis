@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 import 'package:nevis/features/presentation/widgets/favorite_button.dart';
 
 class PharmacyCard extends StatelessWidget {
-  const PharmacyCard({super.key});
+  final PharmacyEntity pharmacy;
+  const PharmacyCard({super.key, required this.pharmacy});
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +33,17 @@ class PharmacyCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '198035 Санкт-Петербург г, Двинская ул',
+                  pharmacy.address ?? 'Адрес',
                   style: UiConstants.textStyle19
                       .copyWith(color: UiConstants.black3Color),
                 ),
                 SizedBox(height: 8.h),
-                Text('ул. Двинская, д. 11', style: UiConstants.textStyle15),
+                // Text(pharmacy.alias ?? 'аа', style: UiConstants.textStyle15),
+                // SizedBox(height: 4.h),
+                Text(pharmacy.phone ?? 'Телефон',
+                    style: UiConstants.textStyle15),
                 SizedBox(height: 4.h),
-                Text('+7 (812) 490 92 70', style: UiConstants.textStyle15),
-                SizedBox(height: 4.h),
-                Text('Пн-Вс 9:00-21:00', style: UiConstants.textStyle15),
+                Text('${pharmacy.schedule}', style: UiConstants.textStyle15),
               ],
             ),
           ),

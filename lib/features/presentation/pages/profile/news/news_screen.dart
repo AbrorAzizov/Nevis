@@ -4,10 +4,8 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/news_screen/news_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/news_screen/news_list_widget.dart';
 import 'package:nevis/locator_service.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewsScreen extends StatelessWidget {
@@ -39,9 +37,7 @@ class NewsScreen extends StatelessWidget {
                           children: [
                             CustomAppBar(showBack: true, title: 'Новости'),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : NewsListWidget(news: state.news ?? []),
+                              child: NewsListWidget(news: state.news ?? []),
                             ),
                           ],
                         );

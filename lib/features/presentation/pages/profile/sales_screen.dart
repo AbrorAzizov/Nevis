@@ -8,11 +8,9 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/sales_screen/sales_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/sales_screen/sales_categories_list.dart';
 import 'package:nevis/features/presentation/widgets/sales_screen/sales_list_item.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
 
 class SalesScreen extends StatefulWidget {
   const SalesScreen({super.key});
@@ -71,30 +69,25 @@ class _SalesScreenState extends State<SalesScreen> {
                                 title: 'Акции и скидки',
                                 backgroundColor: UiConstants.backgroundColor),
                             Expanded(
-                              child: homeState is InternetUnavailable
-                                  ? InternetNoInternetConnectionWidget()
-                                  : ListView(
-                                      padding: getMarginOrPadding(
-                                          top: 16, bottom: 94),
+                              child: ListView(
+                                padding:
+                                    getMarginOrPadding(top: 16, bottom: 94),
+                                shrinkWrap: true,
+                                children: [
+                                  SalesCategoriesList(),
+                                  SizedBox(height: 16.h),
+                                  ListView.separated(
+                                      physics: NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
-                                      children: [
-                                        SalesCategoriesList(),
-                                        SizedBox(height: 16.h),
-                                        ListView.separated(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            padding: getMarginOrPadding(
-                                                right: 20, left: 20),
-                                            itemBuilder: (context, index) =>
-                                                SalesListItem(
-                                                    isExpanded: false),
-                                            separatorBuilder:
-                                                (context, index) =>
-                                                    SizedBox(height: 16.h),
-                                            itemCount: 7)
-                                      ],
-                                    ),
+                                      padding: getMarginOrPadding(
+                                          right: 20, left: 20),
+                                      itemBuilder: (context, index) =>
+                                          SalesListItem(isExpanded: false),
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(height: 16.h),
+                                      itemCount: 7)
+                                ],
+                              ),
                             ),
                           ],
                         );

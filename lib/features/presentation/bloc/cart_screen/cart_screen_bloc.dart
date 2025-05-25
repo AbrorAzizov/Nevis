@@ -5,9 +5,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nevis/constants/enums.dart';
+import 'package:nevis/core/params/cart_params.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
+import 'package:nevis/features/domain/usecases/cart/add_product_to_cart.dart';
 import 'package:nevis/features/domain/usecases/cart/get_cart.dart';
 
 part 'cart_screen_event.dart';
@@ -33,8 +35,10 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
   List<ProductEntity> noInStockProducts = [];
 
   final GetCartProductsUC getCartProducts;
+  final AddProductToCartUC addProductToCart;
 
-  CartScreenBloc({required this.getCartProducts})
+  CartScreenBloc(
+      {required this.getCartProducts, required this.addProductToCart})
       : super(
           CartScreenState(
               isAllProductsChecked: false,
@@ -54,16 +58,37 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
     on<RemoveProductEvent>(_onRemoveItem);
     on<GetProductsEvent>(_getProducts);
     on<ClearCartEvent>(_clearCart);
+    on<AddProductToCart>(_addProductTocart);
   }
 
   void _getCartProducts(
       GetCartProductsEvent event, Emitter<CartScreenState> emit) async {
     final failureOrLoads = await getCartProducts();
+
     failureOrLoads.fold(
-        (_) => emit(state.copyWith(
-            errorMessage: 'ошибка загрузки корзины', isLoading: false)),
-        (cartProducts) =>
-            emit(state.copyWith(cartProducts: cartProducts, isLoading: false)));
+      (_) => emit(state.copyWith(
+        errorMessage: 'ошибка загрузки корзины',
+        isLoading: false,
+      )),
+      (cart) {
+        final newCounters = Map<int, int>.from(state.counters);
+
+        for (var item in cart.cartItems) {
+          if (item.productId != null && item.count != null) {
+            newCounters[item.productId!] = item.count!;
+          }
+        }
+
+        emit(state.copyWith(
+          totalDiscounts: cart.totalDiscounts,
+          totalBonuses: cart.totalBonuses,
+          totalPrice: cart.totalPrice,
+          cartProducts: cart.cartItems,
+          counters: newCounters,
+          isLoading: false,
+        ));
+      },
+    );
   }
 
   void _getProducts(
@@ -109,5 +134,25 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
 
   void _clearCart(ClearCartEvent event, Emitter<CartScreenState> emit) {
     emit(state.copyWith(cartProducts: [], counters: {}));
+  }
+
+  void _addProductTocart(
+      AddProductToCart event, Emitter<CartScreenState> emit) async {
+    if (event.product.productId != null) {
+      final productId = event.product.productId!;
+      final currentCount = state.counters[productId] ?? 0;
+      print(currentCount);
+      final newCount = currentCount + 1;
+
+      final failureOrLoads = await addProductToCart(
+        CartParams(quantity: newCount, id: productId),
+      );
+
+      failureOrLoads.fold(
+        (_) => emit(
+            state.copyWith(errorMessage: 'ошибка добавления товара в корзину')),
+        (_) => add(GetCartProductsEvent()),
+      );
+    }
   }
 }

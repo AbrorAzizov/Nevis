@@ -61,7 +61,8 @@ class _CheckboxesBlockState extends State<CheckboxesBlock> {
             ),
           ),
           spacing: 16,
-          isChecked: personalDataBloc.state.isCheckedPolicyCheckbox,
+          isChecked:
+              personalDataBloc.state.isCheckedNotifictaionAboutApplication,
           onChanged: (isChecked) => personalDataBloc.add(
             ChangePolicyCheckboxEvent(isChecked ?? false),
           ),
