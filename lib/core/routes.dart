@@ -42,6 +42,8 @@ class Routes {
   static const String registerBonusCardScreen = '/register_bonus_card_screen';
   static const String bonusCardScreen = '/bonus_card_screen';
   static const String orderPickupScreen = '/order_pickup_screen';
+  static const String storiesScreen = '/stories_screen';
+
   static List<String> get allRoutes => [
         splashScreen,
         loginScreenPhoneCall,
@@ -79,7 +81,8 @@ class Routes {
         valueBuyProductScreen,
         valueBuySuccessfullyOrderedScreen,
         registerBonusCardScreen,
-        orderPickupScreen
+        orderPickupScreen,
+        storiesScreen
       ];
 
   // Метод для создания анимированного перехода

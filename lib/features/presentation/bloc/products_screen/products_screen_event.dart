@@ -18,16 +18,12 @@ class ShowFilterProductsTypes extends ProductsScreenEvent {}
 
 class SelectSortProductsType extends ProductsScreenEvent {
   final ProductSortType productSortType;
-  final int categoryId;
 
-  const SelectSortProductsType(
-      {required this.categoryId, required this.productSortType});
+  const SelectSortProductsType({required this.productSortType});
 }
 
 class LoadSubCategoriesEvent extends ProductsScreenEvent {
-  final int categoryId;
-
-  const LoadSubCategoriesEvent({required this.categoryId});
+  const LoadSubCategoriesEvent();
 }
 
 class SelectSubCategoryEvent extends ProductsScreenEvent {

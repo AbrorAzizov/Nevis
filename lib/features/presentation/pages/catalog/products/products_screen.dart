@@ -6,7 +6,9 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
+import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart'
     as fv;
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
@@ -23,14 +25,16 @@ class ProductsScreen extends StatelessWidget {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final String title = args?['title'];
-    final int categoryId = int.parse(args?['id']);
+    final categoryParams = args?['categoryParams'] as CategoryParams?;
+    final products = args?['products'] as List<ProductEntity>?;
 
     return BlocProvider(
       create: (context) => ProductsScreenBloc(
           getCategoryProductsUC: sl(),
           getSortCategoryProductsUC: sl(),
           getSubCategoriesUC: sl(),
-          categoryId: categoryId)
+          products: products,
+          categoryParams: categoryParams)
         ..add(LoadProductsEvent()),
       child: BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
         builder: (context, state) {
@@ -81,9 +85,7 @@ class ProductsScreen extends StatelessWidget {
                                   selectedSortType: state.selectedSortType,
                                   onSortSelected: (sortType) {
                                     bloc.add(SelectSortProductsType(
-                                      productSortType: sortType,
-                                      categoryId: categoryId,
-                                    ));
+                                        productSortType: sortType));
                                   },
                                   filterOrSortType:
                                       state.selectedFilterOrSortType,
@@ -91,18 +93,19 @@ class ProductsScreen extends StatelessWidget {
                                       bloc.add(ShowFilterProductsTypes()),
                                 ),
                               ),
-                              SizedBox(height: 16.h),
-                              SizedBox(
-                                height: 33.h,
-                                child: FilterChips(
-                                  categories: state.subCategories,
-                                  selectedCategory: state.selectedSubCategory,
-                                  onSelected: (category) {
-                                    bloc.add(SelectSubCategoryEvent(
-                                        subCategory: category));
-                                  },
+                              if (state.categoryId != null)
+                                Container(
+                                  padding: getMarginOrPadding(top: 16),
+                                  height: 33.h,
+                                  child: FilterChips(
+                                    categories: state.subCategories,
+                                    selectedCategory: state.selectedSubCategory,
+                                    onSelected: (category) {
+                                      bloc.add(SelectSubCategoryEvent(
+                                          subCategory: category));
+                                    },
+                                  ),
                                 ),
-                              ),
                               SizedBox(height: 16.h),
                               // Ваш контент
                               if (state.isLoading)
@@ -121,7 +124,6 @@ class ProductsScreen extends StatelessWidget {
                                       fv.FavoriteProductsScreenState>(
                                     builder: (context, favState) {
                                       return ProductsGridWidget(
-                                        categryId: categoryId,
                                         products:
                                             (state.searchProducts?.products ??
                                                 []),

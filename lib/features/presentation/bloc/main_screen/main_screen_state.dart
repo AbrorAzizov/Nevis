@@ -5,14 +5,16 @@ class MainScreenState extends Equatable {
   final String? error;
   final List<CategoryEntity>? categories;
   final List<BannerEntity>? banners;
-  final List<ProductEntity>? daily;
+  final List<ProductEntity> newProducts;
+  final List<ProductEntity> profitableProducts;
 
   const MainScreenState({
     this.isLoading = true,
     this.error,
     this.categories,
     this.banners,
-    this.daily,
+    this.newProducts = const [],
+    this.profitableProducts = const [],
   });
 
   MainScreenState copyWith({
@@ -20,14 +22,16 @@ class MainScreenState extends Equatable {
     String? error,
     List<CategoryEntity>? categories,
     List<BannerEntity>? banners,
-    List<ProductEntity>? daily,
+    List<ProductEntity>? newProducts,
+    List<ProductEntity>? profitableProducts,
   }) {
     return MainScreenState(
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
       categories: categories ?? this.categories,
       banners: banners ?? this.banners,
-      daily: daily ?? this.daily,
+      newProducts: newProducts ?? this.newProducts,
+      profitableProducts: profitableProducts ?? this.profitableProducts,
     );
   }
 
@@ -37,6 +41,7 @@ class MainScreenState extends Equatable {
         error,
         categories,
         banners,
-        daily,
+        newProducts,
+        profitableProducts,
       ];
 }

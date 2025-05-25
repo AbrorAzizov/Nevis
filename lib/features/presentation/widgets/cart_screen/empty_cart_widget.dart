@@ -64,7 +64,6 @@ class EmptyCartWidget extends StatelessWidget {
                       context.read<CartScreenBloc>().state.products.length,
                   itemBuilder: (context, index) {
                     return ProductWidget(
-                        categoryId: 0,
                         product: context
                             .read<CartScreenBloc>()
                             .state

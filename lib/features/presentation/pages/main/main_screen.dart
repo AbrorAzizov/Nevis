@@ -7,8 +7,13 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
 import 'package:nevis/features/presentation/pages/main/bonus_cards/activate_bonus_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
+import 'package:nevis/features/presentation/widgets/main_screen/block_widget2.dart';
+import 'package:nevis/features/presentation/widgets/main_screen/daily_products_list_widget.dart';
+import 'package:nevis/features/presentation/widgets/main_screen/recommended/recommended_list_widget.dart';
+import 'package:nevis/features/presentation/widgets/main_screen/stories/story_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -47,12 +52,10 @@ class MainScreen extends StatelessWidget {
                             Expanded(
                               child: ListView(
                                 shrinkWrap: true,
-                                padding: getMarginOrPadding(
-                                    bottom: 94, top: 16, right: 20, left: 20),
+                                padding:
+                                    getMarginOrPadding(bottom: 94, top: 16),
                                 children: [
                                   Container(
-                                    width: 320.w,
-                                    height: 180.h,
                                     decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -134,6 +137,87 @@ class MainScreen extends StatelessWidget {
                                         ],
                                       ),
                                     ),
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  BlockWidget2(
+                                    title: 'Актуальное',
+                                    titlePadding:
+                                        getMarginOrPadding(left: 20, right: 20),
+                                    child: StoryListWidget(),
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  BlockWidget2(
+                                    title: 'Популярные товары',
+                                    titlePadding:
+                                        getMarginOrPadding(left: 20, right: 20),
+                                    onTapAll: () {
+                                      Navigator.of(context).push(
+                                        Routes.createRoute(
+                                          ProductsScreen(),
+                                          settings: RouteSettings(
+                                            name: Routes.productsScreen,
+                                            arguments: {
+                                              'title': 'Популярные товары',
+                                              'products': state.newProducts
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: ProductsListWidget(
+                                        products: state.newProducts),
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  BlockWidget2(
+                                    title: 'Рекомендуем',
+                                    titlePadding:
+                                        getMarginOrPadding(left: 20, right: 20),
+                                    child: RecommendedListWidget(),
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  BlockWidget2(
+                                    title: 'Новинки',
+                                    titlePadding:
+                                        getMarginOrPadding(left: 20, right: 20),
+                                    onTapAll: () {
+                                      Navigator.of(context).push(
+                                        Routes.createRoute(
+                                          ProductsScreen(),
+                                          settings: RouteSettings(
+                                            name: Routes.productsScreen,
+                                            arguments: {
+                                              'title': 'Новинки',
+                                              'products': state.newProducts
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: ProductsListWidget(
+                                        products: state.newProducts),
+                                  ),
+                                  SizedBox(height: 16.h),
+                                  BlockWidget2(
+                                    title: 'Купить выгодно',
+                                    titlePadding:
+                                        getMarginOrPadding(left: 20, right: 20),
+                                    onTapAll: () {
+                                      Navigator.of(context).push(
+                                        Routes.createRoute(
+                                          ProductsScreen(),
+                                          settings: RouteSettings(
+                                            name: Routes.productsScreen,
+                                            arguments: {
+                                              'title': 'Купить выгодно',
+                                              'products':
+                                                  state.profitableProducts
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: ProductsListWidget(
+                                        products: state.profitableProducts),
                                   ),
                                 ],
                               ),
