@@ -64,11 +64,31 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
   void _getCartProducts(
       GetCartProductsEvent event, Emitter<CartScreenState> emit) async {
     final failureOrLoads = await getCartProducts();
+
     failureOrLoads.fold(
-        (_) => emit(state.copyWith(
-            errorMessage: 'ошибка загрузки корзины', isLoading: false)),
-        (cartProducts) =>
-            emit(state.copyWith(cartProducts: cartProducts, isLoading: false)));
+      (_) => emit(state.copyWith(
+        errorMessage: 'ошибка загрузки корзины',
+        isLoading: false,
+      )),
+      (cart) {
+        final newCounters = Map<int, int>.from(state.counters);
+
+        for (var item in cart.cartItems) {
+          if (item.productId != null && item.count != null) {
+            newCounters[item.productId!] = item.count!;
+          }
+        }
+
+        emit(state.copyWith(
+          totalDiscounts: cart.totalDiscounts,
+          totalBonuses: cart.totalBonuses,
+          totalPrice: cart.totalPrice,
+          cartProducts: cart.cartItems,
+          counters: newCounters,
+          isLoading: false,
+        ));
+      },
+    );
   }
 
   void _getProducts(
@@ -119,12 +139,20 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
   void _addProductTocart(
       AddProductToCart event, Emitter<CartScreenState> emit) async {
     if (event.product.productId != null) {
+      final productId = event.product.productId!;
+      final currentCount = state.counters[productId] ?? 0;
+      print(currentCount);
+      final newCount = currentCount + 1;
+
       final failureOrLoads = await addProductToCart(
-          CartParams(quantity: 1, id: event.product.productId!));
+        CartParams(quantity: newCount, id: productId),
+      );
+
       failureOrLoads.fold(
-          (_) => state.copyWith(
-              errorMessage: 'ошибка добавление товара в корзину'),
-          (_) => add(GetProductsEvent()));
+        (_) => emit(
+            state.copyWith(errorMessage: 'ошибка добавления товара в корзину')),
+        (_) => add(GetCartProductsEvent()),
+      );
     }
   }
 }

@@ -41,7 +41,7 @@ class ProductModel extends ProductEntity {
   factory ProductModel.fromJson(Map<String, dynamic> data) {
     Map<String, dynamic> json = data["product_info"] ?? data;
     return ProductModel(
-      bonuses: json['bonuses'],
+      bonuses: json['bonuses'] ?? json['bonuses_earned'],
       images: (json["images"] as List<dynamic>?)
           ?.map((item) => item.toString())
           .toList(),
@@ -74,7 +74,7 @@ class ProductModel extends ProductEntity {
       productTrademark: json["product_trademark"],
       productDateRegister: json["product_date_register"],
       productTimeRegister: json["product_time_register"],
-      count: json["count"],
+      count: json["count"] ?? json["quantity"],
       valueBuy: int.tryParse(json["value_buy_price"] ?? ''),
       availableForDelivery: json['is_available_for_delivery'],
       specialOffer:

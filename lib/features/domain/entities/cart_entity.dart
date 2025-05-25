@@ -1,27 +1,27 @@
 import 'package:equatable/equatable.dart';
+import 'package:nevis/features/domain/entities/product_entity.dart';
 
 class CartEntity extends Equatable {
-  final String? image;
-  final String? href;
+  final List<ProductEntity> cartItems;
+  final double totalPrice;
+  final double totalDiscounts;
+  final int totalBonuses;
+  final bool deliveryAvailable;
 
   const CartEntity({
-    this.image,
-    this.href,
+    required this.cartItems,
+    required this.totalPrice,
+    required this.totalDiscounts,
+    required this.totalBonuses,
+    required this.deliveryAvailable,
   });
-
-  CartEntity copyWith({
-    String? image,
-    String? href,
-  }) =>
-      CartEntity(
-        image: image ?? this.image,
-        href: href ?? this.href,
-      );
 
   @override
   List<Object?> get props => [
-        image,
-        href,
-        image,
+        cartItems,
+        totalPrice,
+        totalDiscounts,
+        totalBonuses,
+        deliveryAvailable,
       ];
 }

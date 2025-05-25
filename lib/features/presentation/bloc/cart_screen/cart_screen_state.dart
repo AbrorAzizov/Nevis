@@ -17,8 +17,16 @@ class CartScreenState extends Equatable {
   final bool isLoading;
   final Map<int, int> counters;
   final TypeReceiving selectorIndex;
+  final double? totalPrice;
+  final double? totalDiscounts;
+  final int? totalBonuses;
+  final bool? deliveryAvailable;
 
   const CartScreenState({
+    this.totalPrice,
+    this.totalDiscounts,
+    this.totalBonuses,
+    this.deliveryAvailable,
     this.products = const [],
     this.selectorIndex = TypeReceiving.delivery,
     this.isLoading = true,
@@ -38,9 +46,8 @@ class CartScreenState extends Equatable {
   });
 
   CartScreenState copyWith({
-    TypeReceiving? selectorIndex,
-    List<ProductEntity>? products,
     List<ProductEntity>? cartProducts,
+    List<ProductEntity>? products,
     Set<int>? selectedProductIds,
     bool? isAllProductsChecked,
     List<PharmacyEntity>? pharmacies,
@@ -54,31 +61,42 @@ class CartScreenState extends Equatable {
     String? errorMessage,
     bool? isLoading,
     Map<int, int>? counters,
+    TypeReceiving? selectorIndex,
+    double? totalPrice,
+    double? totalDiscounts,
+    int? totalBonuses,
+    bool? deliveryAvailable,
   }) {
     return CartScreenState(
-        selectorIndex: selectorIndex ?? this.selectorIndex,
-        cartProducts: cartProducts ?? this.cartProducts,
-        products: products ?? this.products,
-        selectedProductIds: selectedProductIds ?? this.selectedProductIds,
-        isAllProductsChecked: isAllProductsChecked ?? this.isAllProductsChecked,
-        pharmacies: pharmacies ?? this.pharmacies,
-        filteredPharmacies: filteredPharmacies ?? this.filteredPharmacies,
-        selectedPharmacy: selectedPharmacy ?? this.selectedPharmacy,
-        isShowPharmaciesWorkingNow:
-            isShowPharmaciesWorkingNow ?? this.isShowPharmaciesWorkingNow,
-        isShowPharmaciesProductsInStock: isShowPharmaciesProductsInStock ??
-            this.isShowPharmaciesProductsInStock,
-        promoCodes: promoCodes ?? this.promoCodes,
-        cartType: cartType ?? this.cartType,
-        counters: counters ?? this.counters,
-        paymentType: paymentType ?? this.paymentType,
-        isLoading: isLoading ?? this.isLoading,
-        errorMessage: errorMessage);
+      cartProducts: cartProducts ?? this.cartProducts,
+      products: products ?? this.products,
+      selectedProductIds: selectedProductIds ?? this.selectedProductIds,
+      isAllProductsChecked: isAllProductsChecked ?? this.isAllProductsChecked,
+      pharmacies: pharmacies ?? this.pharmacies,
+      filteredPharmacies: filteredPharmacies ?? this.filteredPharmacies,
+      selectedPharmacy: selectedPharmacy ?? this.selectedPharmacy,
+      isShowPharmaciesWorkingNow:
+          isShowPharmaciesWorkingNow ?? this.isShowPharmaciesWorkingNow,
+      isShowPharmaciesProductsInStock: isShowPharmaciesProductsInStock ??
+          this.isShowPharmaciesProductsInStock,
+      promoCodes: promoCodes ?? this.promoCodes,
+      cartType: cartType ?? this.cartType,
+      paymentType: paymentType ?? this.paymentType,
+      errorMessage: errorMessage,
+      isLoading: isLoading ?? this.isLoading,
+      counters: counters ?? this.counters,
+      selectorIndex: selectorIndex ?? this.selectorIndex,
+      totalPrice: totalPrice ?? this.totalPrice,
+      totalDiscounts: totalDiscounts ?? this.totalDiscounts,
+      totalBonuses: totalBonuses ?? this.totalBonuses,
+      deliveryAvailable: deliveryAvailable ?? this.deliveryAvailable,
+    );
   }
 
   @override
   List<Object?> get props => [
         cartProducts,
+        products,
         selectedProductIds,
         isAllProductsChecked,
         pharmacies,
@@ -92,6 +110,10 @@ class CartScreenState extends Equatable {
         errorMessage,
         isLoading,
         counters,
-        selectorIndex
+        selectorIndex,
+        totalPrice,
+        totalDiscounts,
+        totalBonuses,
+        deliveryAvailable,
       ];
 }

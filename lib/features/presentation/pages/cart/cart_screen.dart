@@ -23,8 +23,6 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<CartScreenBloc>().add(GetCartProductsEvent());
-    context.read<CartScreenBloc>().add(GetProductsEvent());
     return BlocBuilder<CartScreenBloc, CartScreenState>(
       bloc: sl<CartScreenBloc>(),
       builder: (context, cartState) {
@@ -180,7 +178,13 @@ class CartScreen extends StatelessWidget {
 
                                     // Цена
                                     SelectedProductsPriceInformationWidget(
-                                        products: cartState.cartProducts),
+                                      totalPrice: cartState.totalPrice ?? 0,
+                                      totalDiscounts:
+                                          cartState.totalDiscounts ?? 0,
+                                      totalBonuses: cartState.totalBonuses ?? 0,
+                                      productsTotalCount:
+                                          cartState.cartProducts.length,
+                                    ),
                                     SizedBox(height: 16.h),
 
                                     if (hasUnavailable)
@@ -227,7 +231,9 @@ class CartScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-
+                                    SizedBox(
+                                      height: 16.h,
+                                    ),
                                     AppButtonWidget(
                                       text: 'Оформить заказ',
                                       onTap: cartState.counters.values

@@ -30,7 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => sl<CartScreenBloc>()),
+        BlocProvider(
+          lazy: false,
+          create: (context) => sl<CartScreenBloc>()
+            ..add(GetCartProductsEvent())
+            ..add(GetProductsEvent()),
+        ),
         BlocProvider(
             create: (context) => sl<FavoriteProductsScreenBloc>()
               ..add(LoadFavoriteProductsEvent())),
