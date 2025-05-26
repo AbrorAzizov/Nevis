@@ -1,12 +1,27 @@
 class CategoryParams {
   final String typeOfSort;
   final String sortBy;
-  final int categotyId;
+  final int? categoryId;
   final int page;
 
-  CategoryParams(
-      {required this.categotyId,
-      required this.typeOfSort,
-      this.sortBy = 'asc',
-      this.page = 1});
+  CategoryParams({
+    this.categoryId,
+    this.typeOfSort = '',
+    this.sortBy = 'asc',
+    this.page = 1,
+  });
+
+  CategoryParams copyWith({
+    String? typeOfSort,
+    String? sortBy,
+    int? categoryId,
+    int? page,
+  }) {
+    return CategoryParams(
+      typeOfSort: typeOfSort ?? this.typeOfSort,
+      sortBy: sortBy ?? this.sortBy,
+      categoryId: categoryId ?? this.categoryId,
+      page: page ?? this.page,
+    );
+  }
 }

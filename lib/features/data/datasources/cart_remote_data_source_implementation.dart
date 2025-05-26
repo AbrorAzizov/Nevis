@@ -41,6 +41,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
         body: product.toJsonForAddProductToCart(),
         exceptions: {
           500: ServerException(),
+          400: MaxProductQuantityExceededException()
         },
         callPathNameForLog: '${runtimeType.toString()}.addProductsToCart',
       );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
@@ -48,11 +49,14 @@ class CategoriesGridWidget extends StatelessWidget {
                 Routes.createRoute(
                   ProductsScreen(),
                   settings: RouteSettings(
-                      name: Routes.productsScreen,
-                      arguments: {
-                        'title': category.pageTitle,
-                        'id': category.categoryId
-                      }),
+                    name: Routes.productsScreen,
+                    arguments: {
+                      'title': category.pageTitle,
+                      'categoryParams': CategoryParams(
+                        categoryId: int.parse(category.categoryId!),
+                      )
+                    },
+                  ),
                 ),
               ),
               child: CategoryWidget(

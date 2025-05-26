@@ -146,3 +146,12 @@ class UnauthorizedFailure extends Failure {
   Failure copyWith({String? message}) =>
       UnauthorizedFailure(message ?? this.message);
 }
+
+class MaxQuantityExceededFailure extends Failure {
+  const MaxQuantityExceededFailure({String? message})
+      : super(message: message ?? 'Превышено максимальное количество упаковок');
+
+  @override
+  Failure copyWith({String? message}) =>
+      MaxQuantityExceededFailure(message: message ?? this.message);
+}

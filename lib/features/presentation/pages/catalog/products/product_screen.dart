@@ -28,7 +28,6 @@ class ProductScreen extends StatelessWidget {
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final productId = arguments['productId'];
-    final categoryId = arguments['categoryId'];
 
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
@@ -37,7 +36,7 @@ class ProductScreen extends StatelessWidget {
             getOneProductUC: sl(),
             getProductPharmaciesUC: sl(),
             getRecomendationProductsUC: sl(),
-          )..add(LoadDataEvent(productId: productId, categoryId: categoryId)),
+          )..add(LoadDataEvent(productId: productId)),
           child: BlocBuilder<ProductScreenBloc, ProductScreenState>(
             builder: (context, state) {
               final productBloc = context.read<ProductScreenBloc>();
@@ -168,7 +167,6 @@ class ProductScreen extends StatelessWidget {
                                               .length,
                                           itemBuilder: (context, index) {
                                             return ProductWidget(
-                                                categoryId: categoryId,
                                                 product: (state
                                                         .recomendationProducts
                                                         ?.products ??

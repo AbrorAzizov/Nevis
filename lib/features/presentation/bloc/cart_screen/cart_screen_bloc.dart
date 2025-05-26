@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nevis/constants/enums.dart';
+import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/cart_params.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
@@ -109,17 +110,25 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
 
   void _updateCounter(
       UpdateProductCountEvent event, Emitter<CartScreenState> emit) async {
-    final newCounters = Map<int, int>.from(state.counters);
-    newCounters[event.productId] = event.count;
-    emit(state.copyWith(counters: newCounters));
     final failureOrSuccess = await addProductToCart(
       CartParams(quantity: event.count, id: event.productId),
     );
+
     failureOrSuccess.fold(
-      (failure) => emit(
-        state.copyWith(errorMessage: 'Ошибка обновления количества товара'),
-      ),
-      (_) => add(GetCartProductsEvent()),
+      (failure) {
+        if (failure is MaxQuantityExceededFailure) {
+          emit(
+            state.copyWith(
+                errorMessage: 'Превышено максимальное количество упаковок'),
+          );
+        }
+      },
+      (_) {
+        final newCounters = Map<int, int>.from(state.counters);
+        newCounters[event.productId] = event.count;
+        emit(state.copyWith(counters: newCounters));
+        add(GetCartProductsEvent());
+      },
     );
   }
 

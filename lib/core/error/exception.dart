@@ -156,3 +156,13 @@ class NoFavoritePharmaciesException extends ApiException {
     return NoFavoritePharmaciesException(message ?? this.message);
   }
 }
+
+class MaxProductQuantityExceededException extends ApiException {
+  MaxProductQuantityExceededException([String? message])
+      : super(message: message ?? 'Превышено максимальное количество упаковок');
+
+  @override
+  MaxProductQuantityExceededException copyWith({String? message}) {
+    return MaxProductQuantityExceededException(message ?? this.message);
+  }
+}

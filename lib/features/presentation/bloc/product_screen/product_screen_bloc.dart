@@ -33,10 +33,8 @@ class ProductScreenBloc extends Bloc<ProductScreenEvent, ProductScreenState> {
     SearchProductsEntity? recomendationProducts;
     List<ProductPharmacyEntity> pharmacies = [];
 
-    final data = await Future.wait([
-      getOneProductUC(event.productId),
-      getRecomendationProductsUC(event.categoryId)
-    ]);
+    final data = await Future.wait(
+        [getOneProductUC(event.productId), getRecomendationProductsUC(9475)]);
 
     data.forEachIndexed(
       (index, element) {

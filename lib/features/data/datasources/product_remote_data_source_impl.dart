@@ -141,7 +141,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     try {
       final data = await apiClient.get(
         endpoint:
-            'catalog/categories/${params.categotyId}/allProducts?sort=${params.typeOfSort}&order=${params.sortBy}&page=${params.page}',
+            'catalog/categories/${params.categoryId}/allProducts?sort=${params.typeOfSort}&order=${params.sortBy}&page=${params.page}',
         exceptions: {
           401: ServerException(),
         },

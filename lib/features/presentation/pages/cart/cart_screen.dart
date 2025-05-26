@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/route_manager.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
@@ -25,8 +26,17 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartScreenBloc, CartScreenState>(
+    return BlocConsumer<CartScreenBloc, CartScreenState>(
       bloc: sl<CartScreenBloc>(),
+      listener: (BuildContext context, cartState) {
+        if (cartState.errorMessage != null) {
+          Get.showSnackbar(GetSnackBar(
+            duration: Duration(seconds: 1),
+            title: 'Ошибка при добавлении товара',
+            message: cartState.errorMessage,
+          ));
+        }
+      },
       builder: (context, cartState) {
         final cartBloc = context.read<CartScreenBloc>();
         final hasUnavailable =

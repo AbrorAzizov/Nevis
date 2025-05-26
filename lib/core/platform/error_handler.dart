@@ -40,6 +40,8 @@ class ErrorHandlerImpl implements ErrorHandler {
       return Left(AccountDontExistsFailure(message: e.message));
     } on AcceptPersonalDataException catch (e) {
       return Left(AcceptPersonalDataFailure(message: e.message));
+    } on MaxProductQuantityExceededException catch (e) {
+      return Left(MaxQuantityExceededFailure(message: e.message));
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }

@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nevis/features/domain/entities/banner_entity.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
@@ -20,24 +19,46 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     required this.getBannersUC,
     required this.getCategoriesUC,
     required this.getDailyProductsUC,
-  }) : super(MainScreenState()) {
+  }) : super(
+          MainScreenState(
+            newProducts: List.generate(
+              10,
+              (index) => ProductEntity(
+                  productId: 3170071,
+                  name:
+                      'CareFaсtor Гипоаллергенная гель-пенка д/интимной гигиены 100мл',
+                  image:
+                      'https://virtual-nevis-test.tw1.ru/upload/iblock/d7a/uqext541kohzcc20anqjmendp0xww02x.jpeg',
+                  price: 990),
+            ),
+            profitableProducts: List.generate(
+              10,
+              (index) => ProductEntity(
+                  productId: 3170071,
+                  name:
+                      'CareFaсtor Гипоаллергенная гель-пенка д/интимной гигиены 100мл',
+                  image:
+                      'https://virtual-nevis-test.tw1.ru/upload/iblock/d7a/uqext541kohzcc20anqjmendp0xww02x.jpeg',
+                  price: 990),
+            ),
+          ),
+        ) {
     on<LoadDataEvent>(_onLoadData);
   }
 
   void _onLoadData(LoadDataEvent event, Emitter<MainScreenState> emit) async {
     List<BannerEntity> banners = [];
     List<CategoryEntity> categories = [];
-    List<ProductEntity> daily = [];
 
-    var data = await Future.wait(
+    /*var data = await Future.wait(
       [
         // getBannersUC(),
-        getCategoriesUC(),
+        //getCategoriesUC(),
         // getDailyProductsUC(),
       ],
-    );
+    );*/
 
-    data.forEachIndexed(
+    /*data.forEachIndexed(
       (index, element) {
         element.fold(
           (_) {},
@@ -49,14 +70,12 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
           },
         );
       },
-    );
+    );*/
 
-    emit(
-      MainScreenState(
-          isLoading: false,
-          banners: banners,
-          categories: categories,
-          daily: daily),
-    );
+    emit(state.copyWith(
+      isLoading: false,
+      banners: banners,
+      categories: categories,
+    ));
   }
 }

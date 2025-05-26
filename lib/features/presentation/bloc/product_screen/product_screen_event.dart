@@ -9,6 +9,5 @@ abstract class ProductScreenEvent extends Equatable {
 
 class LoadDataEvent extends ProductScreenEvent {
   final int productId;
-  final int categoryId;
-  const LoadDataEvent({required this.productId, required this.categoryId});
+  const LoadDataEvent({required this.productId});
 }

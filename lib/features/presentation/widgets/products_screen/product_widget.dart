@@ -21,7 +21,6 @@ import 'package:nevis/features/presentation/widgets/favorite_button.dart';
 
 class ProductWidget extends StatelessWidget {
   final ProductEntity product;
-  final int categoryId;
   final bool isSelected;
   final bool showCheckbox;
 
@@ -30,7 +29,6 @@ class ProductWidget extends StatelessWidget {
     required this.product,
     required this.isSelected,
     required this.showCheckbox,
-    required this.categoryId,
   });
 
   @override
@@ -39,10 +37,9 @@ class ProductWidget extends StatelessWidget {
       onTap: () => Navigator.of(context).push(
         Routes.createRoute(
           const ProductScreen(),
-          settings: RouteSettings(name: Routes.productScreen, arguments: {
-            'productId': product.productId,
-            'categoryId': categoryId
-          }),
+          settings: RouteSettings(
+              name: Routes.productScreen,
+              arguments: {'productId': product.productId}),
         ),
       ),
       child: Container(

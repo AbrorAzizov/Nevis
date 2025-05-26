@@ -19,6 +19,7 @@ import 'package:nevis/features/presentation/pages/main/bonus_cards/activate_bonu
 import 'package:nevis/features/presentation/pages/main/bonus_cards/bonus_card_screen.dart';
 import 'package:nevis/features/presentation/pages/main/bonus_cards/register_bonus_card_screen.dart';
 import 'package:nevis/features/presentation/pages/main/main_screen.dart';
+import 'package:nevis/features/presentation/pages/main/stories_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/about_us_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/article_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/articles_screen.dart';
@@ -128,7 +129,8 @@ class MyApp extends StatelessWidget {
                   const RegisterBonusCardScreen(
                     cardType: BonusCardType.physical,
                   ),
-              Routes.bonusCardScreen: (context) => const BonusCardScreen()
+              Routes.bonusCardScreen: (context) => const BonusCardScreen(),
+              Routes.storiesScreen: (context) => const StoriesScreen(),
             },
             initialRoute: Routes.splashScreen,
             navigatorObservers: [routeObserver],
