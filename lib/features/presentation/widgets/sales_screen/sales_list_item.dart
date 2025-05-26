@@ -5,91 +5,69 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/custom_cache_manager.dart';
 
-import 'package:skeletonizer/skeletonizer.dart';
-
 class SalesListItem extends StatelessWidget {
-  const SalesListItem({super.key, this.isExpanded = true});
+  const SalesListItem(
+      {super.key,
+      this.onTap,
+      this.hasShadow = true,
+      this.hasPharmaciesCount = true});
 
-  final bool isExpanded;
+  final VoidCallback? onTap;
+  final bool hasShadow;
+  final bool hasPharmaciesCount;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 296.w,
-      decoration: BoxDecoration(
-        color: UiConstants.whiteColor,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            flex: isExpanded ? 1 : 0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(16.r),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 320.w,
+        decoration: BoxDecoration(
+          color: UiConstants.whiteColor,
+          borderRadius: BorderRadius.circular(18.r),
+          boxShadow: [
+            if (hasShadow)
+              BoxShadow(
+                color: Color(0xFF144B63).withOpacity(0.1),
+                blurRadius: 50,
+                spreadRadius: -4,
+                offset: Offset(-1, -4),
               ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(18.r),
               child: CachedNetworkImage(
-                height: 128.w,
+                height: 168.w,
                 width: double.infinity,
                 imageUrl:
                     'https://avatars.mds.yandex.net/i?id=a4621618cf1f95ef74dce3638f67efdc_l-7544543-images-thumbs&n=13',
-                fit: BoxFit.cover,
-                //placeholder: (context, url) => const Center(
-                //  child:
-                //      CircularProgressIndicator(color: UiConstants.pink2Color),
-                //),
+                fit: BoxFit.fitWidth,
                 cacheManager: CustomCacheManager(),
                 errorWidget: (context, url, error) => Icon(Icons.image,
                     size: 72.w, color: UiConstants.white3Color),
                 progressIndicatorBuilder: (context, url, progress) => Center(
                   child:
-                      CircularProgressIndicator(color: UiConstants.pink2Color),
+                      CircularProgressIndicator(color: UiConstants.blueColor),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 8.h),
-          Padding(
-            padding: getMarginOrPadding(left: 16, right: 16, bottom: 16),
-            child: Column(
-              children: [
-                Text(
-                    'С 9 по 20 сентября скидка 15% на линейку косметических средств Rilastil Daily Care',
-                    style: UiConstants.textStyle3.copyWith(
-                        color: UiConstants.darkBlueColor,
-                        fontWeight: FontWeight.w800),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis),
-                SizedBox(height: 8.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'с 1 по 31 августа',
-                      style: UiConstants.textStyle8.copyWith(
-                        color: UiConstants.darkBlue2Color.withOpacity(.6),
-                      ),
-                    ),
-                    Skeleton.unite(
-                      child: Container(
-                        padding: getMarginOrPadding(all: 4),
-                        decoration: BoxDecoration(
-                          color: UiConstants.pink2Color.withOpacity(.05),
-                          borderRadius: BorderRadius.circular(200.r),
-                        ),
-                        child: Text(
-                          '-15%',
-                          style: UiConstants.textStyle6
-                              .copyWith(color: UiConstants.pink2Color),
-                        ),
-                      ),
-                    ),
-                  ],
+            if (hasPharmaciesCount)
+              Padding(
+                padding: getMarginOrPadding(
+                    left: 16, right: 16, top: 12, bottom: 12),
+                child: Text(
+                  '500 аптек',
+                  style: UiConstants.textStyle8.copyWith(
+                    color: UiConstants.black3Color.withOpacity(.6),
+                  ),
                 ),
-              ],
-            ),
-          )
-        ],
+              ),
+          ],
+        ),
       ),
     );
   }

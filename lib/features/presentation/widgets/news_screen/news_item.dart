@@ -10,7 +10,6 @@ import 'package:nevis/features/domain/entities/news_entity.dart';
 import 'package:nevis/features/presentation/widgets/chip_with_text_widget.dart';
 import 'package:nevis/features/presentation/widgets/date_icon_widget.dart';
 import 'package:nevis/features/presentation/widgets/right_arrow_button.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewsItem extends StatelessWidget {
@@ -58,7 +57,7 @@ class NewsItem extends StatelessWidget {
                       size: 56.w, color: UiConstants.whiteColor),
                   progressIndicatorBuilder: (context, url, progress) => Center(
                     child:
-                        CircularProgressIndicator(color: UiConstants.pinkColor),
+                        CircularProgressIndicator(color: UiConstants.blueColor),
                   ),
                 ),
               ),

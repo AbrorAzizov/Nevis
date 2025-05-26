@@ -25,6 +25,7 @@ class Routes {
   static const String newsScreen = '/news_screen';
   static const String newsInternalScreen = '/news_internal_screen';
   static const String salesScreen = '/sales_screen';
+  static const String saleScreen = '/sale_screen';
   static const String aboutUsScreen = '/about_us_screen';
   static const String howPlaceOrderScreen = '/how_place_order_screen';
   static const String infoAboutOrderScreen = '/info_about_order_screen';
@@ -69,6 +70,7 @@ class Routes {
         newsScreen,
         newsInternalScreen,
         salesScreen,
+        saleScreen,
         aboutUsScreen,
         howPlaceOrderScreen,
         infoAboutOrderScreen,

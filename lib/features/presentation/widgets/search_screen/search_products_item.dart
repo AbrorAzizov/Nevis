@@ -31,7 +31,7 @@ class SearchProductsItem extends StatelessWidget {
                   Paths.drugTemplateIconPath,
                   height: double.infinity),
               progressIndicatorBuilder: (context, url, progress) => Center(
-                child: CircularProgressIndicator(color: UiConstants.pinkColor),
+                child: CircularProgressIndicator(color: UiConstants.blueColor),
               ),
             ),
           ),

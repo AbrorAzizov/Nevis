@@ -81,7 +81,7 @@ class SubcategoryItem extends StatelessWidget {
                             padding: getMarginOrPadding(all: 12),
                             child: Center(
                               child: CircularProgressIndicator(
-                                  color: UiConstants.pink2Color),
+                                  color: UiConstants.blueColor),
                             ),
                           ),
                         )

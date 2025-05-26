@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:intl/intl.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
@@ -57,8 +56,8 @@ class ArticleItem extends StatelessWidget {
                   errorWidget: (context, url, error) => Icon(Icons.image,
                       size: 56.w, color: UiConstants.whiteColor),
                   progressIndicatorBuilder: (context, url, progress) => Center(
-                    child: CircularProgressIndicator(
-                        color: UiConstants.pink2Color),
+                    child:
+                        CircularProgressIndicator(color: UiConstants.blueColor),
                   ),
                 ),
               ),

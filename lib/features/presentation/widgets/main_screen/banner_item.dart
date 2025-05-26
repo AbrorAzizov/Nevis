@@ -22,7 +22,7 @@ class BannerItem extends StatelessWidget {
         errorWidget: (context, url, error) =>
             Icon(Icons.image, size: 56.w, color: UiConstants.whiteColor),
         progressIndicatorBuilder: (context, url, progress) => Center(
-          child: CircularProgressIndicator(color: UiConstants.pink2Color),
+          child: CircularProgressIndicator(color: UiConstants.blueColor),
         ),
       ),
     );
