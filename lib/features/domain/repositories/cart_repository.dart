@@ -6,4 +6,5 @@ import 'package:nevis/features/domain/entities/cart_entity.dart';
 abstract class CartRepository {
   Future<Either<Failure, CartEntity>> getCartProducts();
   Future<Either<Failure, void>> addProductToCart(CartParams product);
+  Future<Either<Failure, void>> deleteProductFromCart(int productId);
 }

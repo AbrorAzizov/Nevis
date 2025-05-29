@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/route_manager.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
@@ -18,7 +17,6 @@ import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
 import 'package:nevis/features/presentation/widgets/favourite_products_screen/selected_products_price_info_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
-import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CartScreen extends StatelessWidget {
@@ -26,17 +24,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CartScreenBloc, CartScreenState>(
-      bloc: sl<CartScreenBloc>(),
-      listener: (BuildContext context, cartState) {
-        if (cartState.errorMessage != null) {
-          Get.showSnackbar(GetSnackBar(
-            duration: Duration(seconds: 1),
-            title: 'Ошибка при добавлении товара',
-            message: cartState.errorMessage,
-          ));
-        }
-      },
+    return BlocBuilder<CartScreenBloc, CartScreenState>(
       builder: (context, cartState) {
         final cartBloc = context.read<CartScreenBloc>();
         final hasUnavailable =

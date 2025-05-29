@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/route_manager.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/cart_params.dart';
@@ -11,6 +12,7 @@ import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/usecases/cart/add_product_to_cart.dart';
+import 'package:nevis/features/domain/usecases/cart/delete_product_from_cart.dart';
 import 'package:nevis/features/domain/usecases/cart/get_cart.dart';
 
 part 'cart_screen_event.dart';
@@ -37,9 +39,12 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
 
   final GetCartProductsUC getCartProducts;
   final AddProductToCartUC addProductToCart;
+  final DeleteProductFromCartUC deleteProductFromCart;
 
   CartScreenBloc(
-      {required this.getCartProducts, required this.addProductToCart})
+      {required this.getCartProducts,
+      required this.deleteProductFromCart,
+      required this.addProductToCart})
       : super(
           CartScreenState(
               isAllProductsChecked: false,
@@ -56,10 +61,10 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
     on<GetCartProductsEvent>(_getCartProducts);
     on<UpdateProductCountEvent>(_updateCounter);
     on<ChangeSelectorIndexEvent>(_onChangeSelector);
-    on<RemoveProductEvent>(_onRemoveItem);
     on<GetProductsEvent>(_getProducts);
     on<ClearCartEvent>(_clearCart);
     on<AddProductToCart>(_addProductTocart);
+    on<DeleteProductFromCart>(_deleteProductFromCart);
   }
 
   void _getCartProducts(
@@ -117,10 +122,12 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
     failureOrSuccess.fold(
       (failure) {
         if (failure is MaxQuantityExceededFailure) {
-          emit(
-            state.copyWith(
-                errorMessage: 'Превышено максимальное количество упаковок'),
-          );
+          Get.showSnackbar(GetSnackBar(
+            snackPosition: SnackPosition.TOP,
+            duration: Duration(seconds: 2),
+            title: 'Ошибка при добавлении товара',
+            message: failure.message,
+          ));
         }
       },
       (_) {
@@ -137,25 +144,6 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
     emit(state.copyWith(cartType: event.typeReceiving));
   }
 
-  void _onRemoveItem(
-      RemoveProductEvent event, Emitter<CartScreenState> emit) async {
-    if (event.product.productId == null) return;
-
-    final productId = event.product.productId!;
-
-    // Вызываем добавление товара с количеством 0 для удаления
-    final failureOrSuccess = await addProductToCart(
-      CartParams(quantity: 0, id: productId),
-    );
-
-    failureOrSuccess.fold(
-      (failure) => emit(
-          state.copyWith(errorMessage: 'Ошибка удаления товара из корзины')),
-      (_) => add(
-          GetCartProductsEvent()), // после успешного удаления обновляем корзину
-    );
-  }
-
   void _clearCart(ClearCartEvent event, Emitter<CartScreenState> emit) {
     emit(state.copyWith(cartProducts: [], counters: {}));
   }
@@ -170,12 +158,27 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
       final failureOrLoads = await addProductToCart(
         CartParams(quantity: newCount, id: productId),
       );
-
       failureOrLoads.fold(
         (_) => emit(
             state.copyWith(errorMessage: 'ошибка добавления товара в корзину')),
         (_) => add(GetCartProductsEvent()),
       );
     }
+  }
+
+  void _deleteProductFromCart(
+      DeleteProductFromCart event, Emitter<CartScreenState> emit) async {
+    final failureOrLoads = await deleteProductFromCart(event.productId);
+
+    failureOrLoads.fold(
+        (_) => emit(
+            state.copyWith(errorMessage: 'ошибка удаление товара из корзины')),
+        (_) {
+      final counters = state.counters;
+      counters.remove(event.productId);
+
+      emit(state.copyWith(counters: counters));
+      add(GetCartProductsEvent());
+    });
   }
 }

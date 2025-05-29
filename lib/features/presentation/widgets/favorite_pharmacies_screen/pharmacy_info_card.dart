@@ -13,6 +13,7 @@ class PharmacyInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(pharmacy.cartAvailable);
     return Container(
       padding: getMarginOrPadding(all: 16),
       decoration: BoxDecoration(
@@ -27,6 +28,7 @@ class PharmacyInfoCard extends StatelessWidget {
               spacing: 12.h,
               mainAxisSize: MainAxisSize.min,
               children: [
+                Text(pharmacy.cartAvailable ?? ''),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

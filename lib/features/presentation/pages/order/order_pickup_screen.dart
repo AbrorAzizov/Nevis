@@ -86,8 +86,6 @@ class _OrderPickupScreenState extends State<OrderPickupScreen> {
                                     )
                                   : PharmacyMapWidget(
                                       points: state.points,
-                                      key: ValueKey(state.points
-                                          .length), // force rebuild when points update
                                     ),
                             )
                           ]

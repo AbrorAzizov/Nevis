@@ -269,6 +269,79 @@ paths:
       security:
         -
           bearerAuth: []
+    put:
+      tags:
+        - Корзина
+      summary: 'Изменение количества товара в корзине'
+      description: 'Изменяет количество товара в корзине пользователя'
+      operationId: 28752e330bd5c21da6cd0f1614a0f9ec
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - product_id
+                - quantity
+              properties:
+                product_id:
+                  type: integer
+                  example: 67507
+                quantity:
+                  type: integer
+                  example: 3
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Количество товара успешно изменено' }
+                  cart_id: { type: integer, example: 12345 }
+                  total_items: { type: integer, example: 5 }
+                  total_price: { type: number, format: float, example: 5550.75 }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно изменить количество товара' }
+                  reasons: { type: array, items: { type: string, example: 'Превышено максимальное количество упаковок' } }
+                type: object
+        '401':
+          description: 'Ошибка авторизации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно изменить количество товара' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '404':
+          description: 'Товар не найден'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно изменить количество товара' }
+                  reasons: { type: array, items: { type: string, example: 'Товар не найден' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно изменить количество товара' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
     post:
       tags:
         - Корзина
@@ -340,6 +413,76 @@ paths:
               schema:
                 properties:
                   error: { type: string, example: 'Невозможно добавить товар' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/cart/delete:
+    post:
+      tags:
+        - Корзина
+      summary: 'Удаление товара из корзины'
+      description: 'Удаляет товар из корзины пользователя'
+      operationId: 7ee064a1d2bee8ef9694f3bdfd2d9da6
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - product_id
+              properties:
+                product_id:
+                  type: integer
+                  example: 3195741
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Товар успешно удален из корзины' }
+                  cart_id: { type: integer, example: 4 }
+                  total_items: { type: integer, example: 2 }
+                  total_price: { type: number, format: float, example: 306 }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно удалить товар' }
+                  reasons: { type: array, items: { type: string, example: 'Товар не найден в корзине' } }
+                type: object
+        '401':
+          description: 'Ошибка авторизации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно удалить товар' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '404':
+          description: 'Товар не найден'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно удалить товар' }
+                  reasons: { type: array, items: { type: string, example: 'Товар не найден' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно удалить товар' }
                   message: { type: string, example: 'Внутренняя ошибка сервера' }
                 type: object
       security:

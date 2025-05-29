@@ -25,4 +25,9 @@ class CartRepositoryImpl extends CartRepository {
   Future<Either<Failure, void>> addProductToCart(CartParams product) async =>
       await errorHandler.handle(
           () async => await cartRemoteDataSource.addProductToCart(product));
+
+  @override
+  Future<Either<Failure, void>> deleteProductFromCart(int productId) async =>
+      await errorHandler.handle(() async =>
+          await cartRemoteDataSource.deleteProductFromCart(productId));
 }

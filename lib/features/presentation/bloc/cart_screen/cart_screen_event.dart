@@ -32,11 +32,6 @@ class ChangeSelectorIndexEvent extends CartScreenEvent {
   const ChangeSelectorIndexEvent(this.typeReceiving);
 }
 
-class RemoveProductEvent extends CartScreenEvent {
-  final ProductEntity product;
-  const RemoveProductEvent({required this.product});
-}
-
 class ClearCartEvent extends CartScreenEvent {
   const ClearCartEvent();
 }
@@ -45,4 +40,10 @@ class AddProductToCart extends CartScreenEvent {
   final ProductEntity product;
 
   const AddProductToCart({required this.product});
+}
+
+class DeleteProductFromCart extends CartScreenEvent {
+  final int productId;
+
+  const DeleteProductFromCart({required this.productId});
 }

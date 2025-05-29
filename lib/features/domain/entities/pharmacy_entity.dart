@@ -24,8 +24,10 @@ class PharmacyEntity extends Equatable {
   final String? ufRegion;
   final Map<String, dynamic>? sum;
   final List<String>? raspisanie;
+  final String? cartAvailable;
 
   const PharmacyEntity({
+    this.cartAvailable,
     this.pharmacyId,
     this.title,
     this.alias,

@@ -69,7 +69,10 @@ class CartProductWidget extends StatelessWidget {
                         width: 12.w,
                       ),
                       DeleteButton(onPressed: () {
-                        bloc.add(RemoveProductEvent(product: product));
+                        if (product.productId != null) {
+                          bloc.add(DeleteProductFromCart(
+                              productId: product.productId!));
+                        }
                       }),
                     ],
                   ),

@@ -8,7 +8,7 @@ class CartParams {
     return {"id": id, "quantity": quantity};
   }
 
-  Map<String, dynamic> toJsonForAddProductToCart() {
+  Map<String, dynamic> toJsonForProductToCart() {
     return {"product_id": id, "quantity": quantity};
   }
 }

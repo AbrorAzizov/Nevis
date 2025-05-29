@@ -28,36 +28,55 @@ class OrderPickupScreenBloc
     on<PickupChangeQueryEvent>(_onChangeQueryEvent);
     on<PickupChangeSelectorIndexEvent>(_onChangeSelectorIndexEvent);
   }
-
-  Future<void> _onLoadData(LoadPickupPharmaciesEvent event,
-      Emitter<OrderPickupScreenState> emit) async {
+  Future<void> _onLoadData(
+    LoadPickupPharmaciesEvent event,
+    Emitter<OrderPickupScreenState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true));
+
     final products = sl<CartScreenBloc>().state.cartProducts;
     final List<CartParams> cartParams = products
         .map((e) => CartParams(
-            quantity: sl<CartScreenBloc>().state.counters[e.productId] ?? 1,
-            id: e.productId!))
+              quantity: sl<CartScreenBloc>().state.counters[e.productId] ?? 1,
+              id: e.productId!,
+            ))
         .toList();
+
     final failureOrLoads = await getPharmaciesByCartUC(cartParams);
     List<MapMarkerModel> points = [];
 
     failureOrLoads.fold(
-      (_) => emit(
-          state.copyWith(errorMessage: 'Ошибка загрузки', isLoading: false)),
+      (_) => emit(state.copyWith(
+        errorMessage: 'Ошибка загрузки',
+        isLoading: false,
+      )),
       (pharmacies) {
         _allPharmacies = pharmacies;
-        points = pharmacies.map((pharmacy) {
-          final coordinates =
-              pharmacy.coordinates!.split(',').map((e) => e.trim()).toList();
-          return MapMarkerModel(
-            id: pharmacy.pharmacyId!,
-            point: Point(
-              latitude: double.tryParse(coordinates[0]) ?? 0,
-              longitude: double.tryParse(coordinates[1]) ?? 0,
-            ),
-            data: (pharmacy as PharmacyModel).toJson(),
-          );
-        }).toList();
+
+        points = pharmacies
+            .map((pharmacy) {
+              final coordinates = pharmacy.coordinates
+                      ?.split(',')
+                      .map((e) => e.trim())
+                      .toList() ??
+                  ['0', '0'];
+
+              final lat = double.tryParse(coordinates[0]) ?? 0;
+              final lon = double.tryParse(coordinates[1]) ?? 0;
+
+              if (lat == 0 && lon == 0) return null;
+
+              return MapMarkerModel(
+                id: pharmacy.pharmacyId ?? -1,
+                point: Point(
+                  latitude: lat,
+                  longitude: lon,
+                ),
+                data: (pharmacy as PharmacyModel).toJson(),
+              );
+            })
+            .whereType<MapMarkerModel>()
+            .toList();
 
         emit(state.copyWith(
           pharmacies: pharmacies,

@@ -27,6 +27,7 @@ class PharmacyModel extends PharmacyEntity {
     super.ufRegion,
     super.sum,
     super.raspisanie,
+    super.cartAvailable,
   });
 
   factory PharmacyModel.fromRawJson(String str) =>
@@ -43,9 +44,10 @@ class PharmacyModel extends PharmacyEntity {
       return null;
     }
 
+    print(json['AMOUNTS']?['TEXT']);
     return PharmacyModel(
       pharmacyId: int.tryParse(json["storeId"]?.toString() ?? ''),
-      title: json["title"],
+      title: json["TITLE"],
       alias: json["alias"],
       address: json["address"],
       coordinates: json["coordinates"]?.toString(),
@@ -69,14 +71,16 @@ class PharmacyModel extends PharmacyEntity {
       storeXmlId: json["storeXmlId"],
       gpsN: parseDouble(json["GPS_N"]),
       gpsS: parseDouble(json["GPS_S"]),
-      amounts: json["AMOUNTS"] as Map<String, dynamic>?,
       ufRegion: json["UF_REGION"],
-      sum: json["SUM"] as Map<String, dynamic>?,
+      sum: json["SUM"] is Map<String, dynamic> ? json["SUM"] : null,
       raspisanie: (json["raspisanie"] as List<dynamic>?)
           ?.map((e) => e.toString())
           .toList(),
+      cartAvailable: json['AMOUNTS']?['TEXT'] ?? json['cartAvailable'],
     );
   }
+
+  @override
   Map<String, dynamic> toJson() => {
         "storeId": pharmacyId,
         "title": title,
@@ -97,8 +101,9 @@ class PharmacyModel extends PharmacyEntity {
         "GPS_N": gpsN,
         "GPS_S": gpsS,
         "amounts": amounts,
-        "uf_region": ufRegion,
+        "UF_REGION": ufRegion,
         "sum": sum,
         "raspisanie": raspisanie,
+        "cartAvailable": cartAvailable,
       };
 }

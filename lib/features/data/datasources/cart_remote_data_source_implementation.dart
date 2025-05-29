@@ -8,6 +8,7 @@ import 'package:nevis/features/data/models/cart_model.dart';
 abstract class CartRemoteDataSource {
   Future<CartModel> getCartProducts();
   Future<void> addProductToCart(CartParams product);
+  Future<void> deleteProductFromCart(int productId);
 }
 
 class CartRemoteDataSourceImpl implements CartRemoteDataSource {
@@ -38,7 +39,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
     try {
       await apiClient.post(
         endpoint: 'cart',
-        body: product.toJsonForAddProductToCart(),
+        body: product.toJsonForProductToCart(),
         exceptions: {
           500: ServerException(),
           400: MaxProductQuantityExceededException()
@@ -48,6 +49,24 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
     } catch (e) {
       log('Error during addProductsToCart: $e',
           name: '${runtimeType.toString()}.addProductsToCart', level: 1000);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteProductFromCart(int productId) async {
+    try {
+      await apiClient.post(
+        endpoint: 'cart/delete',
+        body: {'product_id': productId},
+        exceptions: {
+          500: ServerException(),
+        },
+        callPathNameForLog: '${runtimeType.toString()}.deleteProductFromCart',
+      );
+    } catch (e) {
+      log('Error during deleteProductFromCart: $e',
+          name: '${runtimeType.toString()}.deleteProductFromCart', level: 1000);
       rethrow;
     }
   }

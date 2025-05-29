@@ -52,9 +52,12 @@ class ApiClient {
     String? callPathNameForLog,
   ) {
     final responseBody = jsonDecode(utf8.decode(response.bodyBytes));
-    final message = responseBody is Map<String, dynamic> &&
-            responseBody['message'] is String
-        ? responseBody['message'] as String
+    final message = responseBody is Map<String, dynamic>
+        ? (responseBody['message'] is String
+            ? responseBody['message'] as String
+            : (responseBody['reasons'] is String
+                ? responseBody['reasons'] as String
+                : 'Неизвестная ошибка'))
         : 'Неизвестная ошибка';
 
     log('Response (${response.request?.url}): ${response.statusCode} $responseBody',

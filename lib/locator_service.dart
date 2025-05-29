@@ -41,6 +41,7 @@ import 'package:nevis/features/domain/usecases/auth/logout.dart';
 import 'package:nevis/features/domain/usecases/auth/refresh_token.dart';
 import 'package:nevis/features/domain/usecases/auth/request_code.dart';
 import 'package:nevis/features/domain/usecases/cart/add_product_to_cart.dart';
+import 'package:nevis/features/domain/usecases/cart/delete_product_from_cart.dart';
 import 'package:nevis/features/domain/usecases/cart/get_cart.dart';
 import 'package:nevis/features/domain/usecases/category/get_brands.dart';
 import 'package:nevis/features/domain/usecases/category/get_categories.dart';
@@ -220,7 +221,10 @@ Future<void> init() async {
   );
 
   sl.registerLazySingleton(
-    () => CartScreenBloc(getCartProducts: sl(), addProductToCart: sl()),
+    () => CartScreenBloc(
+        getCartProducts: sl(),
+        addProductToCart: sl(),
+        deleteProductFromCart: sl()),
   );
 
   //// UseCases
@@ -279,9 +283,8 @@ Future<void> init() async {
 
   //Cart
   sl.registerLazySingleton(() => GetCartProductsUC(sl()));
-  sl.registerLazySingleton(() => AddProductToCartUC(
-        sl(),
-      ));
+  sl.registerLazySingleton(() => AddProductToCartUC(sl()));
+  sl.registerLazySingleton(() => DeleteProductFromCartUC(sl()));
 
   // Pharmacy
   sl.registerLazySingleton(() => GetFavoritePharmaciesUC(sl()));

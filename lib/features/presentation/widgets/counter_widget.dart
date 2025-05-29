@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 
 class CounterWidget extends StatelessWidget {
   final int count;
@@ -31,6 +33,10 @@ class CounterWidget extends StatelessWidget {
             onPressed: () {
               if (count > 1) {
                 onCountChanged(productId, count - 1);
+              } else {
+                context
+                    .read<CartScreenBloc>()
+                    .add(DeleteProductFromCart(productId: productId));
               }
             },
             splashRadius: 20,

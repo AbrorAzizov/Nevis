@@ -10,30 +10,17 @@ import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
-import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/order/order_pickup_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
-import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/cart_pharmacy_widget.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/delivery_address_block.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/delivery_customer_block.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/delivery_payment_block.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/delivery_plate_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/online_payment_method_button.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
-import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
-import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
-import 'package:nevis/features/presentation/widgets/map/pharmacy_map_widget.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_info_list.dart';
 import 'package:nevis/features/presentation/widgets/pinput_widget.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class BottomSheetManager {
   static showClearCartSheet(BuildContext context) {
@@ -183,58 +170,6 @@ class BottomSheetManager {
     );
   }
 
-  static showDeliverySheet(BuildContext homeContext) {
-    showModalBottomSheet(
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: homeContext,
-      builder: (sheetContext) {
-        return CustomBottomSheet(
-          color: UiConstants.backgroundColor,
-          child: Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              children: [
-                Text(
-                  'Доставка',
-                  style: UiConstants.textStyle1
-                      .copyWith(color: UiConstants.darkBlueColor),
-                ),
-                SizedBox(height: 16.h),
-                InfoPlateWidget(
-                    text:
-                        'Доставка производится только по Минску и Минскому району'),
-                SizedBox(height: 16.h),
-                DeliveryCustomerBlock(screenContext: homeContext),
-                SizedBox(height: 16.h),
-                DeliveryAddressBlock(
-                  screenContext: homeContext,
-                  onPickAddressOnMap: () =>
-                      showSelectAddressOnMapSheet(homeContext, sheetContext),
-                ),
-                SizedBox(height: 16.h),
-                DeliveryPaymentBlock(
-                  screenContext: homeContext,
-                  changedOnlineMethodTap: () =>
-                      showPickOnlinePaymentSheet(homeContext, sheetContext),
-                ),
-                SizedBox(height: 16.h),
-                AppButtonWidget(
-                  text: 'Оформить заказ',
-                  isActive: true,
-                  onTap: () {
-                    showThanksForOrderSheet(homeContext);
-                  },
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   static showPickOnlinePaymentSheet(
       BuildContext homeContext, BuildContext screenContext) {
     return showModalBottomSheet(
@@ -286,63 +221,6 @@ class BottomSheetManager {
                 },
               ),
             ],
-          ),
-        );
-      },
-    );
-  }
-
-  static showSelectAddressOnMapSheet(
-      BuildContext homeContext, BuildContext screenContext) {
-    showModalBottomSheet(
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: homeContext,
-      builder: (sheetContext) {
-        return CustomBottomSheet(
-          color: UiConstants.backgroundColor,
-          child: Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Выбрать на карте',
-                  style: UiConstants.textStyle1
-                      .copyWith(color: UiConstants.darkBlueColor),
-                ),
-                SizedBox(height: 16.h),
-                InfoPlateWidget(
-                    text:
-                        'Доставка производится только по Минску и Минскому району'),
-                SizedBox(height: 16.h),
-                Skeleton.ignorePointer(
-                  child: Skeleton.shade(
-                    child: AppTextFieldWidget(
-                      hintText: 'Искать улицу или район',
-                      fillColor: UiConstants.white2Color,
-                      controller: TextEditingController(),
-                      prefixWidget: Skeleton.ignore(
-                        child: SvgPicture.asset(Paths.searchIconPath),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                Expanded(
-                  child: PharmacyMapWidget(
-                    points: [],
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                AppButtonWidget(
-                  text: 'Подтвердить',
-                  isActive: true,
-                  onTap: () {
-                    Navigator.pop(screenContext);
-                  },
-                )
-              ],
-            ),
           ),
         );
       },
@@ -420,95 +298,6 @@ class BottomSheetManager {
               ],
             ),
           ),
-        );
-      },
-    );
-  }
-
-  static showSelectPharmacySheet(
-      BuildContext homeContext, BuildContext screenContext) {
-    CartScreenBloc cartBloc = screenContext.read<CartScreenBloc>();
-    showModalBottomSheet(
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: homeContext,
-      builder: (sheetContext) {
-        int selectorIndex = 0;
-
-        return BlocBuilder<CartScreenBloc, CartScreenState>(
-          bloc: cartBloc,
-          builder: (context, cartState) {
-            return CustomBottomSheet(
-              color: UiConstants.whiteColor,
-              child: Expanded(
-                child: BlocProvider(
-                  create: (context) => SelectorCubit(index: selectorIndex),
-                  child: BlocBuilder<SelectorCubit, SelectorState>(
-                    builder: (context, state) {
-                      return ListView(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        children: [
-                          Text(
-                            'Самовывоз',
-                            style: UiConstants.textStyle1
-                                .copyWith(color: UiConstants.darkBlueColor),
-                          ),
-                          SizedBox(height: 16.h),
-                          BlockWidget(
-                            title: 'Выбор аптеки',
-                            titleStyle: UiConstants.textStyle9,
-                            clickableText:
-                                '${cartState.filteredPharmacies.length} аптек',
-                            child: CustomAppBar(
-                              controller: TextEditingController(),
-                              hintText: 'Искать аптеки',
-                              backgroundColor: Colors.transparent,
-                              contentPadding: EdgeInsets.zero,
-                              isShowFavoriteButton: true,
-                            ),
-                          ),
-                          SizedBox(height: 32.h),
-                          // селектор список/карта
-                          Align(
-                            alignment: AlignmentDirectional.center,
-                            child: Selector(
-                              titlesList: const ['Список', 'Карта'],
-                              onTap: (int index) => selectorIndex = index,
-                            ),
-                          ),
-                          SizedBox(height: 16.h),
-                          if (selectorIndex == 0)
-                            ListView.separated(
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) =>
-                                    CartPharmacyWidget(
-                                        pharmacy:
-                                            ProductPharmacyEntity(), // TODO: доделать
-                                        pharmacyListScreenType:
-                                            PharmacyListScreenType.cart,
-                                        onButtonTap: () => (),
-                                        screenContext: homeContext),
-                                separatorBuilder: (context, index) =>
-                                    SizedBox(height: 8.h),
-                                itemCount: cartState.filteredPharmacies.length)
-                          else
-                            SizedBox(
-                              height: 510.h,
-                              child: PharmacyMapWidget(
-                                points: [],
-                              ),
-                            ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-            );
-          },
         );
       },
     );
