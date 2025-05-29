@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/extensions.dart';
@@ -84,8 +85,7 @@ class CartProductWidget extends StatelessWidget {
                   CachedNetworkImage(
                     height: 96.w,
                     width: 96.w,
-                    imageUrl:
-                        'https://upload.wikimedia.org/wikipedia/commons/7/7b/Корвалол-Фармак.jpg',
+                    imageUrl: '${dotenv.env['BASE_URL2']!}${product.image}',
                     fit: BoxFit.contain,
                     cacheManager: CustomCacheManager(),
                     errorWidget: (context, url, error) => SvgPicture.asset(
