@@ -32,7 +32,7 @@ class CuttedOrderInfo extends StatelessWidget {
                 Paths.drugTemplateIconPath,
                 height: double.infinity),
             progressIndicatorBuilder: (context, url, progress) => Center(
-              child: CircularProgressIndicator(color: UiConstants.pink2Color),
+              child: CircularProgressIndicator(color: UiConstants.blueColor),
             ),
           ),
           Expanded(

@@ -44,6 +44,8 @@ class ProductScreen extends StatelessWidget {
                 backgroundColor: UiConstants.whiteColor,
                 body: SafeArea(
                   child: Skeletonizer(
+                    ignorePointers: false,
+                    justifyMultiLineText: false,
                     enabled: state.isLoading,
                     textBoneBorderRadius:
                         TextBoneBorderRadius.fromHeightFactor(.5),

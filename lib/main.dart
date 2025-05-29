@@ -35,7 +35,8 @@ import 'package:nevis/features/presentation/pages/profile/orders/orders_screen.d
 import 'package:nevis/features/presentation/pages/profile/personal_data_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/privacy_policy_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/profile_screen.dart';
-import 'package:nevis/features/presentation/pages/profile/sales_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/sales/sale_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/sales/sales_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/account_not_found_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/code_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_message.dart';
@@ -105,6 +106,7 @@ class MyApp extends StatelessWidget {
               Routes.newsInternalScreen: (context) =>
                   const NewsInternalScreen(),
               Routes.salesScreen: (context) => const SalesScreen(),
+              Routes.saleScreen: (context) => const SaleScreen(),
               Routes.aboutUsScreen: (context) => const AboutUsScreen(),
               Routes.howPlaceOrderScreen: (context) =>
                   const HowPlaceOrderScreen(),
