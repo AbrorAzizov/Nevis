@@ -33,6 +33,7 @@ class OrderPickupCartScreenBloc
       (cart) {
         emit(state.copyWith(
           isLoading: false,
+          cartProductsFromWarehouse: cart.cartItemsFromWarehouse,
           cartProducts: cart.cartItems,
           totalPrice: cart.totalPrice,
           totalBonuses: cart.totalBonuses,
