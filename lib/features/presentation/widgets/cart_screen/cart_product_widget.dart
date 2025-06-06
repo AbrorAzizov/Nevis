@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
@@ -21,19 +22,36 @@ import 'package:nevis/features/presentation/widgets/sale_offer_widget.dart';
 
 class CartProductWidget extends StatelessWidget {
   final ProductEntity product;
-
+  final CartType cartType;
+  final void Function()? additionalEvent;
   const CartProductWidget({
     super.key,
+    this.cartType = CartType.defaultCart,
     required this.product,
+    this.additionalEvent,
   });
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<CartScreenBloc>();
     final counters = bloc.state.counters;
-    final productId = product.productId!;
-    final count = counters[productId] ?? 1;
 
+    final productId = product.productId;
+    if (productId == null) {
+      return Container(
+        width: 100,
+        height: 100,
+        color: Colors.red,
+      );
+    }
+    final baseUrl = dotenv.env['BASE_URL2'] ?? '';
+    final imageUrl = '$baseUrl${product.image ?? ''}';
+    final productName = product.name?.orDash() ?? '-';
+    final availableForDelivery = product.availableForDelivery ?? false;
+    final brand = product.brand ?? 'Производитель';
+    final count = cartType == CartType.defaultCart
+        ? (counters[productId] ?? 1)
+        : (product.count ?? 1);
     return GestureDetector(
       onTap: () => {},
       child: Container(
@@ -70,10 +88,7 @@ class CartProductWidget extends StatelessWidget {
                         width: 12.w,
                       ),
                       DeleteButton(onPressed: () {
-                        if (product.productId != null) {
-                          bloc.add(DeleteProductFromCart(
-                              productId: product.productId!));
-                        }
+                        bloc.add(DeleteProductFromCart(productId: productId));
                       }),
                     ],
                   ),
@@ -85,7 +100,7 @@ class CartProductWidget extends StatelessWidget {
                   CachedNetworkImage(
                     height: 96.w,
                     width: 96.w,
-                    imageUrl: '${dotenv.env['BASE_URL2']!}${product.image}',
+                    imageUrl: imageUrl,
                     fit: BoxFit.contain,
                     cacheManager: CustomCacheManager(),
                     errorWidget: (context, url, error) => SvgPicture.asset(
@@ -106,9 +121,9 @@ class CartProductWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            product.name!.orDash(),
+                            productName,
                             style: UiConstants.textStyle19.copyWith(
-                                color: product.availableForDelivery!
+                                color: availableForDelivery
                                     ? UiConstants.black3Color
                                     : UiConstants.black2Color),
                             maxLines: 4,
@@ -116,7 +131,7 @@ class CartProductWidget extends StatelessWidget {
                           ),
                           SizedBox(height: 14.h),
                           Text(
-                            product.brand ?? 'Производитель',
+                            brand,
                             style: UiConstants.textStyle12.copyWith(
                                 height: 1,
                                 fontWeight: FontWeight.w400,
@@ -148,10 +163,16 @@ class CartProductWidget extends StatelessWidget {
                       count: count,
                       productId: productId,
                       onCountChanged: (id, newCount) {
-                        bloc.add(UpdateProductCountEvent(
-                          productId: id,
-                          count: newCount,
-                        ));
+                        bloc.add(
+                          UpdateProductCountEvent(
+                            productId: id,
+                            count: newCount,
+                          ),
+                        );
+
+                        if (additionalEvent != null) {
+                          additionalEvent!();
+                        }
                       },
                     ),
                   ),
@@ -160,10 +181,10 @@ class CartProductWidget extends StatelessWidget {
               Padding(
                 padding: getMarginOrPadding(top: 8),
                 child: product.specialOffer != null
-                    ? (count >= product.specialOffer!.count
+                    ? (count >= (product.specialOffer?.count ?? 0)
                         ? AsGifetWidget(
                             product: product,
-                            count: counters[product.productId] ?? 1,
+                            count: counters[productId] ?? 1,
                           )
                         : SpecialOfferBadgeWidget(
                             typeOfSpecialOffer: product.specialOffer!,

@@ -23,12 +23,14 @@ class ProductWidget extends StatelessWidget {
   final ProductEntity product;
   final bool isSelected;
   final bool showCheckbox;
+  final void Function(int productId, int newCount)? onCountChanged;
 
   const ProductWidget({
     super.key,
     required this.product,
     required this.isSelected,
     required this.showCheckbox,
+    this.onCountChanged,
   });
 
   @override
@@ -316,12 +318,16 @@ class ProductWidget extends StatelessWidget {
                                 count: count,
                                 productId: productId,
                                 onCountChanged: (id, newCount) {
-                                  context
-                                      .read<CartScreenBloc>()
-                                      .add(UpdateProductCountEvent(
-                                        productId: id,
-                                        count: newCount,
-                                      ));
+                                  if (onCountChanged != null) {
+                                    onCountChanged!(id, newCount);
+                                  } else {
+                                    context.read<CartScreenBloc>().add(
+                                          UpdateProductCountEvent(
+                                            productId: id,
+                                            count: newCount,
+                                          ),
+                                        );
+                                  }
                                 },
                               ),
                             ),

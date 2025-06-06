@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
+import 'package:nevis/constants/ui_constants.dart';
 
 extension StringExtensions on String? {
   String orDash() {
@@ -158,5 +161,38 @@ extension TypeOfSpecialOfferExtension on TypeOfSpecialOffer {
       }
     }
     return null;
+  }
+}
+
+extension AvailabilityCartStatusExtension on AvailabilityCartStatus {
+  static const Map<AvailabilityCartStatus, int> _ids = {
+    AvailabilityCartStatus.availableInHour: 1,
+    AvailabilityCartStatus.preorder: 2,
+    AvailabilityCartStatus.partiallyAvailable: 3,
+    AvailabilityCartStatus.notAvailable: 4,
+  };
+
+  static final Map<AvailabilityCartStatus, Color> _colors = {
+    AvailabilityCartStatus.availableInHour: UiConstants.greenColor,
+    AvailabilityCartStatus.preorder: UiConstants.blueColor.withOpacity(0.8),
+    AvailabilityCartStatus.partiallyAvailable: UiConstants.orangeColor,
+    AvailabilityCartStatus.notAvailable: UiConstants.black3Color,
+  };
+
+  int get id => _ids[this]!;
+
+  static AvailabilityCartStatus? fromId(int? id) {
+    if (id == null) return null;
+    return _ids.entries
+        .firstWhere(
+          (entry) => entry.value == id,
+          orElse: () => const MapEntry(AvailabilityCartStatus.notAvailable, 4),
+        )
+        .key;
+  }
+
+  static Color? fromStatus(AvailabilityCartStatus? status) {
+    if (status == null) return null;
+    return _colors[status];
   }
 }

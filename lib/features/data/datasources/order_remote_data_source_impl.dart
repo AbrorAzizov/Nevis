@@ -67,7 +67,6 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
         exceptions: {
           500: ServerException(),
         },
-        callPathNameForLog: '${runtimeType.toString()}.getAvialablePharmacies',
       );
 
       List<dynamic> dataList = data['STORES'];

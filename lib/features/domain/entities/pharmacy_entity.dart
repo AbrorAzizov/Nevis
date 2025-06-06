@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:nevis/constants/enums.dart';
 
 class PharmacyEntity extends Equatable {
   final int? pharmacyId;
@@ -24,10 +25,12 @@ class PharmacyEntity extends Equatable {
   final String? ufRegion;
   final Map<String, dynamic>? sum;
   final List<String>? raspisanie;
-  final String? cartAvailable;
+  final String? cartAvailableString;
+  final AvailabilityCartStatus? cartStatus;
 
   const PharmacyEntity({
-    this.cartAvailable,
+    this.cartStatus,
+    this.cartAvailableString,
     this.pharmacyId,
     this.title,
     this.alias,

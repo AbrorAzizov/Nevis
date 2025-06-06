@@ -59,9 +59,10 @@ class ApiClient {
                 ? responseBody['reasons'] as String
                 : 'Неизвестная ошибка'))
         : 'Неизвестная ошибка';
-
-    log('Response (${response.request?.url}): ${response.statusCode} $responseBody',
-        name: callPathNameForLog ?? 'NoCallPathNameForLog');
+    if (callPathNameForLog != null) {
+      log('Response (${response.request?.url}): ${response.statusCode} $responseBody',
+          name: callPathNameForLog);
+    }
 
     if (exceptions != null && exceptions.containsKey(response.statusCode)) {
       throw exceptions[response.statusCode]?.copyWith(message: message) ??

@@ -42,6 +42,7 @@ class UiConstants {
   static const Color blue5Color = Color(0xFF35B6FF);
   static const Color blue6Color = Color(0xFF72CCFF);
   static const Color blue7Color = Color(0xFF00A0E3);
+  static const Color orangeColor = Color(0xFFFF9900);
 
   static TextStyle textStyle1 = TextStyle(
     fontSize: 28.sp,

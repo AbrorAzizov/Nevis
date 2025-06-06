@@ -8,6 +8,8 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/order_pickup_cart_screen/order_pickup_cart_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/order_pickup_screen/order_pickup_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/route_observer/route_observer_bloc.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
@@ -51,6 +53,12 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocProvider(
           create: (context) => sl<SearchScreenBloc>(),
         ),
+        BlocProvider(
+            create: (context) => OrderPickupScreenBloc(
+                getFavoritePharmaciesUC: sl(), getPharmaciesByCartUC: sl())),
+        BlocProvider(
+            create: (context) =>
+                OrderPickupCartScreenBloc(getOrderCartProductsUC: sl())),
         BlocProvider(
           create: (context) => RouteObserverBloc(),
         ),

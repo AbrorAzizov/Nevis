@@ -3,6 +3,7 @@ import 'package:nevis/constants/enums.dart';
 
 class ProductEntity extends Equatable {
   final int? productId;
+  final int? maxCount;
   final int? bonuses;
   final String? mnn;
   final String? mnnLat;
@@ -37,6 +38,7 @@ class ProductEntity extends Equatable {
   final bool? isFav;
 
   const ProductEntity({
+    this.maxCount,
     this.productId,
     this.availableForDelivery,
     this.bonuses,
@@ -106,5 +108,6 @@ class ProductEntity extends Equatable {
         images,
         bonuses,
         isFav,
+        maxCount,
       ];
 }

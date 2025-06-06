@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
@@ -18,15 +19,14 @@ import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
 
 class PharmacyMapWidget extends StatelessWidget {
   final List<MapMarkerModel> points;
-  final bool fromProduct;
+  final PharmacyMapType mapType;
   final double? height;
 
-  const PharmacyMapWidget({
-    super.key,
-    required this.points,
-    this.height,
-    this.fromProduct = false,
-  });
+  const PharmacyMapWidget(
+      {super.key,
+      required this.points,
+      this.height,
+      this.mapType = PharmacyMapType.defaultMap});
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,9 @@ class PharmacyMapWidget extends StatelessWidget {
       child: BlocBuilder<PharmacyMapBloc, PharmacyMapState>(
         builder: (context, state) {
           final bloc = context.read<PharmacyMapBloc>();
-          final valueBuyBloc =
-              fromProduct ? context.read<ValueBuyProductScreenBloc>() : null;
+          final valueBuyBloc = mapType == PharmacyMapType.valueBuyMap
+              ? context.read<ValueBuyProductScreenBloc>()
+              : null;
           return ClipRRect(
             borderRadius: BorderRadius.circular(16.r),
             child: Container(
@@ -46,8 +47,8 @@ class PharmacyMapWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.r),
               ),
               padding: getMarginOrPadding(
-                left: fromProduct ? 0 : 20,
-                right: fromProduct ? 0 : 20,
+                left: mapType == PharmacyMapType.valueBuyMap ? 0 : 20,
+                right: mapType == PharmacyMapType.valueBuyMap ? 0 : 20,
               ),
               child: Stack(
                 alignment: Alignment.bottomCenter,
@@ -109,8 +110,9 @@ class PharmacyMapWidget extends StatelessWidget {
                                 final pharmacy = ProductPharmacyModel.fromJson(
                                     selectedPoint.data!);
 
-                                if (!fromProduct) {
+                                if (mapType != PharmacyMapType.valueBuyMap) {
                                   return PharmacyInfoCard(
+                                    pharmacyMapType: mapType,
                                     pharmacy: PharmacyModel.fromJson(
                                         selectedPoint.data!),
                                   );

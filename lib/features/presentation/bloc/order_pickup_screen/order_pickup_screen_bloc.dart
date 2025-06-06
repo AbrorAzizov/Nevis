@@ -33,7 +33,6 @@ class OrderPickupScreenBloc
     Emitter<OrderPickupScreenState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-
     final products = sl<CartScreenBloc>().state.cartProducts;
     final List<CartParams> cartParams = products
         .map((e) => CartParams(
@@ -51,8 +50,14 @@ class OrderPickupScreenBloc
         isLoading: false,
       )),
       (pharmacies) {
+        print(pharmacies
+            .where((e) => e.storeXmlId != null)
+            .toList()
+            .first
+            .storeXmlId);
+        pharmacies =
+            pharmacies.where((pharmacy) => pharmacy.address != null).toList();
         _allPharmacies = pharmacies;
-
         points = pharmacies
             .map((pharmacy) {
               final coordinates = pharmacy.coordinates
@@ -100,11 +105,10 @@ class OrderPickupScreenBloc
       emit(state.copyWith(pharmacies: _allPharmacies));
     } else {
       final results = _allPharmacies
-          .where((item) => item.alias.toString().contains(query))
+          .where((item) => item.address.toString().contains(query))
           .toList();
       emit(state.copyWith(
         pharmacies: results,
-        errorMessage: results.isEmpty ? 'Нет совпадений' : null,
       ));
     }
   }

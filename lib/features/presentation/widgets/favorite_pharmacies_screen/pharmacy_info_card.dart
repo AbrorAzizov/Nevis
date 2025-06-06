@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
+import 'package:nevis/features/presentation/pages/order_pickup_cart/order_pikcup_cart_screen.dart';
+import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
+import 'package:nevis/features/presentation/widgets/cart_status_widget.dart';
 import 'package:nevis/features/presentation/widgets/favorite_button.dart';
 
 class PharmacyInfoCard extends StatelessWidget {
   final PharmacyEntity pharmacy;
-  const PharmacyInfoCard({super.key, required this.pharmacy});
+  final PharmacyMapType pharmacyMapType;
+  const PharmacyInfoCard(
+      {super.key,
+      required this.pharmacy,
+      this.pharmacyMapType = PharmacyMapType.defaultMap});
 
   @override
   Widget build(BuildContext context) {
-    print(pharmacy.cartAvailable);
     return Container(
       padding: getMarginOrPadding(all: 16),
       decoration: BoxDecoration(
@@ -25,10 +33,21 @@ class PharmacyInfoCard extends StatelessWidget {
         children: [
           Expanded(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 12.h,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(pharmacy.cartAvailable ?? ''),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CartStatusLabel(
+                      pharmacy: pharmacy,
+                    ),
+                    FavoriteButton(
+                      onPressed: () {},
+                    )
+                  ],
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -153,16 +172,27 @@ class PharmacyInfoCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                    )
+                    ),
                   ],
-                )
+                ),
+                if (pharmacyMapType == PharmacyMapType.orderPickupMap)
+                  AppButtonWidget(
+                    text: 'Заберу отсюда',
+                    onTap: () {
+                      Navigator.of(context).push(
+                        Routes.createRoute(
+                          OrderPickupCartScreen(),
+                          settings: RouteSettings(
+                            arguments: {'pharmacy': pharmacy},
+                            name: Routes.orderPickupCartScreen,
+                          ),
+                        ),
+                      );
+                    },
+                  )
               ],
             ),
           ),
-          SizedBox(width: 4.w),
-          FavoriteButton(
-            onPressed: () {},
-          )
         ],
       ),
     );

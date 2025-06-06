@@ -37,30 +37,37 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
     String selectedMarkerId = event.markerId ?? state.selectedMarkerId!;
 
     emit(state.copyWith(
-        selectedMarkerId: selectedMarkerId,
-        showStackWindow: state.selectedMarkerId != selectedMarkerId
-            ? true
-            : !state.showStackWindow));
+      selectedMarkerId: selectedMarkerId,
+      showStackWindow: state.selectedMarkerId != selectedMarkerId
+          ? true
+          : !state.showStackWindow,
+    ));
 
     CameraPosition? position = await state.mapController?.getCameraPosition();
-    final targetPoint = state.showStackWindow
+
+    final originalTargetPoint = state.showStackWindow
         ? state.points
             .firstWhereOrNull((e) => e.id.toString() == state.selectedMarkerId)
             ?.point
         : null;
 
-    if (targetPoint != null && position != null) {
+    if (originalTargetPoint != null && position != null) {
+      final shiftedTargetPoint = Point(
+        latitude: originalTargetPoint.latitude - 0.002,
+        longitude: originalTargetPoint.longitude,
+      );
+
       state.mapController?.moveCamera(
-          CameraUpdate.newCameraPosition(
-            position.copyWith(target: targetPoint),
-          ),
-          animation: MapAnimation(duration: 0.6));
+        CameraUpdate.newCameraPosition(
+          position.copyWith(target: shiftedTargetPoint),
+        ),
+        animation: MapAnimation(duration: 0.6),
+      );
     }
   }
 
   void _onUpdateMap(
       UpdatePharmacyMapEvent event, Emitter<PharmacyMapState> emit) async {
-    // Создание списка маркеров
     List<PlacemarkMapObject> placemarks = [];
 
     for (MapMarkerModel point in state.points) {
@@ -84,15 +91,13 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
 
       placemarks.add(placemark);
     }
-    // Создание кластеризованной коллекции маркеров
+
     final clusterizedCollection = ClusterizedPlacemarkCollection(
       mapId: MapObjectId('clusterized_collection'),
       placemarks: placemarks,
-      radius: 60, // Радиус объединения маркеров в кластер
-      minZoom: 15, // Минимальный зум, при котором начинается кластеризация
-      onClusterAdded:
-          (ClusterizedPlacemarkCollection self, Cluster cluster) async {
-        // Создание иконки для кластера с указанием количества маркеров
+      radius: 60,
+      minZoom: 15,
+      onClusterAdded: (self, cluster) async {
         final clusterIcon = await Utils.createBitmapIcon(count: cluster.size);
         return cluster.copyWith(
           appearance: cluster.appearance.copyWith(
@@ -108,8 +113,8 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
       },
     );
 
-    // Добавление кластеризованной коллекции на карту
-    emit(state.copyWith(markers: [...state.markers, clusterizedCollection]));
+    // ❗ Перезаписываем markers
+    emit(state.copyWith(markers: [clusterizedCollection]));
   }
 
   Future _onZoomIn(ZoomInEvent event, Emitter<PharmacyMapState> emit) async {

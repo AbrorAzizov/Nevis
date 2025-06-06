@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 
 class PharmacyModel extends PharmacyEntity {
@@ -27,7 +28,8 @@ class PharmacyModel extends PharmacyEntity {
     super.ufRegion,
     super.sum,
     super.raspisanie,
-    super.cartAvailable,
+    super.cartAvailableString,
+    super.cartStatus,
   });
 
   factory PharmacyModel.fromRawJson(String str) =>
@@ -44,7 +46,6 @@ class PharmacyModel extends PharmacyEntity {
       return null;
     }
 
-    print(json['AMOUNTS']?['TEXT']);
     return PharmacyModel(
       pharmacyId: int.tryParse(json["storeId"]?.toString() ?? ''),
       title: json["TITLE"],
@@ -76,7 +77,10 @@ class PharmacyModel extends PharmacyEntity {
       raspisanie: (json["raspisanie"] as List<dynamic>?)
           ?.map((e) => e.toString())
           .toList(),
-      cartAvailable: json['AMOUNTS']?['TEXT'] ?? json['cartAvailable'],
+      cartAvailableString: json['AMOUNTS']?['TEXT'] ?? json['cartAvailable'],
+      cartStatus: AvailabilityCartStatusExtension.fromId(
+              int.tryParse(json['AMOUNTS']?['ID']?.toString() ?? '')) ??
+          AvailabilityCartStatusExtension.fromId(json['cartStatus']),
     );
   }
 
@@ -104,6 +108,7 @@ class PharmacyModel extends PharmacyEntity {
         "UF_REGION": ufRegion,
         "sum": sum,
         "raspisanie": raspisanie,
-        "cartAvailable": cartAvailable,
+        "cartAvailable": cartAvailableString,
+        "cartStatus": cartStatus?.id
       };
 }

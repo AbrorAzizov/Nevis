@@ -59,3 +59,21 @@ enum BonusCardType { physical, virtual }
 enum TypeOfSpecialOffer { onePlusOne, onePlusTwo, onePlusThree }
 
 enum LoginServiceType { yandex, vk }
+
+enum PharmacyCardInfoType { yandex, vk }
+
+enum AvailabilityCartStatus {
+  availableInHour,
+  preorder,
+  partiallyAvailable,
+  notAvailable,
+}
+
+enum PharmacyMapType {
+  valueBuyMap,
+  orderPickupMap,
+  favrotiePharmaciesMap,
+  defaultMap,
+}
+
+enum CartType { defaultCart, pickupCart }

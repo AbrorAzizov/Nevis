@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
@@ -190,7 +191,7 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                                     valueBuyProductState.points.isNotEmpty)
                                   PharmacyMapWidget(
                                     height: 618.h,
-                                    fromProduct: true,
+                                    mapType: PharmacyMapType.valueBuyMap,
                                     points: valueBuyProductState.points,
                                   ),
                               ],

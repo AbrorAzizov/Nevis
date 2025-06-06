@@ -10,12 +10,14 @@ class ProductsGridWidget extends StatelessWidget {
   final List<ProductEntity> products;
   final Set<int> selectedProductIds;
   final bool showCheckbox;
+  final void Function(int productId, int newCount)? onCountChanged;
 
   const ProductsGridWidget({
     super.key,
     required this.products,
     required this.selectedProductIds,
     required this.showCheckbox,
+    this.onCountChanged,
   });
 
   @override

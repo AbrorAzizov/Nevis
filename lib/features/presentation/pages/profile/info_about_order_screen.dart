@@ -10,7 +10,6 @@ import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/info_about_order_screen/cost_courier_delivery_block.dart';
 import 'package:nevis/features/presentation/widgets/info_about_order_screen/courier_delivery_terms_block.dart';
 import 'package:nevis/features/presentation/widgets/info_about_order_screen/courier_delivery_time_block.dart';
-import 'package:nevis/features/presentation/widgets/info_about_order_screen/courier_delivery_zones_block.dart';
 import 'package:nevis/features/presentation/widgets/info_about_order_screen/orders_with_delivery_accepted_block.dart';
 import 'package:nevis/features/presentation/widgets/info_about_order_screen/types_delivery_block.dart';
 import 'package:nevis/locator_service.dart';
@@ -71,7 +70,6 @@ class _InfoAboutOrderScreenState extends State<InfoAboutOrderScreen> {
                                   SizedBox(height: 16.h),
                                   CourierDeliveryTermsBlock(),
                                   SizedBox(height: 16.h),
-                                  CourierDeliveryZonesBlock(),
                                 ],
                               ),
                             ),
