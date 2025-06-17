@@ -44,7 +44,8 @@ class _CheckboxesBlockState extends State<CheckboxesBlock> {
             ChangeNotificationCheckboxEvent(isChecked ?? false),
           ),
         ),
-        SizedBox(height: 16.h),
+        /*SizedBox(height: 16.h),
+        // TODO: Второй релиз
         CustomCheckbox(
           //isEnabled: !personalDataBloc.state.isCheckedPolicyCheckbox,
           title: RichText(
@@ -66,7 +67,7 @@ class _CheckboxesBlockState extends State<CheckboxesBlock> {
           onChanged: (isChecked) => personalDataBloc.add(
             ChangePolicyCheckboxEvent(isChecked ?? false),
           ),
-        )
+        )*/
       ],
     );
   }

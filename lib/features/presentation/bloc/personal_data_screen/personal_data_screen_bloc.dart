@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/features/data/models/profile_model.dart';
@@ -23,13 +24,8 @@ class PersonalDataScreenBloc
 
   TextEditingController fNameController = TextEditingController(text: '');
   TextEditingController sNameController = TextEditingController(text: '');
-  TextEditingController birthdayController = TextEditingController();
   TextEditingController phoneController = TextEditingController(text: '');
   TextEditingController emailController = TextEditingController(text: '');
-
-  TextEditingController oldPasswordController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController newPasswordConfirmController = TextEditingController();
 
   PersonalDataScreenBloc(
       {required this.getMeUC,
@@ -38,89 +34,29 @@ class PersonalDataScreenBloc
       BuildContext? context})
       : super(PersonalDataScreenLoadingState()) {
     screenContext = context;
-    oldPasswordController.addListener(() {
-      add(PasswordChangedEvent());
-    });
-
-    newPasswordController.addListener(() {
-      add(PasswordChangedEvent());
-    });
-
-    newPasswordConfirmController.addListener(() {
-      add(PasswordChangedEvent());
-    });
-
-    on<PasswordChangedEvent>((event, emit) {
-      if (oldPasswordController.text.isEmpty &&
-          newPasswordController.text.isEmpty &&
-          newPasswordConfirmController.text.isEmpty) {
-        emit(
-          state.copyWith(
-              isButtonActive: true, passwordErrorText: null, showError: false),
-        );
-      } else if (oldPasswordController.text.isEmpty &&
-              [newPasswordController.text, newPasswordConfirmController.text]
-                  .any((e) => e.isNotEmpty) ||
-          oldPasswordController.text.isNotEmpty &&
-              [newPasswordController.text, newPasswordConfirmController.text]
-                  .any((e) => e.isEmpty)) {
-        emit(
-          state.copyWith(
-              isButtonActive: false,
-              passwordErrorText: 'Поле должно быть заполнено',
-              showError: true),
-        );
-      } else if (newPasswordController.text !=
-          newPasswordConfirmController.text) {
-        emit(
-          state.copyWith(
-              isButtonActive: false,
-              passwordErrorText: 'Пароли не совпадают',
-              showError: true),
-        );
-      } else {
-        emit(
-          state.copyWith(
-              isButtonActive: true, passwordErrorText: null, showError: false),
-        );
-      }
-    });
 
     on<ChangeNotificationCheckboxEvent>(
       (event, emit) {
         emit(
           state.copyWith(
-            isCheckedNotificationCheckbox: event.isCheckedNotificationCheckbox,
-            isCheckedPolicyCheckbox: event.isCheckedNotificationCheckbox,
-          ),
+              isCheckedNotificationCheckbox:
+                  event.isCheckedNotificationCheckbox),
         );
       },
     );
 
-    on<LoadProfileEvent>((event, emit) async => getProfile());
-
-    on<ChangePolicyCheckboxEvent>(
+    on<ChangeBirthdayEvent>(
       (event, emit) {
         emit(
-          state.copyWith(
-            isCheckedPolicyCheckbox: event.isCheckedPolicyCheckbox,
-            isCheckedNotificationCheckbox: event.isCheckedPolicyCheckbox,
-          ),
+          state.copyWith(birthday: event.date),
         );
       },
     );
+
     on<ChangeGenderEvent>(
       (event, emit) {
         emit(
           state.copyWith(gender: event.gender),
-        );
-      },
-    );
-
-    on<ConfirmPhoneChangeEvent>(
-      (event, emit) {
-        emit(
-          state.copyWith(confirmPhoneCode: event.confirmPhoneCode),
         );
       },
     );
@@ -133,11 +69,12 @@ class PersonalDataScreenBloc
           email: emailController.text,
           gender: GenderType.values.firstWhere((e) => e == state.gender).name,
           subscribeToMarketing: state.isCheckedNotificationCheckbox,
+          dateOfBirth: DateFormat('dd.MM.yyyy').format(state.birthday!),
         ));
         failureOrLoads.fold((_) => emit(state.copyWith(showError: true)),
             (_) async {
           emit(state.copyWith(isLoading: true));
-          await getProfile();
+          add(LoadDataEvent());
         });
       },
     );
@@ -158,119 +95,49 @@ class PersonalDataScreenBloc
         );
       },
     );
-  }
 
-  Future getProfile() async {
-    final failureOrLoads = await getMeUC();
+    on<LoadDataEvent>((event, emit) async {
+      final failureOrLoads = await getMeUC();
 
-    return failureOrLoads.fold(
-      (_) => Utils.showCustomDialog(
-        screenContext: screenContext!,
-        text: 'Неизвестная ошибка',
-        action: (context) {
-          Navigator.of(context).pop();
-          Navigator.of(screenContext!).pop();
+      return failureOrLoads.fold(
+        (_) => Utils.showCustomDialog(
+          screenContext: screenContext!,
+          text: 'Неизвестная ошибка',
+          action: (context) {
+            Navigator.of(context).pop();
+            Navigator.of(screenContext!).pop();
+          },
+        ),
+        (profile) {
+          fNameController.text = profile.firstName ?? '';
+          sNameController.text = profile.lastName ?? '';
+
+          phoneController.text = Utils.formatPhoneNumber(profile.phone,
+              format: PhoneNumberFormat.client);
+          emailController.text = profile.email ?? '';
+          emit(
+            PersonalDataScreenState(
+                isLoading: false,
+                gender: GenderType.values
+                        .firstWhereOrNull((e) => e.name == profile.gender) ??
+                    GenderType.values.first,
+                birthday: profile.dateOfBirth != null
+                    ? Utils.parseCustomDate(profile.dateOfBirth!)
+                    : null,
+                isCheckedNotificationCheckbox:
+                    profile.subscribeToMarketing ?? false),
+          );
         },
-      ),
-      (profile) {
-        fNameController.text = profile.firstName ?? '';
-        sNameController.text = profile.lastName ?? '';
-        birthdayController.text = profile.dateOfBirth != null
-            ? profile.dateOfBirth!.replaceAll('.', ' / ')
-            : '';
-        phoneController.text =
-            Utils.formatPhoneNumber(profile.phone, toServerFormat: false);
-        emailController.text = profile.email ?? '';
-        emit(
-          PersonalDataScreenState(
-            isLoading: false,
-            gender: GenderType.values
-                    .firstWhereOrNull((e) => e.name == profile.gender) ??
-                GenderType.values.first,
-            installedPhone:
-                Utils.formatPhoneNumber(profile.phone, toServerFormat: false),
-          ),
-        );
-      },
-    );
+      );
+    });
   }
-
-  // Future<String?> updateProfile(
-  //     {bool requestedCode = false, String? confirmedCode}) async {
-  //   final failureOrLoads = await updateMeUC(
-  //     ProfileModel(
-  //         firstName: fNameController.text,
-  //         lastName: sNameController.text,
-  //         phone: Utils.formatPhoneNumber(phoneController.text),
-  //         gender: GenderType.values.firstWhere((e) => e == state.gender).name,
-  //         dateOfBirth: birthdayController.text.replaceAll(' / ', '.'),
-  //         email: emailController.text,
-  //         acceptPolicy: state.isCheckedPolicyCheckbox ? "1" : "0",
-  //         statusNotifications: state.isCheckedNotificationCheckbox ? "1" : "0",
-  //         code: confirmedCode,
-  //         oldPassword: oldPasswordController.text,
-  //         newPassword: newPasswordController.text,
-  //         newPasswordConfirm: newPasswordConfirmController.text),
-  //   );
-
-  //   return failureOrLoads.fold(
-  //     (failure) {
-  //       String error = switch (failure) {
-  //         SendingCodeTooOftenFailure _ =>
-  //           'Слишком частая отправка кода или превышено число попыток за день',
-  //         AcceptPersonalDataFailure _ =>
-  //           'Примите условия политики обработки персональных данных',
-  //         _ => 'Ошибка обновления данных'
-  //       };
-  //       if (!requestedCode) {
-  //         Utils.showCustomDialog(
-  //           screenContext: screenContext!,
-  //           text: error,
-  //           action: (context) {
-  //             Navigator.of(context).pop();
-  //           },
-  //         );
-  //       }
-  //       return error;
-  //     },
-  //     (code) async {
-  //       if (!requestedCode) {
-  //         if (confirmedCode != null) {
-  //           Navigator.of(screenContext!).pop();
-  //         }
-  //         await getProfile();
-  //         Utils.showCustomDialog(
-  //           screenContext: screenContext!,
-  //           title: 'Уведомление',
-  //           text: 'Данные обновлены',
-  //           action: (context) {
-  //             Navigator.of(context).pop();
-  //           },
-  //         );
-  //       }
-
-  //       return code;
-  //     },
-  //   );
-  // }
 
   @override
   Future<void> close() {
     fNameController.dispose();
     sNameController.dispose();
-    birthdayController.dispose();
     phoneController.dispose();
     emailController.dispose();
-    oldPasswordController.dispose();
-    newPasswordController.dispose();
-    newPasswordConfirmController.dispose();
-
-    oldPasswordController.removeListener(() {
-      add(PasswordChangedEvent());
-    });
-    newPasswordController.removeListener(() {
-      add(PasswordChangedEvent());
-    });
 
     return super.close();
   }

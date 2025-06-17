@@ -14,13 +14,14 @@ class OrdersScreenBloc extends Bloc<OrdersScreenEvent, OrdersScreenState> {
 
   OrdersScreenBloc({required this.getOrderHistoryUC})
       : super(OrdersScreenIsLoading()) {
-    on<LoadDataEvent>(_onLoadData);
+    on<LoadOrdersEvent>(_onLoadData);
     on<SearchOrderEvent>(_onSearchOrder);
     on<ShowAllLoadedOrdersEvent>(_onShowAllLoadedOrders);
     on<ChangeSelectorIndexEvent>(_onChangeSelectorIndexEvent);
   }
 
-  void _onLoadData(LoadDataEvent event, Emitter<OrdersScreenState> emit) async {
+  void _onLoadData(
+      LoadOrdersEvent event, Emitter<OrdersScreenState> emit) async {
     emit(OrdersScreenIsLoading());
     final failureOrLoads = await getOrderHistoryUC();
     failureOrLoads.fold(

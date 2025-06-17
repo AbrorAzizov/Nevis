@@ -10,130 +10,143 @@ abstract class ApiException implements Exception {
 }
 
 class ServerException extends ApiException {
-  ServerException([message = 'Ошибка сервера']);
+  ServerException([String? message])
+      : super(message: message ?? 'Ошибка сервера');
 
   @override
   ServerException copyWith({String? message}) {
-    return ServerException(message ?? this.message);
+    return ServerException(message);
   }
 }
 
 class CacheException extends ApiException {
-  CacheException([message = 'Ошибка кеша']);
+  CacheException([String? message]) : super(message: message ?? 'Ошибка кеша');
 
   @override
   CacheException copyWith({String? message}) {
-    return CacheException(message ?? this.message);
+    return CacheException(message);
   }
 }
 
 class SendingCodeTooOftenException extends ApiException {
-  SendingCodeTooOftenException([message = 'Слишком частая отправка кода']);
+  SendingCodeTooOftenException([String? message])
+      : super(message: message ?? 'Слишком частая отправка кода');
 
   @override
   SendingCodeTooOftenException copyWith({String? message}) {
-    return SendingCodeTooOftenException(message ?? this.message);
+    return SendingCodeTooOftenException(message);
   }
 }
 
 class ConfirmationCodeWrongException extends ApiException {
-  ConfirmationCodeWrongException([message = 'Неверный код подтверждения']);
+  ConfirmationCodeWrongException([String? message])
+      : super(message: message ?? 'Неверный код подтверждения');
 
   @override
   ConfirmationCodeWrongException copyWith({String? message}) {
-    return ConfirmationCodeWrongException(message ?? this.message);
+    return ConfirmationCodeWrongException(message);
   }
 }
 
 class PhoneDontFoundException extends ApiException {
-  PhoneDontFoundException([message = 'Телефон не найден']);
+  PhoneDontFoundException([String? message])
+      : super(message: message ?? 'Телефон не найден');
 
   @override
   PhoneDontFoundException copyWith({String? message}) {
-    return PhoneDontFoundException(message ?? this.message);
+    return PhoneDontFoundException(message);
   }
 }
 
 class PhoneAlreadyTakenException extends ApiException {
-  PhoneAlreadyTakenException([message = 'Телефон уже занят']);
+  PhoneAlreadyTakenException([String? message])
+      : super(message: message ?? 'Телефон уже занят');
 
   @override
   PhoneAlreadyTakenException copyWith({String? message}) {
-    return PhoneAlreadyTakenException(message ?? this.message);
+    return PhoneAlreadyTakenException(message);
   }
 }
 
 class UncorrectedPasswordException extends ApiException {
-  UncorrectedPasswordException([message = 'Некорректный пароль']);
+  UncorrectedPasswordException([String? message])
+      : super(message: message ?? 'Некорректный пароль');
 
   @override
   UncorrectedPasswordException copyWith({String? message}) {
-    return UncorrectedPasswordException(message ?? this.message);
+    return UncorrectedPasswordException(message);
   }
 }
 
 class PasswordMatchesPreviousOneException extends ApiException {
-  PasswordMatchesPreviousOneException(
-      [message = 'Пароль совпадает с предыдущим']);
+  PasswordMatchesPreviousOneException([String? message])
+      : super(message: message ?? 'Пароль совпадает с предыдущим');
 
   @override
   PasswordMatchesPreviousOneException copyWith({String? message}) {
-    return PasswordMatchesPreviousOneException(message ?? this.message);
+    return PasswordMatchesPreviousOneException(message);
   }
 }
 
 class SessionExpiredException extends ApiException {
-  SessionExpiredException([message = 'Сессия истекла']);
+  SessionExpiredException([String? message])
+      : super(message: message ?? 'Сессия истекла');
 
   @override
   SessionExpiredException copyWith({String? message}) {
-    return SessionExpiredException(message ?? this.message);
+    return SessionExpiredException(message);
   }
 }
 
 class InvalidFormatException extends ApiException {
-  InvalidFormatException([message = 'Неверный формат']);
+  InvalidFormatException([String? message])
+      : super(message: message ?? 'Неверный формат');
 
   @override
   InvalidFormatException copyWith({String? message}) {
-    return InvalidFormatException(message ?? this.message);
+    return InvalidFormatException(message);
   }
 }
 
 class AccountDontExistsException extends ApiException {
-  AccountDontExistsException([message = 'Аккаунт не существует']);
+  AccountDontExistsException([String? message])
+      : super(message: message ?? 'Аккаунт не существует');
 
   @override
   AccountDontExistsException copyWith({String? message}) {
-    return AccountDontExistsException(message ?? this.message);
+    return AccountDontExistsException(message);
   }
 }
 
 class AcceptPersonalDataException extends ApiException {
-  AcceptPersonalDataException(
-      [message = 'Необходимо принять соглашение на обработку данных']);
+  AcceptPersonalDataException([String? message])
+      : super(
+            message:
+                message ?? 'Необходимо принять соглашение на обработку данных');
 
   @override
   AcceptPersonalDataException copyWith({String? message}) {
-    return AcceptPersonalDataException(message ?? this.message);
+    return AcceptPersonalDataException(message);
   }
 }
 
 class TooManyRequestsException extends ApiException {
-  TooManyRequestsException([message = 'Слишком много запросов']);
+  TooManyRequestsException([String? message])
+      : super(message: message ?? 'Слишком много запросов');
 
   @override
   TooManyRequestsException copyWith({String? message}) {
-    return TooManyRequestsException(message ?? this.message);
+    return TooManyRequestsException(message);
   }
 }
 
 class EmptyOrdersException extends ApiException {
-  EmptyOrdersException([String? message]) : super(message: message);
+  EmptyOrdersException([String? message])
+      : super(message: message ?? 'Список заказов пуст');
 
   @override
-  ApiException copyWith({String? message}) {
-    return EmptyOrdersException(message ?? this.message);
+  EmptyOrdersException copyWith({String? message}) {
+    return EmptyOrdersException(message);
   }
 }
 
@@ -143,7 +156,7 @@ class UnauthorizedException extends ApiException {
 
   @override
   UnauthorizedException copyWith({String? message}) {
-    return UnauthorizedException(message ?? this.message);
+    return UnauthorizedException(message);
   }
 }
 
@@ -153,7 +166,7 @@ class NoFavoritePharmaciesException extends ApiException {
 
   @override
   NoFavoritePharmaciesException copyWith({String? message}) {
-    return NoFavoritePharmaciesException(message ?? this.message);
+    return NoFavoritePharmaciesException(message);
   }
 }
 
@@ -163,6 +176,6 @@ class MaxProductQuantityExceededException extends ApiException {
 
   @override
   MaxProductQuantityExceededException copyWith({String? message}) {
-    return MaxProductQuantityExceededException(message ?? this.message);
+    return MaxProductQuantityExceededException(message);
   }
 }

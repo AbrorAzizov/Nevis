@@ -34,24 +34,22 @@ class ProductModel extends ProductEntity {
     super.specialOffer,
     super.images,
     super.bonuses,
+    super.cashbackPercent,
     super.availableForDelivery,
-    super.maxCount,
-    super.offerId,
   });
 
+  @override
   factory ProductModel.fromJson(Map<String, dynamic> data) {
-    final json = data["product_info"] ?? data;
-
-    final dynamic idField = json['id'];
-    final dynamic productIdField =
-        json['productId'] ?? json['product_id'] ?? json['PRODUCT_ID'];
-
-    final int? parsedProductId =
-        _parseToInt(productIdField) ?? (idField is int ? idField : null);
-
+    Map<String, dynamic> json = data["product_info"] ?? data;
     return ProductModel(
-      offerId: idField is String ? idField : null,
-      productId: parsedProductId ?? 0,
+      bonuses:
+          json['bonuses'] ?? json['bonuses_earned'] ?? json['CASHBACK_BONUSES'],
+      cashbackPercent: json['CASHBACK_PERCENT'],
+      images: (json["images"] as List<dynamic>?)
+          ?.map((item) => item.toString())
+          .toList(),
+      productId:
+          json["id"] ?? json["product_id"] ?? json["product_id"].toString(),
       mnn: json["mnn"],
       mnnLat: json["mnn_lat"],
       name: json["name"],
@@ -60,13 +58,15 @@ class ProductModel extends ProductEntity {
       dose: json["dose"],
       form: json["form"],
       brand: json["manufacturer"],
-      image: json["image_url"] ?? json["picture"] ?? json['image'],
+      image: json["image_url"],
       recipe: json["recipe"],
       country: json["country"],
       delivery: json["delivery"],
-      price: _parseToInt(json["price"]) ?? _parseToInt(json["PRICE"]) ?? 0,
-      oldPrice: _parseToInt(json["price_old"]),
-      discount: _parseToInt(json["product_price_from_percent"]),
+      price: (double.tryParse(json["price"]?.toString() ?? '')?.toInt()) ?? 0,
+      oldPrice: json["price_old"],
+      discount: int.tryParse(
+        (json["product_price_from_percent"] ?? ''),
+      ),
       parent: json["parent"],
       termin: json["termin"],
       temperature: json["temperature"],
@@ -77,20 +77,13 @@ class ProductModel extends ProductEntity {
       productTrademark: json["product_trademark"],
       productDateRegister: json["product_date_register"],
       productTimeRegister: json["product_time_register"],
-      count: _parseToInt(json["count"]) ??
-          _parseToInt(json["quantity"]) ??
-          _parseToInt(json["QUANTITY"]) ??
-          _parseToInt(json["amount"]),
-      valueBuy: _parseToInt(json["value_buy_price"]),
+      count: json["count"] ?? json["quantity"],
+      valueBuy: int.tryParse(json["value_buy_price"] ?? ''),
       availableForDelivery: json['is_available_for_delivery'],
       specialOffer:
           TypeOfSpecialOfferExtension.fromTitle(json["special_offer"]),
-      bonuses: _parseToInt(json['bonuses'] ?? json['bonuses_earned']),
-      images: (json["images"] as List?)?.map((e) => e.toString()).toList(),
-      maxCount: _parseToInt(json['maxAmount']),
     );
   }
-
   Map<String, dynamic> toJson() {
     return {
       "product_info": {
@@ -104,7 +97,6 @@ class ProductModel extends ProductEntity {
         "form": form,
         "manufacturer": brand,
         "image_url": image,
-        "picture": image,
         "recipe": recipe,
         "country": country,
         "delivery": delivery,
@@ -126,23 +118,9 @@ class ProductModel extends ProductEntity {
         "is_available_for_delivery": availableForDelivery,
         "special_offer": "1+1",
         "bonuses": bonuses,
+        "CASHBACK_PERCENT": cashbackPercent,
         "images": images,
       },
     };
-  }
-
-  static int? _parseToInt(dynamic value) {
-    if (value == null) return null;
-    if (value is int) return value;
-    if (value is double) return value.round();
-    if (value is String) {
-      if (value.contains(',') || value.contains('.')) {
-        final parsed = double.tryParse(value.replaceAll(',', '.'));
-        return parsed?.round();
-      } else {
-        return int.tryParse(value);
-      }
-    }
-    return null;
   }
 }

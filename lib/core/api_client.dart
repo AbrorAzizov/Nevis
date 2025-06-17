@@ -53,20 +53,24 @@ class ApiClient {
   ) {
     final responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     final message = responseBody is Map<String, dynamic>
-        ? (responseBody['message'] is String
-            ? responseBody['message'] as String
-            : (responseBody['reasons'] is String
-                ? responseBody['reasons'] as String
-                : 'Неизвестная ошибка'))
+        ? responseBody['message']?.toString() ??
+            responseBody['reasons']?.toString() ??
+            'Неизвестная ошибка'
         : 'Неизвестная ошибка';
     if (callPathNameForLog != null) {
       log('Response (${response.request?.url}): ${response.statusCode} $responseBody',
           name: callPathNameForLog);
+
+      log('Parsed error message: $message', name: 'ApiClient');
     }
 
     if (exceptions != null && exceptions.containsKey(response.statusCode)) {
-      throw exceptions[response.statusCode]?.copyWith(message: message) ??
-          ServerException(message);
+      final exception =
+          exceptions[response.statusCode]?.copyWith(message: message) ??
+              ServerException(message);
+      log('Throwing exception with message: ${exception.message}',
+          name: 'ApiClient');
+      throw exception;
     }
 
     return responseBody;
@@ -80,6 +84,10 @@ class ApiClient {
   }) async {
     final url = Uri.parse('$baseUrl$endpoint');
     final headers = await _authHeaders();
+
+    // ✅ Логируем данные запроса
+    log('Request URL: $url', name: callPathNameForLog ?? 'Request');
+    log('Request Headers: $headers', name: callPathNameForLog ?? 'Request');
 
     return _handleResponseWithRetry(
         () => client.get(url, headers: headers), exceptions, callPathNameForLog,
@@ -97,11 +105,17 @@ class ApiClient {
     final headers = await _authHeaders();
     final bodyString = jsonEncode(body);
 
+    // ✅ Логируем данные запроса
+    log('Request URL: $url', name: callPathNameForLog ?? 'Request');
+    log('Request Headers: $headers', name: callPathNameForLog ?? 'Request');
+    log('Request Body: $bodyString', name: callPathNameForLog ?? 'Request');
+
     return _handleResponseWithRetry(
-        () => client.post(url, headers: headers, body: bodyString),
-        exceptions,
-        callPathNameForLog,
-        isRetryRequest: isRetryRequest);
+      () => client.post(url, headers: headers, body: bodyString),
+      exceptions,
+      callPathNameForLog,
+      isRetryRequest: isRetryRequest,
+    );
   }
 
   Future<dynamic> put({
@@ -114,6 +128,11 @@ class ApiClient {
     final url = Uri.parse('$baseUrl$endpoint');
     final headers = await _authHeaders();
     final bodyString = jsonEncode(body);
+
+    // ✅ Логируем данные запроса
+    log('Request URL: $url', name: callPathNameForLog ?? 'Request');
+    log('Request Headers: $headers', name: callPathNameForLog ?? 'Request');
+    log('Request Body: $bodyString', name: callPathNameForLog ?? 'Request');
 
     return _handleResponseWithRetry(
       () => client.put(url, headers: headers, body: bodyString),
@@ -133,6 +152,11 @@ class ApiClient {
     final url = Uri.parse('$baseUrl$endpoint');
     final headers = await _authHeaders();
     final bodyString = jsonEncode(body);
+
+    // ✅ Логируем данные запроса
+    log('Request URL: $url', name: callPathNameForLog ?? 'Request');
+    log('Request Headers: $headers', name: callPathNameForLog ?? 'Request');
+    log('Request Body: $bodyString', name: callPathNameForLog ?? 'Request');
 
     return _handleResponseWithRetry(
         () => client.delete(url, headers: headers, body: bodyString),

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/models/recommended_item_model.dart';
+import 'package:nevis/core/params/category_params.dart';
+import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget2.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/card_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/new_products_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/popularity_products_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/profitable_to_buy_widget.dart';
+import 'package:nevis/features/presentation/widgets/main_screen/qr_code_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/recommended/recommended_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/sales_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/stories/story_list_widget.dart';
@@ -22,15 +28,12 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PageController pageController = PageController(viewportFraction: 0.95);
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
-        final homeBloc = context.read<HomeScreenBloc>();
         return BlocProvider(
           create: (context) => MainScreenBloc(
-            getBannersUC: sl(),
-            getCategoriesUC: sl(),
-            getDailyProductsUC: sl(),
+            getStoriesUC: sl(),
+            getQRCodeUC: sl(),
           )..add(LoadDataEvent()),
           child: BlocBuilder<MainScreenBloc, MainScreenState>(
             builder: (context, state) {
@@ -54,7 +57,15 @@ class MainScreen extends StatelessWidget {
                                 padding:
                                     getMarginOrPadding(bottom: 94, top: 16),
                                 children: [
-                                  CardWidget(),
+                                  Padding(
+                                    padding:
+                                        getMarginOrPadding(left: 16, right: 16),
+                                    child: state.loyalCard != null
+                                        ? QrCodeWidget(
+                                            loyaltyCardQREntity:
+                                                state.loyalCard!)
+                                        : CardWidget(),
+                                  ),
                                   SizedBox(height: 16.h),
                                   SalesWidget(),
                                   SizedBox(height: 16.h),
@@ -62,7 +73,8 @@ class MainScreen extends StatelessWidget {
                                     title: 'Актуальное',
                                     titlePadding:
                                         getMarginOrPadding(left: 20, right: 20),
-                                    child: StoryListWidget(),
+                                    child: StoryListWidget(
+                                        stories: state.stories?.data ?? []),
                                   ),
                                   SizedBox(height: 16.h),
                                   PopularityProductsWidget(
@@ -72,7 +84,46 @@ class MainScreen extends StatelessWidget {
                                     title: 'Рекомендуем',
                                     titlePadding:
                                         getMarginOrPadding(left: 20, right: 20),
-                                    child: RecommendedListWidget(),
+                                    child: RecommendedListWidget(
+                                      items: [
+                                        RecommendedItemModel(
+                                          imagePath: Paths.medkitPath,
+                                          title: 'Аптечка',
+                                          onTap: () =>
+                                              openRecommendedProductsScreen(
+                                                  context,
+                                                  title: 'Аптечка',
+                                                  categoryId: 15126),
+                                        ),
+                                        RecommendedItemModel(
+                                          imagePath: Paths.likePath,
+                                          title: 'Для вас',
+                                          onTap: () =>
+                                              openRecommendedProductsScreen(
+                                                  context,
+                                                  title: 'Для вас',
+                                                  categoryId: 10354),
+                                        ),
+                                        RecommendedItemModel(
+                                          imagePath: Paths.pillPath,
+                                          title: 'Витамины',
+                                          onTap: () =>
+                                              openRecommendedProductsScreen(
+                                                  context,
+                                                  title: 'Витамины',
+                                                  categoryId: 9645),
+                                        ),
+                                        RecommendedItemModel(
+                                          imagePath: Paths.immunityPath,
+                                          title: 'Иммунитет',
+                                          onTap: () =>
+                                              openRecommendedProductsScreen(
+                                                  context,
+                                                  title: 'Иммунитет',
+                                                  categoryId: 15024),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(height: 16.h),
                                   NewProductsWidget(
@@ -94,6 +145,22 @@ class MainScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void openRecommendedProductsScreen(BuildContext context,
+      {required String title, required int categoryId}) {
+    Navigator.of(context).push(
+      Routes.createRoute(
+        ProductsScreen(),
+        settings: RouteSettings(
+          name: Routes.productsScreen,
+          arguments: {
+            'title': title,
+            'categoryParams': CategoryParams(categoryId: categoryId)
+          },
+        ),
+      ),
     );
   }
 }

@@ -9,7 +9,7 @@ class CardNumberFormatter extends TextInputFormatter {
     var inputText = nextValue.text;
 
     // Ограничение длины ввода до 16 символов без пробелов
-    if (inputText.replaceAll(' ', '').length > 16) {
+    if (inputText.replaceAll(' ', '').length > 13) {
       return previousValue;
     }
 

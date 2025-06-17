@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/features/presentation/bloc/register_bonus_card_screen/register_bonus_cardscreen_bloc.dart';
+import 'package:nevis/constants/utils.dart';
+import 'package:nevis/features/presentation/bloc/register_bonus_card_screen/register_bonus_card_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 
 class CheckboxesBlock extends StatefulWidget {
@@ -25,7 +26,8 @@ class _CheckboxesBlockState extends State<CheckboxesBlock> {
             fillColor: UiConstants.whiteColor,
             title: 'Email',
             hintText: 'Не указано',
-            controller: registerBonusCardBloc.emailController),
+            controller: registerBonusCardBloc.emailController,
+            validator: Utils.emailValidate),
       ],
     );
   }

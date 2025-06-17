@@ -7,7 +7,7 @@ abstract class OrdersScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadDataEvent extends OrdersScreenEvent {}
+class LoadOrdersEvent extends OrdersScreenEvent {}
 
 class SearchOrderEvent extends OrdersScreenEvent {
   final String query;

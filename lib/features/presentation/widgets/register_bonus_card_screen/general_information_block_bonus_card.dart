@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/formatters/card_number_formatter.dart';
-import 'package:nevis/features/presentation/bloc/register_bonus_card_screen/register_bonus_cardscreen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/register_bonus_card_screen/register_bonus_card_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_radio_button.dart';
+import 'package:nevis/features/presentation/widgets/personal_data_screen/date_birthday_widget.dart';
 import 'package:nevis/features/presentation/widgets/register_bonus_card_screen/contacts_block_bonus_card.dart';
 
 class GeneralInformationBlock extends StatelessWidget {
@@ -26,33 +26,20 @@ class GeneralInformationBlock extends StatelessWidget {
       children: [
         Column(
           children: [
-            cardType == BonusCardType.physical
-                ? AppTextFieldWidget(
-                    textStyle: UiConstants.textStyle11,
-                    fillColor: UiConstants.whiteColor,
-                    title: 'Ввидите номер карты',
-                    hintText: 'Номер карты',
-                    controller: registerBonusCardBloc.cardController,
-                    keyboardType: TextInputType.phone,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      CardNumberFormatter()
-                    ],
-                    onTapActionTitle: () async {
-                      // await context
-                      //     .read<CodeScreenBloc>()
-                      //     .reset(phone: personalDataBloc.phoneController.text);
-                      // context.read<CodeScreenBloc>().startTimer(
-                      //   phone: personalDataBloc.phoneController.text,
-                      //   widget.screenContext,
-                      //   requestCodeFun: () async {
-                      //     return await personalDataBloc.updateProfile(
-                      //         requestedCode: true);
-                      //   },
-                      // );
-                    },
-                  )
-                : SizedBox.shrink(),
+            if (cardType == BonusCardType.physical)
+              AppTextFieldWidget(
+                textStyle: UiConstants.textStyle11,
+                fillColor: UiConstants.whiteColor,
+                title: 'Ввидите номер карты',
+                hintText: 'Номер карты',
+                controller: registerBonusCardBloc.cardController,
+                keyboardType: TextInputType.number,
+                maxLength: 13,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+              ),
+            if (cardType == BonusCardType.physical) SizedBox(height: 16.h),
             AppTextFieldWidget(
                 textStyle: UiConstants.textStyle11,
                 fillColor: UiConstants.whiteColor,
@@ -67,30 +54,15 @@ class GeneralInformationBlock extends StatelessWidget {
                 hintText: 'Не указано',
                 controller: registerBonusCardBloc.sNameController),
             SizedBox(height: 16.h),
-            // AppTextFieldWidget(
-            //      textStyle: UiConstants.textStyle11,
-            //    fillColor: UiConstants.whiteColor,
-            //   title: 'Дата рождения',
-            //   hintText: 'ДД / ММ / ГГГГ',
-            //   controller: personalDataBloc.birthdayController,
-            //   keyboardType: TextInputType.datetime,
-            //   inputFormatters: [
-            //     FilteringTextInputFormatter.digitsOnly,
-            //     DateInputFormatter()
-            //   ],
-            //   suffixWidget: Padding(
-            //     padding: getMarginOrPadding(top: 10, bottom: 10),
-            //     child: SvgPicture.asset(Paths.calendarIconPath),
-            //   ),
-            //   onChangedField: (p0) =>
-            //       personalDataBloc.birthdayController.text = p0,
-            // ),
-            ContactsBlock(
-              screenContext: screenContext,
+            ContactsBlock(screenContext: screenContext),
+            SizedBox(height: 16.h),
+            DateBirthdayWidget(
+              selectedDate: registerBonusCardBloc.state.birthday,
+              onSelectedDate: (date) => registerBonusCardBloc.add(
+                ChangeBirthdayEvent(date),
+              ),
             ),
-            SizedBox(
-              height: 16.h,
-            ),
+            SizedBox(height: 16.h),
             Row(
               children: [
                 Text(
@@ -99,26 +71,24 @@ class GeneralInformationBlock extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 8.h,
-            ),
+            SizedBox(height: 8.h),
             Row(
               children: [
                 CustomRadioButton(
                   title: 'Мужской',
-                  value: GenderType.male,
+                  value: GenderType.M,
                   groupValue: registerBonusCardBloc.state.gender,
                   onChanged: (value) => registerBonusCardBloc.add(
-                    ChangeGenderEvent(GenderType.male),
+                    ChangeGenderEvent(GenderType.M),
                   ),
                 ),
                 SizedBox(width: 24.w),
                 CustomRadioButton(
                   title: 'Женский',
-                  value: GenderType.female,
+                  value: GenderType.F,
                   groupValue: registerBonusCardBloc.state.gender,
                   onChanged: (value) => registerBonusCardBloc.add(
-                    ChangeGenderEvent(GenderType.female),
+                    ChangeGenderEvent(GenderType.F),
                   ),
                 ),
               ],

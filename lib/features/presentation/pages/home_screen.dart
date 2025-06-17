@@ -5,11 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/app_route_observer.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/bottom_sheet_manager.dart';
+import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/order_pickup/order_pickup_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_pickup_cart_screen/order_pickup_cart_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/order_pickup_screen/order_pickup_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/route_observer/route_observer_bloc.dart';
@@ -18,6 +20,7 @@ import 'package:nevis/features/presentation/widgets/bottom_navigation_bar_tile.d
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_screen/search_screen.dart';
 import 'package:nevis/locator_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,6 +31,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final PageStorageBucket bucket = PageStorageBucket();
+
+  @override
+  void initState() {
+    _checkAndShowPushPermissionSheet();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocProvider(
           create: (context) => HomeScreenBloc(context: context),
         ),
-        BlocProvider.value(value: sl<SearchScreenBloc>()),
+        BlocProvider(create: (context) => sl<SearchScreenBloc>()),
         BlocProvider(
           create: (context) => OrderPickupScreenBloc(
             getFavoritePharmaciesUC: sl(),
@@ -211,5 +220,26 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+
+  Future<void> _checkAndShowPushPermissionSheet() async {
+    final prefs = sl<SharedPreferences>();
+    final isFirstStart =
+        prefs.getBool(SharedPreferencesKeys.isFirstAppStarted) ?? true;
+
+    if (isFirstStart) {
+      // Ждем, пока UI полностью отрисуется
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(const Duration(seconds: 2), () async {
+          if (mounted) {
+            bool? isSuccess =
+                await BottomSheetManager.showEnableNotificationSheet(context);
+            if (isSuccess != null) {
+              prefs.setBool(SharedPreferencesKeys.isFirstAppStarted, false);
+            }
+          }
+        });
+      });
+    }
   }
 }

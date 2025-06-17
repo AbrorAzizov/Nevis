@@ -14,6 +14,7 @@ class AppButtonWidget extends StatelessWidget {
   final Color? textColor;
   final Color? backgroundColor;
   final AlignmentGeometry alignment;
+  final FontWeight fontWeight;
 
   const AppButtonWidget({
     super.key,
@@ -27,6 +28,7 @@ class AppButtonWidget extends StatelessWidget {
     this.textColor,
     this.backgroundColor,
     this.alignment = Alignment.center,
+    this.fontWeight = FontWeight.w500,
   });
 
   @override
@@ -60,7 +62,7 @@ class AppButtonWidget extends StatelessWidget {
             child: Text(
               text,
               style: UiConstants.textStyle14
-                  .copyWith(height: 1, fontWeight: FontWeight.w500),
+                  .copyWith(height: 1, fontWeight: fontWeight),
               textAlign: TextAlign.center,
             ),
           ),

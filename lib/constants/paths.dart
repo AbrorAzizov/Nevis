@@ -149,4 +149,9 @@ class Paths {
   static const String noPharmaciesIconPath = '${_imagesPath}no_pharmacies.png';
   static const String mockStoryPath = '${_imagesPath}mock_story.png';
   static const String arrowForwardPath = '${_imagesPath}arrow_forward.svg';
+
+  static const String pillPath = '${_imagesPath}pill.svg';
+  static const String medkitPath = '${_imagesPath}medkit.svg';
+  static const String immunityPath = '${_imagesPath}immunity.svg';
+  static const String likePath = '${_imagesPath}like.svg';
 }

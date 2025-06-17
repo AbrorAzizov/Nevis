@@ -118,7 +118,7 @@ class ActivateBonusCardScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(height: 16.h),
+                          /*SizedBox(height: 16.h),
                           Container(
                             decoration: BoxDecoration(
                                 boxShadow: [],
@@ -208,7 +208,7 @@ class ActivateBonusCardScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          )
+                          )*/
                         ],
                       ),
                     )

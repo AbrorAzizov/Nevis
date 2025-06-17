@@ -157,6 +157,7 @@ class _GidTextFieldState extends State<AppTextFieldWidget> {
                 color: UiConstants.darkBlueColor),
             cursorColor: UiConstants.darkBlueColor,
             decoration: InputDecoration(
+              counterText: "",
               hintMaxLines: widget.hintMaxLines ?? 500,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),

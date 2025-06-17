@@ -1,24 +1,22 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:nevis/features/domain/entities/banner_entity.dart';
-import 'package:nevis/features/domain/entities/category_entity.dart';
+import 'package:nevis/features/domain/entities/loyalty_card_entity.dart';
+import 'package:nevis/features/domain/entities/paginated_stories_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
-import 'package:nevis/features/domain/usecases/category/get_categories.dart';
-import 'package:nevis/features/domain/usecases/content/get_banners.dart';
-import 'package:nevis/features/domain/usecases/products/get_daily_products.dart';
+import 'package:nevis/features/domain/usecases/loyalty_card/get_qr_code.dart';
+import 'package:nevis/features/domain/usecases/stories/get_stories_usecase.dart';
 
 part 'main_screen_event.dart';
 part 'main_screen_state.dart';
 
 class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
-  final GetBannersUC getBannersUC;
-  final GetCategoriesUC getCategoriesUC;
-  final GetDailyProductsUC getDailyProductsUC;
+  final GetStoriesUC getStoriesUC;
+  final GetQRCodeUC getQRCodeUC;
 
   MainScreenBloc({
-    required this.getBannersUC,
-    required this.getCategoriesUC,
-    required this.getDailyProductsUC,
+    required this.getStoriesUC,
+    required this.getQRCodeUC,
   }) : super(
           MainScreenState(
             newProducts: List.generate(
@@ -47,35 +45,32 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
   }
 
   void _onLoadData(LoadDataEvent event, Emitter<MainScreenState> emit) async {
-    List<BannerEntity> banners = [];
-    List<CategoryEntity> categories = [];
+    PaginatedStoriesEntity? stories;
+    LoyaltyCardQREntity? loyalCard;
 
-    /*var data = await Future.wait(
+    final data = await Future.wait(
       [
-        // getBannersUC(),
+        getStoriesUC(0),
+        getQRCodeUC()
         //getCategoriesUC(),
         // getDailyProductsUC(),
       ],
-    );*/
+    );
 
-    /*data.forEachIndexed(
+    data.forEachIndexed(
       (index, element) {
         element.fold(
           (_) {},
           (result) => switch (index) {
-            // 0 => banners = result as List<BannerEntity>,
-            1 => categories = result,
-            // 2 => daily = result as List<ProductEntity>,
+            0 => stories = result as PaginatedStoriesEntity?,
+            1 => loyalCard = result as LoyaltyCardQREntity?,
             _ => {},
           },
         );
       },
-    );*/
+    );
 
     emit(state.copyWith(
-      isLoading: false,
-      banners: banners,
-      categories: categories,
-    ));
+        isLoading: false, stories: stories, loyalCard: loyalCard));
   }
 }

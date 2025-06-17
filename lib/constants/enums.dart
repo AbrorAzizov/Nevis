@@ -52,7 +52,7 @@ enum ProductSortType { popularity, priceDecrease, priceIncrease, alphabet }
 
 enum ProductFilterOrSortType { sort, filter }
 
-enum GenderType { male, female }
+enum GenderType { M, F }
 
 enum BonusCardType { physical, virtual }
 
@@ -79,3 +79,9 @@ enum PharmacyMapType {
 enum CartType { defaultCart, pickupCart }
 
 enum PharmacyProductsAvailabilityType { available, notAvailable }
+
+enum PhoneNumberFormat {
+  server, // +7XXXXXXXXXX
+  client, // +7 XXX XXX XX XX
+  loyaltyCard, // +7 (9XX) XXX-XXXX
+}

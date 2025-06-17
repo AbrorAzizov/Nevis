@@ -39,10 +39,13 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<void> updateMe(ProfileModel profile) async {
     try {
+      Map<String, dynamic> body = Map.from(profile.toJson()['personal_info'])
+        ..removeWhere((key, value) => value == null);
+
       await apiClient.put(
         endpoint: 'users/profile',
         exceptions: {500: ServerException()},
-        body: profile.toJson(),
+        body: body,
         callPathNameForLog: '${runtimeType.toString()}.updateMe',
       );
     } catch (e) {
@@ -55,7 +58,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<void> deleteMe() async {
     try {
       final data = await apiClient.delete(
-        endpoint: 'profile/delete',
+        endpoint: 'users/delete',
         callPathNameForLog: '${runtimeType.toString()}.deleteMe',
       );
 

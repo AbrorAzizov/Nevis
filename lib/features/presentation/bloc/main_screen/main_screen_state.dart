@@ -3,16 +3,16 @@ part of 'main_screen_bloc.dart';
 class MainScreenState extends Equatable {
   final bool isLoading;
   final String? error;
-  final List<CategoryEntity>? categories;
-  final List<BannerEntity>? banners;
+  final PaginatedStoriesEntity? stories;
+  final LoyaltyCardQREntity? loyalCard;
   final List<ProductEntity> newProducts;
   final List<ProductEntity> profitableProducts;
 
   const MainScreenState({
     this.isLoading = true,
     this.error,
-    this.categories,
-    this.banners,
+    this.stories,
+    this.loyalCard,
     this.newProducts = const [],
     this.profitableProducts = const [],
   });
@@ -20,16 +20,16 @@ class MainScreenState extends Equatable {
   MainScreenState copyWith({
     bool? isLoading,
     String? error,
-    List<CategoryEntity>? categories,
-    List<BannerEntity>? banners,
+    PaginatedStoriesEntity? stories,
+    LoyaltyCardQREntity? loyalCard,
     List<ProductEntity>? newProducts,
     List<ProductEntity>? profitableProducts,
   }) {
     return MainScreenState(
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
-      categories: categories ?? this.categories,
-      banners: banners ?? this.banners,
+      stories: stories ?? this.stories,
+      loyalCard: loyalCard ?? this.loyalCard,
       newProducts: newProducts ?? this.newProducts,
       profitableProducts: profitableProducts ?? this.profitableProducts,
     );
@@ -39,8 +39,8 @@ class MainScreenState extends Equatable {
   List<Object?> get props => [
         isLoading,
         error,
-        categories,
-        banners,
+        stories,
+        loyalCard,
         newProducts,
         profitableProducts,
       ];

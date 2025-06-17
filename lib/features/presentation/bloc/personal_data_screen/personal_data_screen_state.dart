@@ -5,22 +5,16 @@ class PersonalDataScreenState extends Equatable {
   final bool isButtonActive;
   final GenderType? gender;
   final bool isCheckedNotificationCheckbox;
-  final bool isCheckedNotifictaionAboutApplication;
-  final String? passwordErrorText;
+  final DateTime? birthday;
   final bool showError;
-  final String? confirmPhoneCode;
-  final String? installedPhone;
 
   const PersonalDataScreenState({
     this.isLoading = true,
     this.isButtonActive = true,
-    this.gender = GenderType.male,
+    this.gender = GenderType.M,
     this.isCheckedNotificationCheckbox = false,
-    this.isCheckedNotifictaionAboutApplication = false,
-    this.passwordErrorText,
+    this.birthday,
     this.showError = false,
-    this.confirmPhoneCode,
-    this.installedPhone,
   });
 
   PersonalDataScreenState copyWith({
@@ -28,11 +22,8 @@ class PersonalDataScreenState extends Equatable {
     bool? isButtonActive,
     GenderType? gender,
     bool? isCheckedNotificationCheckbox,
-    bool? isCheckedPolicyCheckbox,
-    String? passwordErrorText,
+    DateTime? birthday,
     bool? showError,
-    String? confirmPhoneCode,
-    String? installedPhone,
   }) {
     return PersonalDataScreenState(
       isLoading: isLoading ?? this.isLoading,
@@ -40,12 +31,8 @@ class PersonalDataScreenState extends Equatable {
       gender: gender ?? this.gender,
       isCheckedNotificationCheckbox:
           isCheckedNotificationCheckbox ?? this.isCheckedNotificationCheckbox,
-      isCheckedNotifictaionAboutApplication:
-          isCheckedPolicyCheckbox ?? this.isCheckedNotifictaionAboutApplication,
-      passwordErrorText: passwordErrorText,
+      birthday: birthday ?? this.birthday,
       showError: showError ?? this.showError,
-      confirmPhoneCode: confirmPhoneCode,
-      installedPhone: installedPhone ?? this.installedPhone,
     );
   }
 
@@ -55,11 +42,8 @@ class PersonalDataScreenState extends Equatable {
         isButtonActive,
         gender,
         isCheckedNotificationCheckbox,
-        isCheckedNotifictaionAboutApplication,
-        passwordErrorText,
+        birthday,
         showError,
-        confirmPhoneCode,
-        installedPhone
       ];
 }
 

@@ -7,7 +7,7 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/register_bonus_card_screen/register_bonus_cardscreen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/register_bonus_card_screen/register_bonus_card_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/main/bonus_cards/bonus_card_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/bonus_program_text_widget.dart';
@@ -26,15 +26,27 @@ class RegisterBonusCardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
         builder: (context, homeState) {
-      final homeBloc = context.read<HomeScreenBloc>();
       return BlocProvider(
         create: (context) => RegisterBonusCardScreenBloc(
             context: context.read<HomeScreenBloc>().context,
             getMeUC: sl(),
+            registerCardUC: sl(),
             cardType: cardType)
           ..getProfile(),
-        child: BlocBuilder<RegisterBonusCardScreenBloc,
+        child: BlocConsumer<RegisterBonusCardScreenBloc,
             RegisterBonusCardScreenState>(
+          listener: (context, state) {
+            if (state is SuccessRegistration) {
+              Navigator.of(context).pushAndRemoveUntil(
+                  Routes.createRoute(
+                    BonusCardScreen(),
+                    settings: RouteSettings(
+                        name: Routes.bonusCardScreen,
+                        arguments: {'loyal_card_type': state.loyalCardType}),
+                  ),
+                  (route) => route.isFirst);
+            }
+          },
           builder: (context, state) {
             return Scaffold(
               backgroundColor: UiConstants.backgroundColor,
@@ -172,30 +184,14 @@ class RegisterBonusCardScreen extends StatelessWidget {
                                   height: 16.h,
                                 ),
                                 AppButtonWidget(
-                                  isActive: state.isButtonActive,
-                                  text: cardType == BonusCardType.physical
-                                      ? 'Зарегистрировать карту'
-                                      : 'Получить виртуальную карту',
-                                  onTap: () {
-                                    // context
-                                    //     .read<
-                                    //         RegisterBonusCardScreenBloc>()
-                                    //     .add(
-                                    //       SubmitEvent(),
-                                    //     );
-                                    Navigator.of(context).push(
-                                      Routes.createRoute(
-                                        BonusCardScreen(),
-                                        settings: RouteSettings(
-                                          name: Routes.bonusCardScreen,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 8.h,
-                                ),
+                                    isActive: state.isButtonActive,
+                                    text: cardType == BonusCardType.physical
+                                        ? 'Зарегистрировать карту'
+                                        : 'Получить виртуальную карту',
+                                    onTap: () => context
+                                        .read<RegisterBonusCardScreenBloc>()
+                                        .add(SubmitEvent())),
+                                SizedBox(height: 8.h),
                                 BonusProgramTextWidget()
                               ],
                             ),

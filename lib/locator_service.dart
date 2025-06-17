@@ -3,12 +3,15 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nevis/core/api_client.dart';
+import 'package:nevis/core/firebase_manager.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/cart_remote_data_source_implementation.dart';
 import 'package:nevis/features/data/datasources/category_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/content_remote_data_source_impl.dart';
+import 'package:nevis/features/data/datasources/loyalty_card_local_source.dart';
+import 'package:nevis/features/data/datasources/loyalty_card_remote_source.dart';
 import 'package:nevis/features/data/datasources/order_local_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/order_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/pharmacy_remote_data_soruce_impl.dart';
@@ -16,24 +19,29 @@ import 'package:nevis/features/data/datasources/product_local_data_soruce.dart';
 import 'package:nevis/features/data/datasources/product_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/profile_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/region_remote_soruce.dart';
+import 'package:nevis/features/data/datasources/story_remote_data_source_impl.dart';
 import 'package:nevis/features/data/repositories/auth_repository_impl.dart';
 import 'package:nevis/features/data/repositories/cart_repository_impl.dart';
 import 'package:nevis/features/data/repositories/category_repository_impl.dart';
 import 'package:nevis/features/data/repositories/content_repository_impl.dart';
+import 'package:nevis/features/data/repositories/loyalty_card_repository_impl.dart';
 import 'package:nevis/features/data/repositories/order_repository_impl.dart';
 import 'package:nevis/features/data/repositories/pharmacy_repository_impl.dart';
 import 'package:nevis/features/data/repositories/product_repository_impl.dart';
 import 'package:nevis/features/data/repositories/profile_repository_impl.dart';
 import 'package:nevis/features/data/repositories/region_respository_impl.dart';
+import 'package:nevis/features/data/repositories/story_repository_impl.dart';
 import 'package:nevis/features/domain/repositories/auth_repository.dart';
 import 'package:nevis/features/domain/repositories/cart_repository.dart';
 import 'package:nevis/features/domain/repositories/category_repository.dart';
 import 'package:nevis/features/domain/repositories/content_repository.dart';
+import 'package:nevis/features/domain/repositories/loyalty_card_repository.dart';
 import 'package:nevis/features/domain/repositories/order_repository.dart';
 import 'package:nevis/features/domain/repositories/pharmacy_repository.dart';
 import 'package:nevis/features/domain/repositories/product_repository.dart';
 import 'package:nevis/features/domain/repositories/profile_repository.dart';
 import 'package:nevis/features/domain/repositories/region_repository.dart';
+import 'package:nevis/features/domain/repositories/story_repository.dart';
 import 'package:nevis/features/domain/usecases/auth/is_phone_exists.dart';
 import 'package:nevis/features/domain/usecases/auth/login.dart';
 import 'package:nevis/features/domain/usecases/auth/login_by_service.dart';
@@ -57,6 +65,9 @@ import 'package:nevis/features/domain/usecases/content/get_one_action.dart';
 import 'package:nevis/features/domain/usecases/content/get_one_article.dart';
 import 'package:nevis/features/domain/usecases/content/get_one_news.dart';
 import 'package:nevis/features/domain/usecases/content/get_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/loyalty_card/get_card_info.dart';
+import 'package:nevis/features/domain/usecases/loyalty_card/get_qr_code.dart';
+import 'package:nevis/features/domain/usecases/loyalty_card/register_card.dart';
 import 'package:nevis/features/domain/usecases/order/create_order_for_pickup.dart';
 import 'package:nevis/features/domain/usecases/order/get_pharmacies_by_cart.dart';
 import 'package:nevis/features/domain/usecases/orders/get_one_order.dart';
@@ -78,8 +89,11 @@ import 'package:nevis/features/domain/usecases/profile/get_me.dart';
 import 'package:nevis/features/domain/usecases/profile/update_me.dart';
 import 'package:nevis/features/domain/usecases/regions/get_regions.dart';
 import 'package:nevis/features/domain/usecases/regions/select_region.dart';
+import 'package:nevis/features/domain/usecases/stories/get_stories_usecase.dart';
+import 'package:nevis/features/domain/usecases/stories/get_story_by_id_usecase.dart';
 import 'package:nevis/features/presentation/bloc/article_screen/article_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/articles_screen/articles_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/bonus_card_screen/bonus_card_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/category_screen/category_screen_bloc.dart';
@@ -90,14 +104,17 @@ import 'package:nevis/features/presentation/bloc/login_screen/login_screen_bloc.
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/news_internal_screen/news_internal_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/news_screen/news_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/no_internet_connection/no_internet_connection_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/product_screen/product_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/profile_screen/profile_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/register_bonus_card_screen/register_bonus_card_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/sign_up_screen/sign_up_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/splash_screen/splash_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/stories/stories_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -129,11 +146,14 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(
-    () => ProfileScreenBloc(
-      logoutUC: sl<LogoutUC>(),
-    ),
+    () => ProfileScreenBloc(logoutUC: sl<LogoutUC>()),
   );
-
+  sl.registerFactory(
+    () => PersonalDataScreenBloc(
+        getMeUC: sl<GetMeUC>(),
+        updateMeUC: sl<UpdateMeUC>(),
+        deleteMeUC: sl<DeleteMeUC>()),
+  );
   sl.registerFactory(
     () => NewsScreenBloc(
       getNewsUC: sl<GetNewsUC>(),
@@ -169,9 +189,8 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => MainScreenBloc(
-      getBannersUC: sl<GetBannersUC>(),
-      getCategoriesUC: sl<GetCategoriesUC>(),
-      getDailyProductsUC: sl<GetDailyProductsUC>(),
+      getStoriesUC: sl<GetStoriesUC>(),
+      getQRCodeUC: sl<GetQRCodeUC>(),
     ),
   );
   sl.registerFactory(
@@ -225,10 +244,19 @@ Future<void> init() async {
   );
 
   sl.registerLazySingleton(
-    () => PersonalDataScreenBloc(
-        getMeUC: sl<GetMeUC>(),
-        updateMeUC: sl<UpdateMeUC>(),
-        deleteMeUC: sl<DeleteMeUC>()),
+    () => StoriesBloc(getStoryByIdUC: sl()),
+  );
+
+  sl.registerLazySingleton(
+    () => RegisterBonusCardScreenBloc(getMeUC: sl(), registerCardUC: sl()),
+  );
+
+  sl.registerLazySingleton(
+    () => NoInternetConnectionBloc(getQRCodeUC: sl()),
+  );
+
+  sl.registerLazySingleton(
+    () => BonusCardScreenBloc(getQRCodeUC: sl()),
   );
 
   //// UseCases
@@ -294,6 +322,15 @@ Future<void> init() async {
 
   // Pharmacy
   sl.registerLazySingleton(() => GetFavoritePharmaciesUC(sl()));
+
+  // Story
+  sl.registerLazySingleton(() => GetStoriesUC(sl()));
+  sl.registerLazySingleton(() => GetStoryByIdUC(sl()));
+
+  // Bonus card
+  sl.registerLazySingleton(() => RegisterCardUC(sl()));
+  sl.registerLazySingleton(() => GetQRCodeUC(sl()));
+  sl.registerLazySingleton(() => GetCardInfoUC(sl()));
 
   //// Repository
   sl.registerLazySingleton<AuthRepository>(
@@ -362,6 +399,19 @@ Future<void> init() async {
         networkInfo: sl(), errorHandler: sl(), cartRemoteDataSource: sl()),
   );
 
+  sl.registerLazySingleton<StoryRepository>(
+    () => StoryRepositoryImpl(
+        networkInfo: sl(), errorHandler: sl(), storyRemoteDataSource: sl()),
+  );
+
+  sl.registerLazySingleton<LoyaltyCardRepository>(
+    () => LoyaltyCardRepositoryImpl(
+        networkInfo: sl(),
+        errorHandler: sl(),
+        remoteDataSource: sl(),
+        localDataSource: sl()),
+  );
+
   //// DataSources
   sl.registerLazySingleton<RegionRemoteDataSource>(
     () => RegionRemoteDataSourceImpl(
@@ -385,24 +435,28 @@ Future<void> init() async {
       sharedPreferences: sl(),
     ),
   );
+
   sl.registerLazySingleton<ProfileRemoteDataSource>(
     () => ProfileRemoteDataSourceImpl(
       apiClient: sl(),
       sharedPreferences: sl(),
     ),
   );
+
   sl.registerLazySingleton<ContentRemoteDataSource>(
     () => ContentRemoteDataSourceImpl(
       apiClient: sl(),
       sharedPreferences: sl(),
     ),
   );
+
   sl.registerLazySingleton<ProductRemoteDataSource>(
     () => ProductRemoteDataSourceImpl(
       apiClient: sl(),
       sharedPreferences: sl(),
     ),
   );
+
   sl.registerLazySingleton<CategoryRemoteDataSource>(
     () => CategoryRemoteDataSourceImpl(
       apiClient: sl(),
@@ -429,6 +483,23 @@ Future<void> init() async {
     ),
   );
 
+  sl.registerLazySingleton<StoryRemoteDataSource>(
+    () => StoryRemoteDataSourceImpl(
+      apiClient: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<LoyaltyCardRemoteDataSource>(
+    () => LoyaltyCardRemoteDataSourceImpl(
+        apiClient: sl(), sharedPreferences: sl()),
+  );
+
+  sl.registerLazySingleton<LoyaltyCardLocalDataSource>(
+    () => LoyaltyCardLocalDataSourceImpl(
+      sharedPreferences: sl(),
+    ),
+  );
+
   //// Core
   sl.registerLazySingleton<NetworkInfo>(
     () => NetworkInfoImpl(sl()),
@@ -449,4 +520,5 @@ Future<void> init() async {
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => InternetConnectionChecker());
+  sl.registerLazySingleton<FirebaseManager>(() => FirebaseManager());
 }

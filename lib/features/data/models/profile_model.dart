@@ -1,5 +1,3 @@
-
-
 import 'package:nevis/features/data/models/adress_model.dart';
 import 'package:nevis/features/domain/entities/profile_entity.dart';
 
@@ -32,16 +30,16 @@ class ProfileModel extends ProfileEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      "personal info": {
-        "first name": firstName,
-        "last name": lastName,
+      "personal_info": {
+        "first_name": firstName,
+        "last_name": lastName,
         "phone": phone,
-        "date of birth": dateOfBirth,
+        "date_of_birth": dateOfBirth,
         "gender": gender,
         "email": email,
-        "subscribe to marketing": subscribeToMarketing,
+        "subscribe_to_marketing": subscribeToMarketing.toString(),
       },
-      "delivery address": (deliveryAddress as AdressModel?)?.toJson(),
+      "delivery_address": (deliveryAddress as AdressModel?)?.toJson(),
     };
   }
 }

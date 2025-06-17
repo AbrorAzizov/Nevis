@@ -93,9 +93,9 @@ class ProductsScreen extends StatelessWidget {
                                       bloc.add(ShowFilterProductsTypes()),
                                 ),
                               ),
-                              if (state.categoryId != null)
+                              if (categoryParams?.categoryId != null)
                                 Container(
-                                  padding: getMarginOrPadding(top: 16),
+                                  margin: getMarginOrPadding(top: 16),
                                   height: 33.h,
                                   child: FilterChips(
                                     categories: state.subCategories,

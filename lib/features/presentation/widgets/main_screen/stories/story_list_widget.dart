@@ -3,35 +3,40 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/core/routes.dart';
+import 'package:nevis/features/domain/entities/story_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/main/stories_screen.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/stories/story_item_widget.dart';
 
 class StoryListWidget extends StatelessWidget {
-  const StoryListWidget({super.key});
+  const StoryListWidget({super.key, required this.stories});
+
+  final List<StoryEntity> stories;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      alignment: Alignment.centerLeft,
       height: 64.w,
       child: ListView.separated(
           padding: getMarginOrPadding(left: 20, right: 20),
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           itemBuilder: (context, index) => StoryItemWidget(
+                story: stories[index],
                 onTap: () {
                   Navigator.of(context.read<HomeScreenBloc>().context).push(
                     Routes.createRoute(
                       StoriesScreen(),
                       settings: RouteSettings(
-                        name: Routes.storiesScreen,
-                      ),
+                          name: Routes.storiesScreen,
+                          arguments: {'id': stories[index].id}),
                     ),
                   );
                 },
               ),
           separatorBuilder: (context, index) => SizedBox(width: 12.w),
-          itemCount: 10),
+          itemCount: stories.length),
     );
   }
 }

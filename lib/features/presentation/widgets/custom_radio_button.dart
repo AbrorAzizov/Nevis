@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CustomRadioButton extends StatelessWidget {
@@ -19,7 +18,7 @@ class CustomRadioButton extends StatelessWidget {
   final String title;
   final dynamic value;
   final dynamic groupValue;
-   final Function(dynamic) onChanged; 
+  final Function(dynamic) onChanged;
   final TextStyle? textStyle;
   final bool isLabelOnLeft;
 
@@ -55,7 +54,7 @@ class CustomRadioButton extends StatelessWidget {
         child: RadioTheme(
           data: RadioThemeData(
             fillColor: WidgetStatePropertyAll(
-              UiConstants.darkBlueColor.withOpacity(.3),
+              UiConstants.black3Color.withOpacity(.6),
             ),
           ),
           child: Radio<dynamic>(
@@ -79,8 +78,8 @@ class CustomRadioButton extends StatelessWidget {
       padding: getMarginOrPadding(left: 12),
       child: Text(
         title,
-        style: (textStyle ?? UiConstants.textStyle2)
-            .copyWith(color: UiConstants.black3Color,fontWeight: FontWeight.w500),
+        style: (textStyle ?? UiConstants.textStyle2).copyWith(
+            color: UiConstants.black3Color, fontWeight: FontWeight.w400),
       ),
     );
   }

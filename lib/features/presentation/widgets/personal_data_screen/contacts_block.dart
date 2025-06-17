@@ -34,10 +34,6 @@ class _ContactsBlockState extends State<ContactsBlock> {
             FilteringTextInputFormatter.digitsOnly,
             CustomPhoneInputFormatter()
           ],
-          isActionTitleActive: personalDataBloc.state.installedPhone !=
-                  personalDataBloc.phoneController.text &&
-              personalDataBloc.phoneController.text.length == 19,
-          onTapActionTitle: () async {},
         )
       ])
     ]);

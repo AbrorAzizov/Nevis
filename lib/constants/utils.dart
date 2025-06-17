@@ -27,6 +27,17 @@ class Utils {
   static String mockHtml =
       "<blockquote>\r\n<p style=\"text-align: justify;\"><strong>Louis Widmer </strong>&mdash; это швейцарская <strong><a href=\"katalog/gigiena-i-kosmetika/uhod-za-licom/zhirnaya-i-problemnaya-kozha.html\">лечебная косметика</a></strong> для самой чувствительной кожи.</p>\r\n</blockquote>\r\n<p class=\"bx-section-desc-post\" style=\"text-align: justify;\">&nbsp;</p>\r\n<p class=\"bx-section-desc-post\" style=\"text-align: justify;\">Средства созданы в тесном сотрудничестве с лучшими швейцарскими дерматологами, химиками и известными университетами.&nbsp;Эффективные дерматологические компоненты в фармакодинамических дозах.&nbsp;Продукты с минимальным содержанием консервантов либо их полным отсутствием, благодаря стерильности производства.&nbsp;Без парфюмерных отдушек и красителей, очень высокая&nbsp;переносимость людьми&nbsp;страдающими аллергией.&nbsp;&nbsp;Наноэмульсии (биодоступность в 5-10 раз выше обычных микроэмульсий, используемых при производстве косметических средств).&nbsp;Липосомные технологии (доставка активных компонентов и воздействие на клеточном уровне).&nbsp;Ферментированная гиалуроновая кислота, действующая в глубоких слоях кожи.&nbsp;Использование ультразвукового эмульгирования при производстве,&nbsp;позволяет снизить до 60% нежелательное действие эмульгаторов на кожу.<br /><br />В марке представлены гаммы:<br /><br /></p>\r\n<ul>\r\n<li style=\"text-align: justify;\"><b><i>Louis Widmer&nbsp;Очищение&nbsp;</i></b>-&nbsp;&nbsp;нежная, но глубокая очистка. Деликатное очищение для чувствительной кожи. Благодаря активным компонентам (комплекс аминокислот и пантенол) продукты данной гаммы увлажняют и успокаивают.</li>\r\n<li style=\"text-align: justify;\"><b><i>Louis Widmer&nbsp;Уход -&nbsp;</i></b>дневной уход&nbsp;для каждого типа кожи: Крема с ценными биоактивными ингредиентами для дневного ухода. Результат: гладкая и мягкая кожа, меньше морщин, идеальное увлажнение.&nbsp;Ночной уход&nbsp;для каждого типа кожи: интенсивно восстанавливает, смягчает. Крема поддерживают естественный процесс регенерации кожи, улучшают кровообращение и стимулируют обновление тканей.</li>\r\n<li style=\"text-align: justify;\"><b><i>Louis Widmer&nbsp;Скин Эпил (</i></b><b><i>Skin Appeal)&nbsp;</i></b>- линейка для проблемной и жирной кожи.&nbsp;Воздействует на: воспалительные элементы; подавляет размножение Р. Аcnes; обладает&nbsp; противовоспалительным, бактерицидным, противогрибковым, противовирусным и ранозаживляющим действием. НЕ СУШИТ КОЖУ.</li>\r\n<li style=\"text-align: justify;\"><b><i>Louis Widmer&nbsp;Ремедерм (Remederm</i></b><b><i>)&nbsp;</i></b>- интенсивный уход для очень сухой и атопичной кожи младенцев детей и взрослых. Глубоко увлажняет, питает и восстанавливает повреждённые участки кожи.&nbsp;</li>\r\n<li style=\"text-align: justify;\"><b><i>Louis Widmer&nbsp;Солнечная линия (Sun line</i></b><b><i>)</i></b>&nbsp;- гамма идеально подходит <strong><a href=\"katalog/gigiena-i-kosmetika/uhod-za-licom/uhod-za-chuvstvitelnoj-atopichnoj-kozhej.html\">для очень чувствительной кожи</a></strong> и кожи, склонной к аллергическим реакциям.&nbsp;Входящие в состав ухаживающие компоненты эффективно восстанавливают и увлажняют кожу.&nbsp;UVA и UVB фильтры нового поколения предотвращают проявление кожных аллергических реакций и снижают вероятность получения солнечных ожогов.&nbsp;Высокая водостойкость.</li>\r\n</ul>";
 
+  static String? phoneValidate(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    if (!phoneRegexp.hasMatch(value)) {
+      return 'Невалидный телефон';
+    }
+    return null; // Если email корректный, возвращаем null (валидация успешна)
+  }
+
   static String? emailValidate(String? value) {
     if (value == null || value.isEmpty) {
       return null;
@@ -37,7 +48,7 @@ class Utils {
     RegExp regex = RegExp(emailPattern);
 
     if (!regex.hasMatch(value)) {
-      return 'Enter a valid e-mail address';
+      return 'Невалидный email';
     }
     return null; // Если email корректный, возвращаем null (валидация успешна)
   }
@@ -188,23 +199,46 @@ class Utils {
   }
 
   static String formatPhoneNumber(String? phoneNumber,
-      {bool toServerFormat = true}) {
-    if (phoneNumber == null || phoneNumber == '') return '';
+      {PhoneNumberFormat format = PhoneNumberFormat.server}) {
+    if (phoneNumber == null || phoneNumber.isEmpty) return '';
 
-    if (toServerFormat) {
-      final RegExp regex = RegExp(r'^\+7(\d{3})(\d{3})(\d{2})(\d{2})$');
-      return phoneNumber.replaceAllMapped(
-        regex,
-        (match) => '+7 ${match[1]} ${match[2]} ${match[3]} ${match[4]}',
-      );
-    } else {
-      // Преобразование из серверного формата в клиентский
-      final RegExp regex = RegExp(r'^\+7(\d{3})-?(\d{3})-?(\d{2})-?(\d{2})$');
-      return phoneNumber.replaceAllMapped(
-        regex,
-        (match) => '+7 (${match[1]}) ${match[2]}-${match[3]}-${match[4]}',
-      );
+    // Удаляем все нецифровые символы
+    String digits = phoneNumber.replaceAll(RegExp(r'\D'), '');
+
+    // Приводим к формату, начинающемуся с 7
+    if (digits.startsWith('8')) {
+      digits = '7${digits.substring(1)}';
+    } else if (digits.startsWith('9') && digits.length == 10) {
+      digits = '7$digits';
     }
+
+    switch (format) {
+      case PhoneNumberFormat.server:
+        // Формат для сервера: +7XXXXXXXXXX
+        if (digits.length == 11 && digits.startsWith('7')) {
+          return '+$digits';
+        }
+        break;
+
+      case PhoneNumberFormat.client:
+        // Формат для клиента: +7 (XXX) XXX XX XX
+        final match =
+            RegExp(r'^7(\d{3})(\d{3})(\d{2})(\d{2})$').firstMatch(digits);
+        if (match != null) {
+          return '+7 ${match[1]} ${match[2]} ${match[3]} ${match[4]}';
+        }
+        break;
+
+      case PhoneNumberFormat.loyaltyCard:
+        // Формат для карты лояльности: +7 (9XX) XXX-XXXX
+        final match = RegExp(r'^7(9\d{2})(\d{3})(\d{4})$').firstMatch(digits);
+        if (match != null) {
+          return '+7 (${match[1]}) ${match[2]}-${match[3]}';
+        }
+        break;
+    }
+
+    return phoneNumber; // fallback
   }
 
   static void showCustomDialog(
@@ -385,5 +419,14 @@ class Utils {
     final Uint8List newList = newData!.buffer.asUint8List();
 
     return BitmapDescriptor.fromBytes(newList);
+  }
+
+  // "DD.MM.YYYY"
+  static DateTime? parseCustomDate(String dateStr) {
+    final parts = dateStr.split('.');
+    if (parts.length == 3) {
+      return DateTime.tryParse('${parts[2]}-${parts[1]}-${parts[0]}');
+    }
+    return null;
   }
 }

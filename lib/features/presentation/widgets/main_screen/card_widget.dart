@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
+import 'package:nevis/core/shared_preferences_keys.dart';
+import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/main/bonus_cards/activate_bonus_screen.dart';
+import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
+import 'package:nevis/locator_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CardWidget extends StatelessWidget {
   const CardWidget({super.key});
@@ -62,19 +69,37 @@ class CardWidget extends StatelessWidget {
                     height: 44.h,
                     width: 182.w,
                     child: AppButtonWidget(
-                      isExpanded: false,
-                      onTap: () {
-                        Navigator.of(context).push(
-                          Routes.createRoute(
-                            ActivateBonusCardScreen(),
-                            settings: RouteSettings(
-                              name: Routes.activateBonusCardScreen,
-                            ),
-                          ),
-                        );
-                      },
-                      text: 'Активировать карту',
-                    ),
+                        isExpanded: false,
+                        onTap: () {
+                          String? token = sl<SharedPreferences>()
+                              .getString(SharedPreferencesKeys.accessToken);
+                          if (token != null) {
+                            Navigator.of(context).push(
+                              Routes.createRoute(
+                                ActivateBonusCardScreen(),
+                                settings: RouteSettings(
+                                  name: Routes.activateBonusCardScreen,
+                                ),
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context.read<HomeScreenBloc>().context)
+                                .push(
+                              Routes.createRoute(
+                                const LoginScreenWithPhoneCall(
+                                  canBack: true,
+                                ),
+                                settings: RouteSettings(
+                                  name: Routes.loginScreenPhoneCall,
+                                  arguments: {
+                                    'redirect_type': LoginScreenType.login
+                                  },
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        text: 'Активировать карту'),
                   ),
                 ],
               ),

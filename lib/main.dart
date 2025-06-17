@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -78,8 +79,16 @@ class MyApp extends StatelessWidget {
       //splitScreenMode: true,
       builder: (_, child) {
         return GetMaterialApp(
+            locale:
+                const Locale('ru'), // Установи язык по умолчанию, если нужно
             title: 'InLek',
-            //home: HomeScreen(),
+            fallbackLocale: const Locale('ru', 'RU'),
+            supportedLocales: [const Locale('ru', 'RU')],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
             routes: {
               Routes.splashScreen: (context) => const SplashScreen(),
               Routes.codeScreen: (context) => const CodeScreen(),
