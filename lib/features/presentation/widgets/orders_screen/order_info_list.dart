@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
-import 'package:nevis/constants/utils.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_info_item.dart';
 
@@ -26,11 +25,11 @@ class OrderInfoList extends StatelessWidget {
             title: 'Номер заказа',
             subtitle: '${order?.orderId}'),
         SizedBox(height: 8.h),
-        OrderInfoItem(
-          imagePath: Paths.timeIconPath,
-          title: 'Время заказа',
-          subtitle: Utils.formatDateTime(order?.createdAt),
-        ),
+        // OrderInfoItem(
+        //   imagePath: Paths.timeIconPath,
+        //   title: 'Время заказа',
+        //   subtitle: Utils.formatDateTime(order?.createdAt),
+        // ),
         SizedBox(height: 8.h),
         OrderInfoItem(
           imagePath: Paths.pharmacyIconPath,

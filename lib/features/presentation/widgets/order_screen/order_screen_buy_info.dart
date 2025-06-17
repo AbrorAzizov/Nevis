@@ -24,11 +24,11 @@ class OrderBuyInfoWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                pluralize(order?.products?.length ?? 1),
+                pluralize(order?.items?.length ?? 1),
                 style: UiConstants.textStyle11,
               ),
               Text(
-                Utils.formatPrice(order?.totalSum),
+                Utils.formatPrice(order?.orderSum),
                 style: UiConstants.textStyle11
                     .copyWith(color: UiConstants.blackColor),
               ),

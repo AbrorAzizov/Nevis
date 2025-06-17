@@ -124,13 +124,13 @@ class CancelOrderScreen extends StatelessWidget {
                                                   NeverScrollableScrollPhysics(),
                                               itemBuilder: (context, index) =>
                                                   CuttedOrderInfo(
-                                                    product: orderState.order!
-                                                        .products![index],
+                                                    product: orderState
+                                                        .order!.items![index],
                                                   ),
                                               separatorBuilder:
                                                   (context, index) => Divider(),
                                               itemCount: orderState
-                                                  .order!.products!.length),
+                                                  .order!.items!.length),
                                       ],
                                     ),
                             )

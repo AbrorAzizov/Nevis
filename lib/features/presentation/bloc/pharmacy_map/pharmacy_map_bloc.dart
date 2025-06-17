@@ -14,17 +14,24 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
       emit(PharmacyMapState(points: event.points));
       add(UpdatePharmacyMapEvent());
     });
+
     on<AttachControllerEvent>((event, emit) {
       emit(state.copyWith(mapController: event.mapController));
       event.mapController.moveCamera(
         CameraUpdate.newCameraPosition(
           const CameraPosition(
-              target: Point(
-                  latitude: 59.946193391466124, longitude: 30.352824011619802),
-              zoom: 12),
+            target: Point(
+                latitude: 59.946193391466124, longitude: 30.352824011619802),
+            zoom: 12,
+          ),
         ),
       );
     });
+
+    on<ClosePharmacyMapEvent>((event, emit) {
+      emit(state.copyWith(removeController: true));
+    });
+
     on<SelectMarkerEvent>(_onSelectMarker);
     on<UpdatePharmacyMapEvent>(_onUpdateMap);
     on<ZoomInEvent>(_onZoomIn);

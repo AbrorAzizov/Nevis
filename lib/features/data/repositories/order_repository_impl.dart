@@ -6,6 +6,7 @@ import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/order_local_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/order_remote_data_source_impl.dart';
 import 'package:nevis/features/data/models/order_model.dart';
+import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 import 'package:nevis/features/domain/repositories/order_repository.dart';
 
@@ -50,5 +51,12 @@ class OrderRepositoryImpl implements OrderRepository {
           List<CartParams> cart) async =>
       await errorHandler.handle(
         () async => await orderRemoteDataSource.getAvialablePharmacies(cart),
+      );
+
+  @override
+  Future<Either<Failure, List<OrderEntity>>> createOrderForPickup(
+          List<CartParams> cart) async =>
+      await errorHandler.handle(
+        () async => await orderRemoteDataSource.createOrderForPickup(cart),
       );
 }

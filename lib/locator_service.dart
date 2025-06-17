@@ -57,6 +57,7 @@ import 'package:nevis/features/domain/usecases/content/get_one_action.dart';
 import 'package:nevis/features/domain/usecases/content/get_one_article.dart';
 import 'package:nevis/features/domain/usecases/content/get_one_news.dart';
 import 'package:nevis/features/domain/usecases/content/get_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/order/create_order_for_pickup.dart';
 import 'package:nevis/features/domain/usecases/order/get_pharmacies_by_cart.dart';
 import 'package:nevis/features/domain/usecases/orders/get_one_order.dart';
 import 'package:nevis/features/domain/usecases/orders/get_order_history.dart';
@@ -132,12 +133,7 @@ Future<void> init() async {
       logoutUC: sl<LogoutUC>(),
     ),
   );
-  sl.registerFactory(
-    () => PersonalDataScreenBloc(
-        getMeUC: sl<GetMeUC>(),
-        updateMeUC: sl<UpdateMeUC>(),
-        deleteMeUC: sl<DeleteMeUC>()),
-  );
+
   sl.registerFactory(
     () => NewsScreenBloc(
       getNewsUC: sl<GetNewsUC>(),
@@ -228,6 +224,13 @@ Future<void> init() async {
         deleteProductFromCart: sl()),
   );
 
+  sl.registerLazySingleton(
+    () => PersonalDataScreenBloc(
+        getMeUC: sl<GetMeUC>(),
+        updateMeUC: sl<UpdateMeUC>(),
+        deleteMeUC: sl<DeleteMeUC>()),
+  );
+
   //// UseCases
 
   // Regions
@@ -281,6 +284,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetOrderHistoryUC(sl()));
   sl.registerLazySingleton(() => GetOneOrderUC(sl()));
   sl.registerLazySingleton(() => GetPharmaciesByCartUC(sl()));
+  sl.registerLazySingleton(() => CreateOrderForPickupUC(sl()));
 
   //Cart
   sl.registerLazySingleton(() => GetCartProductsUC(sl()));

@@ -9,7 +9,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/order/order_pickup_screen.dart';
+import 'package:nevis/features/presentation/pages/order_pickup/order_pickup_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/cart_product_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/empty_cart_widget.dart';
@@ -234,9 +234,9 @@ class CartScreen extends StatelessWidget {
                                               .any((count) => count >= 50)
                                           ? null
                                           : () {
-                                              print(cartState.cartType);
                                               if (cartState.cartType ==
-                                                  TypeReceiving.pickup) {
+                                                      TypeReceiving.pickup &&
+                                                  !hasUnavailable) {
                                                 Navigator.of(context).push(
                                                   Routes.createRoute(
                                                     const OrderPickupScreen(),

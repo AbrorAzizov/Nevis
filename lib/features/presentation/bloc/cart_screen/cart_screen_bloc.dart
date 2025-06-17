@@ -66,7 +66,6 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
     on<AddProductToCart>(_addProductTocart);
     on<DeleteProductFromCart>(_deleteProductFromCart);
   }
-
   void _getCartProducts(
       GetCartProductsEvent event, Emitter<CartScreenState> emit) async {
     final failureOrLoads = await getCartProducts();
@@ -77,7 +76,7 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
         isLoading: false,
       )),
       (cart) {
-        final newCounters = Map<int, int>.from(state.counters);
+        final newCounters = <int, int>{};
 
         for (var item in cart.cartItems) {
           if (item.productId != null && item.count != null) {
@@ -90,7 +89,8 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
           totalBonuses: cart.totalBonuses,
           totalPrice: cart.totalPrice,
           cartProducts: cart.cartItems,
-          counters: newCounters,
+          counters:
+              cart.cartItems.isEmpty ? {} : newCounters, // <-- ключевая строка
           isLoading: false,
         ));
       },

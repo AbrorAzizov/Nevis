@@ -29,7 +29,7 @@ class OrderPickupScreenState extends Equatable {
       selectorIndex: selectorIndex ?? this.selectorIndex,
       pharmacies: pharmacies ?? this.pharmacies,
       points: points ?? this.points,
-      selectedPharmacy: selectedPharmacy ?? this.selectedPharmacy,
+      selectedPharmacy: selectedPharmacy,
       errorMessage: errorMessage,
       isLoading: isLoading ?? this.isLoading,
     );

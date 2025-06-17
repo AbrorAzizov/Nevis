@@ -13,7 +13,7 @@ import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/order/order_pickup_screen.dart';
+import 'package:nevis/features/presentation/pages/order_pickup/order_pickup_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/delivery_bottom_sheet/online_payment_method_button.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';

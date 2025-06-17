@@ -82,11 +82,6 @@ flutter:
     - assets/images/
     - assets/html/
     - .env
-    - assets/response.json
-    - assets/pharmacies.json
-    - assets/products.json
-    - assets/product_pharmacies.json
-
   fonts:
     - family: Nunito
       fonts:

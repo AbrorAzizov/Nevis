@@ -32,6 +32,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         body: {
           'phone_number': phone,
           'verification_code': code,
+          'fcm_token': 'fcmtoken123'
         },
         exceptions: {
           401: ConfirmationCodeWrongException(),
@@ -39,7 +40,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         },
         callPathNameForLog: '${runtimeType.toString()}.login',
       );
-
       if (data.containsKey('access_token')) {
         await sharedPreferences.setString(
             SharedPreferencesKeys.accessToken, data['access_token']['token']);
@@ -63,6 +63,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         body: {
           'service': loginServiceParam.loginServiceType.name,
           'access_token': loginServiceParam.serviceToken,
+          'fcm_token': 'fcmtoken123'
         },
         exceptions: {
           429: TooManyRequestsException(),

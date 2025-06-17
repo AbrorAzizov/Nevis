@@ -1,14 +1,35 @@
 class CartParams {
   final int quantity;
   final int id;
+  final String? offerId;
+  final String? availabilityStatus;
 
-  CartParams({required this.quantity, required this.id});
+  CartParams({
+    required this.quantity,
+    required this.id,
+    this.offerId,
+    this.availabilityStatus,
+  });
 
   Map<String, dynamic> toJsonForCartPharmacies() {
-    return {"id": id, "quantity": quantity};
+    return {
+      "id": id,
+      "quantity": quantity,
+    };
   }
 
   Map<String, dynamic> toJsonForProductToCart() {
-    return {"product_id": id, "quantity": quantity};
+    return {
+      "product_id": id,
+      "quantity": quantity,
+    };
+  }
+
+  Map<String, dynamic> toJsonForOrder() {
+    return {
+      "product_id": offerId.toString(),
+      "quantity": quantity.toString(),
+      "type": availabilityStatus,
+    };
   }
 }

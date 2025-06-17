@@ -10,12 +10,9 @@ import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/profile/cancel_order_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
-import 'package:nevis/features/presentation/widgets/cart_screen/products_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget.dart';
-import 'package:nevis/features/presentation/widgets/order_screen/order_progress_indicator.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_screen_buy_info.dart';
-import 'package:nevis/features/presentation/widgets/order_screen/order_status_widget.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_info_list.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -72,72 +69,72 @@ class OrderScreen extends StatelessWidget {
                                         height: 133,
                                       ),
                                     if (!orderState.isLoading)
-                                      OrderStatusWidget(
-                                          orderStatus:
-                                              orderState.order!.status!,
-                                          date: orderState.order!.createdAt!),
-                                    (!orderState.isLoading &&
-                                            orderState.order!.status ==
-                                                OrderStatus.canceled)
-                                        ? SizedBox.shrink()
-                                        : SizedBox(
-                                            height: 32.h,
-                                          ),
+                                      // OrderStatusWidget(
+                                      //     orderStatus:
+                                      //         orderState.order!.status!,
+                                      //     date: orderState.order!.createdAt!),
+                                      (!orderState.isLoading &&
+                                              orderState.order!.status ==
+                                                  OrderStatus.canceled)
+                                          ? SizedBox.shrink()
+                                          : SizedBox(
+                                              height: 32.h,
+                                            ),
                                     if (!orderState.isLoading &&
                                         orderState.order!.status !=
                                             OrderStatus.canceled &&
                                         orderState.order!.status !=
                                             OrderStatus.received)
-                                      OrderProgressIndicator(
-                                          orderStatus:
-                                              orderState.order!.status!,
-                                          paymentType:
-                                              orderState.order!.paymentType!,
-                                          typeReceipt:
-                                              orderState.order!.typeReceipt!),
-                                    SizedBox(height: 32.h),
-                                    if (!orderState.isLoading &&
-                                        orderState.order!.typeReceipt !=
-                                            TypeReceiving.delivery &&
-                                        orderState.order!.status ==
-                                            OrderStatus.readyToIssue)
-                                      Padding(
-                                        padding: getMarginOrPadding(bottom: 16),
-                                        child: Text(
-                                          'Можете оплатить сейчас или при получении',
-                                          textAlign: TextAlign.center,
-                                          style: UiConstants.textStyle2,
-                                        ),
+                                      // OrderProgressIndicator(
+                                      //     orderStatus:
+                                      //         orderState.order!.status!,
+                                      //     paymentType:
+                                      //         orderState.order!.paymentType!,
+                                      //     typeReceipt:
+                                      //         orderState.order!.typeReceipt!),
+                                      SizedBox(height: 32.h),
+                                    // if (!orderState.isLoading &&
+                                    //     orderState.order!.typeReceipt !=
+                                    //         TypeReceiving.delivery &&
+                                    //     orderState.order!.status ==
+                                    //         OrderStatus.readyToIssue)
+                                    Padding(
+                                      padding: getMarginOrPadding(bottom: 16),
+                                      child: Text(
+                                        'Можете оплатить сейчас или при получении',
+                                        textAlign: TextAlign.center,
+                                        style: UiConstants.textStyle2,
                                       ),
-                                    if (!orderState.isLoading &&
-                                        (orderState.order!.status ==
-                                                OrderStatus.accepted ||
+                                    ),
+                                    // if (!orderState.isLoading &&
+                                    //     (orderState.order!.status ==
+                                    //             OrderStatus.accepted ||
+                                    //         orderState.order!.status ==
+                                    //             OrderStatus.readyToIssue) &&
+                                    //     orderState.order!.typeReceipt !=
+                                    //         TypeReceiving.delivery)
+                                    Padding(
+                                      padding: getMarginOrPadding(bottom: 32),
+                                      child: AppButtonWidget(
+                                        text: 'Перейти к оплате',
+                                        showBorder: false,
+                                        textColor: orderState.order!.status ==
+                                                OrderStatus.accepted
+                                            ? UiConstants.black3Color
+                                                .withOpacity(0.6)
+                                            : UiConstants.whiteColor,
+                                        backgroundColor:
                                             orderState.order!.status ==
-                                                OrderStatus.readyToIssue) &&
-                                        orderState.order!.typeReceipt !=
-                                            TypeReceiving.delivery)
-                                      Padding(
-                                        padding: getMarginOrPadding(bottom: 32),
-                                        child: AppButtonWidget(
-                                          text: 'Перейти к оплате',
-                                          showBorder: false,
-                                          textColor: orderState.order!.status ==
-                                                  OrderStatus.accepted
-                                              ? UiConstants.black3Color
-                                                  .withOpacity(0.6)
-                                              : UiConstants.whiteColor,
-                                          backgroundColor:
-                                              orderState.order!.status ==
-                                                      OrderStatus.accepted
-                                                  ? UiConstants.black3Color
-                                                      .withOpacity(0.05)
-                                                  : UiConstants.blueColor,
-                                          onTap: orderState.order!.status ==
-                                                  OrderStatus.accepted
-                                              ? null
-                                              : () {},
-                                        ),
+                                                    OrderStatus.accepted
+                                                ? UiConstants.black3Color
+                                                    .withOpacity(0.05)
+                                                : UiConstants.blueColor,
+                                        onTap: orderState.order!.status ==
+                                                OrderStatus.accepted
+                                            ? null
+                                            : () {},
                                       ),
+                                    ),
                                     if (!orderState.isLoading &&
                                         orderState.order!.status ==
                                             OrderStatus.readyToIssue)
@@ -176,20 +173,20 @@ class OrderScreen extends StatelessWidget {
                                                 SizedBox(
                                                   width: 12.w,
                                                 ),
-                                                Expanded(
-                                                    child: Text(
-                                                  orderState.order!
-                                                              .typeReceipt ==
-                                                          TypeReceiving.pickup
-                                                      ? 'Заберите заказ в течение 48 часов или он будет отменен'
-                                                      : 'Заберите заказ в течение 7 дней или он будет отменен',
-                                                  style: UiConstants.textStyle11
-                                                      .copyWith(
-                                                          color: UiConstants
-                                                              .blueColor,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                ))
+                                                // Expanded(
+                                                //     child: Text(
+                                                //   orderState.order!
+                                                //               .typeReceipt ==
+                                                //           TypeReceiving.pickup
+                                                //       ? 'Заберите заказ в течение 48 часов или он будет отменен'
+                                                //       : 'Заберите заказ в течение 7 дней или он будет отменен',
+                                                //   style: UiConstants.textStyle11
+                                                //       .copyWith(
+                                                //           color: UiConstants
+                                                //               .blueColor,
+                                                //           fontWeight:
+                                                //               FontWeight.w500),
+                                                // ))
                                               ],
                                             ),
                                           ),
@@ -279,14 +276,14 @@ class OrderScreen extends StatelessWidget {
                                           )
                                         ],
                                       ),
-                                    ProductsListWidget(
-                                        products:
-                                            orderState.order?.products ?? [],
-                                        productsListScreenType:
-                                            ProductsListScreenType.order),
-                                    SizedBox(
-                                      height: 16.h,
-                                    ),
+                                    // ProductsListWidget(
+                                    //     products:
+                                    //         orderState.order?.products ?? [],
+                                    //     productsListScreenType:
+                                    //         ProductsListScreenType.order),
+                                    // SizedBox(
+                                    //   height: 16.h,
+                                    // ),
                                     OrderBuyInfoWidget(order: orderState.order),
                                     SizedBox(height: 32.h),
                                     Container(

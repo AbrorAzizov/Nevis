@@ -7,7 +7,7 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/order_pickup_screen/order_pickup_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/order_pickup_cart/order_pikcup_cart_screen.dart';
+import 'package:nevis/features/presentation/pages/order_pickup/order_pikcup_cart_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';

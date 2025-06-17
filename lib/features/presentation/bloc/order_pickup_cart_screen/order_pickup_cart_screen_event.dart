@@ -13,3 +13,5 @@ class LoadCartForSelectedPharmacyEvent extends OrderPickupCartScreenEvent {
   const LoadCartForSelectedPharmacyEvent(
       {required this.cartForSelectedPharmacyParam});
 }
+
+class CreateOrderForPickupEvent extends OrderPickupCartScreenEvent {}

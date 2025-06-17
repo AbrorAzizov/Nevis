@@ -8,7 +8,7 @@ import UIKit
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     YMKMapKit.setLocale("ru_RU")
-    YMKMapKit.setApiKey("39a54941-0819-4ad3-bec0-ea83ea36e655") 
+    YMKMapKit.setApiKey("6127076d-e153-4873-be2b-1e927e3730d4") 
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

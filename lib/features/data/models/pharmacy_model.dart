@@ -36,7 +36,6 @@ class PharmacyModel extends PharmacyEntity {
       PharmacyModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
-
   factory PharmacyModel.fromJson(Map<String, dynamic> json) {
     double? parseDouble(dynamic value) {
       if (value == null) return null;
@@ -46,13 +45,18 @@ class PharmacyModel extends PharmacyEntity {
       return null;
     }
 
+    final cartStatusId =
+        int.tryParse(json['AMOUNTS']?['ID']?.toString() ?? '') ??
+            int.tryParse(json['cartStatus']?.toString() ?? '');
+
     return PharmacyModel(
-      pharmacyId: int.tryParse(json["storeId"]?.toString() ?? ''),
+      pharmacyId: int.tryParse(json["storeId"]?.toString() ?? '') ??
+          int.tryParse(json['ID']?.toString() ?? ''),
       title: json["TITLE"],
       alias: json["alias"],
-      address: json["address"],
+      address: json["address"] ?? json["ADDRESS"],
       coordinates: json["coordinates"]?.toString(),
-      schedule: json["workTime"],
+      schedule: json["workTime"] ?? json['SCHEDULE'],
       metro: json["metro"],
       optics: json["optics"] is int
           ? json["optics"]
@@ -64,7 +68,7 @@ class PharmacyModel extends PharmacyEntity {
           ? json["roundtheclock"]
           : int.tryParse(json["roundtheclock"]?.toString() ?? ''),
       iconHref: json["iconHref"],
-      phone: json["phone"],
+      phone: json["phone"] ?? json["PHONE"],
       brand: json["brand"],
       textCloseTime: json["textCloseTime"],
       classCloseTime: json["classCloseTime"],
@@ -78,9 +82,9 @@ class PharmacyModel extends PharmacyEntity {
           ?.map((e) => e.toString())
           .toList(),
       cartAvailableString: json['AMOUNTS']?['TEXT'] ?? json['cartAvailable'],
-      cartStatus: AvailabilityCartStatusExtension.fromId(
-              int.tryParse(json['AMOUNTS']?['ID']?.toString() ?? '')) ??
-          AvailabilityCartStatusExtension.fromId(json['cartStatus']),
+      cartStatus: cartStatusId != null
+          ? AvailabilityCartStatusExtension.fromId(cartStatusId)
+          : null,
     );
   }
 

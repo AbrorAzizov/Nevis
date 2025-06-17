@@ -166,15 +166,16 @@ extension TypeOfSpecialOfferExtension on TypeOfSpecialOffer {
 
 extension AvailabilityCartStatusExtension on AvailabilityCartStatus {
   static const Map<AvailabilityCartStatus, int> _ids = {
-    AvailabilityCartStatus.availableInHour: 1,
-    AvailabilityCartStatus.preorder: 2,
+    AvailabilityCartStatus.available: 1,
+    AvailabilityCartStatus.fromWareHouse: 2,
     AvailabilityCartStatus.partiallyAvailable: 3,
     AvailabilityCartStatus.notAvailable: 4,
   };
 
   static final Map<AvailabilityCartStatus, Color> _colors = {
-    AvailabilityCartStatus.availableInHour: UiConstants.greenColor,
-    AvailabilityCartStatus.preorder: UiConstants.blueColor.withOpacity(0.8),
+    AvailabilityCartStatus.available: UiConstants.greenColor,
+    AvailabilityCartStatus.fromWareHouse:
+        UiConstants.blueColor.withOpacity(0.8),
     AvailabilityCartStatus.partiallyAvailable: UiConstants.orangeColor,
     AvailabilityCartStatus.notAvailable: UiConstants.black3Color,
   };

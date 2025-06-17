@@ -11,6 +11,7 @@ import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.da
 import 'package:nevis/features/presentation/bloc/order_pickup_cart_screen/order_pickup_cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_pickup_screen/order_pickup_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/route_observer/route_observer_bloc.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/bottom_navigation_bar_tile.dart';
@@ -32,34 +33,45 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider.value(
+            value: sl<PersonalDataScreenBloc>()..add(LoadProfileEvent())),
+        BlocProvider.value(
+          value: sl<CartScreenBloc>()..add(GetCartProductsEvent()),
+        ),
         BlocProvider(
           lazy: false,
-          create: (context) => sl<CartScreenBloc>()
-            ..add(GetCartProductsEvent())
-            ..add(GetProductsEvent()),
+          create: (context) =>
+              OrdersScreenBloc(getOrderHistoryUC: sl())..add(LoadDataEvent()),
         ),
         BlocProvider(
-            create: (context) => sl<FavoriteProductsScreenBloc>()
-              ..add(LoadFavoriteProductsEvent())),
+          lazy: false,
+          create: (context) => FavoriteProductsScreenBloc(
+            getFavoriteProductsUC: sl(),
+            deleteProductFromFavoriteProductsUC: sl(),
+            updateFavoriteProductsUC: sl(),
+          )..add(LoadFavoriteProductsEvent()),
+        ),
         BlocProvider(
-            create: (context) => OrdersScreenBloc(getOrderHistoryUC: sl())
-              ..add(LoadDataEvent())),
-        BlocProvider(
-            create: (context) => sl<FavoriteProductsScreenBloc>()
-              ..add(LoadFavoriteProductsEvent())),
-        BlocProvider(
+          lazy: false,
           create: (context) => HomeScreenBloc(context: context),
         ),
+        BlocProvider.value(value: sl<SearchScreenBloc>()),
         BlocProvider(
-          create: (context) => sl<SearchScreenBloc>(),
+          lazy: false,
+          create: (context) => OrderPickupScreenBloc(
+            getFavoritePharmaciesUC: sl(),
+            getPharmaciesByCartUC: sl(),
+          ),
         ),
         BlocProvider(
-            create: (context) => OrderPickupScreenBloc(
-                getFavoritePharmaciesUC: sl(), getPharmaciesByCartUC: sl())),
+          lazy: false,
+          create: (context) => OrderPickupCartScreenBloc(
+            getOrderCartProductsUC: sl(),
+            createOrderForPickupUC: sl(),
+          ),
+        ),
         BlocProvider(
-            create: (context) =>
-                OrderPickupCartScreenBloc(getOrderCartProductsUC: sl())),
-        BlocProvider(
+          lazy: false,
           create: (context) => RouteObserverBloc(),
         ),
       ],
@@ -164,21 +176,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: List.generate(
                                           bloc.screens.length,
-                                          (index) => BottomNavigationBarTile(
-                                              icon: bloc.iconsPaths[index],
-                                              title: bloc.iconsNames[index],
-                                              countChatMessage:
-                                                  index == 2 ? 99 : null,
-                                              onTap: () {
-                                                bloc
-                                                    .navigatorKeys[
-                                                        selectedIndex]
-                                                    .currentState!
-                                                    .popUntil((route) =>
-                                                        route.isFirst);
-                                                bloc.onChangePage(index);
-                                              },
-                                              isActive: selectedIndex == index),
+                                          (index) => BlocBuilder<CartScreenBloc,
+                                              CartScreenState>(
+                                            builder: (context, state) {
+                                              return BottomNavigationBarTile(
+                                                  icon: bloc.iconsPaths[index],
+                                                  title: bloc.iconsNames[index],
+                                                  countChatMessage: index == 2
+                                                      ? context
+                                                          .read<
+                                                              CartScreenBloc>()
+                                                          .state
+                                                          .cartProducts
+                                                          .length
+                                                      : null,
+                                                  onTap: () {
+                                                    bloc
+                                                        .navigatorKeys[
+                                                            selectedIndex]
+                                                        .currentState!
+                                                        .popUntil((route) =>
+                                                            route.isFirst);
+                                                    bloc.onChangePage(index);
+                                                  },
+                                                  isActive:
+                                                      selectedIndex == index);
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ),

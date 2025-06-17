@@ -9,4 +9,6 @@ abstract class OrderRepository {
   Future<Either<Failure, OrderEntity?>> getOrderById(int id);
   Future<Either<Failure, List<PharmacyEntity>>> getAvialablePharmacies(
       List<CartParams> cart);
+  Future<Either<Failure, List<OrderEntity>>> createOrderForPickup(
+      List<CartParams> cart);
 }

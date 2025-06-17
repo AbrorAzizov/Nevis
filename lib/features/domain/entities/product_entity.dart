@@ -5,6 +5,7 @@ class ProductEntity extends Equatable {
   final int? productId;
   final int? maxCount;
   final int? bonuses;
+  final String? offerId;
   final String? mnn;
   final String? mnnLat;
   final String? name;
@@ -38,6 +39,7 @@ class ProductEntity extends Equatable {
   final bool? isFav;
 
   const ProductEntity({
+    this.offerId,
     this.maxCount,
     this.productId,
     this.availableForDelivery,

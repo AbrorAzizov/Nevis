@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/params/cart_params.dart';
@@ -11,6 +12,7 @@ abstract class OrderRemoteDataSource {
   Future<List<OrderModel>> getOrderHistory();
   Future<OrderModel?> getOrderById(int id);
   Future<List<PharmacyModel>> getAvialablePharmacies(List<CartParams> cart);
+  Future<List<OrderModel>> createOrderForPickup(List<CartParams> cart);
 }
 
 class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
@@ -73,6 +75,41 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
       return dataList.map((e) => PharmacyModel.fromJson(e)).toList();
     } catch (e) {
       log('Error during getAvialablePharmacies: $e', level: 1000);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<OrderModel>> createOrderForPickup(List<CartParams> cart) async {
+    final body = cart.map((e) => e.toJsonForOrder()).toList();
+    try {
+      final data = await apiClient.post(
+        body: {'items': body},
+        endpoint: 'orders/create',
+        exceptions: {500: ServerException()},
+        callPathNameForLog: '${runtimeType.toString()}.createOrderForPickup',
+      );
+
+      final ordersMap =
+          data['success']['orders'] as Map<String, dynamic>? ?? {};
+      final available = (ordersMap['available'] as List<dynamic>? ?? []);
+      final availableOnRequest =
+          (ordersMap['available_on_request'] as List<dynamic>? ?? []);
+
+      final allOrders = [...available, ...availableOnRequest];
+
+      return allOrders.map((e) {
+        return OrderModel.fromJson(e,
+            status: available.isEmpty
+                ? AvailabilityCartStatus.fromWareHouse
+                : AvailabilityCartStatus.available);
+      }).toList();
+    } catch (e) {
+      log(
+        'Error during createOrderForPickup: $e',
+        level: 1000,
+        name: '${runtimeType.toString()}.createOrderForPickup',
+      );
       rethrow;
     }
   }

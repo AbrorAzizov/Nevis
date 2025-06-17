@@ -97,6 +97,8 @@ class PersonalDataScreenBloc
       },
     );
 
+    on<LoadProfileEvent>((event, emit) async => getProfile());
+
     on<ChangePolicyCheckboxEvent>(
       (event, emit) {
         emit(

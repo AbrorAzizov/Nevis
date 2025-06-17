@@ -63,8 +63,8 @@ enum LoginServiceType { yandex, vk }
 enum PharmacyCardInfoType { yandex, vk }
 
 enum AvailabilityCartStatus {
-  availableInHour,
-  preorder,
+  available,
+  fromWareHouse,
   partiallyAvailable,
   notAvailable,
 }
@@ -77,3 +77,5 @@ enum PharmacyMapType {
 }
 
 enum CartType { defaultCart, pickupCart }
+
+enum PharmacyProductsAvailabilityType { available, notAvailable }

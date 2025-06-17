@@ -32,3 +32,5 @@ class ConfirmPhoneChangeEvent extends PersonalDataScreenEvent {
 }
 
 class DeleteAccountEvent extends PersonalDataScreenEvent {}
+
+class LoadProfileEvent extends PersonalDataScreenEvent {}

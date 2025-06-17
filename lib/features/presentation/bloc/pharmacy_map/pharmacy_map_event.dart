@@ -15,6 +15,8 @@ class AttachControllerEvent extends PharmacyMapEvent {
   AttachControllerEvent({required this.mapController});
 }
 
+class ClosePharmacyMapEvent extends PharmacyMapEvent {}
+
 class SelectMarkerEvent extends PharmacyMapEvent {
   final String? markerId;
   SelectMarkerEvent({this.markerId});

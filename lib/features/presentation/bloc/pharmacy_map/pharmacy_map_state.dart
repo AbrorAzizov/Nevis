@@ -21,15 +21,16 @@ class PharmacyMapState extends Equatable {
     bool? showStackWindow,
     List<MapObject<dynamic>>? markers,
     List<MapMarkerModel>? points,
-    CameraPosition? position,
     YandexMapController? mapController,
+    bool removeController = false,
   }) {
     return PharmacyMapState(
       showStackWindow: showStackWindow ?? this.showStackWindow,
       selectedMarkerId: selectedMarkerId ?? this.selectedMarkerId,
       markers: markers ?? this.markers,
       points: points ?? this.points,
-      mapController: mapController ?? this.mapController,
+      mapController:
+          removeController ? null : mapController ?? this.mapController,
     );
   }
 

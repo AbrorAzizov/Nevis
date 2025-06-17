@@ -2,6 +2,7 @@ import 'package:nevis/features/domain/entities/order_cart_entity.dart';
 
 class OrderCartModel extends OrderCartEntity {
   const OrderCartModel({
+    required super.notAvailableCartItems,
     required super.cartItemsFromWarehouse,
     required super.cartItems,
     required super.totalPrice,

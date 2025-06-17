@@ -20,7 +20,8 @@ import 'package:nevis/features/presentation/pages/main/bonus_cards/bonus_card_sc
 import 'package:nevis/features/presentation/pages/main/bonus_cards/register_bonus_card_screen.dart';
 import 'package:nevis/features/presentation/pages/main/main_screen.dart';
 import 'package:nevis/features/presentation/pages/main/stories_screen.dart';
-import 'package:nevis/features/presentation/pages/order_pickup_cart/order_pikcup_cart_screen.dart';
+import 'package:nevis/features/presentation/pages/order_pickup/order_pickup_success_screen.dart';
+import 'package:nevis/features/presentation/pages/order_pickup/order_pikcup_cart_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/about_us_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/article_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/articles_screen.dart';
@@ -135,7 +136,9 @@ class MyApp extends StatelessWidget {
               Routes.bonusCardScreen: (context) => const BonusCardScreen(),
               Routes.storiesScreen: (context) => const StoriesScreen(),
               Routes.orderPickupCartScreen: (context) =>
-                  const OrderPickupCartScreen()
+                  const OrderPickupCartScreen(),
+              Routes.orderPickupSuccessfullScreen: (context) =>
+                  const OrderPickupSuccessScreen()
             },
             initialRoute: Routes.splashScreen,
             navigatorObservers: [routeObserver],

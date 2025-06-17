@@ -34,12 +34,14 @@ class OrderPickupScreenBloc
   ) async {
     emit(state.copyWith(isLoading: true));
     final products = sl<CartScreenBloc>().state.cartProducts;
+
     final List<CartParams> cartParams = products
         .map((e) => CartParams(
               quantity: sl<CartScreenBloc>().state.counters[e.productId] ?? 1,
               id: e.productId!,
             ))
         .toList();
+    print(cartParams);
 
     final failureOrLoads = await getPharmaciesByCartUC(cartParams);
     List<MapMarkerModel> points = [];

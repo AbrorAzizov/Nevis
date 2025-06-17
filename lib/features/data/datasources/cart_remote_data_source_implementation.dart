@@ -99,7 +99,6 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       );
 
       final itemsMap = data['items'] as Map<String, dynamic>? ?? {};
-
       final available = (itemsMap['available'] as List<dynamic>? ?? [])
           .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -108,10 +107,14 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
           (itemsMap['available_on_request'] as List<dynamic>? ?? [])
               .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
               .toList();
-      print(available.length);
+      final notAvailable = (itemsMap['not_available'] as List<dynamic>? ?? [])
+          .map((e) => ProductModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+
       return OrderCartModel(
         cartItemsFromWarehouse: availableFromWareHouse,
         cartItems: available,
+        notAvailableCartItems: notAvailable,
         totalPrice: toDoubleSafe(data['ORDER_SUM']),
         totalDiscounts: toDoubleSafe(data['ORDER_DISCOUNT_SUM']),
         totalBonuses: 0,

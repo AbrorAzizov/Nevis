@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/enums.dart';
-import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/presentation/pages/profile/orders/order_screen.dart';
@@ -78,11 +76,11 @@ class OrderItem extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 16.h),
-                          Text(
-                            TypeReceivingExtension.titles[order.typeReceipt]!,
-                            style: UiConstants.textStyle11
-                                .copyWith(color: UiConstants.blueColor),
-                          ),
+                          // Text(
+                          //   TypeReceivingExtension.titles[order.typeReceipt]!,
+                          //   style: UiConstants.textStyle11
+                          //       .copyWith(color: UiConstants.blueColor),
+                          // ),
                           SizedBox(
                             height: 8.h,
                           ),
@@ -90,14 +88,14 @@ class OrderItem extends StatelessWidget {
                           SizedBox(
                             height: 4.h,
                           ),
-                          Text(
-                            Utils.formatDate(order.createdAt!),
-                            style: UiConstants.textStyle11,
-                          ),
+                          // Text(
+                          //   Utils.formatDate(order.createdAt!),
+                          //   style: UiConstants.textStyle11,
+                          // ),
                           SizedBox(height: 8.h),
                           Text('Итого'),
                           Text(
-                            '${order.sumPrices.toString()} ₽',
+                            '${order.orderSum.toString()} ₽',
                             style: UiConstants.textStyle11,
                           )
                         ],
@@ -106,7 +104,7 @@ class OrderItem extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8.h),
-                OrderItemProductsList(orderProducts: order.products ?? []),
+                OrderItemProductsList(orderProducts: order.items ?? []),
                 if (order.status == OrderStatus.canceled)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

@@ -45,6 +45,8 @@ class Routes {
   static const String orderPickupScreen = '/order_pickup_screen';
   static const String storiesScreen = '/stories_screen';
   static const String orderPickupCartScreen = '/order_pickup_cart_screen';
+  static const String orderPickupSuccessfullScreen =
+      '/order_pickup_successfull_screen';
 
   static List<String> get allRoutes => [
         splashScreen,
