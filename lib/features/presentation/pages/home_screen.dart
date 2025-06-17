@@ -43,35 +43,27 @@ class _HomeScreenState extends State<HomeScreen> {
           create: (context) =>
               OrdersScreenBloc(getOrderHistoryUC: sl())..add(LoadDataEvent()),
         ),
-        BlocProvider(
-          lazy: false,
-          create: (context) => FavoriteProductsScreenBloc(
-            getFavoriteProductsUC: sl(),
-            deleteProductFromFavoriteProductsUC: sl(),
-            updateFavoriteProductsUC: sl(),
-          )..add(LoadFavoriteProductsEvent()),
+        BlocProvider.value(
+          value: sl<FavoriteProductsScreenBloc>()
+            ..add(LoadFavoriteProductsEvent()),
         ),
         BlocProvider(
-          lazy: false,
           create: (context) => HomeScreenBloc(context: context),
         ),
         BlocProvider.value(value: sl<SearchScreenBloc>()),
         BlocProvider(
-          lazy: false,
           create: (context) => OrderPickupScreenBloc(
             getFavoritePharmaciesUC: sl(),
             getPharmaciesByCartUC: sl(),
           ),
         ),
         BlocProvider(
-          lazy: false,
           create: (context) => OrderPickupCartScreenBloc(
             getOrderCartProductsUC: sl(),
             createOrderForPickupUC: sl(),
           ),
         ),
         BlocProvider(
-          lazy: false,
           create: (context) => RouteObserverBloc(),
         ),
       ],
