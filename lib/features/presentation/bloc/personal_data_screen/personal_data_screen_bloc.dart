@@ -74,7 +74,7 @@ class PersonalDataScreenBloc
         failureOrLoads.fold((_) => emit(state.copyWith(showError: true)),
             (_) async {
           emit(state.copyWith(isLoading: true));
-          add(LoadDataEvent());
+          add(LoadProfileEvent());
         });
       },
     );
@@ -96,7 +96,7 @@ class PersonalDataScreenBloc
       },
     );
 
-    on<LoadDataEvent>((event, emit) async {
+    on<LoadProfileEvent>((event, emit) async {
       final failureOrLoads = await getMeUC();
 
       return failureOrLoads.fold(

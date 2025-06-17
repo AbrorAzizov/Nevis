@@ -79,6 +79,11 @@ class _OrderPickupScreenState extends State<OrderPickupScreen> {
                                       itemBuilder: (context, index) =>
                                           PharmacyCard(
                                         pharmacy: state.pharmacies[index],
+                                        onTap: () => bloc.add(
+                                          PickupPharmacySelectedEvent(
+                                            pharmacy: state.pharmacies[index],
+                                          ),
+                                        ),
                                       ),
                                       separatorBuilder: (context, index) =>
                                           SizedBox(height: 8.h),

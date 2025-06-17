@@ -29,7 +29,7 @@ class PersonalDataScreen extends StatelessWidget {
               getMeUC: sl(),
               updateMeUC: sl(),
               deleteMeUC: sl())
-            ..add(LoadDataEvent()),
+            ..add(LoadProfileEvent()),
           child: BlocConsumer<PersonalDataScreenBloc, PersonalDataScreenState>(
             listener: (context, state) => switch (state) {
               DeleteAccountState _ =>

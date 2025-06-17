@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocProvider(
           lazy: false,
           create: (context) =>
-              OrdersScreenBloc(getOrderHistoryUC: sl())..add(LoadDataEvent()),
+              OrdersScreenBloc(getOrderHistoryUC: sl())..add(LoadOrdersEvent()),
         ),
         BlocProvider.value(
           value: sl<FavoriteProductsScreenBloc>()
@@ -234,9 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (mounted) {
             bool? isSuccess =
                 await BottomSheetManager.showEnableNotificationSheet(context);
-            if (isSuccess != null) {
-              prefs.setBool(SharedPreferencesKeys.isFirstAppStarted, false);
-            }
+            prefs.setBool(SharedPreferencesKeys.isFirstAppStarted, false);
           }
         });
       });

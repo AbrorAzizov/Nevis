@@ -7,8 +7,8 @@ abstract class PersonalDataScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadDataEvent extends PersonalDataScreenEvent {
-  const LoadDataEvent();
+class LoadProfileEvent extends PersonalDataScreenEvent {
+  const LoadProfileEvent();
 }
 
 class ChangeNotificationCheckboxEvent extends PersonalDataScreenEvent {

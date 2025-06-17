@@ -44,7 +44,9 @@ class ProductModel extends ProductEntity {
     return ProductModel(
       bonuses:
           json['bonuses'] ?? json['bonuses_earned'] ?? json['CASHBACK_BONUSES'],
-      cashbackPercent: json['CASHBACK_PERCENT'],
+      cashbackPercent: json['CASHBACK_PERCENT'] != null
+          ? (json['CASHBACK_PERCENT'] as num).toDouble()
+          : null,
       images: (json["images"] as List<dynamic>?)
           ?.map((item) => item.toString())
           .toList(),

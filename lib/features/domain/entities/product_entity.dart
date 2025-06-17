@@ -3,8 +3,11 @@ import 'package:nevis/constants/enums.dart';
 
 class ProductEntity extends Equatable {
   final int? productId;
+  final String? offerId;
+  final int? maxCount;
   final int? bonuses;
-  final int? cashbackPercent;
+  final double? cashbackPercent;
+  final int? valueBuy;
   final String? mnn;
   final String? mnnLat;
   final String? name;
@@ -31,7 +34,6 @@ class ProductEntity extends Equatable {
   final String? productDateRegister;
   final String? productTimeRegister;
   final int? count;
-  final int? valueBuy;
   final TypeOfSpecialOffer? specialOffer;
   final bool? availableForDelivery;
   final List<String>? images;
@@ -39,10 +41,10 @@ class ProductEntity extends Equatable {
 
   const ProductEntity({
     this.productId,
-    this.availableForDelivery,
+    this.offerId,
+    this.maxCount,
     this.bonuses,
     this.cashbackPercent,
-    this.images,
     this.valueBuy,
     this.mnn,
     this.mnnLat,
@@ -71,12 +73,19 @@ class ProductEntity extends Equatable {
     this.productTimeRegister,
     this.count,
     this.specialOffer,
+    this.availableForDelivery,
+    this.images,
     this.isFav,
   });
 
   @override
   List<Object?> get props => [
         productId,
+        offerId,
+        maxCount,
+        bonuses,
+        cashbackPercent,
+        valueBuy,
         mnn,
         mnnLat,
         name,
@@ -106,8 +115,6 @@ class ProductEntity extends Equatable {
         specialOffer,
         availableForDelivery,
         images,
-        bonuses,
-        cashbackPercent,
         isFav,
       ];
 }

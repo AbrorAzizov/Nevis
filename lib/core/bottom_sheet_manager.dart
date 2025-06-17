@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/firebase_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/order/order_pickup_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_bottom_sheet.dart';
+import 'package:nevis/locator_service.dart';
 
 class BottomSheetManager {
   static showClearCartSheet(BuildContext context) {
@@ -149,6 +151,98 @@ class BottomSheetManager {
                 onTap: () {
                   Navigator.pop(sheetContext);
                 },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  static Future<bool?> showEnableNotificationSheet(BuildContext context) {
+    return showModalBottomSheet<bool?>(
+      useRootNavigator: true,
+      context: context,
+      builder: (sheetContext) {
+        return CustomBottomSheet(
+          height: 158.h,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Хотите получать Push-уведомления о статусе заказа?',
+                style: UiConstants.textStyle5
+                    .copyWith(color: UiConstants.darkBlueColor),
+              ),
+              SizedBox(height: 24.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: AppButtonWidget(
+                      alignment: Alignment.centerLeft,
+                      onTap: () => Navigator.pop(sheetContext, false),
+                      text: 'Нет',
+                      backgroundColor: UiConstants.whiteColor,
+                      textColor: UiConstants.black3Color.withOpacity(.6),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: AppButtonWidget(
+                        onTap: () async {
+                          final firebaseManager = sl<FirebaseManager>();
+                          bool isSuccess = await firebaseManager
+                              .requestPushPermission(context);
+                          Navigator.pop(sheetContext, isSuccess);
+                        },
+                        text: 'Включить уведомления',
+                        backgroundColor: UiConstants.blueColor),
+                  )
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  static Future<bool?> showDeleteAccountSheet(BuildContext context) {
+    return showModalBottomSheet(
+      useRootNavigator: true,
+      context: context,
+      builder: (sheetContext) {
+        return CustomBottomSheet(
+          height: 158.h,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Вы дейстивильно хотите удалить аккаунт?',
+                style: UiConstants.textStyle5
+                    .copyWith(color: UiConstants.darkBlueColor),
+              ),
+              SizedBox(height: 16.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: AppButtonWidget(
+                      alignment: Alignment.centerLeft,
+                      onTap: () {
+                        Navigator.pop(sheetContext, true);
+                      },
+                      text: 'Удалить',
+                      backgroundColor: UiConstants.whiteColor,
+                      textColor: UiConstants.black3Color.withOpacity(.6),
+                    ),
+                  ),
+                  Expanded(
+                    child: AppButtonWidget(
+                        onTap: () => Navigator.pop(sheetContext, false),
+                        text: 'Нет',
+                        backgroundColor: UiConstants.blueColor),
+                  )
+                ],
               ),
             ],
           ),
