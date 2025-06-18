@@ -28,6 +28,7 @@ class OrderPickupScreenBloc
     on<PickupChangeQueryEvent>(_onChangeQueryEvent);
     on<PickupChangeSelectorIndexEvent>(_onChangeSelectorIndexEvent);
   }
+
   Future<void> _onLoadData(
     LoadPickupPharmaciesEvent event,
     Emitter<OrderPickupScreenState> emit,
@@ -41,7 +42,6 @@ class OrderPickupScreenBloc
               id: e.productId!,
             ))
         .toList();
-    print(cartParams);
 
     final failureOrLoads = await getPharmaciesByCartUC(cartParams);
     List<MapMarkerModel> points = [];
@@ -52,11 +52,6 @@ class OrderPickupScreenBloc
         isLoading: false,
       )),
       (pharmacies) {
-        print(pharmacies
-            .where((e) => e.storeXmlId != null)
-            .toList()
-            .first
-            .storeXmlId);
         pharmacies =
             pharmacies.where((pharmacy) => pharmacy.address != null).toList();
         _allPharmacies = pharmacies;
@@ -95,28 +90,35 @@ class OrderPickupScreenBloc
   }
 
   void _onSelectPharmacy(
-      PickupPharmacySelectedEvent event, Emitter<OrderPickupScreenState> emit) {
+    PickupPharmacySelectedEvent event,
+    Emitter<OrderPickupScreenState> emit,
+  ) {
     emit(state.copyWith(selectedPharmacy: event.pharmacy));
   }
 
   void _onChangeQueryEvent(
-      PickupChangeQueryEvent event, Emitter<OrderPickupScreenState> emit) {
+    PickupChangeQueryEvent event,
+    Emitter<OrderPickupScreenState> emit,
+  ) {
     final query = event.query.replaceAll(RegExp(r'[^0-9]'), '');
 
     if (query.isEmpty) {
-      emit(state.copyWith(pharmacies: _allPharmacies));
+      emit(state.copyWith(pharmacies: _allPharmacies, errorMessage: null));
     } else {
       final results = _allPharmacies
           .where((item) => item.address.toString().contains(query))
           .toList();
       emit(state.copyWith(
         pharmacies: results,
+        errorMessage: results.isEmpty ? 'Нет совпадений' : null,
       ));
     }
   }
 
-  void _onChangeSelectorIndexEvent(PickupChangeSelectorIndexEvent event,
-      Emitter<OrderPickupScreenState> emit) {
+  void _onChangeSelectorIndexEvent(
+    PickupChangeSelectorIndexEvent event,
+    Emitter<OrderPickupScreenState> emit,
+  ) {
     emit(state.copyWith(selectorIndex: event.selectorIndex));
   }
 }
