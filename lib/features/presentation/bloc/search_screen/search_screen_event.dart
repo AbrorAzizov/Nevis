@@ -117,3 +117,21 @@ class SelectRegionEvent extends SearchScreenEvent {
   final int id;
   const SelectRegionEvent({required this.id});
 }
+
+class GetAutocompleteEvent extends SearchScreenEvent {
+  final String query;
+  const GetAutocompleteEvent(this.query);
+
+  @override
+  List<Object?> get props => [query];
+}
+
+class PerformSearchEvent extends SearchScreenEvent {
+  final SearchParams params;
+  const PerformSearchEvent(this.params);
+
+  @override
+  List<Object?> get props => [params];
+}
+
+class ClearFocusEvent extends SearchScreenEvent {}

@@ -128,6 +128,19 @@ extension ProductSortTypeExtension on ProductSortType {
     }
   }
 
+  String get searchParamName {
+    switch (this) {
+      case ProductSortType.popularity:
+        return 'POPULAR';
+      case ProductSortType.alphabet:
+        return 'DEFAULT';
+      case ProductSortType.priceDecrease:
+        return 'PRICE_DESC';
+      case ProductSortType.priceIncrease:
+        return 'PRICE_ASC';
+    }
+  }
+
   static const Map<ProductSortType, String> typeOfSortMap = {
     ProductSortType.alphabet: 'name',
     ProductSortType.popularity: '', // TO DO change to popularity,

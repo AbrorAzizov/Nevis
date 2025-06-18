@@ -97,6 +97,7 @@ class _SaleScreenState extends State<SaleScreen> {
                                         getCategoryProductsUC: sl(),
                                         getSortCategoryProductsUC: sl(),
                                         getSubCategoriesUC: sl(),
+                                        searchUC: sl(),
                                         products: state.products)
                                       ..add(LoadProductsEvent()),
                                     child: BlocBuilder<ProductsScreenBloc,

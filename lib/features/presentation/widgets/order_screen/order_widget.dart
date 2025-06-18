@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/enums.dart';
@@ -6,6 +7,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
+import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_status_label_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -244,7 +246,13 @@ class OrderWidget extends StatelessWidget {
               ),
               AppButtonWidget(
                 showBorder: true,
-                onTap: () async {},
+                onTap: () async {
+                  final homeBloc = context.read<HomeScreenBloc>();
+                  homeBloc
+                      .navigatorKeys[homeBloc.selectedPageIndex].currentState!
+                      .popUntil((route) => route.isFirst);
+                  homeBloc.add(ChangePageEvent(0));
+                },
                 text: 'На главную',
                 backgroundColor: UiConstants.whiteColor,
                 textColor: UiConstants.blueColor,

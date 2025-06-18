@@ -51,12 +51,22 @@ class ProductModel extends ProductEntity {
     final dynamic productIdField =
         json['productId'] ?? json['product_id'] ?? json['PRODUCT_ID'];
 
-    final int? parsedProductId =
-        _parseToInt(productIdField) ?? (idField is int ? idField : null);
+    final int? parsedProductId = _parseToInt(productIdField) ??
+        (idField is int ? idField : _parseToInt(idField));
 
     return ProductModel(
       offerId: idField is String ? idField : null,
       productId: parsedProductId ?? 0,
+      bonuses: _parseToInt(json['bonuses'] ??
+          json['bonuses_earned'] ??
+          json['CASHBACK_BONUSES'] ??
+          json['discounts']?['CASHBACK_BONUSES']),
+      cashbackPercent: json['CASHBACK_PERCENT'] != null
+          ? (json['CASHBACK_PERCENT'] as num).toDouble()
+          : null,
+      images: (json["images"] as List<dynamic>?)
+          ?.map((item) => item.toString())
+          .toList(),
       mnn: json["mnn"],
       mnnLat: json["mnn_lat"],
       name: json["name"],
@@ -90,11 +100,6 @@ class ProductModel extends ProductEntity {
       availableForDelivery: json['is_available_for_delivery'],
       specialOffer:
           TypeOfSpecialOfferExtension.fromTitle(json["special_offer"]),
-      bonuses: _parseToInt(json['bonuses'] ?? json['bonuses_earned']),
-      images: (json["images"] as List?)?.map((e) => e.toString()).toList(),
-      cashbackPercent: json['CASHBACK_PERCENT'] != null
-          ? (json['CASHBACK_PERCENT'] as num).toDouble()
-          : null,
       maxCount: _parseToInt(json['maxAmount']),
     );
   }

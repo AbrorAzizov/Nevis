@@ -57,6 +57,7 @@ class ApiClient {
             responseBody['reasons']?.toString() ??
             'Неизвестная ошибка'
         : 'Неизвестная ошибка';
+
     if (callPathNameForLog != null) {
       log('Response (${response.request?.url}): ${response.statusCode} $responseBody',
           name: callPathNameForLog);
@@ -81,8 +82,10 @@ class ApiClient {
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
     bool isRetryRequest = true,
+    Map<String, dynamic>? queryParameters,
   }) async {
-    final url = Uri.parse('$baseUrl$endpoint');
+    final url = Uri.parse('$baseUrl$endpoint')
+        .replace(queryParameters: queryParameters);
     final headers = await _authHeaders();
 
     // ✅ Логируем данные запроса
@@ -100,8 +103,10 @@ class ApiClient {
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
     bool isRetryRequest = true,
+    Map<String, dynamic>? queryParameters,
   }) async {
-    final url = Uri.parse('$baseUrl$endpoint');
+    final url = Uri.parse('$baseUrl$endpoint')
+        .replace(queryParameters: queryParameters);
     final headers = await _authHeaders();
     final bodyString = jsonEncode(body);
 
@@ -124,8 +129,10 @@ class ApiClient {
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
     bool isRetryRequest = true,
+    Map<String, dynamic>? queryParameters,
   }) async {
-    final url = Uri.parse('$baseUrl$endpoint');
+    final url = Uri.parse('$baseUrl$endpoint')
+        .replace(queryParameters: queryParameters);
     final headers = await _authHeaders();
     final bodyString = jsonEncode(body);
 
@@ -148,8 +155,10 @@ class ApiClient {
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
     bool isRetryRequest = true,
+    Map<String, dynamic>? queryParameters,
   }) async {
-    final url = Uri.parse('$baseUrl$endpoint');
+    final url = Uri.parse('$baseUrl$endpoint')
+        .replace(queryParameters: queryParameters);
     final headers = await _authHeaders();
     final bodyString = jsonEncode(body);
 

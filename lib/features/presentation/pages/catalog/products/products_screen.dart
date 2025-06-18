@@ -7,6 +7,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/params/category_params.dart';
+import 'package:nevis/core/params/search_param.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart'
@@ -24,17 +25,20 @@ class ProductsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final String title = args?['title'];
+    final String title = args?['title'] ?? 'Результаты поиска';
     final categoryParams = args?['categoryParams'] as CategoryParams?;
     final products = args?['products'] as List<ProductEntity>?;
+    final searchParams = args?['searchParams'] as SearchParams?;
 
     return BlocProvider(
       create: (context) => ProductsScreenBloc(
           getCategoryProductsUC: sl(),
           getSortCategoryProductsUC: sl(),
           getSubCategoriesUC: sl(),
+          searchUC: sl(),
           products: products,
-          categoryParams: categoryParams)
+          categoryParams: categoryParams,
+          searchParams: searchParams)
         ..add(LoadProductsEvent()),
       child: BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
         builder: (context, state) {

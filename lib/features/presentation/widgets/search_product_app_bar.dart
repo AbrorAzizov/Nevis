@@ -6,10 +6,12 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/params/search_param.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
@@ -17,7 +19,7 @@ import 'package:nevis/locator_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class SearchProductAppBar extends StatelessWidget {
+class SearchProductAppBar extends StatefulWidget {
   const SearchProductAppBar({
     super.key,
     this.showLocationChip = false,
@@ -32,10 +34,44 @@ class SearchProductAppBar extends StatelessWidget {
   final BuildContext? screenContext;
 
   @override
+  State<SearchProductAppBar> createState() => _SearchProductAppBarState();
+}
+
+class _SearchProductAppBarState extends State<SearchProductAppBar> {
+  late FocusNode _localFocusNode;
+  late TextEditingController _localSearchProductController;
+  late TextEditingController _localSearchRegionController;
+
+  @override
+  void initState() {
+    super.initState();
+    _localFocusNode = FocusNode();
+    _localSearchProductController = TextEditingController();
+    _localSearchRegionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _localFocusNode.dispose();
+    _localSearchProductController.dispose();
+    _localSearchRegionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SearchScreenBloc searchBloc = context.read<SearchScreenBloc>();
     return BlocBuilder<SearchScreenBloc, SearchScreenState>(
       builder: (context, state) {
+        if (_localSearchProductController.text != state.query &&
+            !state.regionSelectionPressed) {
+          _localSearchProductController.text = state.query;
+        }
+        if (_localSearchRegionController.text != state.query &&
+            state.regionSelectionPressed) {
+          _localSearchRegionController.text = state.query;
+        }
+
         return Container(
           decoration: BoxDecoration(
             color: UiConstants.backgroundColor,
@@ -61,11 +97,11 @@ class SearchProductAppBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (onTapBack != null)
+                  if (widget.onTapBack != null)
                     Padding(
                       padding: getMarginOrPadding(right: 10),
                       child: GestureDetector(
-                        onTap: onTapBack,
+                        onTap: widget.onTapBack,
                         child: SvgPicture.asset(Paths.arrowBackIconPath,
                             color: UiConstants.darkBlue2Color.withOpacity(.6),
                             width: 24.w,
@@ -87,22 +123,32 @@ class SearchProductAppBar extends StatelessWidget {
                             ],
                           ),
                           child: AppTextFieldWidget(
+                            focusNode: _localFocusNode,
                             hintText: state.regionSelectionPressed
                                 ? ''
                                 : 'Поиск товаров',
                             controller: state.regionSelectionPressed
-                                ? searchBloc.searchRegionController
-                                : searchBloc.searchProductController,
+                                ? _localSearchRegionController
+                                : _localSearchProductController,
                             fillColor: UiConstants.whiteColor,
                             hintMaxLines: 1,
+                            textInputAction: TextInputAction.search,
                             prefixWidget: Skeleton.ignore(
                               child: SvgPicture.asset(Paths.searchIconPath),
                             ),
                             suffixWidget: state.isExpanded
                                 ? Skeleton.ignore(
                                     child: GestureDetector(
-                                      onTap: () =>
-                                          searchBloc.add(ClearQueryEvent()),
+                                      onTap: () {
+                                        searchBloc.add(ClearQueryEvent());
+                                        Future.delayed(
+                                            Duration(milliseconds: 150), () {
+                                          _localFocusNode.unfocus();
+                                          context
+                                              .read<SearchScreenBloc>()
+                                              .add(ClearFocusEvent());
+                                        });
+                                      },
                                       child:
                                           SvgPicture.asset(Paths.closeIconPath),
                                     ),
@@ -111,7 +157,40 @@ class SearchProductAppBar extends StatelessWidget {
                             onChangedField: (query) {
                               searchBloc.add(ChangeQueryEvent(query));
                             },
-                            onTapOutside: (event) {},
+                            onFieldSubmitted: (query) {
+                              if (query.isNotEmpty &&
+                                  !state.regionSelectionPressed) {
+                                searchBloc.add(PerformSearchEvent(
+                                    SearchParams(query: query)));
+                                _localFocusNode.unfocus();
+                                Navigator.of(context
+                                        .read<HomeScreenBloc>()
+                                        .navigatorKeys[context
+                                            .read<HomeScreenBloc>()
+                                            .selectedPageIndex]
+                                        .currentContext!)
+                                    .push(
+                                  Routes.createRoute(
+                                    const ProductsScreen(),
+                                    settings: RouteSettings(
+                                      name: Routes.productScreen,
+                                      arguments: {
+                                        'searchParams':
+                                            SearchParams(query: query),
+                                      },
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            onTapOutside: (event) {
+                              Future.delayed(Duration(milliseconds: 150), () {
+                                _localFocusNode.unfocus();
+                                context
+                                    .read<SearchScreenBloc>()
+                                    .add(ClearFocusEvent());
+                              });
+                            },
                             onTap: () =>
                                 searchBloc.add(ToggleExpandCollapseEvent(true)),
                           ),
@@ -119,13 +198,13 @@ class SearchProductAppBar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (showFavoriteProductsChip)
+                  if (widget.showFavoriteProductsChip)
                     Padding(
                       padding: getMarginOrPadding(left: 12),
                       child: Skeleton.replace(
                         child: GestureDetector(
                           onTap: () {
-                            FocusScope.of(context).unfocus();
+                            _localFocusNode.unfocus();
 
                             String? token = sl<SharedPreferences>()
                                 .getString(SharedPreferencesKeys.accessToken);

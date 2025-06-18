@@ -8,6 +8,10 @@ class SearchScreenState extends Equatable {
   final bool isLoading;
   final String? errorMessage;
   final bool regionSelectionPressed;
+  final List<SearchAutocompleteEntity>? autocompleteResults;
+  final SearchResultsEntity? searchResults;
+  final bool isSearching;
+  final bool isAutocompleteLoading;
 
   const SearchScreenState({
     required this.errorMessage,
@@ -17,16 +21,25 @@ class SearchScreenState extends Equatable {
     this.isExpanded = false,
     required this.query,
     required this.regionSuggestions,
+    this.autocompleteResults,
+    this.searchResults,
+    this.isSearching = false,
+    this.isAutocompleteLoading = false,
   });
 
-  SearchScreenState copyWith(
-      {bool? isExpanded,
-      String? query,
-      List<RegionEntity>? regionSuggestions,
-      List<RegionEntity>? regions,
-      String? errorMessage,
-      bool? regionSelectionPressed,
-      bool? isLoading}) {
+  SearchScreenState copyWith({
+    bool? isExpanded,
+    String? query,
+    List<RegionEntity>? regionSuggestions,
+    List<RegionEntity>? regions,
+    String? errorMessage,
+    bool? regionSelectionPressed,
+    bool? isLoading,
+    List<SearchAutocompleteEntity>? autocompleteResults,
+    SearchResultsEntity? searchResults,
+    bool? isSearching,
+    bool? isAutocompleteLoading,
+  }) {
     return SearchScreenState(
       isExpanded: isExpanded ?? this.isExpanded,
       query: query ?? this.query,
@@ -36,6 +49,11 @@ class SearchScreenState extends Equatable {
       regionSelectionPressed:
           regionSelectionPressed ?? this.regionSelectionPressed,
       isLoading: isLoading ?? this.isLoading,
+      autocompleteResults: autocompleteResults ?? this.autocompleteResults,
+      searchResults: searchResults ?? this.searchResults,
+      isSearching: isSearching ?? this.isSearching,
+      isAutocompleteLoading:
+          isAutocompleteLoading ?? this.isAutocompleteLoading,
     );
   }
 
@@ -47,6 +65,10 @@ class SearchScreenState extends Equatable {
         isLoading,
         regions,
         regionSelectionPressed,
-        errorMessage
+        errorMessage,
+        autocompleteResults,
+        searchResults,
+        isSearching,
+        isAutocompleteLoading,
       ];
 }

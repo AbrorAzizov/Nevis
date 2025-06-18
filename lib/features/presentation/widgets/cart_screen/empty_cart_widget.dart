@@ -5,6 +5,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/product_widget.dart';
 
@@ -40,7 +41,10 @@ class EmptyCartWidget extends StatelessWidget {
             SizedBox(height: 9.h),
             Padding(
               padding: getMarginOrPadding(left: 20, right: 20),
-              child: AppButtonWidget(onTap: () {}, text: 'В каталог'),
+              child: AppButtonWidget(
+                  onTap: () =>
+                      context.read<HomeScreenBloc>().add(ChangePageEvent(1)),
+                  text: 'В каталог'),
             ),
             SizedBox(
               height: 16.h,

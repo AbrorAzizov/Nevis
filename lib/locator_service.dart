@@ -19,6 +19,7 @@ import 'package:nevis/features/data/datasources/product_local_data_soruce.dart';
 import 'package:nevis/features/data/datasources/product_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/profile_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/region_remote_soruce.dart';
+import 'package:nevis/features/data/datasources/search_remote_data_source.dart';
 import 'package:nevis/features/data/datasources/story_remote_data_source_impl.dart';
 import 'package:nevis/features/data/repositories/auth_repository_impl.dart';
 import 'package:nevis/features/data/repositories/cart_repository_impl.dart';
@@ -30,6 +31,7 @@ import 'package:nevis/features/data/repositories/pharmacy_repository_impl.dart';
 import 'package:nevis/features/data/repositories/product_repository_impl.dart';
 import 'package:nevis/features/data/repositories/profile_repository_impl.dart';
 import 'package:nevis/features/data/repositories/region_respository_impl.dart';
+import 'package:nevis/features/data/repositories/search_repository_impl.dart';
 import 'package:nevis/features/data/repositories/story_repository_impl.dart';
 import 'package:nevis/features/domain/repositories/auth_repository.dart';
 import 'package:nevis/features/domain/repositories/cart_repository.dart';
@@ -41,6 +43,7 @@ import 'package:nevis/features/domain/repositories/pharmacy_repository.dart';
 import 'package:nevis/features/domain/repositories/product_repository.dart';
 import 'package:nevis/features/domain/repositories/profile_repository.dart';
 import 'package:nevis/features/domain/repositories/region_repository.dart';
+import 'package:nevis/features/domain/repositories/search_repository.dart';
 import 'package:nevis/features/domain/repositories/story_repository.dart';
 import 'package:nevis/features/domain/usecases/auth/is_phone_exists.dart';
 import 'package:nevis/features/domain/usecases/auth/login.dart';
@@ -89,6 +92,8 @@ import 'package:nevis/features/domain/usecases/profile/get_me.dart';
 import 'package:nevis/features/domain/usecases/profile/update_me.dart';
 import 'package:nevis/features/domain/usecases/regions/get_regions.dart';
 import 'package:nevis/features/domain/usecases/regions/select_region.dart';
+import 'package:nevis/features/domain/usecases/search/autocomplete_search.dart';
+import 'package:nevis/features/domain/usecases/search/search.dart';
 import 'package:nevis/features/domain/usecases/stories/get_stories_usecase.dart';
 import 'package:nevis/features/domain/usecases/stories/get_story_by_id_usecase.dart';
 import 'package:nevis/features/presentation/bloc/article_screen/article_screen_bloc.dart';
@@ -195,9 +200,11 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => ProductsScreenBloc(
-        getSubCategoriesUC: sl<GetSubCategoriesUC>(),
-        getCategoryProductsUC: sl<GetCategoryProductsUC>(),
-        getSortCategoryProductsUC: sl<GetSortCategoryProductsUC>()),
+      getSubCategoriesUC: sl<GetSubCategoriesUC>(),
+      getCategoryProductsUC: sl<GetCategoryProductsUC>(),
+      getSortCategoryProductsUC: sl<GetSortCategoryProductsUC>(),
+      searchUC: sl<SearchUC>(),
+    ),
   );
   sl.registerFactory(
     () => ProductScreenBloc(
@@ -233,7 +240,11 @@ Future<void> init() async {
   );
 
   sl.registerLazySingleton(
-    () => SearchScreenBloc(getRegionsUC: sl(), selectRegionUC: sl()),
+    () => SearchScreenBloc(
+      getRegionsUC: sl(),
+      selectRegionUC: sl(),
+      autocompleteSearchUC: sl(),
+    ),
   );
 
   sl.registerLazySingleton(
@@ -332,6 +343,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetQRCodeUC(sl()));
   sl.registerLazySingleton(() => GetCardInfoUC(sl()));
 
+  // Search
+  sl.registerLazySingleton(() => AutocompleteSearchUC(sl()));
+  sl.registerLazySingleton(() => SearchUC(sl()));
+
   //// Repository
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
@@ -410,6 +425,14 @@ Future<void> init() async {
         errorHandler: sl(),
         remoteDataSource: sl(),
         localDataSource: sl()),
+  );
+
+  sl.registerLazySingleton<SearchRepository>(
+    () => SearchRepositoryImpl(
+      remoteDataSource: sl(),
+      networkInfo: sl(),
+      errorHandler: sl(),
+    ),
   );
 
   //// DataSources
@@ -497,6 +520,12 @@ Future<void> init() async {
   sl.registerLazySingleton<LoyaltyCardLocalDataSource>(
     () => LoyaltyCardLocalDataSourceImpl(
       sharedPreferences: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<SearchRemoteDataSource>(
+    () => SearchRemoteDataSourceImpl(
+      apiClient: sl(),
     ),
   );
 

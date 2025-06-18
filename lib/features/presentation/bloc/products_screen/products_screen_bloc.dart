@@ -6,12 +6,14 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/category_params.dart';
+import 'package:nevis/core/params/search_param.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/search_products_entity.dart';
 import 'package:nevis/features/domain/usecases/products/get_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_sort_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_subcategories_products.dart';
+import 'package:nevis/features/domain/usecases/search/search.dart';
 
 part 'products_screen_event.dart';
 part 'products_screen_state.dart';
@@ -21,9 +23,11 @@ class ProductsScreenBloc
   final GetCategoryProductsUC getCategoryProductsUC;
   final GetSortCategoryProductsUC getSortCategoryProductsUC;
   final GetSubCategoriesUC getSubCategoriesUC;
+  final SearchUC searchUC;
 
-  CategoryParams? categoryParams;
+  final CategoryParams? categoryParams;
   final List<ProductEntity>? products;
+  final SearchParams? searchParams;
 
   ScrollController productsController = ScrollController();
 
@@ -31,8 +35,10 @@ class ProductsScreenBloc
     required this.getSubCategoriesUC,
     required this.getCategoryProductsUC,
     required this.getSortCategoryProductsUC,
+    required this.searchUC,
     this.products,
     this.categoryParams,
+    this.searchParams,
   }) : super(ProductsScreenState()) {
     on<LoadProductsEvent>(_onLoadProducts);
     on<ShowSortProductsTypes>(_onShowSortProductsTypes);
@@ -61,21 +67,42 @@ class ProductsScreenBloc
     Emitter<ProductsScreenState> emit,
   ) async {
     try {
-      SearchProductsEntity? searchProducts;
+      SearchProductsEntity searchProducts = state.searchProducts ??
+          SearchProductsEntity(
+            currentPage: 1,
+            totalPage: 1,
+            totalCount: products?.length ?? 0,
+            products: products ?? [],
+          );
       String? error;
       List<CategoryEntity> subCategories = [];
 
-      final isInitialLoad = products != null;
-
-      if (isInitialLoad) {
-        // Прямая инициализация, если есть кэш
-        searchProducts = SearchProductsEntity(
-          currentPage: 1,
-          totalPage: 1,
-          totalCount: products!.length,
-          products: products!,
+      if (searchParams != null) {
+        // Новый алгоритм поиска по searchParams
+        final currentPage =
+            event.page ?? (state.searchProducts?.currentPage ?? 1);
+        List<ProductEntity> oldProducts = [];
+        if (currentPage != 1) {
+          emit(state.copyWith(isLoadingProducts: true));
+          oldProducts = state.searchProducts?.products ?? [];
+        }
+        final failureOrProducts = await searchUC(
+          searchParams!.copyWith(
+              page: currentPage, sort: state.selectedSortType?.searchParamName),
         );
-      } else {
+        failureOrProducts.fold(
+          (l) => error = 'Ошибка поиска товаров',
+          (r) {
+            searchProducts = searchProducts.copyWith(
+                products: [...oldProducts, ...r.products],
+                totalPage: r.lastPage,
+                total: r.total,
+                currentPage: currentPage);
+          },
+        );
+        // subCategories можно не трогать или загрузить отдельно, если нужно
+      } else if (categoryParams != null) {
+        // ... старая логика с CategoryParams ...
         final currentPage =
             event.page ?? (state.searchProducts?.currentPage ?? 1);
         List<ProductEntity> oldProducts = [];
@@ -113,6 +140,8 @@ class ProductsScreenBloc
             if (r != null) {
               searchProducts = r.copyWith(
                 products: [...oldProducts, ...r.products],
+                totalPage: r.totalPage,
+                currentPage: currentPage,
               );
             }
           },
@@ -125,13 +154,15 @@ class ProductsScreenBloc
       }
 
       // Финальный emit один на всё
-      emit(state.copyWith(
-        isLoading: false,
-        isLoadingProducts: false,
-        error: error,
-        searchProducts: searchProducts,
-        subCategories: subCategories,
-      ));
+      if (!isClosed) {
+        emit(state.copyWith(
+          isLoading: false,
+          isLoadingProducts: false,
+          error: error,
+          searchProducts: searchProducts,
+          subCategories: subCategories,
+        ));
+      }
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
@@ -177,20 +208,9 @@ class ProductsScreenBloc
       SelectSortProductsType event, Emitter<ProductsScreenState> emit) async {
     emit(state.copyWith(
         selectedSortType: event.productSortType, isLoading: true));
-    try {
-      final failureOrLoads = await getSortCategoryProductsUC(categoryParams!
-          .copyWith(
-              sortBy: event.productSortType == ProductSortType.priceDecrease
-                  ? 'desc'
-                  : 'asc',
-              typeOfSort: event.productSortType.typeOfSort,
-              page: 1));
-      failureOrLoads.fold(
-          (_) => emit(
-              state.copyWith(isLoading: false, error: 'Something went wrong')),
-          (products) =>
-              emit(state.copyWith(searchProducts: products, isLoading: false)));
-    } catch (e) {
+    emit(state.copyWith(selectedSortType: event.productSortType));
+    add(LoadProductsEvent(page: 1));
+    try {} catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }

@@ -6,6 +6,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/custom_checkbox.dart';
@@ -74,7 +75,17 @@ class FavoriteProductsScreen extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
                                 child: AppButtonWidget(
-                                    onTap: () {}, text: 'В каталог'),
+                                    onTap: () {
+                                      final homeBloc =
+                                          context.read<HomeScreenBloc>();
+                                      homeBloc
+                                          .navigatorKeys[
+                                              homeBloc.selectedPageIndex]
+                                          .currentState!
+                                          .popUntil((route) => route.isFirst);
+                                      homeBloc.add(ChangePageEvent(1));
+                                    },
+                                    text: 'В каталог'),
                               ),
                             ],
                           ),

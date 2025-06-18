@@ -47,6 +47,7 @@ class AppTextFieldWidget extends StatefulWidget {
     this.hintMaxLines,
     this.suffixPadding,
     this.isActionTitleActive = true,
+    this.onFieldSubmitted,
   });
 
   final String? hintText;
@@ -86,6 +87,7 @@ class AppTextFieldWidget extends StatefulWidget {
   final int? hintMaxLines;
   final EdgeInsets? suffixPadding;
   final bool isActionTitleActive;
+  final Function(String)? onFieldSubmitted;
 
   @override
   State<AppTextFieldWidget> createState() => _GidTextFieldState();
@@ -236,9 +238,12 @@ class _GidTextFieldState extends State<AppTextFieldWidget> {
             validator: widget.validator,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: widget.onChangedField,
-            onTapOutside: (event) =>
-                widget.onTapOutside ??
-                FocusScope.of(context).requestFocus(FocusNode()),
+            onFieldSubmitted: widget.onFieldSubmitted,
+            onTapOutside: (event) {
+              FocusScope.of(context).requestFocus(FocusNode());
+              widget.onTapOutside?.call(event);
+            },
+            onTapAlwaysCalled: true,
           ),
         ),
         if (widget.description != null)
