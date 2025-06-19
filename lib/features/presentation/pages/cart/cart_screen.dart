@@ -9,6 +9,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/order/order_delivery/order_delivery_personal_data_screen.dart';
 import 'package:nevis/features/presentation/pages/order_pickup/order_pickup_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/cart_product_widget.dart';
@@ -235,8 +236,19 @@ class CartScreen extends StatelessWidget {
                                           ? null
                                           : () {
                                               if (cartState.cartType ==
-                                                      TypeReceiving.pickup &&
-                                                  !hasUnavailable) {
+                                                  TypeReceiving.delivery) {
+                                                Navigator.of(context).push(
+                                                  Routes.createRoute(
+                                                    const OrderDeliveryPersonalDataScreen(),
+                                                    settings: RouteSettings(
+                                                      name: Routes
+                                                          .orderPickupScreen,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              if (cartState.cartType ==
+                                                  TypeReceiving.pickup) {
                                                 Navigator.of(context).push(
                                                   Routes.createRoute(
                                                     const OrderPickupScreen(),
