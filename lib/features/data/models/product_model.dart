@@ -38,6 +38,7 @@ class ProductModel extends ProductEntity {
     super.availableForDelivery,
     super.offerId,
     this.maxCount,
+    super.utsenkaPrice,
   });
 
   @override
@@ -101,6 +102,9 @@ class ProductModel extends ProductEntity {
       specialOffer:
           TypeOfSpecialOfferExtension.fromTitle(json["special_offer"]),
       maxCount: _parseToInt(json['maxAmount']),
+      utsenkaPrice: json['utsenka_price'] != null
+          ? double.tryParse(json['utsenka_price'])
+          : null,
     );
   }
 
@@ -142,6 +146,7 @@ class ProductModel extends ProductEntity {
         "CASHBACK_PERCENT": cashbackPercent,
         "images": images,
         "maxAmount": maxCount,
+        "utsenkaPrice": utsenkaPrice,
       },
     };
   }

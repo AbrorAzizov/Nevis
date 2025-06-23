@@ -9,7 +9,6 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/pages/cart/cart_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/catalog_screen.dart';
-import 'package:nevis/features/presentation/pages/catalog/category_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/pharmacies_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/product_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/products/products_screen.dart';
@@ -100,7 +99,6 @@ class MyApp extends StatelessWidget {
               Routes.mainScreen: (context) => const MainScreen(),
               Routes.catalogScreen: (context) => const CatalogScreen(),
               Routes.cartScreen: (context) => const CartScreen(),
-              Routes.categoryScreen: (context) => const CategoryScreen(),
               Routes.productsScreen: (context) => const ProductsScreen(),
               Routes.bannerScreen: (context) => const BannerScreen(),
               Routes.productScreen: (context) => const ProductScreen(),

@@ -101,7 +101,6 @@ import 'package:nevis/features/presentation/bloc/articles_screen/articles_screen
 import 'package:nevis/features/presentation/bloc/bonus_card_screen/bonus_card_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/category_screen/category_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/info_about_order_screen/info_about_order_screen_bloc.dart';
@@ -182,14 +181,6 @@ Future<void> init() async {
   sl.registerFactory(
     () => CatalogScreenBloc(
       getCategoriesUC: sl<GetCategoriesUC>(),
-    ),
-  );
-  sl.registerFactory(
-    () => CategoryScreenBloc(
-      getSubcategoriesUC: sl<GetSubcategoriesUC>(),
-      getBrandsUC: sl<GetBrandsUC>(),
-      getCountriesUC: sl<GetCountriesUC>(),
-      getFormsUC: sl<GetFormsUC>(),
     ),
   );
   sl.registerFactory(

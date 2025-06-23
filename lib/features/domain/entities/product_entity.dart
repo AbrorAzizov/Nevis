@@ -38,6 +38,7 @@ class ProductEntity extends Equatable {
   final bool? availableForDelivery;
   final List<String>? images;
   final bool? isFav;
+  final double? utsenkaPrice;
 
   const ProductEntity({
     this.productId,
@@ -76,6 +77,7 @@ class ProductEntity extends Equatable {
     this.availableForDelivery,
     this.images,
     this.isFav,
+    this.utsenkaPrice,
   });
 
   @override
@@ -116,5 +118,6 @@ class ProductEntity extends Equatable {
         availableForDelivery,
         images,
         isFav,
+        utsenkaPrice,
       ];
 }

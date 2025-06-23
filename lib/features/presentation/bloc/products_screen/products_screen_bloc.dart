@@ -7,9 +7,10 @@ import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/search_param.dart';
-import 'package:nevis/features/domain/entities/category_entity.dart';
+import 'package:nevis/core/params/subcategory_params.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/search_products_entity.dart';
+import 'package:nevis/features/domain/entities/subcategory_entity.dart';
 import 'package:nevis/features/domain/usecases/products/get_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_sort_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_subcategories_products.dart';
@@ -30,6 +31,7 @@ class ProductsScreenBloc
   final SearchParams? searchParams;
 
   ScrollController productsController = ScrollController();
+  ScrollController subCategoriesController = ScrollController();
 
   ProductsScreenBloc({
     required this.getSubCategoriesUC,
@@ -46,9 +48,14 @@ class ProductsScreenBloc
     on<SelectSortProductsType>(_onSelectSortProductsType);
     on<LoadSubCategoriesEvent>(_onLoadSubCategories);
     on<SelectSubCategoryEvent>(_onSelectSubCategory);
+    on<LoadNextSubCategoriesPageEvent>(_onLoadNextSubCategoriesPage);
 
-    // Добавляем слушатель для скролла
+    // Добавляем слушатель для скролла продуктов
     if (products == null) productsController.addListener(_scrollListener);
+    // Добавляем слушатель для скролла подкатегорий
+    if (categoryParams != null) {
+      subCategoriesController.addListener(_subCategoriesScrollListener);
+    }
   }
 
   void _scrollListener() {
@@ -59,6 +66,17 @@ class ProductsScreenBloc
         // Загружаем следующую страницу
         add(LoadProductsEvent(page: state.searchProducts!.currentPage + 1));
       }
+    }
+  }
+
+  void _subCategoriesScrollListener() {
+    final subCategories = state.subCategories;
+    if (subCategories != null &&
+        subCategoriesController.position.pixels ==
+            subCategoriesController.position.maxScrollExtent &&
+        (subCategories.currentPage ?? 1) < (subCategories.totalPage ?? 1)) {
+      add(LoadNextSubCategoriesPageEvent(
+          page: (subCategories.currentPage ?? 1) + 1));
     }
   }
 
@@ -75,7 +93,7 @@ class ProductsScreenBloc
             products: products ?? [],
           );
       String? error;
-      List<CategoryEntity> subCategories = [];
+      SubcategoryEntity? subCategories;
 
       if (searchParams != null) {
         // Новый алгоритм поиска по searchParams
@@ -116,7 +134,7 @@ class ProductsScreenBloc
           getSortCategoryProductsUC(
             categoryParams!.copyWith(
               categoryId: int.tryParse(
-                    state.selectedSubCategory?.categoryId ?? '',
+                    state.selectedSubCategory?.id ?? '',
                   ) ??
                   state.categoryId,
               sortBy: state.selectedSortType == ProductSortType.priceDecrease
@@ -126,13 +144,16 @@ class ProductsScreenBloc
               page: currentPage,
             ),
           ),
-          getSubCategoriesUC(categoryParams?.categoryId ?? state.categoryId!),
+          getSubCategoriesUC(
+            SubcategoryParams(
+                categoryId: categoryParams?.categoryId ?? state.categoryId!),
+          ),
         ]);
 
         final failureOrProducts =
             results[0] as Either<Failure, SearchProductsEntity?>;
         final failureOrSubCategories =
-            results[1] as Either<Failure, List<CategoryEntity>>;
+            results[1] as Either<Failure, SubcategoryEntity?>;
 
         failureOrProducts.fold(
           (l) => error = 'Ошибка загрузки продуктов',
@@ -172,8 +193,7 @@ class ProductsScreenBloc
       LoadSubCategoriesEvent event, Emitter<ProductsScreenState> emit) async {
     emit(state.copyWith(isLoading: true));
     try {
-      final failureOrLoads =
-          await getSubCategoriesUC(categoryParams!.categoryId!);
+      final failureOrLoads = await getSubCategoriesUC(event.params);
       failureOrLoads.fold(
           (_) => emit(
               state.copyWith(isLoading: false, error: 'Something went wrong')),
@@ -224,9 +244,8 @@ class ProductsScreenBloc
       try {
         final failureOrProducts = await getSortCategoryProductsUC(
           categoryParams!.copyWith(
-              categoryId:
-                  int.tryParse(state.selectedSubCategory?.categoryId ?? '') ??
-                      state.categoryId!,
+              categoryId: int.tryParse(state.selectedSubCategory?.id ?? '') ??
+                  state.categoryId!,
               sortBy: state.selectedSortType == ProductSortType.priceDecrease
                   ? 'desc'
                   : 'asc',
@@ -245,6 +264,36 @@ class ProductsScreenBloc
       }
     } else {
       emit(state.copyWith(isLoading: true));
+    }
+  }
+
+  Future<void> _onLoadNextSubCategoriesPage(
+    LoadNextSubCategoriesPageEvent event,
+    Emitter<ProductsScreenState> emit,
+  ) async {
+    try {
+      final currentSubCategories = state.subCategories;
+      final failureOrLoads = await getSubCategoriesUC(
+        SubcategoryParams(
+            categoryId: categoryParams?.categoryId ?? state.categoryId!,
+            page: event.page),
+      );
+      failureOrLoads.fold(
+        (_) => emit(state.copyWith(
+            isLoading: false, error: 'Ошибка загрузки подкатегорий')),
+        (newSubCategories) {
+          final mergedGroups = [
+            ...?currentSubCategories?.groups,
+            ...?newSubCategories.groups,
+          ];
+          emit(state.copyWith(
+            subCategories: newSubCategories.copyWith(groups: mergedGroups),
+            isLoading: false,
+          ));
+        },
+      );
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }
 }

@@ -213,11 +213,9 @@ class ProductWidget extends StatelessWidget {
                           maxLines: 4,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (product.valueBuy != null)
+                        if (product.utsenkaPrice != null)
                           Padding(
-                            padding: getMarginOrPadding(
-                              top: 3,
-                            ),
+                            padding: getMarginOrPadding(top: 3),
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
@@ -257,7 +255,8 @@ class ProductWidget extends StatelessWidget {
                                                           .purpleColor),
                                             ),
                                             TextSpan(
-                                              text: 'от ${product.valueBuy} ₽',
+                                              text:
+                                                  'от ${product.utsenkaPrice} ₽',
                                               style: UiConstants.textStyle15
                                                   .copyWith(
                                                       color: UiConstants
@@ -271,7 +270,8 @@ class ProductWidget extends StatelessWidget {
                                       RotatedBox(
                                         quarterTurns: 1,
                                         child: SvgPicture.asset(
-                                            Paths.dropdownArrowIconPath),
+                                            Paths.dropdownArrowIconPath,
+                                            color: UiConstants.purpleColor),
                                       )
                                     ],
                                   ),

@@ -6,10 +6,11 @@ import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/product_param.dart';
-import 'package:nevis/features/data/models/category_model.dart';
+import 'package:nevis/core/params/subcategory_params.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/data/models/search_products_model.dart';
+import 'package:nevis/features/data/models/subcategory_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ProductRemoteDataSource {
@@ -19,7 +20,7 @@ abstract class ProductRemoteDataSource {
   Future<List<ProductPharmacyModel>> getProductPharmacies(int id);
   Future<SearchProductsModel> getCategoryProducts(int id);
   Future<SearchProductsModel> getSortCategoryProducts(CategoryParams params);
-  Future<List<CategoryModel>> getSubCategories(int id);
+  Future<SubcategoryModel> getSubCategories(SubcategoryParams params);
   Future<List<ProductModel>> getFavoriteProducts();
   Future<void> updateFavoriteProducts(int id);
   Future<void> deleteFromFavoriteProducts(int id);
@@ -156,17 +157,21 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   }
 
   @override
-  Future<List<CategoryModel>> getSubCategories(int id) async {
+  Future<SubcategoryModel> getSubCategories(SubcategoryParams params) async {
     try {
       final data = await apiClient.get(
-        endpoint: 'catalog/categories/$id',
+        endpoint: 'catalog/categories/${params.categoryId}',
+        queryParameters: {
+          'sort': params.sort,
+          'order': params.order,
+          'page': params.page.toString()
+        },
         exceptions: {
           401: ServerException(),
         },
         callPathNameForLog: '${runtimeType.toString()}.getSubCategories',
       );
-      List<dynamic> dataList = data['categories'][0]['groups'];
-      return dataList.map((e) => CategoryModel.fromJson(e)).toList();
+      return SubcategoryModel.fromJson(data);
     } catch (e) {
       log('Error during logout: $e',
           name: '${runtimeType.toString()}.getSubCategories', level: 1000);
