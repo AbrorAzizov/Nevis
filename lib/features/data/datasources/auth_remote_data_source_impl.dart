@@ -28,6 +28,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> login(String phone, String code) async {
     try {
       final data = await apiClient.post(
+        requireAuth: false,
         endpoint: 'auth/login',
         body: {
           'phone_number': phone,
@@ -59,6 +60,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> loginByService(LoginServiceParam loginServiceParam) async {
     try {
       final data = await apiClient.post(
+        requireAuth: false,
         endpoint: 'auth/login',
         body: {
           'service': loginServiceParam.loginServiceType.name,
@@ -90,6 +92,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> refreshToken() async {
     try {
       final data = await apiClient.post(
+          requireAuth: false,
           endpoint: 'auth/refresh-token',
           body: {
             'refresh_token':
@@ -141,6 +144,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> requestCode(String phone) async {
     try {
       await apiClient.post(
+        requireAuth: false,
         endpoint: 'auth/verification-code',
         body: {'phone_number': phone},
         exceptions: {

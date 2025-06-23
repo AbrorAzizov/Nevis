@@ -24,6 +24,7 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
   Future<List<CategoryModel>> getCategories({int? id}) async {
     try {
       final data = await apiClient.get(
+        requireAuth: false,
         endpoint: 'catalog',
         callPathNameForLog: '${runtimeType.toString()}.getCategories',
       );

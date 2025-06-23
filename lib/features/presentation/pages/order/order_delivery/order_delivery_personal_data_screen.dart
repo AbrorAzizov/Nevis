@@ -22,11 +22,13 @@ class _OrderDeliveryPersonalDataScreenState
     extends State<OrderDeliveryPersonalDataScreen> {
   late OrderDeliveryPersonalDataBloc personalDataBloc;
   bool isButtonEnabled = false;
+  GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    personalDataBloc = OrderDeliveryPersonalDataBloc(getMeUC: sl())
+    personalDataBloc = OrderDeliveryPersonalDataBloc(
+        getMeUC: sl(), createOrderForDeliveryUC: sl())
       ..add(GetPersonalDataEvent());
     _addListeners();
   }
@@ -37,9 +39,7 @@ class _OrderDeliveryPersonalDataScreenState
       personalDataBloc.sNameController,
       personalDataBloc.cityController,
       personalDataBloc.districtAndBuildingController,
-      personalDataBloc.entranceController,
-      personalDataBloc.floorController,
-      personalDataBloc.apartmentController,
+      personalDataBloc.phoneController
     ];
 
     for (var controller in controllers) {
@@ -48,19 +48,66 @@ class _OrderDeliveryPersonalDataScreenState
   }
 
   void _validateFields() {
-    final areFilled = personalDataBloc.fNameController.text.isNotEmpty &&
-        personalDataBloc.sNameController.text.isNotEmpty &&
-        personalDataBloc.cityController.text.isNotEmpty &&
-        personalDataBloc.districtAndBuildingController.text.isNotEmpty &&
-        personalDataBloc.entranceController.text.isNotEmpty &&
-        personalDataBloc.floorController.text.isNotEmpty &&
-        personalDataBloc.apartmentController.text.isNotEmpty;
+    bool validAddress = false;
 
-    if (areFilled != isButtonEnabled) {
-      setState(() {
-        isButtonEnabled = areFilled;
-      });
+    if (personalDataBloc.initialGeoObject != null) {
+      // если адрес был выбран из подсказов/тапом по карте,
+      // а после одно из полей адреса поменялось, то
+      // сбрасываем делаем кнопку на форме неактивной
+      List<String> fullAddressComponents = [
+        personalDataBloc.districtAndBuildingController.text,
+        personalDataBloc.cityController.text
+      ].join(', ').split(', ');
+      List<String> getObjectAddressComponents = (personalDataBloc
+                  .initialGeoObject
+                  ?.metaDataProperty
+                  ?.geocoderMetaData
+                  ?.address
+                  ?.formatted ??
+              '')
+          .split(', ');
+
+      List<String> normalize(List<String> list) =>
+          list.map((e) => e.trim().toLowerCase()).toList();
+
+      final normalizedFull = normalize(fullAddressComponents);
+      final normalizedFromGeo = normalize(getObjectAddressComponents);
+
+      validAddress = normalizedFull.every(
+        (item) => normalizedFromGeo.contains(item),
+      );
     }
+
+    Future.delayed(Duration(milliseconds: 100), () {
+      bool validForm = formKey.currentState?.validate() ?? false;
+      final areFilled = personalDataBloc.fNameController.text.isNotEmpty &&
+          personalDataBloc.sNameController.text.isNotEmpty &&
+          personalDataBloc.cityController.text.isNotEmpty &&
+          personalDataBloc.districtAndBuildingController.text.isNotEmpty &&
+          personalDataBloc.initialGeoObject != null &&
+          validForm &&
+          validAddress;
+
+      if (areFilled != isButtonEnabled) {
+        setState(() {
+          isButtonEnabled = areFilled;
+        });
+      }
+    });
+  }
+
+  void _onCreateOrder() {
+    // Получаем текущую дату и время для демонстрации
+    final now = DateTime.now();
+    final dateDelivery =
+        '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
+    final timeDelivery =
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+    personalDataBloc.add(CreateOrderForDeliveryEvent(
+      dateDelivery: dateDelivery,
+      timeDelivery: timeDelivery,
+    ));
   }
 
   @override
@@ -76,12 +123,42 @@ class _OrderDeliveryPersonalDataScreenState
       child: BlocBuilder<OrderDeliveryPersonalDataBloc,
           OrderDeliveryPersonalDataState>(
         builder: (context, state) {
+          // Показываем индикатор загрузки при создании заказа
+          final isLoading = state is OrderDeliveryPersonalDataLoading ||
+              state is OrderDeliveryPersonalDataCreating;
+
+          // Обрабатываем успешное создание заказа
+          if (state is OrderDeliveryPersonalDataCreated) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              // Здесь можно добавить навигацию на экран успеха или показать диалог
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                      'Заказ успешно создан! ID: ${state.deliveryOrder.orderId}'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            });
+          }
+
+          // Обрабатываем ошибку создания заказа
+          if (state is OrderDeliveryPersonalDataCreatingFailed) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            });
+          }
+
           return Scaffold(
             backgroundColor: UiConstants.backgroundColor,
             body: SafeArea(
               child: Skeletonizer(
                 ignorePointers: false,
-                enabled: state is OrderDeliveryPersonalDataLoading,
+                enabled: isLoading,
                 child: Column(
                   children: [
                     CustomAppBar(
@@ -94,11 +171,18 @@ class _OrderDeliveryPersonalDataScreenState
                         padding: getMarginOrPadding(
                             bottom: 71, right: 20, left: 20, top: 16),
                         children: [
-                          OrderDeliveryForm(personalDataBloc: personalDataBloc),
+                          Form(
+                              key: formKey,
+                              child: OrderDeliveryForm(
+                                  personalDataBloc: personalDataBloc)),
                           SizedBox(height: 16.h),
                           AppButtonWidget(
-                            text: 'Оформить доставку',
-                            onTap: isButtonEnabled ? () {} : null,
+                            text: state is OrderDeliveryPersonalDataCreating
+                                ? 'Создание заказа...'
+                                : 'Оформить доставку',
+                            onTap: isButtonEnabled && !isLoading
+                                ? _onCreateOrder
+                                : null,
                           ),
                           SizedBox(height: 8.h),
                         ],

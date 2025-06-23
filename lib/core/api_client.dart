@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get_connect/http/src/exceptions/exceptions.dart' as gc;
 import 'package:http/http.dart' as http;
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
@@ -28,6 +27,12 @@ class ApiClient {
       log('🔁 Token expired. Trying to refresh...',
           name: callPathNameForLog ?? '');
       try {
+        // Проверяем наличие refresh token
+        final refreshToken =
+            sharedPreferences.getString(SharedPreferencesKeys.refreshToken);
+        if (refreshToken == null || refreshToken.isEmpty) {
+          throw UnauthorizedException(); // нет refresh token, не пытаемся рефрешить
+        }
         // рефреш токена
         RefreshTokenUC refreshTokenUC = sl<RefreshTokenUC>();
         await refreshTokenUC();
@@ -39,7 +44,7 @@ class ApiClient {
             await client.send(originalRequest..headers.addAll(headers));
         response = await http.Response.fromStream(streamedResponse);
       } catch (_) {
-        throw gc.UnauthorizedException(); // не смогли обновить токен
+        throw UnauthorizedException(); // не смогли обновить токен
       }
     }
 
@@ -51,27 +56,51 @@ class ApiClient {
     Map<int, ApiException>? exceptions,
     String? callPathNameForLog,
   ) {
+    final statusCode = response.statusCode;
     final responseBody = jsonDecode(utf8.decode(response.bodyBytes));
     final message = responseBody is Map<String, dynamic>
         ? responseBody['message']?.toString() ??
-            responseBody['reasons']?.toString() ??
-            'Неизвестная ошибка'
-        : 'Неизвестная ошибка';
+            responseBody['reasons']?.toString()
+        : null;
 
     if (callPathNameForLog != null) {
-      log('Response (${response.request?.url}): ${response.statusCode} $responseBody',
+      log('Response (${response.request?.url}): $statusCode $responseBody',
           name: callPathNameForLog);
-
-      log('Parsed error message: $message', name: 'ApiClient');
+      if (message != null) {
+        log('Parsed error message: $message', name: 'ApiClient');
+      }
     }
 
-    if (exceptions != null && exceptions.containsKey(response.statusCode)) {
-      final exception =
-          exceptions[response.statusCode]?.copyWith(message: message) ??
-              ServerException(message);
+    // ✅ Проверяем наличие поля error в ответе (даже при статусе 200)
+    if (responseBody is Map<String, dynamic> &&
+        responseBody.containsKey('error')) {
+      final errorMessage =
+          responseBody['error']?.toString() ?? 'Ошибка без описания';
+      log('Found error field in response: $errorMessage', name: 'ApiClient');
+      throw ServerException(errorMessage);
+    }
+
+    // ✅ Если есть конкретная обработка по статусу
+    if (exceptions != null && exceptions.containsKey(statusCode)) {
+      final exception = exceptions[statusCode]?.copyWith(message: message) ??
+          ServerException(message);
       log('Throwing exception with message: ${exception.message}',
           name: 'ApiClient');
       throw exception;
+    }
+
+    // ✅ Бросаем по всем неуспешным кодам (не 2xx)
+    if (statusCode < 200 || statusCode >= 300) {
+      log('Unexpected status code: $statusCode', name: 'ApiClient');
+      throw ServerException(message);
+    }
+
+    // ✅ Дополнительно: если сервер возвращает success == false
+    if (responseBody is Map<String, dynamic> &&
+        responseBody.containsKey('success') &&
+        responseBody['success'] == false) {
+      throw ServerException(
+          responseBody['message']?.toString() ?? 'Ошибка без статуса');
     }
 
     return responseBody;
@@ -83,10 +112,11 @@ class ApiClient {
     String? callPathNameForLog,
     bool isRetryRequest = true,
     Map<String, dynamic>? queryParameters,
+    bool requireAuth = true,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint')
         .replace(queryParameters: queryParameters);
-    final headers = await _authHeaders();
+    final headers = await _authHeaders(requireAuth: requireAuth);
 
     // ✅ Логируем данные запроса
     log('Request URL: $url', name: callPathNameForLog ?? 'Request');
@@ -104,10 +134,11 @@ class ApiClient {
     String? callPathNameForLog,
     bool isRetryRequest = true,
     Map<String, dynamic>? queryParameters,
+    bool requireAuth = true,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint')
         .replace(queryParameters: queryParameters);
-    final headers = await _authHeaders();
+    final headers = await _authHeaders(requireAuth: requireAuth);
     final bodyString = jsonEncode(body);
 
     // ✅ Логируем данные запроса
@@ -130,10 +161,11 @@ class ApiClient {
     String? callPathNameForLog,
     bool isRetryRequest = true,
     Map<String, dynamic>? queryParameters,
+    bool requireAuth = true,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint')
         .replace(queryParameters: queryParameters);
-    final headers = await _authHeaders();
+    final headers = await _authHeaders(requireAuth: requireAuth);
     final bodyString = jsonEncode(body);
 
     // ✅ Логируем данные запроса
@@ -156,10 +188,11 @@ class ApiClient {
     String? callPathNameForLog,
     bool isRetryRequest = true,
     Map<String, dynamic>? queryParameters,
+    bool requireAuth = true,
   }) async {
     final url = Uri.parse('$baseUrl$endpoint')
         .replace(queryParameters: queryParameters);
-    final headers = await _authHeaders();
+    final headers = await _authHeaders(requireAuth: requireAuth);
     final bodyString = jsonEncode(body);
 
     // ✅ Логируем данные запроса
@@ -174,13 +207,19 @@ class ApiClient {
         isRetryRequest: isRetryRequest);
   }
 
-  Future<Map<String, String>> _authHeaders() async {
+  Future<Map<String, String>> _authHeaders({bool requireAuth = true}) async {
     final accessToken =
         sharedPreferences.getString(SharedPreferencesKeys.accessToken);
-    return {
+    final headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer $accessToken',
     };
+    if (requireAuth) {
+      if (accessToken == null || accessToken.isEmpty) {
+        throw UnauthorizedException();
+      }
+      headers['Authorization'] = 'Bearer $accessToken';
+    }
+    return headers;
   }
 }

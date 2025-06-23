@@ -179,3 +179,13 @@ class MaxProductQuantityExceededException extends ApiException {
     return MaxProductQuantityExceededException(message);
   }
 }
+
+class DeliveryOrderException extends ApiException {
+  DeliveryOrderException([String? message])
+      : super(message: message ?? 'Ошибка создания заказа доставки');
+
+  @override
+  DeliveryOrderException copyWith({String? message}) {
+    return DeliveryOrderException(message);
+  }
+}

@@ -29,7 +29,7 @@ class PersonalDataScreen extends StatelessWidget {
               getMeUC: sl(),
               updateMeUC: sl(),
               deleteMeUC: sl())
-            ..add(LoadProfileEvent()),
+            ..add(LoadProfileEvent(context: context)),
           child: BlocConsumer<PersonalDataScreenBloc, PersonalDataScreenState>(
             listener: (context, state) => switch (state) {
               DeleteAccountState _ =>
@@ -79,7 +79,7 @@ class PersonalDataScreen extends StatelessWidget {
                                     text: 'Сохранить',
                                     onTap: () {
                                       personalDataBloc.add(
-                                        SubmitEvent(),
+                                        SubmitEvent(context: context),
                                       );
                                     },
                                   ),
@@ -96,8 +96,9 @@ class PersonalDataScreen extends StatelessWidget {
                                             .showDeleteAccountSheet(context);
 
                                         if (isAgree == true) {
-                                          personalDataBloc
-                                              .add(DeleteAccountEvent());
+                                          personalDataBloc.add(
+                                              DeleteAccountEvent(
+                                                  context: context));
                                         }
                                       }),
                                 ],

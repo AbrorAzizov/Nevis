@@ -155,3 +155,12 @@ class MaxQuantityExceededFailure extends Failure {
   Failure copyWith({String? message}) =>
       MaxQuantityExceededFailure(message: message ?? this.message);
 }
+
+class DeliveryOrderFailure extends Failure {
+  const DeliveryOrderFailure({String? message})
+      : super(message: message ?? 'Ошибка создания заказа доставки');
+
+  @override
+  Failure copyWith({String? message}) =>
+      DeliveryOrderFailure(message: message ?? this.message);
+}

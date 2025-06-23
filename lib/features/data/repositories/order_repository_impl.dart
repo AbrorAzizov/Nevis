@@ -1,11 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/cart_params.dart';
+import 'package:nevis/core/params/delivery_order_params.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/order_local_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/order_remote_data_source_impl.dart';
 import 'package:nevis/features/data/models/order_model.dart';
+import 'package:nevis/features/domain/entities/delivery_order_entity.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 import 'package:nevis/features/domain/repositories/order_repository.dart';
@@ -58,5 +60,12 @@ class OrderRepositoryImpl implements OrderRepository {
           List<CartParams> cart) async =>
       await errorHandler.handle(
         () async => await orderRemoteDataSource.createOrderForPickup(cart),
+      );
+
+  @override
+  Future<Either<Failure, DeliveryOrderEntity>> createOrderForDelivery(
+          DeliveryOrderParams params) async =>
+      await errorHandler.handle(
+        () async => await orderRemoteDataSource.createOrderForDelivery(params),
       );
 }

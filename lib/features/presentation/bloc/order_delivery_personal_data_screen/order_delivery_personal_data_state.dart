@@ -13,3 +13,25 @@ class OrderDeliveryPersonalDataLoading extends OrderDeliveryPersonalDataState {}
 
 class OrderDeliveryPersonalDataLoadingFailed
     extends OrderDeliveryPersonalDataState {}
+
+class OrderDeliveryPersonalDataCreating
+    extends OrderDeliveryPersonalDataState {}
+
+class OrderDeliveryPersonalDataCreated extends OrderDeliveryPersonalDataState {
+  final DeliveryOrderEntity deliveryOrder;
+
+  OrderDeliveryPersonalDataCreated({required this.deliveryOrder});
+
+  @override
+  List<Object?> get props => [deliveryOrder];
+}
+
+class OrderDeliveryPersonalDataCreatingFailed
+    extends OrderDeliveryPersonalDataState {
+  final String errorMessage;
+
+  OrderDeliveryPersonalDataCreatingFailed({required this.errorMessage});
+
+  @override
+  List<Object?> get props => [errorMessage];
+}

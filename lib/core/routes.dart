@@ -49,6 +49,7 @@ class Routes {
       '/order_pickup_successfull_screen';
   static const String orderDeliveryPersonalDataScreen =
       '/order_delivery_personal_data_screen';
+  static const String pickAddressMapScreen = '/pick_address_map_screen';
 
   static List<String> get allRoutes => [
         splashScreen,
@@ -89,11 +90,12 @@ class Routes {
         valueBuySuccessfullyOrderedScreen,
         registerBonusCardScreen,
         orderPickupScreen,
-        storiesScreen
+        storiesScreen,
+        pickAddressMapScreen
       ];
 
   // Метод для создания анимированного перехода
-  static Route createRoute(Widget screen,
+  static Route<T> createRoute<T>(Widget screen,
       {Duration duration = const Duration(milliseconds: 500),
       RouteSettings? settings}) {
     return PageRouteBuilder(

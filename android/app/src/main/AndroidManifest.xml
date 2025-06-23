@@ -46,7 +46,7 @@
             android:value="2" />
             <meta-data
     android:name="com.yandex.android.maps.apikey"
-    android:value="39a54941-0819-4ad3-bec0-ea83ea36e655"/>
+    android:value="6127076d-e153-4873-be2b-1e927e3730d4"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

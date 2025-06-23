@@ -74,6 +74,7 @@ enum PharmacyMapType {
   orderPickupMap,
   favrotiePharmaciesMap,
   defaultMap,
+  addressPickup,
 }
 
 enum CartType { defaultCart, pickupCart }

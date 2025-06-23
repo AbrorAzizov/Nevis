@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/firebase_manager.dart';
+import 'package:nevis/core/geocoder_manager.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/auth_remote_data_source_impl.dart';
@@ -71,6 +72,7 @@ import 'package:nevis/features/domain/usecases/content/get_pharmacies.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/get_card_info.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/get_qr_code.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/register_card.dart';
+import 'package:nevis/features/domain/usecases/order/create_order_for_delivery.dart';
 import 'package:nevis/features/domain/usecases/order/create_order_for_pickup.dart';
 import 'package:nevis/features/domain/usecases/order/get_pharmacies_by_cart.dart';
 import 'package:nevis/features/domain/usecases/orders/get_one_order.dart';
@@ -110,6 +112,7 @@ import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.da
 import 'package:nevis/features/presentation/bloc/news_internal_screen/news_internal_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/news_screen/news_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/no_internet_connection/no_internet_connection_bloc.dart';
+import 'package:nevis/features/presentation/bloc/order_delivery_personal_data_screen/order_delivery_personal_data_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/product_screen/product_screen_bloc.dart';
@@ -122,6 +125,7 @@ import 'package:nevis/features/presentation/bloc/splash_screen/splash_screen_blo
 import 'package:nevis/features/presentation/bloc/stories/stories_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yandex_geocoder/yandex_geocoder.dart';
 
 final sl = GetIt.instance;
 
@@ -269,6 +273,10 @@ Future<void> init() async {
   sl.registerLazySingleton(
     () => BonusCardScreenBloc(getQRCodeUC: sl()),
   );
+  sl.registerLazySingleton(
+    () => OrderDeliveryPersonalDataBloc(
+        getMeUC: sl(), createOrderForDeliveryUC: sl()),
+  );
 
   //// UseCases
 
@@ -324,6 +332,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetOneOrderUC(sl()));
   sl.registerLazySingleton(() => GetPharmaciesByCartUC(sl()));
   sl.registerLazySingleton(() => CreateOrderForPickupUC(sl()));
+  sl.registerLazySingleton(() => CreateOrderForDeliveryUC(sl()));
 
   //Cart
   sl.registerLazySingleton(() => GetCartProductsUC(sl()));
@@ -446,6 +455,10 @@ Future<void> init() async {
     () => OrderLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
+  sl.registerLazySingleton<OrderRemoteDataSource>(
+    () => OrderRemoteDataSourceImpl(sharedPreferences: sl(), apiClient: sl()),
+  );
+
   sl.registerLazySingleton<ProductLocaleDataSource>(
     () => ProductLocalDataSourceImpl(
       sharedPreferences: sl(),
@@ -482,13 +495,6 @@ Future<void> init() async {
 
   sl.registerLazySingleton<CategoryRemoteDataSource>(
     () => CategoryRemoteDataSourceImpl(
-      apiClient: sl(),
-      sharedPreferences: sl(),
-    ),
-  );
-
-  sl.registerLazySingleton<OrderRemoteDataSource>(
-    () => OrderRemoteDataSourceImpl(
       apiClient: sl(),
       sharedPreferences: sl(),
     ),
@@ -549,5 +555,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => InternetConnectionChecker());
+  sl.registerLazySingleton(
+      () => YandexGeocoder(apiKey: dotenv.env['YANDEX_GEOCODER_API_KEY']!));
+  sl.registerLazySingleton(() => GeocoderManager(sl<YandexGeocoder>()));
   sl.registerLazySingleton<FirebaseManager>(() => FirebaseManager());
 }
