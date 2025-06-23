@@ -5,9 +5,9 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/formatters/custom_phone_input_formatter.dart';
 import 'package:nevis/features/presentation/bloc/order_delivery_personal_data_screen/order_delivery_personal_data_bloc.dart';
-import 'package:nevis/features/presentation/pages/order/order_delivery/pick_address_field_on_map_widget.dart';
 import 'package:nevis/features/presentation/pages/order/order_delivery/pick_address_map_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_text_field_widget.dart';
+import 'package:nevis/features/presentation/widgets/order_screen/order_delivery/pick_address_field_on_map_widget.dart';
 import 'package:yandex_geocoder/yandex_geocoder.dart';
 
 class OrderDeliveryForm extends StatelessWidget {

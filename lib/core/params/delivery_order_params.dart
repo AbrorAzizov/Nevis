@@ -23,8 +23,8 @@ class DeliveryOrderParams {
       'order_type': orderType,
     };
 
-    if (lon != null) map['LON'] = lon;
-    if (lat != null) map['LAT'] = lat;
+    if (lat != null) map['LON'] = lat;
+    if (lon != null) map['LAT'] = lon;
 
     return map;
   }

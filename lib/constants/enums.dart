@@ -86,3 +86,5 @@ enum PhoneNumberFormat {
   client, // +7 XXX XXX XX XX
   loyaltyCard, // +7 (9XX) XXX-XXXX
 }
+
+enum PaymentMethod { sbp, card }

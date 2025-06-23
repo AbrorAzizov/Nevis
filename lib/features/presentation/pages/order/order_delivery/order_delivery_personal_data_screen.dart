@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/order_delivery_personal_data_screen/order_delivery_personal_data_bloc.dart';
+import 'package:nevis/features/presentation/pages/order/order_delivery/order_delivery_success_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/order_delivery_personal_data_screen/order_delivery_form_widget.dart';
@@ -105,9 +107,7 @@ class _OrderDeliveryPersonalDataScreenState
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
 
     personalDataBloc.add(CreateOrderForDeliveryEvent(
-      dateDelivery: dateDelivery,
-      timeDelivery: timeDelivery,
-    ));
+        dateDelivery: dateDelivery, timeDelivery: timeDelivery));
   }
 
   @override
@@ -131,11 +131,12 @@ class _OrderDeliveryPersonalDataScreenState
           if (state is OrderDeliveryPersonalDataCreated) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               // Здесь можно добавить навигацию на экран успеха или показать диалог
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                      'Заказ успешно создан! ID: ${state.deliveryOrder.orderId}'),
-                  backgroundColor: Colors.green,
+              Navigator.of(context).push(
+                Routes.createRoute(
+                  const OrderDeliverySuccessScreen(),
+                  settings: RouteSettings(
+                      name: Routes.orderDeliverySuccessScreen,
+                      arguments: {'order': state.deliveryOrder}),
                 ),
               );
             });

@@ -22,8 +22,9 @@ import 'package:nevis/features/presentation/pages/main/bonus_cards/register_bonu
 import 'package:nevis/features/presentation/pages/main/main_screen.dart';
 import 'package:nevis/features/presentation/pages/main/stories_screen.dart';
 import 'package:nevis/features/presentation/pages/order/order_delivery/order_delivery_personal_data_screen.dart';
-import 'package:nevis/features/presentation/pages/order_pickup/order_pickup_success_screen.dart';
-import 'package:nevis/features/presentation/pages/order_pickup/order_pikcup_cart_screen.dart';
+import 'package:nevis/features/presentation/pages/order/order_delivery/order_delivery_success_screen.dart';
+import 'package:nevis/features/presentation/pages/order/order_pickup/order_pickup_success_screen.dart';
+import 'package:nevis/features/presentation/pages/order/order_pickup/order_pikcup_cart_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/about_us_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/article_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/articles_screen.dart';
@@ -150,7 +151,9 @@ class MyApp extends StatelessWidget {
               Routes.orderPickupSuccessfullScreen: (context) =>
                   const OrderPickupSuccessScreen(),
               Routes.orderDeliveryPersonalDataScreen: (context) =>
-                  OrderDeliveryPersonalDataScreen()
+                  OrderDeliveryPersonalDataScreen(),
+              Routes.orderDeliverySuccessScreen: (context) =>
+                  OrderDeliverySuccessScreen()
             },
             initialRoute: Routes.splashScreen,
             navigatorObservers: [routeObserver],

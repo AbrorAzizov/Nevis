@@ -10,15 +10,20 @@ import 'package:skeletonizer/skeletonizer.dart';
 class SelectedProductsPriceInformationWidget extends StatelessWidget {
   const SelectedProductsPriceInformationWidget({
     super.key,
+    required this.price,
     required this.totalPrice,
     required this.totalDiscounts,
     required this.totalBonuses,
     required this.productsTotalCount,
+    this.deliveryPrice,
   });
+  final double price;
   final double totalPrice;
   final double totalDiscounts;
   final int totalBonuses;
   final int productsTotalCount;
+  final double? deliveryPrice;
+
   @override
   Widget build(BuildContext context) {
     return Skeleton.unite(
@@ -33,15 +38,13 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
                 style: UiConstants.textStyle11,
               ),
               Text(
-                Utils.formatPrice(totalPrice),
+                Utils.formatPrice(price),
                 style: UiConstants.textStyle11
                     .copyWith(color: UiConstants.blackColor),
               ),
             ],
           ),
-          SizedBox(
-            height: 8.h,
-          ),
+          SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -50,15 +53,31 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
                 style: UiConstants.textStyle11,
               ),
               Text(
-                Utils.formatPrice(totalPrice - totalDiscounts),
+                Utils.formatPrice(totalDiscounts),
                 style: UiConstants.textStyle11
                     .copyWith(color: UiConstants.blackColor),
               ),
             ],
           ),
-          SizedBox(
-            height: 8.h,
-          ),
+          if (deliveryPrice != null)
+            Padding(
+              padding: getMarginOrPadding(top: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Доставка',
+                    style: UiConstants.textStyle11,
+                  ),
+                  Text(
+                    Utils.formatPrice(deliveryPrice),
+                    style: UiConstants.textStyle11
+                        .copyWith(color: UiConstants.blackColor),
+                  ),
+                ],
+              ),
+            ),
+          SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -67,38 +86,30 @@ class SelectedProductsPriceInformationWidget extends StatelessWidget {
                 style: UiConstants.textStyle11,
               ),
               Container(
-                width: 52.w,
-                height: 22.h,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30.r),
                     gradient: LinearGradient(
                         colors: [Color(0xFFBF80FF), Color(0xFF85C6FF)])),
                 child: Container(
-                  padding: getMarginOrPadding(left: 4, right: 4),
+                  padding: getMarginOrPadding(all: 4),
                   child: Row(
                     children: [
                       SvgPicture.asset(Paths.bonusIcon2Path),
-                      Expanded(
-                          child: Text(
-                        '$totalBonuses',
-                        style: UiConstants.textStyle12.copyWith(
-                          color: UiConstants.whiteColor,
-                        ),
-                        textAlign: TextAlign.center,
-                      ))
+                      SizedBox(width: 4.w),
+                      Text('+$totalBonuses',
+                          style: UiConstants.textStyle12.copyWith(
+                            color: UiConstants.whiteColor,
+                          ),
+                          textAlign: TextAlign.center)
                     ],
                   ),
                 ),
               )
             ],
           ),
-          SizedBox(
-            height: 16.h,
-          ),
-          Divider(),
-          SizedBox(
-            height: 16.h,
-          ),
+          SizedBox(height: 16.h),
+          Divider(color: UiConstants.black3Color.withOpacity(.1)),
+          SizedBox(height: 16.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

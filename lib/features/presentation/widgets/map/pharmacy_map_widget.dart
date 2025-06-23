@@ -45,7 +45,8 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
   @override
   void initState() {
     super.initState();
-    final initPoint = widget.mapType == PharmacyMapType.addressPickup
+    final initPoint = widget.mapType == PharmacyMapType.addressPickup &&
+            widget.points.isNotEmpty
         ? widget.points.first.point
         : null;
 
