@@ -1,11 +1,15 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:nevis/constants/enums.dart';
+import 'package:nevis/core/notification_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/pages/cart/cart_screen.dart';
 import 'package:nevis/features/presentation/pages/catalog/catalog_screen.dart';
@@ -46,6 +50,7 @@ import 'package:nevis/features/presentation/pages/starts/login_screen_with_messa
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_phone_call.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_yandex.dart';
 import 'package:nevis/features/presentation/pages/starts/splash_screen.dart';
+import 'package:nevis/firebase_options.dart';
 
 import 'locator_service.dart' as di;
 
@@ -53,6 +58,20 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await initializeDateFormatting('ru', null);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Set the background messaging handler early on, as a named top-level function
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  if (!kIsWeb) {
+    print(await FirebaseMessaging.instance.getToken());
+  }
+
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true, badge: true, sound: true);
+
+  await NotificationManager.initNotifications();
+  await NotificationManager.connectToForegroundMessages();
+
   await di.init();
 
   runApp(const MyApp());
@@ -166,4 +185,11 @@ class MyHttpOverrides extends HttpOverrides {
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
   }
+}
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationManager.initNotifications();
+  NotificationManager.showFlutterNotification(message);
 }
