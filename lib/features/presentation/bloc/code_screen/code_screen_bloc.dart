@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/error/failure.dart';
@@ -74,7 +75,9 @@ class CodeScreenBloc extends Bloc<CodeScreenEvent, CodeScreenState> {
     emit(state.copyWith(showError: false));
 
     final failureOrLoads = await loginUC(AuthenticationParams(
-        phone: Utils.formatPhoneNumber(state.phone), code: state.code));
+        phone: Utils.formatPhoneNumber(state.phone),
+        code: state.code,
+        fcmToken: await FirebaseMessaging.instance.getToken()));
     failureOrLoads.fold(
       (failure) => switch (failure) {
         TooManyRequestsFailure e => emit(state.copyWith(

@@ -248,6 +248,7 @@ class Utils {
       required String text,
       required Function(BuildContext context) action}) {
     showDialog(
+      useRootNavigator: true,
       context: screenContext,
       builder: (BuildContext context) {
         return WillPopScope(

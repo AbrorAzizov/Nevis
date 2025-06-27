@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
 import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
@@ -11,6 +12,17 @@ part 'pharmacy_map_state.dart';
 class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
   PharmacyMapBloc() : super(PharmacyMapState()) {
     on<InitPharmacyMapEvent>((event, emit) {
+<<<<<<< HEAD
+=======
+      emit(PharmacyMapState(
+          points: event.points,
+          mapType: event.mapType,
+          userPoint: event.initPoint ?? state.userPoint));
+      add(UpdatePharmacyMapEvent());
+    });
+
+    on<UpdatePharmacyMapMarkersEvent>((event, emit) {
+>>>>>>> main
       emit(state.copyWith(points: event.points));
       add(UpdatePharmacyMapEvent());
     });
@@ -19,11 +31,7 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
       emit(state.copyWith(mapController: event.mapController));
       event.mapController.moveCamera(
         CameraUpdate.newCameraPosition(
-          const CameraPosition(
-            target: Point(
-                latitude: 59.946193391466124, longitude: 30.352824011619802),
-            zoom: 12,
-          ),
+          CameraPosition(target: state.userPoint, zoom: 12),
         ),
       );
     });
@@ -37,18 +45,21 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
     on<ZoomInEvent>(_onZoomIn);
     on<ZoomOutEvent>(_onZoomOut);
     on<MoveToCurrentLocationEvent>(_onMoveToCurrentLocation);
+    on<MoveToPointEvent>(_onMoveToPoint);
   }
 
   void _onSelectMarker(
       SelectMarkerEvent event, Emitter<PharmacyMapState> emit) async {
     String selectedMarkerId = event.markerId ?? state.selectedMarkerId!;
 
-    emit(state.copyWith(
-      selectedMarkerId: selectedMarkerId,
-      showStackWindow: state.selectedMarkerId != selectedMarkerId
-          ? true
-          : !state.showStackWindow,
-    ));
+    emit(
+      state.copyWith(
+        selectedMarkerId: selectedMarkerId,
+        showStackWindow: state.selectedMarkerId != selectedMarkerId
+            ? true
+            : !state.showStackWindow,
+      ),
+    );
 
     CameraPosition? position = await state.mapController?.getCameraPosition();
 
@@ -92,8 +103,9 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
         icon: PlacemarkIcon.single(
           PlacemarkIconStyle(image: icon),
         ),
-        onTap: (point, __) =>
-            add(SelectMarkerEvent(markerId: point.mapId.value)),
+        onTap: (point, __) => state.mapType != PharmacyMapType.addressPickup
+            ? add(SelectMarkerEvent(markerId: point.mapId.value))
+            : null,
       );
 
       placemarks.add(placemark);
@@ -163,8 +175,19 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
     if (position != null) {
       state.mapController?.moveCamera(
           CameraUpdate.newCameraPosition(
-            position.copyWith(
-                target: Point(latitude: 53.9006, longitude: 27.5590), zoom: 12),
+            position.copyWith(target: state.userPoint, zoom: 12),
+          ),
+          animation: MapAnimation(duration: 0.6));
+    }
+  }
+
+  Future _onMoveToPoint(
+      MoveToPointEvent event, Emitter<PharmacyMapState> emit) async {
+    CameraPosition? position = await state.mapController?.getCameraPosition();
+    if (position != null) {
+      state.mapController?.moveCamera(
+          CameraUpdate.newCameraPosition(
+            position.copyWith(target: event.point, zoom: 12),
           ),
           animation: MapAnimation(duration: 0.6));
     }

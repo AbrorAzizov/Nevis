@@ -7,7 +7,15 @@ abstract class PharmacyMapEvent extends Equatable {
 
 class InitPharmacyMapEvent extends PharmacyMapEvent {
   final List<MapMarkerModel> points;
-  InitPharmacyMapEvent({required this.points});
+  final PharmacyMapType mapType;
+  final Point? initPoint;
+  InitPharmacyMapEvent(
+      {required this.points, required this.mapType, this.initPoint});
+}
+
+class UpdatePharmacyMapMarkersEvent extends PharmacyMapEvent {
+  final List<MapMarkerModel> points;
+  UpdatePharmacyMapMarkersEvent({required this.points});
 }
 
 class AttachControllerEvent extends PharmacyMapEvent {
@@ -35,6 +43,11 @@ class ZoomInEvent extends PharmacyMapEvent {
 class ZoomOutEvent extends PharmacyMapEvent {}
 
 class MoveToCurrentLocationEvent extends PharmacyMapEvent {}
+
+class MoveToPointEvent extends PharmacyMapEvent {
+  final Point point;
+  MoveToPointEvent({required this.point});
+}
 
 class ClusterTappedEvent extends PharmacyMapEvent {
   final Cluster cluster;

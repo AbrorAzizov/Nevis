@@ -95,20 +95,6 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<List<ProductPharmacyModel>> getProductPharmacies(int id) async {
-    //   try {
-    //     final data = await apiClient.get(
-    //       endpoint: 'product/$id/pharmacies',
-    //       callPathNameForLog: '${runtimeType.toString()}.getProductPharmacies',
-    //     );
-    //     List<dynamic> dataList = data['data'];
-    //     return dataList
-    //         .map((e) => ProductPharmacyModel.fromJson(e['product_pharmacy_json']))
-    //         .toList();
-    //   } catch (e) {
-    //     log('Error during getProductPharmacies: $e', level: 1000);
-    //     rethrow;
-    //   }
-    // }
     try {
       final String jsonString =
           await rootBundle.loadString('assets/product_pharmacies.json');
@@ -128,6 +114,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   Future<SearchProductsModel> getCategoryProducts(int id) async {
     try {
       final data = await apiClient.get(
+        requireAuth: false,
         endpoint: 'catalog/categories/$id/allProducts',
         exceptions: {
           401: ServerException(),
@@ -148,6 +135,7 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       CategoryParams params) async {
     try {
       final data = await apiClient.get(
+        requireAuth: false,
         endpoint:
             'catalog/categories/${params.categoryId}/allProducts?sort=${params.typeOfSort}&order=${params.sortBy}&page=${params.page}',
         exceptions: {
@@ -167,12 +155,17 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   Future<SubcategoryModel> getSubCategories(SubcategoryParams params) async {
     try {
       final data = await apiClient.get(
+<<<<<<< HEAD
         endpoint: 'catalog/categories/${params.categoryId}',
         queryParameters: {
           'sort': params.sort,
           'order': params.order,
           'page': params.page.toString()
         },
+=======
+        requireAuth: false,
+        endpoint: 'catalog/categories/$id',
+>>>>>>> main
         exceptions: {
           401: ServerException(),
         },

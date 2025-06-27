@@ -46,13 +46,19 @@
             android:value="2" />
             <meta-data
     android:name="com.yandex.android.maps.apikey"
-    android:value="39a54941-0819-4ad3-bec0-ea83ea36e655"/>
+    android:value="6127076d-e153-4873-be2b-1e927e3730d4"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <meta-data
+        android:name="com.google.firebase.messaging.high_importance_channel"
+        android:value="high_importance_channel" />
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@drawable/ic_notification" />
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>

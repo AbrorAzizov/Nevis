@@ -21,7 +21,7 @@ class DropdownBlockItem extends StatelessWidget {
       children: [
         CustomCheckbox(
             isChecked: isChecked,
-            title: Text(
+            titleWidget: Text(
               text,
               style: UiConstants.textStyle8
                   .copyWith(color: UiConstants.blackColor),

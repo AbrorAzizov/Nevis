@@ -43,7 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(
-            value: sl<PersonalDataScreenBloc>()..add(LoadProfileEvent())),
+            value: sl<PersonalDataScreenBloc>()
+              ..add(LoadProfileEvent(context: context))),
         BlocProvider.value(
           value: sl<CartScreenBloc>()..add(GetCartProductsEvent()),
         ),

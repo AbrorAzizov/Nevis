@@ -154,4 +154,9 @@ class Paths {
   static const String medkitPath = '${_imagesPath}medkit.svg';
   static const String immunityPath = '${_imagesPath}immunity.svg';
   static const String likePath = '${_imagesPath}like.svg';
+
+  static const String sbpPlatePath = '${_imagesPath}sbp.png';
+  static const String mirPlatePath = '${_imagesPath}mir.png';
+  static const String visaPlatePath = '${_imagesPath}visa.png';
+  static const String mastercardPlatePath = '${_imagesPath}mastercard.png';
 }

@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class AuthRemoteDataSource {
   Future<bool?> isPhoneExists(String phone);
   Future<void> requestCode(String phone);
-  Future<void> login(String phone, String password);
+  Future<void> login(String phone, String password, String fcmToken);
   Future<void> loginByService(LoginServiceParam loginServiceParam);
   Future<void> refreshToken();
   Future<void> logout();
@@ -25,14 +25,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   });
 
   @override
-  Future<void> login(String phone, String code) async {
+  Future<void> login(String phone, String code, String fcmToken) async {
     try {
       final data = await apiClient.post(
+        requireAuth: false,
         endpoint: 'auth/login',
         body: {
           'phone_number': phone,
           'verification_code': code,
-          'fcm_token': 'fcmtoken123'
+          'fcm_token': fcmToken
         },
         exceptions: {
           401: ConfirmationCodeWrongException(),
@@ -59,11 +60,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> loginByService(LoginServiceParam loginServiceParam) async {
     try {
       final data = await apiClient.post(
+        requireAuth: false,
         endpoint: 'auth/login',
         body: {
           'service': loginServiceParam.loginServiceType.name,
           'access_token': loginServiceParam.serviceToken,
-          'fcm_token': 'fcmtoken123'
+          'fcm_token': loginServiceParam.fcmToken
         },
         exceptions: {
           429: TooManyRequestsException(),
@@ -90,6 +92,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> refreshToken() async {
     try {
       final data = await apiClient.post(
+          requireAuth: false,
           endpoint: 'auth/refresh-token',
           body: {
             'refresh_token':
@@ -141,6 +144,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> requestCode(String phone) async {
     try {
       await apiClient.post(
+        requireAuth: false,
         endpoint: 'auth/verification-code',
         body: {'phone_number': phone},
         exceptions: {

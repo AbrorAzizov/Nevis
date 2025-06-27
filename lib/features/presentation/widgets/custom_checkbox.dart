@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CustomCheckbox extends StatelessWidget {
   const CustomCheckbox(
       {super.key,
+      this.titleWidget,
       this.title,
       required this.isChecked,
       required this.onChanged,
@@ -17,7 +17,8 @@ class CustomCheckbox extends StatelessWidget {
       this.scale = 1.5,
       this.isEnabled = true});
 
-  final Widget? title;
+  final Widget? titleWidget;
+  final String? title;
   final bool isChecked;
   final Function(bool?) onChanged;
   final double? spacing;
@@ -62,12 +63,18 @@ class CustomCheckbox extends StatelessWidget {
                     onChanged: isEnabled ? onChanged : null),
               ),
             ),
-            if (title != null)
+            if (titleWidget != null || title != null)
               Expanded(
                 child: Padding(
                     padding: getMarginOrPadding(left: spacing ?? 8),
-                    child: title),
-              )
+                    child: title != null
+                        ? Text(
+                            title ?? '',
+                            style: (textStyle ?? UiConstants.textStyle11)
+                                .copyWith(color: UiConstants.blackColor),
+                          )
+                        : titleWidget),
+              ),
           ],
         ),
       ),

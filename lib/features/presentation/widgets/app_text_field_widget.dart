@@ -126,9 +126,9 @@ class _GidTextFieldState extends State<AppTextFieldWidget> {
                         : null,
                     child: Text(
                       widget.actionTitle ?? '',
-                      style: UiConstants.textStyle2.copyWith(
+                      style: UiConstants.textStyle3.copyWith(
                           color: widget.isActionTitleActive
-                              ? UiConstants.purpleColor
+                              ? UiConstants.blueColor
                               : UiConstants.oliveGreenColor),
                     ),
                   ),

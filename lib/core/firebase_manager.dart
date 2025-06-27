@@ -1,21 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class FirebaseManager {
   Future<bool> requestPushPermission(BuildContext context) async {
-    /*final firebaseSettings =
-        await FirebaseMessaging.instance.requestPermission();
+    // 1. Запрос у Firebase Messaging (обязательно для iOS)
+    final settings = await FirebaseMessaging.instance.requestPermission();
 
-    if (firebaseSettings.authorizationStatus == AuthorizationStatus.denied) {
-      final isPermanentlyDenied =
-          await Permission.notification.isPermanentlyDenied;
-
-      if (isPermanentlyDenied) {
-        await openAppSettings();
-      } else {
-        await Permission.notification.request();
-      }
-    }*/
+    // 2. Проверяем статус через permission_handler
     final status = await Permission.notification.status;
 
     if (status.isDenied) {
@@ -24,6 +16,8 @@ class FirebaseManager {
       await openAppSettings();
     }
 
-    return (await Permission.notification.status).isGranted;
+    // 3. Возвращаем true, если разрешение получено
+    return (await Permission.notification.status).isGranted &&
+        settings.authorizationStatus == AuthorizationStatus.authorized;
   }
 }

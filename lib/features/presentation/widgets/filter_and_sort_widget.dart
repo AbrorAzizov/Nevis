@@ -7,7 +7,8 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart' as prod;
+import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart'
+    as prod;
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_radio_button.dart';
 import 'package:nevis/features/presentation/widgets/dropdown_block_item.dart';
@@ -29,7 +30,8 @@ class FilterSortContainer extends StatefulWidget {
     required this.selectedSortType,
     required this.onSortSelected,
     required this.filterOrSortType,
-    required this.onConfirmFilter, required this.isFromFav,
+    required this.onConfirmFilter,
+    required this.isFromFav,
   });
 
   @override
@@ -75,26 +77,25 @@ class _FilterSortContainerState extends State<FilterSortContainer> {
             children: [
               Expanded(
                 child: SortWidget(
-                  iconColor: widget.filterOrSortType ==
-                          ProductFilterOrSortType.filter
-                      ? UiConstants.blueColor
-                      : UiConstants.black3Color.withOpacity(.6),
-                  style: widget.filterOrSortType ==
-                          ProductFilterOrSortType.filter
-                      ? UiConstants.textStyle11
-                          .copyWith(color: UiConstants.blueColor)
-                      : UiConstants.textStyle11,
+                  iconColor:
+                      widget.filterOrSortType == ProductFilterOrSortType.filter
+                          ? UiConstants.blueColor
+                          : UiConstants.black3Color.withOpacity(.6),
+                  style:
+                      widget.filterOrSortType == ProductFilterOrSortType.filter
+                          ? UiConstants.textStyle11
+                              .copyWith(color: UiConstants.blueColor)
+                          : UiConstants.textStyle11,
                   text: 'Фильтр',
                   iconPath: Paths.sortIconPath,
                   onTap: () {
-                     widget.isFromFav ?
-                    context
-                        .read<FavoriteProductsScreenBloc>()
-                        .add(ShowFilterProductsTypes()):
-                      context
-                        .read<prod.ProductsScreenBloc>()
-                        .add(prod.ShowFilterProductsTypes());  
-
+                    widget.isFromFav
+                        ? context
+                            .read<FavoriteProductsScreenBloc>()
+                            .add(ShowFilterProductsTypes())
+                        : context
+                            .read<prod.ProductsScreenBloc>()
+                            .add(prod.ShowFilterProductsTypes());
                   },
                 ),
               ),
@@ -104,22 +105,20 @@ class _FilterSortContainerState extends State<FilterSortContainer> {
                       widget.filterOrSortType == ProductFilterOrSortType.sort
                           ? UiConstants.blueColor
                           : UiConstants.black3Color.withOpacity(.6),
-                  style:
-                      widget.filterOrSortType == ProductFilterOrSortType.sort
-                          ? UiConstants.textStyle11
-                              .copyWith(color: UiConstants.blueColor)
-                          : UiConstants.textStyle11,
+                  style: widget.filterOrSortType == ProductFilterOrSortType.sort
+                      ? UiConstants.textStyle11
+                          .copyWith(color: UiConstants.blueColor)
+                      : UiConstants.textStyle11,
                   text: 'Сортировка',
                   iconPath: Paths.filtersIconPath,
                   onTap: () {
-                    widget.isFromFav ?
-                    context
-                        .read<FavoriteProductsScreenBloc>()
-                        .add(ShowSortProductsTypes()):
-                      context
-                        .read<prod.ProductsScreenBloc>()
-                        .add(prod.ShowSortProductsTypes());  
-
+                    widget.isFromFav
+                        ? context
+                            .read<FavoriteProductsScreenBloc>()
+                            .add(ShowSortProductsTypes())
+                        : context
+                            .read<prod.ProductsScreenBloc>()
+                            .add(prod.ShowSortProductsTypes());
                   },
                 ),
               ),

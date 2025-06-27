@@ -58,6 +58,8 @@ dependencies:
   firebase_core: ^3.13.1
   flutter_localizations:
     sdk: flutter
+  flutter_local_notifications: ^19.3.0
+  yandex_geocoder: ^2.3.1
 
 dev_dependencies:
   flutter_test:
@@ -73,11 +75,11 @@ flutter_native_splash:
   ios: true
   web: false
 
-  color: "#ed1f94"
-  image: assets/images/logo_pink.png
+  color: "#50B1D7"
+  image: assets/images/ic_launcher.png
   android_12:
-    color: "#ed1f94"
-    image: assets/images/logo_pink.png
+    color: "#50B1D7"
+    image: assets/images/ic_launcher.png
 
 flutter:
   uses-material-design: true

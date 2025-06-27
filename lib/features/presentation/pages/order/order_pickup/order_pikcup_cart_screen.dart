@@ -11,7 +11,7 @@ import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_pickup_cart_screen/order_pickup_cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_pickup_screen/order_pickup_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/order_pickup/order_pickup_success_screen.dart';
+import 'package:nevis/features/presentation/pages/order/order_pickup/order_pickup_success_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/cart_product_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_status_widget.dart';
@@ -253,8 +253,10 @@ class _OrderPickupCartScreenState extends State<OrderPickupCartScreen> {
                           if (state.cartProducts.isNotEmpty ||
                               state.cartProductsFromWarehouse.isNotEmpty) ...[
                             SelectedProductsPriceInformationWidget(
+                              price: state.totalPrice ?? 0,
                               totalPrice: state.totalPrice ?? 0,
-                              totalDiscounts: state.totalDiscounts ?? 0,
+                              totalDiscounts: (state.totalPrice ?? 0) -
+                                  (state.totalDiscounts ?? 0),
                               totalBonuses: state.totalBonuses ?? 0,
                               productsTotalCount: state.cartProducts.length,
                             ),

@@ -4,7 +4,6 @@ import 'package:nevis/core/params/authentification_param.dart';
 import 'package:nevis/core/usecases/usecase.dart';
 import 'package:nevis/features/domain/repositories/auth_repository.dart';
 
-
 class LoginUC extends UseCaseParam<void, AuthenticationParams> {
   final AuthRepository authRepository;
 
@@ -12,6 +11,7 @@ class LoginUC extends UseCaseParam<void, AuthenticationParams> {
 
   @override
   Future<Either<Failure, void>> call(AuthenticationParams params) async {
-    return await authRepository.login(params.phone, params.code!);
+    return await authRepository.login(
+        params.phone, params.code!, params.fcmToken!);
   }
 }

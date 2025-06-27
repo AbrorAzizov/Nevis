@@ -17,6 +17,7 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
   Future<PaginatedStoriesModel> getStories(int page) async {
     try {
       final data = await apiClient.get(
+        requireAuth: false,
         endpoint: 'stories?page=$page',
         exceptions: {500: ServerException()},
         callPathNameForLog: '${runtimeType.toString()}.getStories',
@@ -33,6 +34,7 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
   Future<StoryModel> getStoryById(int id) async {
     try {
       final data = await apiClient.get(
+        requireAuth: false,
         endpoint: 'stories/$id',
         exceptions: {500: ServerException()},
         callPathNameForLog: '${runtimeType.toString()}.getStoryById',

@@ -6,7 +6,8 @@ abstract class AuthRepository {
   Future<Either<Failure, bool?>> isPhoneExists(String phone);
   Future<Either<Failure, void>> requestCode(String phone);
   Future<Either<Failure, void>> refreshToken();
-  Future<Either<Failure, void>> login(String phone, String code);
+  Future<Either<Failure, void>> login(
+      String phone, String code, String fcmToken);
   Future<Either<Failure, void>> loginByService(
       LoginServiceParam loginServiceParam);
   Future<Either<Failure, void>> logout();

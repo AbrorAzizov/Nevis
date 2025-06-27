@@ -4,6 +4,11 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/params/cart_params.dart';
+<<<<<<< HEAD
+=======
+import 'package:nevis/core/params/delivery_order_params.dart';
+import 'package:nevis/features/data/models/delivery_order_model.dart';
+>>>>>>> main
 import 'package:nevis/features/data/models/order_model.dart';
 import 'package:nevis/features/data/models/pharmacy_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +18,10 @@ abstract class OrderRemoteDataSource {
   Future<OrderModel?> getOrderById(int id);
   Future<List<PharmacyModel>> getAvialablePharmacies(List<CartParams> cart);
   Future<List<OrderModel>> createOrderForPickup(List<CartParams> cart);
+<<<<<<< HEAD
+=======
+  Future<DeliveryOrderModel> createOrderForDelivery(DeliveryOrderParams params);
+>>>>>>> main
 }
 
 class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
@@ -113,4 +122,29 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
       rethrow;
     }
   }
+<<<<<<< HEAD
+=======
+
+  @override
+  Future<DeliveryOrderModel> createOrderForDelivery(
+      DeliveryOrderParams params) async {
+    try {
+      final data = await apiClient.post(
+        body: params.toJson(),
+        endpoint: 'orders/create',
+        exceptions: {500: ServerException()},
+        callPathNameForLog: '${runtimeType.toString()}.createOrderForDelivery',
+      );
+
+      return DeliveryOrderModel.fromJson(data);
+    } catch (e) {
+      log(
+        'Error during createOrderForDelivery: $e',
+        level: 1000,
+        name: '${runtimeType.toString()}.createOrderForDelivery',
+      );
+      rethrow;
+    }
+  }
+>>>>>>> main
 }

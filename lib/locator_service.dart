@@ -4,6 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/firebase_manager.dart';
+<<<<<<< HEAD
+=======
+import 'package:nevis/core/geocoder_manager.dart';
+>>>>>>> main
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/auth_remote_data_source_impl.dart';
@@ -71,14 +75,22 @@ import 'package:nevis/features/domain/usecases/content/get_pharmacies.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/get_card_info.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/get_qr_code.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/register_card.dart';
+<<<<<<< HEAD
+=======
+import 'package:nevis/features/domain/usecases/order/create_order_for_delivery.dart';
+>>>>>>> main
 import 'package:nevis/features/domain/usecases/order/create_order_for_pickup.dart';
 import 'package:nevis/features/domain/usecases/order/get_pharmacies_by_cart.dart';
 import 'package:nevis/features/domain/usecases/orders/get_one_order.dart';
 import 'package:nevis/features/domain/usecases/orders/get_order_history.dart';
 import 'package:nevis/features/domain/usecases/pharmacies/get_favorite_pharmacies.dart';
+<<<<<<< HEAD
 import 'package:nevis/features/domain/usecases/products/book_bargain_product.dart';
 import 'package:nevis/features/domain/usecases/products/delete_from_favorite_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_bargain_product.dart';
+=======
+import 'package:nevis/features/domain/usecases/products/delete_from_favorite_products.dart';
+>>>>>>> main
 import 'package:nevis/features/domain/usecases/products/get_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_daily_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_favorite_products.dart';
@@ -103,6 +115,10 @@ import 'package:nevis/features/presentation/bloc/articles_screen/articles_screen
 import 'package:nevis/features/presentation/bloc/bonus_card_screen/bonus_card_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
+<<<<<<< HEAD
+=======
+import 'package:nevis/features/presentation/bloc/category_screen/category_screen_bloc.dart';
+>>>>>>> main
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/info_about_order_screen/info_about_order_screen_bloc.dart';
@@ -111,6 +127,10 @@ import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.da
 import 'package:nevis/features/presentation/bloc/news_internal_screen/news_internal_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/news_screen/news_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/no_internet_connection/no_internet_connection_bloc.dart';
+<<<<<<< HEAD
+=======
+import 'package:nevis/features/presentation/bloc/order_delivery_personal_data_screen/order_delivery_personal_data_bloc.dart';
+>>>>>>> main
 import 'package:nevis/features/presentation/bloc/order_screen/order_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/personal_data_screen/personal_data_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/product_screen/product_screen_bloc.dart';
@@ -123,6 +143,10 @@ import 'package:nevis/features/presentation/bloc/splash_screen/splash_screen_blo
 import 'package:nevis/features/presentation/bloc/stories/stories_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+<<<<<<< HEAD
+=======
+import 'package:yandex_geocoder/yandex_geocoder.dart';
+>>>>>>> main
 
 final sl = GetIt.instance;
 
@@ -186,6 +210,17 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(
+<<<<<<< HEAD
+=======
+    () => CategoryScreenBloc(
+      getSubcategoriesUC: sl<GetSubcategoriesUC>(),
+      getBrandsUC: sl<GetBrandsUC>(),
+      getCountriesUC: sl<GetCountriesUC>(),
+      getFormsUC: sl<GetFormsUC>(),
+    ),
+  );
+  sl.registerFactory(
+>>>>>>> main
     () => MainScreenBloc(
       getStoriesUC: sl<GetStoriesUC>(),
       getQRCodeUC: sl<GetQRCodeUC>(),
@@ -208,8 +243,12 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => ValueBuyProductScreenBloc(
+<<<<<<< HEAD
       getBargainProductUC: sl<GetBargainProductUC>(),
       bookBargainProductUC: sl<BookBargainProductUC>(),
+=======
+      getProductPharmaciesUC: sl<GetProductPharmaciesUC>(),
+>>>>>>> main
     ),
   );
 
@@ -263,6 +302,13 @@ Future<void> init() async {
   sl.registerLazySingleton(
     () => BonusCardScreenBloc(getQRCodeUC: sl()),
   );
+<<<<<<< HEAD
+=======
+  sl.registerLazySingleton(
+    () => OrderDeliveryPersonalDataBloc(
+        getMeUC: sl(), createOrderForDeliveryUC: sl()),
+  );
+>>>>>>> main
 
   //// UseCases
 
@@ -306,8 +352,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateFavoriteProductsUC(sl()));
   sl.registerLazySingleton(() => DeleteProductFromFavoriteProductsUC(sl()));
   sl.registerLazySingleton(() => UpdateSeveralFavoriteProductsUC(sl()));
+<<<<<<< HEAD
   sl.registerLazySingleton(() => GetBargainProductUC(sl()));
   sl.registerLazySingleton(() => BookBargainProductUC(sl()));
+=======
+>>>>>>> main
   // Category
   sl.registerLazySingleton(() => GetCategoriesUC(sl()));
   sl.registerLazySingleton(() => GetSubcategoriesUC(sl()));
@@ -320,6 +369,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetOneOrderUC(sl()));
   sl.registerLazySingleton(() => GetPharmaciesByCartUC(sl()));
   sl.registerLazySingleton(() => CreateOrderForPickupUC(sl()));
+<<<<<<< HEAD
+=======
+  sl.registerLazySingleton(() => CreateOrderForDeliveryUC(sl()));
+>>>>>>> main
 
   //Cart
   sl.registerLazySingleton(() => GetCartProductsUC(sl()));
@@ -442,6 +495,13 @@ Future<void> init() async {
     () => OrderLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
+<<<<<<< HEAD
+=======
+  sl.registerLazySingleton<OrderRemoteDataSource>(
+    () => OrderRemoteDataSourceImpl(sharedPreferences: sl(), apiClient: sl()),
+  );
+
+>>>>>>> main
   sl.registerLazySingleton<ProductLocaleDataSource>(
     () => ProductLocalDataSourceImpl(
       sharedPreferences: sl(),
@@ -483,6 +543,7 @@ Future<void> init() async {
     ),
   );
 
+<<<<<<< HEAD
   sl.registerLazySingleton<OrderRemoteDataSource>(
     () => OrderRemoteDataSourceImpl(
       apiClient: sl(),
@@ -490,6 +551,8 @@ Future<void> init() async {
     ),
   );
 
+=======
+>>>>>>> main
   sl.registerLazySingleton<CartRemoteDataSource>(
     () => CartRemoteDataSourceImpl(
       apiClient: sl(),
@@ -545,5 +608,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => InternetConnectionChecker());
+<<<<<<< HEAD
+=======
+  sl.registerLazySingleton(
+      () => YandexGeocoder(apiKey: dotenv.env['YANDEX_GEOCODER_API_KEY']!));
+  sl.registerLazySingleton(() => GeocoderManager(sl<YandexGeocoder>()));
+>>>>>>> main
   sl.registerLazySingleton<FirebaseManager>(() => FirebaseManager());
 }

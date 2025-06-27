@@ -9,7 +9,8 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/order_pickup/order_pickup_screen.dart';
+import 'package:nevis/features/presentation/pages/order/order_delivery/order_delivery_personal_data_screen.dart';
+import 'package:nevis/features/presentation/pages/order/order_pickup/order_pickup_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/cart_product_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/empty_cart_widget.dart';
@@ -172,9 +173,11 @@ class CartScreen extends StatelessWidget {
                                     ],
                                     SizedBox(height: 16.h),
                                     SelectedProductsPriceInformationWidget(
+                                      price: cartState.totalPrice ?? 0,
                                       totalPrice: cartState.totalPrice ?? 0,
                                       totalDiscounts:
-                                          cartState.totalDiscounts ?? 0,
+                                          (cartState.totalPrice ?? 0) -
+                                              (cartState.totalDiscounts ?? 0),
                                       totalBonuses: cartState.totalBonuses ?? 0,
                                       productsTotalCount:
                                           cartState.cartProducts.length,
@@ -235,15 +238,25 @@ class CartScreen extends StatelessWidget {
                                           ? null
                                           : () {
                                               if (cartState.cartType ==
-                                                      TypeReceiving.pickup &&
-                                                  !hasUnavailable) {
+                                                  TypeReceiving.delivery) {
                                                 Navigator.of(context).push(
                                                   Routes.createRoute(
-                                                    const OrderPickupScreen(),
+                                                    const OrderDeliveryPersonalDataScreen(),
                                                     settings: RouteSettings(
                                                       name: Routes
                                                           .orderPickupScreen,
                                                     ),
+                                                  ),
+                                                );
+                                              }
+                                              if (cartState.cartType ==
+                                                  TypeReceiving.pickup) {
+                                                Navigator.of(context).push(
+                                                  Routes.createRoute(
+                                                    const OrderPickupScreen(),
+                                                    settings: RouteSettings(
+                                                        name: Routes
+                                                            .orderPickupScreen),
                                                   ),
                                                 );
                                               }

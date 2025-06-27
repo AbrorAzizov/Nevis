@@ -3,12 +3,13 @@ import 'package:equatable/equatable.dart';
 class AuthenticationParams extends Equatable {
   final String phone;
   final String? password;
-  final String? fbid;
+
   final String? code;
+  final String? fcmToken;
 
   const AuthenticationParams(
-      {required this.phone, this.password, this.fbid, this.code});
+      {required this.phone, this.password, this.code, this.fcmToken});
 
   @override
-  List<Object?> get props => [phone, password, fbid, code];
+  List<Object?> get props => [phone, password, code];
 }

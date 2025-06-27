@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:nevis/features/data/models/pharmacy_model.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/presentation/bloc/pharmacy_map/pharmacy_map_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
+import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/address_card.dart';
 import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/pharmacy_info_card.dart';
 import 'package:nevis/features/presentation/widgets/map/map_button.dart';
 import 'package:nevis/features/presentation/widgets/value_buy_product_screen/pharmacy_product_info_card_widget.dart';
@@ -21,12 +23,16 @@ class PharmacyMapWidget extends StatefulWidget {
   final List<MapMarkerModel> points;
   final PharmacyMapType mapType;
   final double? height;
+  final Function(Point point)? onMapTap;
+  final Function()? onUnselectPoint;
 
   const PharmacyMapWidget({
     super.key,
     required this.points,
     this.height,
     this.mapType = PharmacyMapType.defaultMap,
+    this.onMapTap,
+    this.onUnselectPoint,
   });
 
   @override
@@ -39,7 +45,38 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
   @override
   void initState() {
     super.initState();
-    _bloc = PharmacyMapBloc()..add(InitPharmacyMapEvent(points: widget.points));
+    final initPoint = widget.mapType == PharmacyMapType.addressPickup &&
+            widget.points.isNotEmpty
+        ? widget.points.first.point
+        : null;
+
+    _bloc = PharmacyMapBloc()
+      ..add(InitPharmacyMapEvent(
+          points: widget.points,
+          mapType: widget.mapType,
+          initPoint: initPoint));
+
+    if (widget.points.isNotEmpty &&
+        widget.mapType == PharmacyMapType.addressPickup) {
+      _bloc.add(SelectMarkerEvent(markerId: widget.points.first.id.toString()));
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant PharmacyMapWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.points != oldWidget.points) {
+      if (widget.points.isNotEmpty &&
+          widget.mapType == PharmacyMapType.addressPickup) {
+        if (_bloc.state.selectedMarkerId == null ||
+            !_bloc.state.showStackWindow) {
+          _bloc.add(
+              SelectMarkerEvent(markerId: widget.points.first.id.toString()));
+        }
+        _bloc.add(MoveToPointEvent(point: widget.points.first.point));
+      }
+      _bloc.add(UpdatePharmacyMapMarkersEvent(points: widget.points));
+    }
   }
 
   @override
@@ -91,6 +128,10 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
                           () => EagerGestureRecognizer(),
                         ),
                       },
+<<<<<<< HEAD
+=======
+                      onMapTap: widget.onMapTap,
+>>>>>>> main
                       mapObjects: state.markers),
                   Positioned(
                     right: 8,
@@ -127,10 +168,25 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
                             padding: getMarginOrPadding(top: 16),
                             child: Builder(
                               builder: (context) {
-                                final selectedPoint = state.points.firstWhere(
-                                  (e) =>
-                                      e.id.toString() == state.selectedMarkerId,
-                                );
+                                final selectedPoint = state.points
+                                    .firstWhereOrNull((e) =>
+                                        e.id.toString() ==
+                                        state.selectedMarkerId);
+
+                                if (selectedPoint == null) return SizedBox();
+
+                                if (widget.mapType ==
+                                    PharmacyMapType.addressPickup) {
+                                  return AddressCard(
+                                    geoObject: selectedPoint.data?['geoObject'],
+                                    onUnselectPoint: () {
+                                      _bloc.add(
+                                          SelectMarkerEvent(markerId: null));
+                                      widget.onUnselectPoint?.call();
+                                    },
+                                  );
+                                }
+
                                 final pharmacy = ProductPharmacyModel.fromJson(
                                     selectedPoint.data!);
 

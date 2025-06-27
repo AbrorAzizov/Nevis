@@ -7,7 +7,7 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
-import 'package:nevis/features/presentation/pages/order_pickup/order_pikcup_cart_screen.dart';
+import 'package:nevis/features/presentation/pages/order/order_pickup/order_pikcup_cart_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_status_widget.dart';
 import 'package:nevis/features/presentation/widgets/favorite_button.dart';

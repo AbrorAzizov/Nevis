@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_vk/flutter_login_vk.dart';
 import 'package:flutter_login_yandex/flutter_login_yandex.dart';
@@ -109,7 +110,8 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
           final failureOrLoads = await loginByService(
             LoginServiceParam(
                 serviceToken: vkToken.token,
-                loginServiceType: LoginServiceType.vk),
+                loginServiceType: LoginServiceType.vk,
+                fcmToken: await FirebaseMessaging.instance.getToken() ?? ''),
           );
           failureOrLoads.fold(
             (failure) => switch (failure) {
@@ -141,7 +143,8 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
       final failureOrLoads = await loginByService(
         LoginServiceParam(
             serviceToken: yandexToken,
-            loginServiceType: LoginServiceType.yandex),
+            loginServiceType: LoginServiceType.yandex,
+            fcmToken: await FirebaseMessaging.instance.getToken() ?? ''),
       );
       failureOrLoads.fold(
         (failure) => switch (failure) {
