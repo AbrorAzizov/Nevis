@@ -58,7 +58,11 @@ dependencies:
   firebase_core: ^3.13.1
   flutter_localizations:
     sdk: flutter
+<<<<<<< HEAD
   flutter_local_notifications: ^19.3.0
+=======
+  yandex_geocoder: ^2.3.1
+>>>>>>> order_delivery
 
 dev_dependencies:
   flutter_test:

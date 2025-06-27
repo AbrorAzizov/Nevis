@@ -32,7 +32,7 @@ class _CheckboxesBlockState extends State<CheckboxesBlock> {
           height: 16.h,
         ),
         CustomCheckbox(
-          title: Text(
+          titleWidget: Text(
             'Хочу получать рекламные рассылки по email, смс и пуш-уведомления',
             style: UiConstants.textStyle11.copyWith(
               color: UiConstants.darkBlue2Color.withOpacity(.8),

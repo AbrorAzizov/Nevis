@@ -74,6 +74,7 @@ enum PharmacyMapType {
   orderPickupMap,
   favrotiePharmaciesMap,
   defaultMap,
+  addressPickup,
 }
 
 enum CartType { defaultCart, pickupCart }
@@ -85,3 +86,5 @@ enum PhoneNumberFormat {
   client, // +7 XXX XXX XX XX
   loyaltyCard, // +7 (9XX) XXX-XXXX
 }
+
+enum PaymentMethod { sbp, card }

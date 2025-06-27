@@ -112,7 +112,7 @@ class FavoriteProductsScreen extends StatelessWidget {
                               ),
                               SizedBox(height: 16.h),
                               CustomCheckbox(
-                                title: Text(
+                                titleWidget: Text(
                                   'Выбрать все',
                                   style: UiConstants.textStyle8.copyWith(
                                     color: UiConstants.blackColor,

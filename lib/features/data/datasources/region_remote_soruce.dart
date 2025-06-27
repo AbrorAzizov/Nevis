@@ -33,9 +33,7 @@ class RegionRemoteDataSourceImpl implements RegionRemoteDataSource {
   Future<void> selectRegion(int id) async {
     try {
       await apiClient.post(
-        body: {
-          "region_id": id,
-        },
+        body: {"region_id": id},
         endpoint: 'region',
         exceptions: {500: ServerException()},
         callPathNameForLog: '${runtimeType.toString()}.setRegion',

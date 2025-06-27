@@ -28,6 +28,7 @@ class SearchRemoteDataSourceImpl implements SearchRemoteDataSource {
   Future<SearchAutocompleteModel> autocompleteSearch(String query) async {
     try {
       final data = await apiClient.get(
+          requireAuth: false,
           endpoint: 'search/autocomplete',
           exceptions: {500: ServerException()},
           callPathNameForLog: '${runtimeType.toString()}.autocompleteSearch',
@@ -79,6 +80,7 @@ class SearchRemoteDataSourceImpl implements SearchRemoteDataSource {
       }
 
       final data = await apiClient.get(
+          requireAuth: false,
           endpoint: 'search',
           exceptions: {500: ServerException()},
           callPathNameForLog: '${runtimeType.toString()}.autocompleteSearch',

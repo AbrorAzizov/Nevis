@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/utils.dart';
+import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/features/data/models/profile_model.dart';
 import 'package:nevis/features/domain/usecases/profile/delete_me.dart';
 import 'package:nevis/features/domain/usecases/profile/get_me.dart';
@@ -16,8 +17,6 @@ part 'personal_data_screen_state.dart';
 
 class PersonalDataScreenBloc
     extends Bloc<PersonalDataScreenEvent, PersonalDataScreenState> {
-  BuildContext? screenContext;
-
   final GetMeUC getMeUC;
   final UpdateMeUC updateMeUC;
   final DeleteMeUC deleteMeUC;
@@ -33,8 +32,6 @@ class PersonalDataScreenBloc
       required this.deleteMeUC,
       BuildContext? context})
       : super(PersonalDataScreenLoadingState()) {
-    screenContext = context;
-
     on<ChangeNotificationCheckboxEvent>(
       (event, emit) {
         emit(
@@ -74,7 +71,7 @@ class PersonalDataScreenBloc
         failureOrLoads.fold((_) => emit(state.copyWith(showError: true)),
             (_) async {
           emit(state.copyWith(isLoading: true));
-          add(LoadProfileEvent());
+          add(LoadProfileEvent(context: event.context));
         });
       },
     );
@@ -85,7 +82,7 @@ class PersonalDataScreenBloc
 
         return failureOrLoads.fold(
           (_) => Utils.showCustomDialog(
-            screenContext: screenContext!,
+            screenContext: event.context,
             text: 'Неизвестная ошибка',
             action: (context) {
               Navigator.of(context).pop();
@@ -100,14 +97,16 @@ class PersonalDataScreenBloc
       final failureOrLoads = await getMeUC();
 
       return failureOrLoads.fold(
-        (_) => Utils.showCustomDialog(
-          screenContext: screenContext!,
-          text: 'Неизвестная ошибка',
-          action: (context) {
-            Navigator.of(context).pop();
-            Navigator.of(screenContext!).pop();
-          },
-        ),
+        (failure) => failure is UnauthorizedFailure
+            ? null
+            : Utils.showCustomDialog(
+                screenContext: event.context,
+                text: 'Неизвестная ошибка',
+                action: (context) {
+                  Navigator.of(context).pop();
+                  Navigator.of(event.context).pop();
+                },
+              ),
         (profile) {
           fNameController.text = profile.firstName ?? '';
           sNameController.text = profile.lastName ?? '';
