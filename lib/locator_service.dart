@@ -76,7 +76,9 @@ import 'package:nevis/features/domain/usecases/order/get_pharmacies_by_cart.dart
 import 'package:nevis/features/domain/usecases/orders/get_one_order.dart';
 import 'package:nevis/features/domain/usecases/orders/get_order_history.dart';
 import 'package:nevis/features/domain/usecases/pharmacies/get_favorite_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/products/book_bargain_product.dart';
 import 'package:nevis/features/domain/usecases/products/delete_from_favorite_products.dart';
+import 'package:nevis/features/domain/usecases/products/get_bargain_product.dart';
 import 'package:nevis/features/domain/usecases/products/get_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_daily_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_favorite_products.dart';
@@ -206,7 +208,8 @@ Future<void> init() async {
   );
   sl.registerFactory(
     () => ValueBuyProductScreenBloc(
-      getProductPharmaciesUC: sl<GetProductPharmaciesUC>(),
+      getBargainProductUC: sl<GetBargainProductUC>(),
+      bookBargainProductUC: sl<BookBargainProductUC>(),
     ),
   );
 
@@ -303,6 +306,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateFavoriteProductsUC(sl()));
   sl.registerLazySingleton(() => DeleteProductFromFavoriteProductsUC(sl()));
   sl.registerLazySingleton(() => UpdateSeveralFavoriteProductsUC(sl()));
+  sl.registerLazySingleton(() => GetBargainProductUC(sl()));
+  sl.registerLazySingleton(() => BookBargainProductUC(sl()));
   // Category
   sl.registerLazySingleton(() => GetCategoriesUC(sl()));
   sl.registerLazySingleton(() => GetSubcategoriesUC(sl()));

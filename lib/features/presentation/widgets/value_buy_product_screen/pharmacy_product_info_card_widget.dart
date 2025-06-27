@@ -48,7 +48,7 @@ class PharmacyProductInfoCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  pharmacy.address!,
+                  pharmacy.address ?? '-',
                   style: UiConstants.textStyle2
                       .copyWith(fontWeight: FontWeight.w500),
                 ),
@@ -72,20 +72,18 @@ class PharmacyProductInfoCard extends StatelessWidget {
                   height: 8.h,
                 ),
                 Text(
-                  pharmacy.schedule!,
+                  pharmacy.schedule ?? '',
                   style: UiConstants.textStyle10
                       .copyWith(color: UiConstants.black3Color.withOpacity(.6)),
                 ),
-                SizedBox(
-                  height: 12.h,
-                ),
+                SizedBox(height: 12.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${(pharmacy.price! * counter).toString()} ₽',
+                        Text('${(pharmacy.price ?? 0 * counter).toString()} ₽',
                             style: UiConstants.textStyle3.copyWith(
                                 color: UiConstants.blueColor,
                                 fontWeight: FontWeight.w800)),

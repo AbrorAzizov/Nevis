@@ -38,3 +38,17 @@ class UpdateCounterEvent extends ValueBuyProductScreenEvent {
   final int counter;
   const UpdateCounterEvent({required this.pharmacyId, required this.counter});
 }
+
+class BookBargainProductEvent extends ValueBuyProductScreenEvent {
+  final String productId;
+  final String pharmacyId;
+  final int quantity;
+  const BookBargainProductEvent({
+    required this.productId,
+    required this.pharmacyId,
+    required this.quantity,
+  });
+
+  @override
+  List<Object> get props => [productId, pharmacyId, quantity];
+}

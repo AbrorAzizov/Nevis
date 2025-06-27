@@ -5,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/constants/utils.dart';
+import 'package:nevis/features/data/models/book_bargain_product_response.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_successfully_ordered_screen/value_buy_successfully_ordered_screen_bloc.dart';
@@ -19,6 +21,8 @@ class ValueBuySuccessfullyOrderedScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final ProductPharmacyEntity pharmacy =
         arguments['pharmacy'] as ProductPharmacyEntity;
+    final BookBargainProductResponse order =
+        arguments['order'] as BookBargainProductResponse;
 
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
@@ -128,9 +132,7 @@ class ValueBuySuccessfullyOrderedScreen extends StatelessWidget {
                                       style: UiConstants.textStyle19.copyWith(
                                           color: UiConstants.black3Color))
                                 ])),
-                                SizedBox(
-                                  height: 16.h,
-                                ),
+                                SizedBox(height: 16.h),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -153,15 +155,13 @@ class ValueBuySuccessfullyOrderedScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
+                                    SizedBox(width: 8),
                                     Expanded(
                                       child: RichText(
                                         text: TextSpan(
                                           children: [
                                             TextSpan(
-                                                text: 'Аптека Невис\n',
+                                                text: pharmacy.pharmacyName,
                                                 style: UiConstants.textStyle10
                                                     .copyWith(
                                                         color: UiConstants
@@ -179,9 +179,7 @@ class ValueBuySuccessfullyOrderedScreen extends StatelessWidget {
                                     )
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 8.h,
-                                ),
+                                SizedBox(height: 8.h),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -230,17 +228,25 @@ class ValueBuySuccessfullyOrderedScreen extends StatelessWidget {
                                 SizedBox(
                                   height: 16.h,
                                 ),
-                                Text(
-                                  'Показать аптеку на карте',
-                                  style: UiConstants.textStyle11.copyWith(
-                                      color: UiConstants.black3Color
-                                          .withOpacity(.6)),
+                                GestureDetector(
+                                  onTap: () async => await Utils.openMapRouteTo(
+                                    lat: double.parse(
+                                        pharmacy.coordinates!.split(', ')[0]),
+                                    lon: double.parse(
+                                        pharmacy.coordinates!.split(', ')[1]),
+                                  ),
+                                  child: Text(
+                                    'Показать аптеку на карте',
+                                    style: UiConstants.textStyle11.copyWith(
+                                        color: UiConstants.black3Color
+                                            .withOpacity(.6)),
+                                  ),
                                 ),
                                 SizedBox(
                                   height: 24.h,
                                 ),
                                 AppButtonWidget(
-                                    onTap: () {},
+                                    onTap: () => Navigator.of(context).pop(),
                                     text: 'Купить в другой аптеке'),
                                 SizedBox(
                                   height: 8.h,
@@ -249,12 +255,14 @@ class ValueBuySuccessfullyOrderedScreen extends StatelessWidget {
                                     showBorder: true,
                                     backgroundColor: UiConstants.whiteColor,
                                     onTap: () {
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                      context
-                                          .read<HomeScreenBloc>()
-                                          .add(ChangePageEvent(0));
+                                      final homeBloc =
+                                          context.read<HomeScreenBloc>();
+                                      homeBloc
+                                          .navigatorKeys[
+                                              homeBloc.selectedPageIndex]
+                                          .currentState!
+                                          .popUntil((route) => route.isFirst);
+                                      homeBloc.add(ChangePageEvent(0));
                                     },
                                     textColor: UiConstants.blueColor,
                                     text: 'На главную')

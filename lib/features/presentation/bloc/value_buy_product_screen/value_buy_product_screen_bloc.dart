@@ -1,10 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
+import 'package:nevis/core/params/bargain_product_params.dart';
+import 'package:nevis/core/params/book_bargain_product_params.dart';
+import 'package:nevis/features/data/models/book_bargain_product_response.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
+import 'package:nevis/features/domain/entities/bargain_product_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
-import 'package:nevis/features/domain/usecases/products/get_product_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/products/book_bargain_product.dart';
+import 'package:nevis/features/domain/usecases/products/get_bargain_product.dart';
 import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
 
 part 'value_buy_product_screen_event.dart';
@@ -12,11 +17,13 @@ part 'value_buy_product_screen_state.dart';
 
 class ValueBuyProductScreenBloc
     extends Bloc<ValueBuyProductScreenEvent, ValueBuyProductScreenState> {
-  final GetProductPharmaciesUC getProductPharmaciesUC;
-  List<ProductPharmacyEntity> _allPharmacies = [];
+  final GetBargainProductUC getBargainProductUC;
+  final BookBargainProductUC bookBargainProductUC;
+  final List<ProductPharmacyEntity> _allPharmacies = [];
 
   ValueBuyProductScreenBloc({
-    required this.getProductPharmaciesUC,
+    required this.getBargainProductUC,
+    required this.bookBargainProductUC,
   }) : super(const ValueBuyProductScreenState(isLoading: false)) {
     on<LoadDataEvent>(_onLoadData);
     on<PharmacyMarkerTappedEvent>(_onSelectPharmacyMarker);
@@ -24,36 +31,63 @@ class ValueBuyProductScreenBloc
     on<ChangeSelectorIndexEvent>(_onChangeSelectorIndexEvent);
     on<PharmacyCardTappedEvent>(_onSelectPharmacyCard);
     on<UpdateCounterEvent>(_onUpdateCounterEvent);
+    on<BookBargainProductEvent>(_onBookBargainProduct);
   }
 
   Future<void> _onLoadData(
       LoadDataEvent event, Emitter<ValueBuyProductScreenState> emit) async {
     emit(state.copyWith(isLoading: true));
 
-    final failureOrLoads = await getProductPharmaciesUC(event.productId);
-    List<MapMarkerModel> points = [];
-    failureOrLoads.fold(
-      (_) =>
-          emit(state.copyWith(error: 'Something went wrong', isLoading: false)),
-      (pharmacies) {
-        _allPharmacies = pharmacies;
-        points = pharmacies.map((pharmacy) {
-          final coordinates = pharmacy.coordinates!.split(', ');
-          return MapMarkerModel(
-            id: pharmacy.pharmacyId!,
-            point: Point(
-              latitude: double.parse(coordinates.first),
-              longitude: double.parse(coordinates.last),
-            ),
-            data: (pharmacy as ProductPharmacyModel).toJson(),
-          );
-        }).toList();
+    final params = BargainProductParams(
+        regionId: 2, productId: event.productId.toString());
 
-        emit(state.copyWith(
-          pharmacies: pharmacies,
-          points: points,
-          isLoading: false,
-        ));
+    final failureOrLoads = await getBargainProductUC(params);
+    failureOrLoads.fold(
+      (failure) =>
+          emit(state.copyWith(error: 'Ошибка загрузки', isLoading: false)),
+      (response) {
+        emit(
+          state.copyWith(
+            pharmacies: response.pharmacies,
+            product: response.item,
+            isLoading: false,
+            points: List.generate(
+              response.pharmacies.length,
+              (index) {
+                final pharmacy = response.pharmacies[index];
+                final coordinates = pharmacy.coordinates;
+                final latString = coordinates?.split(', ')[0];
+                final lonString = coordinates?.split(', ')[1];
+
+                return MapMarkerModel(
+                    id: response.pharmacies[index].pharmacyId!,
+                    point: Point(
+                      latitude: double.tryParse(latString ?? '') ?? 0,
+                      longitude: double.tryParse(lonString ?? '') ?? 0,
+                    ),
+                    data: (pharmacy as ProductPharmacyModel).toJson());
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _onBookBargainProduct(BookBargainProductEvent event,
+      Emitter<ValueBuyProductScreenState> emit) async {
+    emit(state.copyWith(isLoading: true));
+    final params = BookBargainProductParams(
+      productId: event.productId,
+      pharmacyId: event.pharmacyId,
+      quantity: event.quantity,
+    );
+    final result = await bookBargainProductUC(params);
+    result.fold(
+      (failure) =>
+          emit(state.copyWith(error: 'Ошибка бронирования', isLoading: false)),
+      (response) {
+        emit(state.copyWith(isLoading: false));
       },
     );
   }

@@ -4,9 +4,13 @@ import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
+import 'package:nevis/core/params/bargain_product_params.dart';
+import 'package:nevis/core/params/book_bargain_product_params.dart';
 import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/core/params/subcategory_params.dart';
+import 'package:nevis/features/data/models/bargain_product_model.dart';
+import 'package:nevis/features/data/models/book_bargain_product_response.dart';
 import 'package:nevis/features/data/models/product_model.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/data/models/search_products_model.dart';
@@ -25,6 +29,9 @@ abstract class ProductRemoteDataSource {
   Future<void> updateFavoriteProducts(int id);
   Future<void> deleteFromFavoriteProducts(int id);
   Future<void> updateSeveralFavoriteProducts(List<int> ids);
+  Future<BargainProductModel> getBargainProduct(BargainProductParams params);
+  Future<BookBargainProductResponse> bookBargainProduct(
+      BookBargainProductParams params);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -261,5 +268,31 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
           level: 1000);
       rethrow;
     }
+  }
+
+  @override
+  Future<BargainProductModel> getBargainProduct(
+      BargainProductParams params) async {
+    final data = await apiClient.get(
+      endpoint: 'bargain/items/${params.productId}',
+      queryParameters: {'region_id': params.regionId.toString()},
+      callPathNameForLog: '${runtimeType.toString()}.getBargainProduct',
+    );
+    return BargainProductModel.fromJson(data);
+  }
+
+  @override
+  Future<BookBargainProductResponse> bookBargainProduct(
+      BookBargainProductParams params) async {
+    final data = await apiClient.post(
+      endpoint: 'bargain/discounts/book',
+      body: {
+        'product_id': params.productId,
+        'pharmacy_id': params.pharmacyId,
+        'quantity': params.quantity,
+      },
+      callPathNameForLog: '${runtimeType.toString()}.bookBargainProduct',
+    );
+    return BookBargainProductResponse.fromJson(data);
   }
 }

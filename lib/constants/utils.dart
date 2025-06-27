@@ -9,6 +9,7 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
 
 class Utils {
@@ -428,5 +429,20 @@ class Utils {
       return DateTime.tryParse('${parts[2]}-${parts[1]}-${parts[0]}');
     }
     return null;
+  }
+
+  static Future openMapRouteTo(
+      {required double lat, required double lon}) async {
+    final Uri googleMapsUri = Uri.parse(
+      'https://www.google.com/maps/dir/?api=1'
+      '&destination=$lat,$lon'
+      '&travelmode=driving',
+    );
+
+    if (await canLaunchUrl(googleMapsUri)) {
+      await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Не удалось открыть карты.';
+    }
   }
 }

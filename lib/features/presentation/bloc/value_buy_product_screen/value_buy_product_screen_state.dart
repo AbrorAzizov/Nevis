@@ -10,6 +10,7 @@ class ValueBuyProductScreenState extends Equatable {
   final ProductPharmacyEntity? selectedPharmacyMarker;
   final ProductPharmacyEntity? selectedPharmacyCard;
   final Map<int, int> counters;
+  final BookBargainProductResponse? bookResponse;
 
   const ValueBuyProductScreenState({
     this.counters = const {},
@@ -21,6 +22,7 @@ class ValueBuyProductScreenState extends Equatable {
     this.points = const [],
     this.product,
     this.pharmacies = const [],
+    this.bookResponse,
   });
 
   ValueBuyProductScreenState copyWith({
@@ -32,18 +34,23 @@ class ValueBuyProductScreenState extends Equatable {
     bool? isLoading,
     ProductPharmacyEntity? selectedPharmacyCard,
     Map<int, int>? counters,
+    ProductEntity? product,
+    BargainProductEntity? bargainProduct,
+    BookBargainProductResponse? bookResponse,
   }) {
     return ValueBuyProductScreenState(
-        selectorIndex: selectorIndex ?? this.selectorIndex,
-        pharmacies: pharmacies ?? this.pharmacies,
-        points: points ?? this.points,
-        selectedPharmacyMarker:
-            selectedPharmacyMarker ?? this.selectedPharmacyMarker,
-        error: error,
-        isLoading: isLoading ?? this.isLoading,
-        counters: counters ?? this.counters,
-        selectedPharmacyCard:
-            selectedPharmacyCard ?? this.selectedPharmacyCard);
+      selectorIndex: selectorIndex ?? this.selectorIndex,
+      pharmacies: pharmacies ?? this.pharmacies,
+      points: points ?? this.points,
+      selectedPharmacyMarker:
+          selectedPharmacyMarker ?? this.selectedPharmacyMarker,
+      error: error,
+      isLoading: isLoading ?? this.isLoading,
+      counters: counters ?? this.counters,
+      selectedPharmacyCard: selectedPharmacyCard ?? this.selectedPharmacyCard,
+      product: product ?? this.product,
+      bookResponse: bookResponse ?? this.bookResponse,
+    );
   }
 
   @override
@@ -55,6 +62,8 @@ class ValueBuyProductScreenState extends Equatable {
         error,
         isLoading,
         selectedPharmacyCard,
-        counters
+        counters,
+        product,
+        bookResponse,
       ];
 }

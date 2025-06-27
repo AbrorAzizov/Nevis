@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:nevis/core/error/failure.dart';
+import 'package:nevis/core/params/bargain_product_params.dart';
+import 'package:nevis/core/params/book_bargain_product_params.dart';
 import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/product_param.dart';
 import 'package:nevis/core/params/subcategory_params.dart';
@@ -8,6 +10,8 @@ import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/data/datasources/product_local_data_soruce.dart';
 import 'package:nevis/features/data/datasources/product_remote_data_source_impl.dart';
+import 'package:nevis/features/data/models/book_bargain_product_response.dart';
+import 'package:nevis/features/domain/entities/bargain_product_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/domain/entities/search_products_entity.dart';
@@ -145,4 +149,16 @@ class ProductRepositoryImpl implements ProductRepository {
       return await productRemoteDataSource.updateSeveralFavoriteProducts(ids);
     });
   }
+
+  @override
+  Future<Either<Failure, BargainProductEntity>> getBargainProduct(
+          BargainProductParams params) async =>
+      await errorHandler.handle(
+          () async => await productRemoteDataSource.getBargainProduct(params));
+
+  @override
+  Future<Either<Failure, BookBargainProductResponse>> bookBargainProduct(
+          BookBargainProductParams params) async =>
+      await errorHandler.handle(
+          () async => await productRemoteDataSource.bookBargainProduct(params));
 }

@@ -6,11 +6,11 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/constants/utils.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_status_label_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class OrderWidget extends StatelessWidget {
   final OrderEntity order;
@@ -222,9 +222,9 @@ class OrderWidget extends StatelessWidget {
                 height: 8.h,
               ),
               GestureDetector(
-                onTap: () async {
-                  await openMapRouteTo();
-                },
+                onTap: () async => await Utils.openMapRouteTo(
+                    lat: order.pharmacy?.gpsN ?? 0,
+                    lon: order.pharmacy?.gpsS ?? 0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -261,38 +261,4 @@ class OrderWidget extends StatelessWidget {
           )),
     );
   }
-
-  Future<void> openMapRouteTo() async {
-    final Uri googleMapsUri = Uri.parse(
-      'https://www.google.com/maps/dir/?api=1'
-      // '&origin=59.934280,30.335098'
-      '&destination=${order.pharmacy?.gpsN},${order.pharmacy?.gpsS}'
-      '&travelmode=driving',
-    );
-
-    if (await canLaunchUrl(googleMapsUri)) {
-      await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Не удалось открыть карты.';
-    }
-  }
 }
-
-// : 59.922774
-// I/flutter ( 7503): 30.278202
-
-
-// : 60.050781
-// I/flutter ( 7503): 30.342168
-
-
-
-//  59.922774
-// I/flutter ( 7503): 30.278202
-
-// /flutter ( 7503): 59.922774
-// I/flutter ( 7503): 30.278202
-
-
-// /flutter ( 7503): 59.922774
-// I/flutter ( 7503): 30.278202

@@ -49,6 +49,12 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
   }
 
   @override
+  void didChangeDependencies() {
+    _bloc = PharmacyMapBloc()..add(InitPharmacyMapEvent(points: widget.points));
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final valueBuyBloc = widget.mapType == PharmacyMapType.valueBuyMap
         ? context.read<ValueBuyProductScreenBloc>()
@@ -73,19 +79,19 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
                 alignment: Alignment.bottomCenter,
                 children: [
                   YandexMap(
-                    onMapCreated: (controller) => _bloc
-                        .add(AttachControllerEvent(mapController: controller)),
-                    onCameraPositionChanged:
-                        (position, reason, isGesture, visibleRegion) {
-                      _bloc.add(UpdatePharmacyMapEvent(position: position));
-                    },
-                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-                      Factory<OneSequenceGestureRecognizer>(
-                        () => EagerGestureRecognizer(),
-                      ),
-                    },
-                    mapObjects: state.markers,
-                  ),
+                      onMapCreated: (controller) => _bloc.add(
+                          AttachControllerEvent(mapController: controller)),
+                      onCameraPositionChanged:
+                          (position, reason, isGesture, visibleRegion) {
+                        _bloc.add(UpdatePharmacyMapEvent(position: position));
+                      },
+                      gestureRecognizers: <Factory<
+                          OneSequenceGestureRecognizer>>{
+                        Factory<OneSequenceGestureRecognizer>(
+                          () => EagerGestureRecognizer(),
+                        ),
+                      },
+                      mapObjects: state.markers),
                   Positioned(
                     right: 8,
                     bottom: 16,
