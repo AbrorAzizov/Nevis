@@ -8,6 +8,7 @@ import 'package:nevis/core/geocoder_manager.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/auth_remote_data_source_impl.dart';
+import 'package:nevis/features/data/datasources/cart_local_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/cart_remote_data_source_implementation.dart';
 import 'package:nevis/features/data/datasources/category_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/content_remote_data_source_impl.dart';
@@ -420,7 +421,11 @@ Future<void> init() async {
 
   sl.registerLazySingleton<CartRepository>(
     () => CartRepositoryImpl(
-        networkInfo: sl(), errorHandler: sl(), cartRemoteDataSource: sl()),
+        networkInfo: sl(),
+        errorHandler: sl(),
+        cartRemoteDataSource: sl(),
+        cartLocalDataSource: sl(),
+        sharedPreferences: sl()),
   );
 
   sl.registerLazySingleton<StoryRepository>(
@@ -533,6 +538,9 @@ Future<void> init() async {
     () => SearchRemoteDataSourceImpl(
       apiClient: sl(),
     ),
+  );
+  sl.registerLazySingleton<CartLocalDataSource>(
+    () => CartLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
   //// Core

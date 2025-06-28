@@ -4,6 +4,7 @@ import 'package:nevis/core/params/cart_for_selected_pharmacy_param.dart';
 import 'package:nevis/core/params/cart_params.dart';
 import 'package:nevis/features/domain/entities/cart_entity.dart';
 import 'package:nevis/features/domain/entities/order_cart_entity.dart';
+import 'package:nevis/features/domain/entities/product_entity.dart';
 
 abstract class CartRepository {
   Future<Either<Failure, CartEntity>> getCartProducts();
@@ -11,4 +12,5 @@ abstract class CartRepository {
   Future<Either<Failure, void>> deleteProductFromCart(int productId);
   Future<Either<Failure, OrderCartEntity>> getCartForSelectedPharmacyProducts(
       CartForSelectedPharmacyParam cart);
+  Future<Either<Failure, void>> syncCartFromLocal(List<ProductEntity> products);
 }

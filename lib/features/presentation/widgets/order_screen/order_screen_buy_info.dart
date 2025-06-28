@@ -28,7 +28,7 @@ class OrderBuyInfoWidget extends StatelessWidget {
                 style: UiConstants.textStyle11,
               ),
               Text(
-                Utils.formatPrice(order?.orderSum),
+                Utils.formatPrice(order?.totalPrice),
                 style: UiConstants.textStyle11
                     .copyWith(color: UiConstants.blackColor),
               ),

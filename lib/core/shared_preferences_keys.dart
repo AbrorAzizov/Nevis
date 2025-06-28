@@ -4,4 +4,5 @@ class SharedPreferencesKeys {
   static const String localFavoriteProducts = 'localFavoriteProducts';
   static const String isFirstAppStarted = 'isFirstAppStarted';
   static const String loyaltyCard = 'loyaltyCard';
+  static const String localCartProducts = 'localCartProducts';
 }

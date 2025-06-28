@@ -57,8 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
           value: sl<FavoriteProductsScreenBloc>()
             ..add(LoadFavoriteProductsEvent()),
         ),
-        BlocProvider(
-          create: (context) => HomeScreenBloc(context: context),
+        BlocProvider.value(
+          value: HomeScreenBloc(context: context),
         ),
         BlocProvider(create: (context) => sl<SearchScreenBloc>()),
         BlocProvider(

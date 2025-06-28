@@ -35,7 +35,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
           callPathNameForLog: '${runtimeType.toString()}.getOrderHistory',
           exceptions: {400: EmptyOrdersException()});
 
-      List<dynamic> dataList = data['data'];
+      List<dynamic> dataList = data['orders'];
       return dataList.map((e) => OrderModel.fromJson(e)).toList();
     } catch (e) {
       log('Error during getOrderHistory: $e', level: 1000);
@@ -47,7 +47,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
   Future<OrderModel?> getOrderById(int id) async {
     try {
       final data = await apiClient.get(
-        endpoint: 'order/details/$id',
+        endpoint: 'orders/search?order_id=${id.toString()}',
         callPathNameForLog: '${runtimeType.toString()}.getOrderById',
       );
 
@@ -103,7 +103,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
 
       return allOrders.map((e) {
         return OrderModel.fromJson(e,
-            status: available.isEmpty
+            availabilityCartStatus: available.isEmpty
                 ? AvailabilityCartStatus.fromWareHouse
                 : AvailabilityCartStatus.available);
       }).toList();

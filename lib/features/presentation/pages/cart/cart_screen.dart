@@ -8,6 +8,7 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/core/routes.dart';
+import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/order/order_delivery/order_delivery_personal_data_screen.dart';
 import 'package:nevis/features/presentation/pages/order/order_pickup/order_pickup_screen.dart';
@@ -18,25 +19,30 @@ import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
 import 'package:nevis/features/presentation/widgets/favourite_products_screen/selected_products_price_info_widget.dart';
 import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/locator_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
+
+  bool get isAuthorized =>
+      sl<SharedPreferences>().getString(SharedPreferencesKeys.accessToken) !=
+      null;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartScreenBloc, CartScreenState>(
       builder: (context, cartState) {
         final cartBloc = context.read<CartScreenBloc>();
-        final hasUnavailable =
-            cartState.cartProducts.any((p) => p.availableForDelivery == false);
         final availableProducts = cartState.cartProducts
-            .where((p) => p.availableForDelivery == true)
+            .where((p) => p.availableForDelivery != false)
             .toList();
+
         final unavailableProducts = cartState.cartProducts
             .where((p) => p.availableForDelivery == false)
             .toList();
-
+        final hasUnavailable = isAuthorized && unavailableProducts.isNotEmpty;
         return BlocProvider(
           create: (_) => SelectorCubit(
             index: [TypeReceiving.delivery, TypeReceiving.pickup]
@@ -60,7 +66,6 @@ class CartScreen extends StatelessWidget {
                             ? Expanded(
                                 child: ListView(
                                   controller: cartBloc.controller,
-                                  shrinkWrap: true,
                                   padding: getMarginOrPadding(
                                       bottom: 94, right: 20, left: 20, top: 16),
                                   children: [
@@ -105,71 +110,7 @@ class CartScreen extends StatelessWidget {
                                                     product: product),
                                               )),
                                       SizedBox(height: 12),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16.r),
-                                          color: UiConstants.whiteColor,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: const Color(0xFF144B63)
-                                                  .withOpacity(0.1),
-                                              blurRadius: 50,
-                                              spreadRadius: -4,
-                                              offset: const Offset(-1, -4),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Padding(
-                                          padding: getMarginOrPadding(all: 8),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      color: UiConstants
-                                                          .blue2Color,
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          getMarginOrPadding(
-                                                              all: 8),
-                                                      child: SvgPicture.asset(
-                                                        Paths.bagIconPath,
-                                                        colorFilter:
-                                                            ColorFilter.mode(
-                                                                UiConstants
-                                                                    .blueColor,
-                                                                BlendMode
-                                                                    .srcIn),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 8.w),
-                                                  Text('Оформить самовывоз',
-                                                      style: UiConstants
-                                                          .textStyle21),
-                                                ],
-                                              ),
-                                              RotatedBox(
-                                                quarterTurns: 1,
-                                                child: SvgPicture.asset(
-                                                  Paths.dropdownArrowIconPath,
-                                                  colorFilter: ColorFilter.mode(
-                                                      UiConstants.blueColor,
-                                                      BlendMode.srcIn),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                      _selfPickupSuggestionCard(),
                                     ],
                                     SizedBox(height: 16.h),
                                     SelectedProductsPriceInformationWidget(
@@ -199,17 +140,18 @@ class CartScreen extends StatelessWidget {
                                               style: UiConstants.textStyle20),
                                           SizedBox(height: 8.h),
                                           Selector(
-                                              titlesList: const [
-                                                'Доставка на дом',
-                                                'Самовывоз'
-                                              ],
-                                              onTap: (int index) {
-                                                cartBloc.add(
-                                                  ChangeSelectorIndexEvent(
-                                                      TypeReceiving
-                                                          .values[index]),
-                                                );
-                                              }),
+                                            titlesList: const [
+                                              'Доставка на дом',
+                                              'Самовывоз'
+                                            ],
+                                            onTap: (int index) {
+                                              cartBloc.add(
+                                                ChangeSelectorIndexEvent(
+                                                    TypeReceiving
+                                                        .values[index]),
+                                              );
+                                            },
+                                          ),
                                         ],
                                       ),
                                     if (cartState.counters.values
@@ -228,9 +170,7 @@ class CartScreen extends StatelessWidget {
                                           ),
                                         ),
                                       ),
-                                    SizedBox(
-                                      height: 16.h,
-                                    ),
+                                    SizedBox(height: 16.h),
                                     AppButtonWidget(
                                       text: 'Оформить заказ',
                                       onTap: cartState.counters.values
@@ -242,24 +182,16 @@ class CartScreen extends StatelessWidget {
                                                 Navigator.of(context).push(
                                                   Routes.createRoute(
                                                     const OrderDeliveryPersonalDataScreen(),
-                                                    settings: RouteSettings(
-                                                      name: Routes
-                                                          .orderPickupScreen,
-                                                    ),
                                                   ),
                                                 );
-                                              }
-                                              if (cartState.cartType ==
-                                                  TypeReceiving.pickup) {
+                                              } else {
                                                 Navigator.of(context).push(
                                                   Routes.createRoute(
                                                     const OrderPickupScreen(),
-                                                    settings: RouteSettings(
-                                                        name: Routes
-                                                            .orderPickupScreen),
                                                   ),
                                                 );
                                               }
+
                                               if (hasUnavailable) {
                                                 BottomSheetManager
                                                     .showWarningAboutNonDeliveryProduct(
@@ -280,6 +212,59 @@ class CartScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _selfPickupSuggestionCard() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.r),
+        color: UiConstants.whiteColor,
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF144B63).withOpacity(0.1),
+            blurRadius: 50,
+            spreadRadius: -4,
+            offset: const Offset(-1, -4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: getMarginOrPadding(all: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: UiConstants.blue2Color,
+                  ),
+                  child: Padding(
+                    padding: getMarginOrPadding(all: 8),
+                    child: SvgPicture.asset(
+                      Paths.bagIconPath,
+                      colorFilter: ColorFilter.mode(
+                          UiConstants.blueColor, BlendMode.srcIn),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Text('Оформить самовывоз', style: UiConstants.textStyle21),
+              ],
+            ),
+            RotatedBox(
+              quarterTurns: 1,
+              child: SvgPicture.asset(
+                Paths.dropdownArrowIconPath,
+                colorFilter:
+                    ColorFilter.mode(UiConstants.blueColor, BlendMode.srcIn),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

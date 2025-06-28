@@ -4,7 +4,6 @@ import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 
 class OrderEntity extends Equatable {
-  final double? orderSum;
   final double? orderDiscountSum;
   final List<ProductEntity>? items;
   final bool? isDeliveryPharm;
@@ -13,21 +12,27 @@ class OrderEntity extends Equatable {
   final PharmacyEntity? pharmacy;
   final String? paymentName;
   final AvailabilityCartStatus? availabilityCartStatus;
+  // изменено: totalPrice теперь int
+  final int? totalPrice;
+  final double? deliveryPrice;
+  final String? deliveryDate;
 
-  const OrderEntity(
-      {this.pharmacy,
-      this.paymentName,
-      this.orderSum,
-      this.orderDiscountSum,
-      this.items,
-      this.isDeliveryPharm,
-      this.orderId,
-      this.status,
-      this.availabilityCartStatus});
+  const OrderEntity({
+    this.pharmacy,
+    this.paymentName,
+    this.orderDiscountSum,
+    this.items,
+    this.isDeliveryPharm,
+    this.orderId,
+    this.status,
+    this.availabilityCartStatus,
+    this.totalPrice,
+    this.deliveryPrice,
+    this.deliveryDate,
+  });
 
   @override
   List<Object?> get props => [
-        orderSum,
         orderDiscountSum,
         items,
         isDeliveryPharm,
@@ -35,6 +40,9 @@ class OrderEntity extends Equatable {
         status,
         paymentName,
         pharmacy,
-        availabilityCartStatus
+        availabilityCartStatus,
+        totalPrice,
+        deliveryPrice,
+        deliveryDate,
       ];
 }

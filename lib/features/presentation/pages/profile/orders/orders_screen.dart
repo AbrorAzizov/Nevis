@@ -23,6 +23,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<OrdersScreenBloc>().add(LoadOrdersEvent());
     return BlocBuilder<OrdersScreenBloc, OrdersScreenState>(
       builder: (context, ordersState) {
         OrdersScreenBloc ordersBloc = context.read<OrdersScreenBloc>();
