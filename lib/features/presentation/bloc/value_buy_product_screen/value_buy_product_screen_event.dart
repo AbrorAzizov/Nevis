@@ -52,3 +52,7 @@ class BookBargainProductEvent extends ValueBuyProductScreenEvent {
   @override
   List<Object> get props => [productId, pharmacyId, quantity];
 }
+
+class ClearBookingResponseEvent extends ValueBuyProductScreenEvent {}
+
+class ClearBookingErrorEvent extends ValueBuyProductScreenEvent {}

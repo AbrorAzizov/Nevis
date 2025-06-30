@@ -9,13 +9,8 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
-import 'package:nevis/features/data/models/pharmacy_model.dart';
-import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/presentation/bloc/pharmacy_map/pharmacy_map_bloc.dart';
-import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/address_card.dart';
-import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/pharmacy_info_card.dart';
 import 'package:nevis/features/presentation/widgets/map/map_button.dart';
-import 'package:nevis/features/presentation/widgets/value_buy_product_screen/pharmacy_product_info_card_widget.dart';
 import 'package:yandex_mapkit_lite/yandex_mapkit_lite.dart';
 
 class PharmacyMapWidget extends StatefulWidget {
@@ -23,11 +18,10 @@ class PharmacyMapWidget extends StatefulWidget {
   final PharmacyMapType mapType;
   final double? height;
   final Function(Point point)? onMapTap;
-  final Function()? onUnselectPoint;
 
-  final Function(int pharmacyId)? onValueBuyPickUpRequested;
-  final Function(int pharmacyId, int value)? onValueBuyPickUpChangedCount;
-  final Map<int, int>? onValueBuyPickUpCounters;
+  final Widget Function(
+          BuildContext context, MapMarkerModel point, PharmacyMapBloc mapBloc)?
+      selectedMarkerBuilder;
 
   const PharmacyMapWidget({
     super.key,
@@ -35,10 +29,7 @@ class PharmacyMapWidget extends StatefulWidget {
     this.height,
     this.mapType = PharmacyMapType.defaultMap,
     this.onMapTap,
-    this.onUnselectPoint,
-    this.onValueBuyPickUpRequested,
-    this.onValueBuyPickUpChangedCount,
-    this.onValueBuyPickUpCounters,
+    this.selectedMarkerBuilder,
   });
 
   @override
@@ -166,9 +157,15 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
                                         e.id.toString() ==
                                         state.selectedMarkerId);
 
-                                if (selectedPoint == null) return SizedBox();
+                                if (selectedPoint == null ||
+                                    widget.selectedMarkerBuilder == null) {
+                                  return SizedBox();
+                                }
 
-                                if (widget.mapType ==
+                                return widget.selectedMarkerBuilder!(
+                                    context, selectedPoint, _bloc);
+
+                                /*if (widget.mapType ==
                                     PharmacyMapType.addressPickup) {
                                   return AddressCard(
                                     geoObject: selectedPoint.data?['geoObject'],
@@ -209,7 +206,7 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
                                         widget.onValueBuyPickUpRequested != null
                                             ? widget.onValueBuyPickUpRequested!(
                                                 pharmacyId)
-                                            : null);
+                                            : null);*/
                               },
                             ),
                           ),

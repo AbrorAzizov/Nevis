@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
 import 'package:nevis/core/params/bargain_product_params.dart';
@@ -30,6 +31,8 @@ class ValueBuyProductScreenBloc
     on<PharmacyCardTappedEvent>(_onSelectPharmacyCard);
     on<UpdateCounterEvent>(_onUpdateCounterEvent);
     on<BookBargainProductEvent>(_onBookBargainProduct);
+    on<ClearBookingResponseEvent>(_onClearBookingResponse);
+    on<ClearBookingErrorEvent>(_onClearBookingError);
   }
 
   List<MapMarkerModel> _buildPoints(List<ProductPharmacyEntity> pharmacies) {
@@ -64,13 +67,19 @@ class ValueBuyProductScreenBloc
       (failure) =>
           emit(state.copyWith(error: 'Ошибка загрузки', isLoading: false)),
       (response) {
+        final Map<int, int> counters = Map.fromEntries(
+          response.pharmacies.map(
+            (e) => MapEntry(e.pharmacyId!, 1),
+          ),
+        );
+
         emit(
           state.copyWith(
-            pharmacies: response.pharmacies,
-            isLoading: false,
-            points: _buildPoints(response.pharmacies),
-            bargainProduct: response,
-          ),
+              pharmacies: response.pharmacies,
+              isLoading: false,
+              points: _buildPoints(response.pharmacies),
+              bargainProduct: response,
+              counters: counters),
         );
       },
     );
@@ -78,7 +87,9 @@ class ValueBuyProductScreenBloc
 
   Future<void> _onBookBargainProduct(BookBargainProductEvent event,
       Emitter<ValueBuyProductScreenState> emit) async {
-    emit(state.copyWith(isLoading: true));
+    final pharmacyToBook = state.bargainProduct?.pharmacies
+        .firstWhereOrNull((p) => p.pharmacyId.toString() == event.pharmacyId);
+    emit(state.copyWith(isLoading: true, selectedPharmacyCard: pharmacyToBook));
     final params = BookBargainProductParams(
       productId: event.productId,
       pharmacyId: event.pharmacyId,
@@ -86,10 +97,10 @@ class ValueBuyProductScreenBloc
     );
     final result = await bookBargainProductUC(params);
     result.fold(
-      (failure) =>
-          emit(state.copyWith(error: 'Ошибка бронирования', isLoading: false)),
+      (failure) => emit(state.copyWith(
+          bookingError: 'Ошибка бронирования', isLoading: false)),
       (response) {
-        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(isLoading: false, bookResponse: response));
       },
     );
   }
@@ -136,5 +147,15 @@ class ValueBuyProductScreenBloc
     final newCounters = Map<int, int>.from(state.counters);
     newCounters[event.pharmacyId] = event.counter;
     emit(state.copyWith(counters: newCounters));
+  }
+
+  void _onClearBookingResponse(ClearBookingResponseEvent event,
+      Emitter<ValueBuyProductScreenState> emit) {
+    emit(state.copyWith(clearBookResponse: true));
+  }
+
+  void _onClearBookingError(
+      ClearBookingErrorEvent event, Emitter<ValueBuyProductScreenState> emit) {
+    emit(state.copyWith(clearBookingError: true));
   }
 }

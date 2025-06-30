@@ -5,7 +5,9 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/geocoder_manager.dart';
 import 'package:nevis/core/models/map_marker_model.dart';
+import 'package:nevis/features/presentation/bloc/pharmacy_map/pharmacy_map_bloc.dart';
 import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/address_card.dart';
 import 'package:nevis/features/presentation/widgets/map/pharmacy_map_widget.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_delivery/pick_address_field_on_map_widget.dart';
 import 'package:nevis/locator_service.dart';
@@ -65,16 +67,27 @@ class _PickAddressMapScreenState extends State<PickAddressMapScreen> {
               SizedBox(height: 16.h),
               Expanded(
                 child: PharmacyMapWidget(
-                    mapType: PharmacyMapType.addressPickup,
-                    points: [
-                      if (selectedPoint != null)
-                        MapMarkerModel(
-                            id: 1,
-                            point: selectedPoint!,
-                            data: {'geoObject': geoObject})
-                    ],
-                    onMapTap: (point) => onMapTapHandler(point),
-                    onUnselectPoint: clearAddress),
+                  mapType: PharmacyMapType.addressPickup,
+                  points: [
+                    if (selectedPoint != null)
+                      MapMarkerModel(
+                          id: 1,
+                          point: selectedPoint!,
+                          data: {'geoObject': geoObject})
+                  ],
+                  selectedMarkerBuilder: (context, point, mapBloc) {
+                    return AddressCard(
+                      geoObject: point.data?['geoObject'],
+                      onUnselectPoint: () {
+                        mapBloc.add(
+                          SelectMarkerEvent(markerId: null),
+                        );
+                        clearAddress();
+                      },
+                    );
+                  },
+                  onMapTap: (point) => onMapTapHandler(point),
+                ),
               )
             ],
           ),

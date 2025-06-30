@@ -5,6 +5,7 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
+import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/profile/orders/successfully_order/value_buy_successfully_ordered_screen.dart';
@@ -41,8 +42,33 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
           create: (context) => ValueBuyProductScreenBloc(
               getBargainProductUC: sl(), bookBargainProductUC: sl())
             ..add(LoadDataEvent(productId: productId)),
-          child: BlocBuilder<ValueBuyProductScreenBloc,
+          child: BlocConsumer<ValueBuyProductScreenBloc,
               ValueBuyProductScreenState>(
+            listener: (context, state) {
+              final bloc = context.read<ValueBuyProductScreenBloc>();
+              if (state.bookingError != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.bookingError!)),
+                );
+                bloc.add(ClearBookingErrorEvent());
+              } else if (state.bookResponse != null) {
+                if (state.selectedPharmacyCard != null) {
+                  Navigator.of(context).push(
+                    Routes.createRoute(
+                      const ValueBuySuccessfullyOrderedScreen(),
+                      settings: RouteSettings(
+                        name: Routes.valueBuySuccessfullyOrderedScreen,
+                        arguments: {
+                          'pharmacy': state.selectedPharmacyCard,
+                          'order': state.bookResponse
+                        },
+                      ),
+                    ),
+                  );
+                  bloc.add(ClearBookingResponseEvent());
+                }
+              }
+            },
             builder: (context, state) {
               final bloc = context.read<ValueBuyProductScreenBloc>();
 
@@ -68,9 +94,9 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                             children: [
                               ListView(
                                 shrinkWrap: true,
-                                physics: !isList
+                                /*physics: !isList
                                     ? NeverScrollableScrollPhysics()
-                                    : null,
+                                    : null,*/
                                 padding: getMarginOrPadding(
                                     left: 20,
                                     right: 20,
@@ -124,9 +150,6 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                                           itemBuilder: (context, index) {
                                             final pharmacy =
                                                 state.pharmacies?[index];
-                                            final counter = state.counters[
-                                                    pharmacy?.pharmacyId] ??
-                                                1;
 
                                             return GestureDetector(
                                               onTap: () {
@@ -146,15 +169,29 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                                                 onValueBuyPickUpCounters:
                                                     state.counters,
                                                 onValueBuyPickUpChangedCount:
-                                                    (pharmacyId, newCounter) {
+                                                    (newCounter) {
                                                   bloc.add(
                                                     UpdateCounterEvent(
-                                                        pharmacyId: pharmacyId,
+                                                        pharmacyId: pharmacy
+                                                            .pharmacyId!,
                                                         counter: newCounter),
                                                   );
                                                 },
-                                                onValueBuyPickUpRequested:
-                                                    (int pharmacyId) {},
+                                                onValueBuyPickUpRequested: () {
+                                                  bloc.add(
+                                                    BookBargainProductEvent(
+                                                      productId:
+                                                          productId.toString(),
+                                                      pharmacyId: pharmacy
+                                                          .pharmacyId!
+                                                          .toString(),
+                                                      quantity: state.counters[
+                                                              pharmacy
+                                                                  .pharmacyId] ??
+                                                          1,
+                                                    ),
+                                                  );
+                                                },
                                               ),
                                             );
                                           },
@@ -170,19 +207,35 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                                     PharmacyMapWidget(
                                       mapType: PharmacyMapType.valueBuyMap,
                                       points: state.points,
-                                      height: 400.h,
-                                      onValueBuyPickUpCounters: state.counters,
-                                      onValueBuyPickUpChangedCount:
-                                          (pharmacyId, newCounter) {
-                                        bloc.add(
-                                          UpdateCounterEvent(
-                                            pharmacyId: pharmacyId,
-                                            counter: newCounter,
+                                      height: 600.h,
+                                      selectedMarkerBuilder:
+                                          (context, point, mapBloc) {
+                                        final pharmacy =
+                                            ProductPharmacyModel.fromJson(
+                                                point.data!);
+
+                                        return PharmacyProductInfoCard(
+                                          pharmacy: pharmacy,
+                                          onValueBuyPickUpCounters:
+                                              state.counters,
+                                          onValueBuyPickUpChangedCount:
+                                              (int value) => bloc.add(
+                                            UpdateCounterEvent(
+                                                pharmacyId:
+                                                    pharmacy.pharmacyId!,
+                                                counter: value),
                                           ),
+                                          onValueBuyPickUpRequested: () {
+                                            bloc.add(BookBargainProductEvent(
+                                                productId: productId.toString(),
+                                                pharmacyId: pharmacy.pharmacyId!
+                                                    .toString(),
+                                                quantity: state.counters[
+                                                        pharmacy.pharmacyId] ??
+                                                    1));
+                                          },
                                         );
                                       },
-                                      onValueBuyPickUpRequested:
-                                          (int pharmacyId) {},
                                     ),
                                 ],
                               ),
@@ -192,25 +245,20 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                                   right: 20.w,
                                   bottom: 75.h,
                                   child: AppButtonWidget(
-                                      onTap: hasSelectedPharmacy
-                                          ? () {
-                                              Navigator.of(context).push(
-                                                Routes.createRoute(
-                                                  const ValueBuySuccessfullyOrderedScreen(),
-                                                  settings: RouteSettings(
-                                                    name: Routes
-                                                        .valueBuySuccessfullyOrderedScreen,
-                                                    arguments: {
-                                                      'pharmacy': state
-                                                          .selectedPharmacyCard,
-                                                      'order':
-                                                          state.bookResponse
-                                                    },
-                                                  ),
-                                                ),
-                                              );
-                                            }
-                                          : null,
+                                      onTap: () {
+                                        final pharmacy =
+                                            state.selectedPharmacyCard!;
+                                        bloc.add(
+                                          BookBargainProductEvent(
+                                            productId: productId.toString(),
+                                            pharmacyId:
+                                                pharmacy.pharmacyId!.toString(),
+                                            quantity: state.counters[
+                                                    pharmacy.pharmacyId] ??
+                                                1,
+                                          ),
+                                        );
+                                      },
                                       text: 'Заберу отсюда',
                                       backgroundColor: UiConstants.blueColor),
                                 ),

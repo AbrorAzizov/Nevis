@@ -10,8 +10,8 @@ class PharmacyProductInfoCard extends StatelessWidget {
   final ProductPharmacyEntity pharmacy;
   final bool isSelected;
   final bool isForList;
-  final Function(int pharmacyId) onValueBuyPickUpRequested;
-  final Function(int pharmacyId, int value) onValueBuyPickUpChangedCount;
+  final Function() onValueBuyPickUpRequested;
+  final Function(int value) onValueBuyPickUpChangedCount;
   final Map<int, int> onValueBuyPickUpCounters;
 
   const PharmacyProductInfoCard({
@@ -111,8 +111,7 @@ class PharmacyProductInfoCard extends StatelessWidget {
                                 Icon(Icons.remove, color: Colors.grey.shade700),
                             onPressed: () {
                               if (count > 1) {
-                                onValueBuyPickUpChangedCount(
-                                    pharmacy.pharmacyId!, count - 1);
+                                onValueBuyPickUpChangedCount(count - 1);
                               }
                             },
                             splashRadius: 20,
@@ -127,8 +126,7 @@ class PharmacyProductInfoCard extends StatelessWidget {
                           IconButton(
                             icon: Icon(Icons.add, color: Colors.grey.shade700),
                             onPressed: () {
-                              onValueBuyPickUpChangedCount(
-                                  pharmacy.pharmacyId!, count + 1);
+                              onValueBuyPickUpChangedCount(count + 1);
                             },
                             splashRadius: 20,
                             constraints: BoxConstraints(),
@@ -145,8 +143,7 @@ class PharmacyProductInfoCard extends StatelessWidget {
                         padding: getMarginOrPadding(top: 16),
                         child: AppButtonWidget(
                           text: 'Заберу отсюда',
-                          onTap: () =>
-                              onValueBuyPickUpRequested(pharmacy.pharmacyId!),
+                          onTap: onValueBuyPickUpRequested,
                           backgroundColor: UiConstants.blueColor,
                         ),
                       )

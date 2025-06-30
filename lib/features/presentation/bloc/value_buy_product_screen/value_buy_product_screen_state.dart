@@ -11,6 +11,7 @@ class ValueBuyProductScreenState extends Equatable {
   final Map<int, int> counters;
   final BookBargainProductResponse? bookResponse;
   final BargainProductEntity? bargainProduct;
+  final String? bookingError;
 
   const ValueBuyProductScreenState({
     this.counters = const {},
@@ -23,6 +24,7 @@ class ValueBuyProductScreenState extends Equatable {
     this.pharmacies = const [],
     this.bookResponse,
     this.bargainProduct,
+    this.bookingError,
   });
 
   ValueBuyProductScreenState copyWith({
@@ -36,6 +38,9 @@ class ValueBuyProductScreenState extends Equatable {
     Map<int, int>? counters,
     BookBargainProductResponse? bookResponse,
     BargainProductEntity? bargainProduct,
+    String? bookingError,
+    bool? clearBookResponse,
+    bool? clearBookingError,
   }) {
     return ValueBuyProductScreenState(
       selectorIndex: selectorIndex ?? this.selectorIndex,
@@ -47,8 +52,11 @@ class ValueBuyProductScreenState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       counters: counters ?? this.counters,
       selectedPharmacyCard: selectedPharmacyCard ?? this.selectedPharmacyCard,
-      bookResponse: bookResponse ?? this.bookResponse,
+      bookResponse:
+          clearBookResponse == true ? null : bookResponse ?? this.bookResponse,
       bargainProduct: bargainProduct ?? this.bargainProduct,
+      bookingError:
+          clearBookingError == true ? null : bookingError ?? this.bookingError,
     );
   }
 
@@ -64,5 +72,6 @@ class ValueBuyProductScreenState extends Equatable {
         counters,
         bookResponse,
         bargainProduct,
+        bookingError,
       ];
 }

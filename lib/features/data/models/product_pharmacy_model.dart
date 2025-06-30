@@ -29,7 +29,7 @@ class ProductPharmacyModel extends ProductPharmacyEntity {
             : null;
 
     dynamic id = json["pharmacy_id"] ?? json['id'];
-    id = id is String ? int.parse(id) : null;
+    id = id is String ? int.parse(id) : id;
 
     return ProductPharmacyModel(
       price: (json["price"] as num?)?.toInt(),
