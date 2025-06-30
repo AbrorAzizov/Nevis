@@ -142,13 +142,13 @@ class ProductModel extends ProductEntity {
         "count": count,
         "value_buy_price": valueBuy,
         "is_available_for_delivery": availableForDelivery,
-        "special_offer": "1+1",
+        "special_offer": specialOffer?.title,
         "bonuses": bonuses,
         "CASHBACK_PERCENT": cashbackPercent,
         "images": images,
         "maxAmount": maxCount,
         "utsenkaPrice": utsenkaPrice,
-      },
+      }
     };
   }
 
