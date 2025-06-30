@@ -107,6 +107,7 @@ import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_b
 import 'package:nevis/features/presentation/bloc/category_screen/category_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/info_about_order_screen/info_about_order_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/login_screen/login_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
@@ -154,6 +155,9 @@ Future<void> init() async {
       requestCodeUC: sl<RequestCodeUC>(),
       loginUC: sl<LoginUC>(),
     ),
+  );
+  sl.registerFactory(
+    () => HomeScreenBloc(),
   );
   sl.registerFactory(
     () => ProfileScreenBloc(logoutUC: sl<LogoutUC>()),

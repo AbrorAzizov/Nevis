@@ -25,7 +25,7 @@ class StoryListWidget extends StatelessWidget {
           itemBuilder: (context, index) => StoryItemWidget(
                 story: stories[index],
                 onTap: () {
-                  Navigator.of(context.read<HomeScreenBloc>().context).push(
+                  Navigator.of(context.read<HomeScreenBloc>().context!).push(
                     Routes.createRoute(
                       StoriesScreen(),
                       settings: RouteSettings(

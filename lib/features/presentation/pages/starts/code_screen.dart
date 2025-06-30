@@ -7,7 +7,6 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/home_screen.dart';
 import 'package:nevis/features/presentation/pages/starts/login_screen_with_message.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
@@ -47,11 +46,10 @@ class CodeScreen extends StatelessWidget {
             /*context
                 .read<FavoriteProductsScreenBloc>()
                 .add(LoadFavoriteProductsEvent());*/
-            Navigator.of(context.read<HomeScreenBloc>().context)
-                .pushAndRemoveUntil(
-                    Routes.createRoute(const HomeScreen(),
-                        settings: RouteSettings(name: Routes.homeScreen)),
-                    (route) => false);
+            Navigator.of(context).pushAndRemoveUntil(
+                Routes.createRoute(const HomeScreen(),
+                    settings: RouteSettings(name: Routes.homeScreen)),
+                (route) => false);
           }
         },
         builder: (context, state) {

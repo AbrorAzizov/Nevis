@@ -33,7 +33,7 @@ class PersonalDataScreen extends StatelessWidget {
           child: BlocConsumer<PersonalDataScreenBloc, PersonalDataScreenState>(
             listener: (context, state) => switch (state) {
               DeleteAccountState _ =>
-                Navigator.of(context.read<HomeScreenBloc>().context)
+                Navigator.of(context.read<HomeScreenBloc>().context!)
                     .pushAndRemoveUntil(
                         Routes.createRoute(
                           const LoginScreenWithPhoneCall(
