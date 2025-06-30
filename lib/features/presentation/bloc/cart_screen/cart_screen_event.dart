@@ -22,9 +22,9 @@ class GetProductsEvent extends CartScreenEvent {
 }
 
 class UpdateProductCountEvent extends CartScreenEvent {
-  final int productId;
+  final ProductEntity product;
   final int count;
-  const UpdateProductCountEvent({required this.productId, required this.count});
+  const UpdateProductCountEvent({required this.product, required this.count});
 }
 
 class ChangeSelectorIndexEvent extends CartScreenEvent {

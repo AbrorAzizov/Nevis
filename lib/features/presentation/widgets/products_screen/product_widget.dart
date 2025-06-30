@@ -297,9 +297,12 @@ class ProductWidget extends StatelessWidget {
                     BlocBuilder<CartScreenBloc, CartScreenState>(
                       builder: (context, state) {
                         final counters = state.counters;
-                        final productId = product.productId!;
-                        final count = counters[productId] ?? 1;
-                        if (state.counters[product.productId] == null) {
+                        final productId = product.productId;
+
+                        final isInCart = state.cartProducts
+                            .any((p) => p.productId == productId);
+
+                        if (!isInCart) {
                           return AppButtonWidget(
                             isFilled: false,
                             showBorder: true,
@@ -312,29 +315,28 @@ class ProductWidget extends StatelessWidget {
                                   .add(AddProductToCart(product: product));
                             },
                           );
-                        }
-                        return Row(
-                          children: [
-                            Expanded(
-                              child: CounterWidget(
-                                count: count,
-                                productId: productId,
-                                onCountChanged: (id, newCount) {
-                                  if (onCountChanged != null) {
-                                    onCountChanged!(id, newCount);
-                                  } else {
+                        } else {
+                          final count = counters[productId] ?? 1;
+
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: CounterWidget(
+                                  count: count,
+                                  product: product,
+                                  onCountChanged: (id, newCount) {
                                     context.read<CartScreenBloc>().add(
                                           UpdateProductCountEvent(
-                                            productId: id,
+                                            product: product,
                                             count: newCount,
                                           ),
                                         );
-                                  }
-                                },
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
-                        );
+                            ],
+                          );
+                        }
                       },
                     ),
                     SizedBox(height: 8.h),

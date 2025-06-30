@@ -44,7 +44,7 @@ class ProfileCategoriesList extends StatelessWidget {
                   ),
                 );
               } else {
-                Navigator.of(context.read<HomeScreenBloc>().context).push(
+                Navigator.of(context.read<HomeScreenBloc>().context!).push(
                   Routes.createRoute(
                     const LoginScreenWithPhoneCall(
                       canBack: true,
@@ -74,7 +74,7 @@ class ProfileCategoriesList extends StatelessWidget {
                   ),
                 );
               } else {
-                Navigator.of(context.read<HomeScreenBloc>().context).push(
+                Navigator.of(context.read<HomeScreenBloc>().context!).push(
                   Routes.createRoute(
                     const LoginScreenWithPhoneCall(
                       canBack: true,
@@ -129,7 +129,7 @@ class ProfileCategoriesList extends StatelessWidget {
                   ),
                 );
               } else {
-                Navigator.of(context.read<HomeScreenBloc>().context).push(
+                Navigator.of(context.read<HomeScreenBloc>().context!).push(
                   Routes.createRoute(
                     const LoginScreenWithPhoneCall(
                       canBack: true,

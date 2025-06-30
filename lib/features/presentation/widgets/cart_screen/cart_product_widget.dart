@@ -27,6 +27,7 @@ class CartProductWidget extends StatelessWidget {
   final CartType cartType;
   final PharmacyProductsAvailabilityType availabilityType;
   final void Function()? additionalEvent;
+
   const CartProductWidget({
     super.key,
     this.availabilityType = PharmacyProductsAvailabilityType.available,
@@ -42,30 +43,36 @@ class CartProductWidget extends StatelessWidget {
 
     final productId = product.productId;
     if (productId == null) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
+
     final baseUrl = dotenv.env['BASE_URL2'] ?? '';
-    final imageUrl = '$baseUrl${product.image ?? ''}';
+    final imageUrl = (product.image?.startsWith('http') ?? false)
+        ? product.image!
+        : '$baseUrl${product.image ?? ''}';
+
     final productName = product.name?.orDash() ?? '-';
     final availableForDelivery = product.availableForDelivery ?? false;
     final brand = product.brand ?? 'Производитель';
+
     final count = cartType == CartType.defaultCart
         ? (counters[productId] ?? 1)
         : (product.count ?? 1);
+
     return BlocBuilder<FavoriteProductsScreenBloc, FavoriteProductsScreenState>(
       builder: (context, state) {
         return GestureDetector(
-          onTap: () => {},
+          onTap: () {},
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.r),
               color: UiConstants.whiteColor,
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xFF144B63).withOpacity(0.1),
+                  color: const Color(0xFF144B63).withOpacity(0.1),
                   blurRadius: 20,
                   spreadRadius: -4,
-                  offset: Offset(-1, 4),
+                  offset: const Offset(-1, 4),
                 ),
               ],
             ),
@@ -84,21 +91,13 @@ class CartProductWidget extends StatelessWidget {
                       Row(
                         children: [
                           FavoriteButton(
-                            isFav: context
-                                .read<FavoriteProductsScreenBloc>()
-                                .state
-                                .products
+                            isFav: state.products
                                 .map((e) => e.productId)
-                                .toList()
                                 .contains(product.productId),
                             onPressed: () {
                               if (product.productId != null) {
-                                if (context
-                                    .read<FavoriteProductsScreenBloc>()
-                                    .state
-                                    .products
+                                if (state.products
                                     .map((e) => e.productId)
-                                    .toList()
                                     .contains(product.productId)) {
                                   context
                                       .read<FavoriteProductsScreenBloc>()
@@ -113,9 +112,7 @@ class CartProductWidget extends StatelessWidget {
                               }
                             },
                           ),
-                          SizedBox(
-                            width: 12.w,
-                          ),
+                          SizedBox(width: 12.w),
                           DeleteButton(onPressed: () {
                             bloc.add(
                                 DeleteProductFromCart(productId: productId));
@@ -153,9 +150,10 @@ class CartProductWidget extends StatelessWidget {
                               Text(
                                 productName,
                                 style: UiConstants.textStyle19.copyWith(
-                                    color: availableForDelivery
-                                        ? UiConstants.black3Color
-                                        : UiConstants.black2Color),
+                                  color: availableForDelivery
+                                      ? UiConstants.black3Color
+                                      : UiConstants.black2Color,
+                                ),
                                 maxLines: 4,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -163,11 +161,12 @@ class CartProductWidget extends StatelessWidget {
                               Text(
                                 brand,
                                 style: UiConstants.textStyle12.copyWith(
-                                    height: 1,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0,
-                                    color: UiConstants.black3Color
-                                        .withOpacity(.6)),
+                                  height: 1,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: 0,
+                                  color:
+                                      UiConstants.black3Color.withOpacity(.6),
+                                ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ],
@@ -179,70 +178,62 @@ class CartProductWidget extends StatelessWidget {
                   SizedBox(height: 8.h),
                   Row(
                     children: [
-                      availabilityType ==
-                              PharmacyProductsAvailabilityType.available
-                          ? Expanded(
-                              child: SizedBox(
-                                height: 40.h,
-                                child: ProductPrice(
-                                    fromCart: true, product: product),
-                              ),
-                            )
-                          : SizedBox.shrink(),
-                      SizedBox(
-                        width: 16.w,
-                      ),
-                      availabilityType ==
-                              PharmacyProductsAvailabilityType.available
-                          ? SizedBox(
-                              height: 32,
-                              child: CounterWidget(
-                                count: count,
-                                productId: productId,
-                                onCountChanged: (id, newCount) {
-                                  final pickupBloc =
-                                      context.read<OrderPickupCartScreenBloc>();
-                                  final state = pickupBloc.state;
+                      if (availabilityType ==
+                          PharmacyProductsAvailabilityType.available)
+                        Expanded(
+                          child: SizedBox(
+                            height: 40.h,
+                            child:
+                                ProductPrice(fromCart: true, product: product),
+                          ),
+                        ),
+                      SizedBox(width: 16.w),
+                      if (availabilityType ==
+                          PharmacyProductsAvailabilityType.available)
+                        SizedBox(
+                          height: 32,
+                          child: CounterWidget(
+                            count: count,
+                            product: product,
+                            onCountChanged: (id, newCount) {
+                              final pickupBloc =
+                                  context.read<OrderPickupCartScreenBloc>();
+                              final state = pickupBloc.state;
 
-                                  if (cartType == CartType.pickupCart) {
-                                    final sameIdInCart = state.cartProducts
-                                        .where((e) =>
-                                            e.productId == id &&
-                                            !identical(e, product))
-                                        .map((e) => e.count ?? 1)
-                                        .fold(0, (a, b) => a + b);
+                              if (cartType == CartType.pickupCart) {
+                                final sameIdInCart = state.cartProducts
+                                    .where((e) =>
+                                        e.productId == id &&
+                                        !identical(e, product))
+                                    .map((e) => e.count ?? 1)
+                                    .fold(0, (a, b) => a + b);
 
-                                    final sameIdInWarehouse = state
-                                        .cartProductsFromWarehouse
-                                        .where((e) =>
-                                            e.productId == id &&
-                                            !identical(e, product))
-                                        .map((e) => e.count ?? 1)
-                                        .fold(0, (a, b) => a + b);
+                                final sameIdInWarehouse = state
+                                    .cartProductsFromWarehouse
+                                    .where((e) =>
+                                        e.productId == id &&
+                                        !identical(e, product))
+                                    .map((e) => e.count ?? 1)
+                                    .fold(0, (a, b) => a + b);
 
-                                    final totalCount = newCount +
-                                        sameIdInCart +
-                                        sameIdInWarehouse;
+                                final totalCount =
+                                    newCount + sameIdInCart + sameIdInWarehouse;
 
-                                    bloc.add(
-                                      UpdateProductCountEvent(
-                                        productId: id,
-                                        count: totalCount,
-                                      ),
-                                    );
-                                  } else {
-                                    bloc.add(
-                                      UpdateProductCountEvent(
-                                        productId: id,
-                                        count: newCount,
-                                      ),
-                                    );
-                                  }
+                                bloc.add(UpdateProductCountEvent(
+                                  product: product,
+                                  count: totalCount,
+                                ));
+                              } else {
+                                bloc.add(UpdateProductCountEvent(
+                                  product: product,
+                                  count: newCount,
+                                ));
+                              }
 
-                                  additionalEvent?.call();
-                                },
-                              ))
-                          : SizedBox.shrink()
+                              additionalEvent?.call();
+                            },
+                          ),
+                        ),
                     ],
                   ),
                   Padding(
@@ -256,7 +247,7 @@ class CartProductWidget extends StatelessWidget {
                             : SpecialOfferBadgeWidget(
                                 typeOfSpecialOffer: product.specialOffer!,
                               ))
-                        : SizedBox.shrink(),
+                        : const SizedBox.shrink(),
                   ),
                 ],
               ),

@@ -41,22 +41,24 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
   final AddProductToCartUC addProductToCart;
   final DeleteProductFromCartUC deleteProductFromCart;
 
-  CartScreenBloc(
-      {required this.getCartProducts,
-      required this.deleteProductFromCart,
-      required this.addProductToCart})
-      : super(
+  CartScreenBloc({
+    required this.getCartProducts,
+    required this.deleteProductFromCart,
+    required this.addProductToCart,
+  }) : super(
           CartScreenState(
-              isAllProductsChecked: false,
-              selectedProductIds: {},
-              pharmacies: [],
-              filteredPharmacies: [],
-              selectedPharmacy: null,
-              promoCodes: [],
-              cartType: TypeReceiving.delivery,
-              paymentType: PaymentType.inPerson,
-              isShowPharmaciesWorkingNow: false,
-              isShowPharmaciesProductsInStock: false),
+            isAllProductsChecked: false,
+            selectedProductIds: {},
+            pharmacies: [],
+            filteredPharmacies: [],
+            selectedPharmacy: null,
+            promoCodes: [],
+            cartType: TypeReceiving.delivery,
+            paymentType: PaymentType.inPerson,
+            isShowPharmaciesWorkingNow: false,
+            isShowPharmaciesProductsInStock: false,
+            counters: {},
+          ),
         ) {
     on<GetCartProductsEvent>(_getCartProducts);
     on<UpdateProductCountEvent>(_updateCounter);
@@ -66,6 +68,7 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
     on<AddProductToCart>(_addProductTocart);
     on<DeleteProductFromCart>(_deleteProductFromCart);
   }
+
   void _getCartProducts(
       GetCartProductsEvent event, Emitter<CartScreenState> emit) async {
     final failureOrLoads = await getCartProducts();
@@ -77,7 +80,6 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
       )),
       (cart) {
         final newCounters = <int, int>{};
-
         for (var item in cart.cartItems) {
           if (item.productId != null && item.count != null) {
             newCounters[item.productId!] = item.count!;
@@ -89,8 +91,7 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
           totalBonuses: cart.totalBonuses,
           totalPrice: cart.totalPrice,
           cartProducts: cart.cartItems,
-          counters:
-              cart.cartItems.isEmpty ? {} : newCounters, // <-- ключевая строка
+          counters: newCounters,
           isLoading: false,
         ));
       },
@@ -102,37 +103,92 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
     try {
       String jsonString = await rootBundle.loadString('assets/products.json');
       final data = jsonDecode(jsonString);
-      List<dynamic> dataList = data['data'];
       List<ProductEntity> products =
-          dataList.map((e) => ProductModel.fromJson(e)).toList();
+          (data['data'] as List).map((e) => ProductModel.fromJson(e)).toList();
       emit(state.copyWith(products: products, isLoading: false));
     } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-      ));
+      emit(state.copyWith(isLoading: false));
     }
   }
 
   void _updateCounter(
       UpdateProductCountEvent event, Emitter<CartScreenState> emit) async {
-    final failureOrSuccess = await addProductToCart(
-      CartParams(quantity: event.count, id: event.productId),
-    );
+    if (event.product.productId != null) {
+      final productId = event.product.productId!;
+      final updatedProduct =
+          (event.product as ProductModel).copyWith(count: event.count);
 
-    failureOrSuccess.fold(
-      (failure) {
-        if (failure is MaxQuantityExceededFailure) {
-          Get.showSnackbar(GetSnackBar(
-            snackPosition: SnackPosition.TOP,
-            duration: Duration(seconds: 2),
-            title: 'Ошибка при добавлении товара',
-            message: failure.message,
-          ));
-        }
-      },
+      final failureOrSuccess = await addProductToCart(
+        CartParams(
+          quantity: event.count,
+          id: productId,
+          product: updatedProduct,
+        ),
+      );
+
+      failureOrSuccess.fold(
+        (failure) {
+          if (failure is MaxQuantityExceededFailure) {
+            Get.showSnackbar(GetSnackBar(
+              snackPosition: SnackPosition.TOP,
+              duration: Duration(seconds: 2),
+              title: 'Ошибка при добавлении товара',
+              message: failure.message,
+            ));
+          }
+        },
+        (_) {
+          final newCounters = Map<int, int>.from(state.counters);
+          newCounters[productId] = event.count;
+          emit(state.copyWith(counters: newCounters));
+          add(GetCartProductsEvent());
+        },
+      );
+    }
+  }
+
+  void _addProductTocart(
+      AddProductToCart event, Emitter<CartScreenState> emit) async {
+    if (event.product.productId != null) {
+      final productId = event.product.productId!;
+      final currentCount = state.counters[productId] ?? 0;
+      final newCount = currentCount + 1;
+
+      final updatedProduct =
+          (event.product as ProductModel).copyWith(count: newCount);
+
+      final failureOrLoads = await addProductToCart(
+        CartParams(
+          quantity: newCount,
+          id: productId,
+          product: updatedProduct,
+        ),
+      );
+
+      failureOrLoads.fold(
+        (_) => emit(
+            state.copyWith(errorMessage: 'ошибка добавления товара в корзину')),
+        (_) {
+          final newCounters = Map<int, int>.from(state.counters);
+          newCounters[productId] = newCount;
+          emit(state.copyWith(counters: newCounters));
+          add(GetCartProductsEvent());
+        },
+      );
+    }
+  }
+
+  void _deleteProductFromCart(
+      DeleteProductFromCart event, Emitter<CartScreenState> emit) async {
+    final failureOrLoads = await deleteProductFromCart(event.productId);
+
+    failureOrLoads.fold(
+      (_) => emit(
+          state.copyWith(errorMessage: 'ошибка удаление товара из корзины')),
       (_) {
         final newCounters = Map<int, int>.from(state.counters);
-        newCounters[event.productId] = event.count;
+        newCounters.remove(event.productId);
+
         emit(state.copyWith(counters: newCounters));
         add(GetCartProductsEvent());
       },
@@ -146,39 +202,5 @@ class CartScreenBloc extends Bloc<CartScreenEvent, CartScreenState> {
 
   void _clearCart(ClearCartEvent event, Emitter<CartScreenState> emit) {
     emit(state.copyWith(cartProducts: [], counters: {}));
-  }
-
-  void _addProductTocart(
-      AddProductToCart event, Emitter<CartScreenState> emit) async {
-    if (event.product.productId != null) {
-      final productId = event.product.productId!;
-      final currentCount = state.counters[productId] ?? 0;
-      final newCount = currentCount + 1;
-
-      final failureOrLoads = await addProductToCart(
-        CartParams(quantity: newCount, id: productId),
-      );
-      failureOrLoads.fold(
-        (_) => emit(
-            state.copyWith(errorMessage: 'ошибка добавления товара в корзину')),
-        (_) => add(GetCartProductsEvent()),
-      );
-    }
-  }
-
-  void _deleteProductFromCart(
-      DeleteProductFromCart event, Emitter<CartScreenState> emit) async {
-    final failureOrLoads = await deleteProductFromCart(event.productId);
-
-    failureOrLoads.fold(
-        (_) => emit(
-            state.copyWith(errorMessage: 'ошибка удаление товара из корзины')),
-        (_) {
-      final counters = state.counters;
-      counters.remove(event.productId);
-
-      emit(state.copyWith(counters: counters));
-      add(GetCartProductsEvent());
-    });
   }
 }

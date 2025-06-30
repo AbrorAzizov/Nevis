@@ -8,6 +8,7 @@ import 'package:nevis/core/geocoder_manager.dart';
 import 'package:nevis/core/platform/error_handler.dart';
 import 'package:nevis/core/platform/network_info.dart';
 import 'package:nevis/features/data/datasources/auth_remote_data_source_impl.dart';
+import 'package:nevis/features/data/datasources/cart_local_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/cart_remote_data_source_implementation.dart';
 import 'package:nevis/features/data/datasources/category_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/content_remote_data_source_impl.dart';
@@ -107,6 +108,7 @@ import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.da
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/info_about_order_screen/info_about_order_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/login_screen/login_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
@@ -154,6 +156,9 @@ Future<void> init() async {
       requestCodeUC: sl<RequestCodeUC>(),
       loginUC: sl<LoginUC>(),
     ),
+  );
+  sl.registerFactory(
+    () => HomeScreenBloc(),
   );
   sl.registerFactory(
     () => ProfileScreenBloc(logoutUC: sl<LogoutUC>()),
@@ -416,7 +421,11 @@ Future<void> init() async {
 
   sl.registerLazySingleton<CartRepository>(
     () => CartRepositoryImpl(
-        networkInfo: sl(), errorHandler: sl(), cartRemoteDataSource: sl()),
+        networkInfo: sl(),
+        errorHandler: sl(),
+        cartRemoteDataSource: sl(),
+        cartLocalDataSource: sl(),
+        sharedPreferences: sl()),
   );
 
   sl.registerLazySingleton<StoryRepository>(
@@ -532,6 +541,9 @@ Future<void> init() async {
     () => SearchRemoteDataSourceImpl(
       apiClient: sl(),
     ),
+  );
+  sl.registerLazySingleton<CartLocalDataSource>(
+    () => CartLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
   //// Core

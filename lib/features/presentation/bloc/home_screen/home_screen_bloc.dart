@@ -14,7 +14,7 @@ part 'home_screen_event.dart';
 part 'home_screen_state.dart';
 
 class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
-  final BuildContext context;
+  final BuildContext? context;
 
   final ConnectivityService connectivityService = ConnectivityService();
   final List<GlobalKey<NavigatorState>> navigatorKeys =
@@ -39,7 +39,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   ];
   List<String> iconsNames = ['Главная', 'Каталог', 'Корзина', 'Профиль'];
 
-  HomeScreenBloc({required this.context}) : super(HomeScreenInitial()) {
+  HomeScreenBloc({this.context}) : super(HomeScreenInitial()) {
     on<CheckInternetConnection>((event, emit) async {
       final hasConnection = await connectivityService.hasInternetConnection();
       if (hasConnection) {

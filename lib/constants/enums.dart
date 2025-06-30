@@ -43,7 +43,7 @@ enum OrderStatus {
   collecting, // В сборке
   courierSearching, // поиск курьера
   courierWaiting, // Поиск курьера
-  accepted,
+  accepted, // принят
 }
 
 enum DeliveryZoneType { green, yellow }

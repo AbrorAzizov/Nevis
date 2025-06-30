@@ -210,7 +210,7 @@ class _SearchProductAppBarState extends State<SearchProductAppBar> {
                                 .getString(SharedPreferencesKeys.accessToken);
                             if (token == null) {
                               Navigator.of(
-                                      context.read<HomeScreenBloc>().context)
+                                      context.read<HomeScreenBloc>().context!)
                                   .push(
                                 Routes.createRoute(
                                   const LoginScreenWithPhoneCall(

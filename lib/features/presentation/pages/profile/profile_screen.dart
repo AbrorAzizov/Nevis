@@ -38,7 +38,7 @@ class ProfileScreen extends StatelessWidget {
                 await prefs.remove(SharedPreferencesKeys.refreshToken);
                 await prefs.remove(SharedPreferencesKeys.loyaltyCard);
 
-                Navigator.of(context.read<HomeScreenBloc>().context)
+                Navigator.of(context.read<HomeScreenBloc>().context!)
                     .pushAndRemoveUntil(
                         Routes.createRoute(const HomeScreen(),
                             settings: RouteSettings(name: Routes.homeScreen)),

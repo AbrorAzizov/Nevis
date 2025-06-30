@@ -8,7 +8,6 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/presentation/pages/profile/orders/order_screen.dart';
-import 'package:nevis/features/presentation/widgets/orders_screen/order_item_products_list.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_item_status_chip.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -95,7 +94,7 @@ class OrderItem extends StatelessWidget {
                           SizedBox(height: 8.h),
                           Text('Итого'),
                           Text(
-                            '${order.orderSum.toString()} ₽',
+                            '${order.totalPrice.toString()} ₽',
                             style: UiConstants.textStyle11,
                           )
                         ],
@@ -104,7 +103,7 @@ class OrderItem extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8.h),
-                OrderItemProductsList(orderProducts: order.items ?? []),
+                // OrderItemProductsList(orderProducts: order.items ?? []),
                 if (order.status == OrderStatus.canceled)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
