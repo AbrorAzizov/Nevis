@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
-import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
-import 'package:nevis/features/presentation/pages/profile/orders/successfully_order/value_buy_successfully_ordered_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 
 class PharmacyProductInfoCard extends StatelessWidget {
   final ProductPharmacyEntity pharmacy;
   final bool isSelected;
   final bool isForList;
-  final int counter;
-  final Function(int) onCounterChanged;
-  const PharmacyProductInfoCard(
-      {super.key,
-      required this.pharmacy,
-      this.isForList = false,
-      this.isSelected = false,
-      required this.counter,
-      required this.onCounterChanged});
+  final Function(int pharmacyId) onValueBuyPickUpRequested;
+  final Function(int pharmacyId, int value) onValueBuyPickUpChangedCount;
+  final Map<int, int> onValueBuyPickUpCounters;
+
+  const PharmacyProductInfoCard({
+    super.key,
+    required this.pharmacy,
+    this.isForList = false,
+    this.isSelected = false,
+    required this.onValueBuyPickUpChangedCount,
+    required this.onValueBuyPickUpRequested,
+    required this.onValueBuyPickUpCounters,
+  });
 
   @override
   Widget build(BuildContext context) {
+    int count = onValueBuyPickUpCounters[pharmacy.pharmacyId!]!;
+
     return Container(
       padding: getMarginOrPadding(top: 24, bottom: 24, left: 16, right: 16),
       decoration: BoxDecoration(
@@ -48,31 +53,25 @@ class PharmacyProductInfoCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  pharmacy.address ?? '-',
+                  pharmacy.address.orDash(),
                   style: UiConstants.textStyle2
                       .copyWith(fontWeight: FontWeight.w500),
                 ),
-                SizedBox(
-                  height: 16.h,
-                ),
+                SizedBox(height: 16.h),
                 Text(
-                  'ул Двинская д.11',
+                  extractStreetAndHouse(pharmacy.address ?? ''),
                   style: UiConstants.textStyle10
                       .copyWith(color: UiConstants.black3Color.withOpacity(.6)),
                 ),
-                SizedBox(
-                  height: 8.h,
-                ),
+                SizedBox(height: 8.h),
                 Text(
-                  '7 812 490 92 70',
+                  pharmacy.phone.orDash(),
                   style: UiConstants.textStyle10
                       .copyWith(color: UiConstants.black3Color.withOpacity(.6)),
                 ),
-                SizedBox(
-                  height: 8.h,
-                ),
+                SizedBox(height: 8.h),
                 Text(
-                  pharmacy.schedule ?? '',
+                  pharmacy.schedule.orDash(),
                   style: UiConstants.textStyle10
                       .copyWith(color: UiConstants.black3Color.withOpacity(.6)),
                 ),
@@ -83,7 +82,7 @@ class PharmacyProductInfoCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${(pharmacy.price ?? 0 * counter).toString()} ₽',
+                        Text('${(pharmacy.price ?? 0 * count).toString()} ₽',
                             style: UiConstants.textStyle3.copyWith(
                                 color: UiConstants.blueColor,
                                 fontWeight: FontWeight.w800)),
@@ -111,8 +110,9 @@ class PharmacyProductInfoCard extends StatelessWidget {
                             icon:
                                 Icon(Icons.remove, color: Colors.grey.shade700),
                             onPressed: () {
-                              if (counter > 1) {
-                                onCounterChanged(counter - 1);
+                              if (count > 1) {
+                                onValueBuyPickUpChangedCount(
+                                    pharmacy.pharmacyId!, count - 1);
                               }
                             },
                             splashRadius: 20,
@@ -120,14 +120,15 @@ class PharmacyProductInfoCard extends StatelessWidget {
                             padding: EdgeInsets.zero,
                           ),
                           Text(
-                            '$counter',
+                            '$count',
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w500),
                           ),
                           IconButton(
                             icon: Icon(Icons.add, color: Colors.grey.shade700),
                             onPressed: () {
-                              onCounterChanged(counter + 1);
+                              onValueBuyPickUpChangedCount(
+                                  pharmacy.pharmacyId!, count + 1);
                             },
                             splashRadius: 20,
                             constraints: BoxConstraints(),
@@ -144,18 +145,8 @@ class PharmacyProductInfoCard extends StatelessWidget {
                         padding: getMarginOrPadding(top: 16),
                         child: AppButtonWidget(
                           text: 'Заберу отсюда',
-                          onTap: () {
-                            Navigator.of(context).push(
-                              Routes.createRoute(
-                                const ValueBuySuccessfullyOrderedScreen(),
-                                settings: RouteSettings(
-                                  name:
-                                      Routes.valueBuySuccessfullyOrderedScreen,
-                                  arguments: {'pharmacy': pharmacy},
-                                ),
-                              ),
-                            );
-                          },
+                          onTap: () =>
+                              onValueBuyPickUpRequested(pharmacy.pharmacyId!),
                           backgroundColor: UiConstants.blueColor,
                         ),
                       )
@@ -165,5 +156,13 @@ class PharmacyProductInfoCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String extractStreetAndHouse(String address) {
+    final regex = RegExp(
+        r'((ул\.?|улица|пр\.?|проспект|пер\.?|переулок|шоссе|ш\.?|дорога|наб\.?|набережная|бульвар|бул\.?|площадь|пл\.?)\s?.+?,?\s?(дом\s?№?\s?\d+\w?|\d+\w?))',
+        caseSensitive: false);
+    final match = regex.firstMatch(address);
+    return match?.group(0) ?? '';
   }
 }

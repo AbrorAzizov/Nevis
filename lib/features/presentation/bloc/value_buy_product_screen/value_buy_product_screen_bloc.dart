@@ -6,7 +6,6 @@ import 'package:nevis/core/params/book_bargain_product_params.dart';
 import 'package:nevis/features/data/models/book_bargain_product_response.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/domain/entities/bargain_product_entity.dart';
-import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/domain/usecases/products/book_bargain_product.dart';
 import 'package:nevis/features/domain/usecases/products/get_bargain_product.dart';
@@ -19,7 +18,6 @@ class ValueBuyProductScreenBloc
     extends Bloc<ValueBuyProductScreenEvent, ValueBuyProductScreenState> {
   final GetBargainProductUC getBargainProductUC;
   final BookBargainProductUC bookBargainProductUC;
-  final List<ProductPharmacyEntity> _allPharmacies = [];
 
   ValueBuyProductScreenBloc({
     required this.getBargainProductUC,
@@ -32,6 +30,26 @@ class ValueBuyProductScreenBloc
     on<PharmacyCardTappedEvent>(_onSelectPharmacyCard);
     on<UpdateCounterEvent>(_onUpdateCounterEvent);
     on<BookBargainProductEvent>(_onBookBargainProduct);
+  }
+
+  List<MapMarkerModel> _buildPoints(List<ProductPharmacyEntity> pharmacies) {
+    return List.generate(
+      pharmacies.length,
+      (index) {
+        final pharmacy = pharmacies[index];
+        final coordinates = pharmacy.coordinates;
+        final latString = coordinates?.split(', ')[0];
+        final lonString = coordinates?.split(', ')[1];
+        return MapMarkerModel(
+          id: pharmacy.pharmacyId!,
+          point: Point(
+            latitude: double.tryParse(latString ?? '') ?? 0,
+            longitude: double.tryParse(lonString ?? '') ?? 0,
+          ),
+          data: (pharmacy as ProductPharmacyModel).toJson(),
+        );
+      },
+    );
   }
 
   Future<void> _onLoadData(
@@ -49,25 +67,9 @@ class ValueBuyProductScreenBloc
         emit(
           state.copyWith(
             pharmacies: response.pharmacies,
-            product: response.item,
             isLoading: false,
-            points: List.generate(
-              response.pharmacies.length,
-              (index) {
-                final pharmacy = response.pharmacies[index];
-                final coordinates = pharmacy.coordinates;
-                final latString = coordinates?.split(', ')[0];
-                final lonString = coordinates?.split(', ')[1];
-
-                return MapMarkerModel(
-                    id: response.pharmacies[index].pharmacyId!,
-                    point: Point(
-                      latitude: double.tryParse(latString ?? '') ?? 0,
-                      longitude: double.tryParse(lonString ?? '') ?? 0,
-                    ),
-                    data: (pharmacy as ProductPharmacyModel).toJson());
-              },
-            ),
+            points: _buildPoints(response.pharmacies),
+            bargainProduct: response,
           ),
         );
       },
@@ -108,19 +110,20 @@ class ValueBuyProductScreenBloc
 
   void _onChangeQueryEvent(
       ChangeQueryEvent event, Emitter<ValueBuyProductScreenState> emit) {
-    final query = event.query.replaceAll(RegExp(r'[^0-9]'), '');
-
+    final query = event.query.trim().toLowerCase();
+    List<ProductPharmacyEntity> filtered;
     if (query.isEmpty) {
-      emit(state.copyWith(pharmacies: _allPharmacies));
+      filtered = state.bargainProduct?.pharmacies ?? [];
     } else {
-      final results = _allPharmacies
-          .where((item) => item.address.toString().contains(query))
+      filtered = (state.bargainProduct?.pharmacies ?? [])
+          .where((item) => (item.address ?? '').toLowerCase().contains(query))
           .toList();
-      emit(state.copyWith(
-        pharmacies: results,
-        error: results.isEmpty ? 'Нет совпадений' : null,
-      ));
     }
+    emit(state.copyWith(
+      pharmacies: filtered,
+      points: _buildPoints(filtered),
+      error: filtered.isEmpty ? 'Нет совпадений' : null,
+    ));
   }
 
   void _onChangeSelectorIndexEvent(ChangeSelectorIndexEvent event,

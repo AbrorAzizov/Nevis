@@ -12,8 +12,6 @@ part 'pharmacy_map_state.dart';
 class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
   PharmacyMapBloc() : super(PharmacyMapState()) {
     on<InitPharmacyMapEvent>((event, emit) {
-<<<<<<< HEAD
-=======
       emit(PharmacyMapState(
           points: event.points,
           mapType: event.mapType,
@@ -22,7 +20,6 @@ class PharmacyMapBloc extends Bloc<PharmacyMapEvent, PharmacyMapState> {
     });
 
     on<UpdatePharmacyMapMarkersEvent>((event, emit) {
->>>>>>> main
       emit(state.copyWith(points: event.points));
       add(UpdatePharmacyMapEvent());
     });

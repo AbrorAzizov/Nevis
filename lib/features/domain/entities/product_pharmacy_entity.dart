@@ -14,6 +14,7 @@ class ProductPharmacyEntity extends Equatable {
   final String? pharmacyAlias;
   final String? expirationDate;
   final String? pharmacyDelivery;
+  final String? phone;
 
   const ProductPharmacyEntity({
     this.price,
@@ -29,6 +30,7 @@ class ProductPharmacyEntity extends Equatable {
     this.pharmacyAlias,
     this.expirationDate,
     this.pharmacyDelivery,
+    this.phone,
   });
 
   @override
@@ -46,5 +48,6 @@ class ProductPharmacyEntity extends Equatable {
         pharmacyAlias,
         expirationDate,
         pharmacyDelivery,
+        phone,
       ];
 }

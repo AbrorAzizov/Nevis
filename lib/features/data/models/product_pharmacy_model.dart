@@ -15,6 +15,7 @@ class ProductPharmacyModel extends ProductPharmacyEntity {
     super.pharmacyAlias,
     super.expirationDate,
     super.pharmacyDelivery,
+    super.phone,
   });
 
   factory ProductPharmacyModel.fromJson(Map<String, dynamic> json) {
@@ -44,6 +45,7 @@ class ProductPharmacyModel extends ProductPharmacyEntity {
       pharmacyAlias: json["pharmacy_alias"],
       expirationDate: json["expiration_date"],
       pharmacyDelivery: json["pharmacy_delivery"],
+      phone: json["phone"],
     );
   }
 
@@ -61,5 +63,6 @@ class ProductPharmacyModel extends ProductPharmacyEntity {
         "pharmacy_alias": pharmacyAlias,
         "expiration_date": expirationDate,
         "pharmacy_delivery": pharmacyDelivery,
+        "phone": phone,
       };
 }

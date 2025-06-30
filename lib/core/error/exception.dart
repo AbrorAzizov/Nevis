@@ -179,8 +179,6 @@ class MaxProductQuantityExceededException extends ApiException {
     return MaxProductQuantityExceededException(message);
   }
 }
-<<<<<<< HEAD
-=======
 
 class DeliveryOrderException extends ApiException {
   DeliveryOrderException([String? message])
@@ -191,4 +189,3 @@ class DeliveryOrderException extends ApiException {
     return DeliveryOrderException(message);
   }
 }
->>>>>>> main

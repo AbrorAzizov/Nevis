@@ -155,17 +155,13 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   Future<SubcategoryModel> getSubCategories(SubcategoryParams params) async {
     try {
       final data = await apiClient.get(
-<<<<<<< HEAD
         endpoint: 'catalog/categories/${params.categoryId}',
         queryParameters: {
           'sort': params.sort,
           'order': params.order,
           'page': params.page.toString()
         },
-=======
         requireAuth: false,
-        endpoint: 'catalog/categories/$id',
->>>>>>> main
         exceptions: {
           401: ServerException(),
         },

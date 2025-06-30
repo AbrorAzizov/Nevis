@@ -5,7 +5,6 @@ import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
-import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/profile/orders/successfully_order/value_buy_successfully_ordered_screen.dart';
@@ -34,14 +33,14 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
   Widget build(BuildContext context) {
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final ProductEntity product = arguments['product'] as ProductEntity;
+    final int productId = arguments['productId'] as int;
 
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
         return BlocProvider(
           create: (context) => ValueBuyProductScreenBloc(
               getBargainProductUC: sl(), bookBargainProductUC: sl())
-            ..add(LoadDataEvent(productId: product.productId!)),
+            ..add(LoadDataEvent(productId: productId)),
           child: BlocBuilder<ValueBuyProductScreenBloc,
               ValueBuyProductScreenState>(
             builder: (context, state) {
@@ -80,7 +79,8 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                                         : 90),
                                 children: [
                                   SizedBox(height: 20.h),
-                                  ValueBuyProductCardWidget(product: product),
+                                  ValueBuyProductCardWidget(
+                                      product: state.bargainProduct?.item),
                                   SizedBox(height: 32.h),
                                   Text(
                                     'Доступные аптеки',
@@ -143,16 +143,18 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                                                     pharmacy,
                                                 isForList: true,
                                                 pharmacy: pharmacy!,
-                                                counter: counter,
-                                                onCounterChanged: (newCounter) {
+                                                onValueBuyPickUpCounters:
+                                                    state.counters,
+                                                onValueBuyPickUpChangedCount:
+                                                    (pharmacyId, newCounter) {
                                                   bloc.add(
                                                     UpdateCounterEvent(
-                                                      pharmacyId:
-                                                          pharmacy.pharmacyId!,
-                                                      counter: newCounter,
-                                                    ),
+                                                        pharmacyId: pharmacyId,
+                                                        counter: newCounter),
                                                   );
                                                 },
+                                                onValueBuyPickUpRequested:
+                                                    (int pharmacyId) {},
                                               ),
                                             );
                                           },
@@ -166,9 +168,22 @@ class _ValueBuyProductScreenState extends State<ValueBuyProductScreen> {
                                     )
                                   else
                                     PharmacyMapWidget(
-                                        mapType: PharmacyMapType.valueBuyMap,
-                                        points: state.points,
-                                        height: 400.h),
+                                      mapType: PharmacyMapType.valueBuyMap,
+                                      points: state.points,
+                                      height: 400.h,
+                                      onValueBuyPickUpCounters: state.counters,
+                                      onValueBuyPickUpChangedCount:
+                                          (pharmacyId, newCounter) {
+                                        bloc.add(
+                                          UpdateCounterEvent(
+                                            pharmacyId: pharmacyId,
+                                            counter: newCounter,
+                                          ),
+                                        );
+                                      },
+                                      onValueBuyPickUpRequested:
+                                          (int pharmacyId) {},
+                                    ),
                                 ],
                               ),
                               if (hasSelectedPharmacy && isList)

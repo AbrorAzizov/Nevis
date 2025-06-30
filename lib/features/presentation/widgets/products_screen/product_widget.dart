@@ -223,7 +223,9 @@ class ProductWidget extends StatelessWidget {
                                     const ValueBuyProductScreen(),
                                     settings: RouteSettings(
                                       name: Routes.valueBuyProductScreen,
-                                      arguments: {'product': product},
+                                      arguments: {
+                                        'productId': product.productId
+                                      },
                                     ),
                                   ),
                                 );

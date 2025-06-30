@@ -12,7 +12,6 @@ import 'package:nevis/core/models/map_marker_model.dart';
 import 'package:nevis/features/data/models/pharmacy_model.dart';
 import 'package:nevis/features/data/models/product_pharmacy_model.dart';
 import 'package:nevis/features/presentation/bloc/pharmacy_map/pharmacy_map_bloc.dart';
-import 'package:nevis/features/presentation/bloc/value_buy_product_screen/value_buy_product_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/address_card.dart';
 import 'package:nevis/features/presentation/widgets/favorite_pharmacies_screen/pharmacy_info_card.dart';
 import 'package:nevis/features/presentation/widgets/map/map_button.dart';
@@ -26,6 +25,10 @@ class PharmacyMapWidget extends StatefulWidget {
   final Function(Point point)? onMapTap;
   final Function()? onUnselectPoint;
 
+  final Function(int pharmacyId)? onValueBuyPickUpRequested;
+  final Function(int pharmacyId, int value)? onValueBuyPickUpChangedCount;
+  final Map<int, int>? onValueBuyPickUpCounters;
+
   const PharmacyMapWidget({
     super.key,
     required this.points,
@@ -33,6 +36,9 @@ class PharmacyMapWidget extends StatefulWidget {
     this.mapType = PharmacyMapType.defaultMap,
     this.onMapTap,
     this.onUnselectPoint,
+    this.onValueBuyPickUpRequested,
+    this.onValueBuyPickUpChangedCount,
+    this.onValueBuyPickUpCounters,
   });
 
   @override
@@ -86,17 +92,7 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
   }
 
   @override
-  void didChangeDependencies() {
-    _bloc = PharmacyMapBloc()..add(InitPharmacyMapEvent(points: widget.points));
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final valueBuyBloc = widget.mapType == PharmacyMapType.valueBuyMap
-        ? context.read<ValueBuyProductScreenBloc>()
-        : null;
-
     return BlocProvider.value(
       value: _bloc,
       child: BlocBuilder<PharmacyMapBloc, PharmacyMapState>(
@@ -128,10 +124,7 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
                           () => EagerGestureRecognizer(),
                         ),
                       },
-<<<<<<< HEAD
-=======
                       onMapTap: widget.onMapTap,
->>>>>>> main
                       mapObjects: state.markers),
                   Positioned(
                     right: 8,
@@ -199,22 +192,24 @@ class _PharmacyMapWidgetState extends State<PharmacyMapWidget> {
                                   );
                                 }
 
-                                final counter = valueBuyBloc!
-                                        .state.counters[pharmacy.pharmacyId] ??
-                                    1;
-
                                 return PharmacyProductInfoCard(
-                                  pharmacy: pharmacy,
-                                  counter: counter,
-                                  onCounterChanged: (newCounter) {
-                                    valueBuyBloc.add(
-                                      UpdateCounterEvent(
-                                        pharmacyId: pharmacy.pharmacyId!,
-                                        counter: newCounter,
-                                      ),
-                                    );
-                                  },
-                                );
+                                    pharmacy: pharmacy,
+                                    onValueBuyPickUpCounters:
+                                        widget.onValueBuyPickUpCounters ?? {},
+                                    onValueBuyPickUpChangedCount: (int
+                                                pharmacyId,
+                                            int value) =>
+                                        widget.onValueBuyPickUpChangedCount !=
+                                                null
+                                            ? widget.onValueBuyPickUpChangedCount!(
+                                                pharmacyId, value)
+                                            : null,
+                                    onValueBuyPickUpRequested: (int
+                                            pharmacyId) =>
+                                        widget.onValueBuyPickUpRequested != null
+                                            ? widget.onValueBuyPickUpRequested!(
+                                                pharmacyId)
+                                            : null);
                               },
                             ),
                           ),
