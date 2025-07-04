@@ -56,6 +56,13 @@ class ProductModel extends ProductEntity {
     final int? parsedProductId = _parseToInt(productIdField) ??
         (idField is int ? idField : _parseToInt(idField));
 
+    List<dynamic>? images = json["images"];
+
+    String? image = json["image_url"] ??
+        json["picture"] ??
+        json["image"] ??
+        (images != null && images.isNotEmpty ? images.first : null);
+
     return ProductModel(
       offerId: idField is String ? idField : null,
       productId: parsedProductId ?? 0,
@@ -77,13 +84,17 @@ class ProductModel extends ProductEntity {
       dose: json["dose"],
       form: json["form"],
       brand: json["manufacturer"],
-      image: json["image_url"] ?? json["picture"] ?? json['image'],
+      image: image,
       recipe: json["recipe"],
       country: json["country"],
       delivery: json["delivery"],
-      price: _parseToInt(json["price"]) ?? _parseToInt(json["PRICE"]) ?? 0,
+      price: _parseToInt(json["price"]) ??
+          _parseToInt(json["PRICE"]) ??
+          _parseToInt(json["original_price"]) ??
+          0,
       oldPrice: _parseToInt(json["price_old"]),
-      discount: _parseToInt(json["product_price_from_percent"]),
+      discount: _parseToInt(json["product_price_from_percent"]) ??
+          _parseToInt(json["discount_percent"]),
       parent: json["parent"],
       termin: json["termin"],
       temperature: json["temperature"],
