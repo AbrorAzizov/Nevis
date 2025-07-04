@@ -4,15 +4,15 @@ import 'package:nevis/features/domain/entities/product_entity.dart';
 class SearchProductsEntity extends Equatable {
   final int currentPage;
   final int totalPage;
-  final int totalCount;
   final int lastPage;
+  final int totalCount;
   final List<ProductEntity> products;
 
   const SearchProductsEntity({
     required this.currentPage,
     required this.totalPage,
-    required this.totalCount,
     required this.lastPage,
+    required this.totalCount,
     required this.products,
   });
 
@@ -20,15 +20,15 @@ class SearchProductsEntity extends Equatable {
   SearchProductsEntity copyWith({
     int? currentPage,
     int? totalPage,
-    int? totalCount,
     int? lastPage,
+    int? totalCount,
     List<ProductEntity>? products,
   }) {
     return SearchProductsEntity(
       currentPage: currentPage ?? this.currentPage,
       totalPage: totalPage ?? this.totalPage,
-      totalCount: totalCount ?? this.totalCount,
       lastPage: lastPage ?? this.lastPage,
+      totalCount: totalCount ?? this.totalCount,
       products: products ?? this.products,
     );
   }
@@ -37,8 +37,8 @@ class SearchProductsEntity extends Equatable {
   List<Object?> get props => [
         currentPage,
         totalPage,
+        lastPage,
         totalCount,
         products,
-        lastPage,
       ];
 }

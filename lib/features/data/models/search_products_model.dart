@@ -13,14 +13,14 @@ class SearchProductsModel extends SearchProductsEntity {
   factory SearchProductsModel.fromJson(Map<String, dynamic> json) {
     return SearchProductsModel(
       currentPage: json['currentPage'],
-      lastPage: json['lastPage'],
+      lastPage: json['totalPage'],
+      totalPage: json['totalPage'],
       totalCount: json['totalCount'],
       products: json['products'] != null
           ? (json['products'] as List)
               .map((e) => ProductModel.fromJson(e))
               .toList()
           : [],
-      totalPage: json['totalPage'],
     );
   }
 }

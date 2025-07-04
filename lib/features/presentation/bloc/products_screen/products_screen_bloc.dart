@@ -77,11 +77,11 @@ class ProductsScreenBloc
     try {
       SearchProductsEntity searchProducts = state.searchProducts ??
           SearchProductsEntity(
-            currentPage: 1,
-            lastPage: 1,
-            totalCount: products?.length ?? 0,
-            products: products ?? [],
-          );
+              currentPage: 1,
+              totalCount: products?.length ?? 0,
+              products: products ?? [],
+              totalPage: 1,
+              lastPage: 1);
       String? error;
       List<CategoryEntity> subCategories = [];
 
@@ -104,7 +104,7 @@ class ProductsScreenBloc
             searchProducts = searchProducts.copyWith(
                 products: [...oldProducts, ...r.products],
                 totalPage: r.lastPage,
-                total: r.total,
+                totalCount: r.total,
                 currentPage: currentPage);
           },
         );
@@ -148,10 +148,10 @@ class ProductsScreenBloc
           (r) {
             if (r != null) {
               searchProducts = r.copyWith(
-                products: [...oldProducts, ...r.products],
-                totalPage: r.lastPage,
-                currentPage: currentPage,
-              );
+                  products: [...oldProducts, ...r.products],
+                  totalPage: r.lastPage,
+                  currentPage: currentPage,
+                  lastPage: r.lastPage);
             }
           },
         );
