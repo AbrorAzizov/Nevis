@@ -10,6 +10,7 @@ import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/search_param.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
+import 'package:nevis/features/domain/entities/subcategory_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart'
     as fv;
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
@@ -29,22 +30,22 @@ class ProductsScreen extends StatelessWidget {
     final categoryParams = args?['categoryParams'] as CategoryParams?;
     final products = args?['products'] as List<ProductEntity>?;
     final searchParams = args?['searchParams'] as SearchParams?;
-    final productsCompilationType = args?['productsCompilationType'] as ProductsCompilationType?;
+    final productsCompilationType =
+        args?['productsCompilationType'] as ProductsCompilationType?;
     final showSortAndFilter = args?['showSortAndFilter'] as bool? ?? true;
 
     return BlocProvider(
       create: (context) => ProductsScreenBloc(
-          getCategoryProductsUC: sl(),
-          getSortCategoryProductsUC: sl(),
-          getSubCategoriesUC: sl(),
-          searchUC: sl(),
-          productsCompilationUC: sl(),
-          products: products,
-          categoryParams: categoryParams,
-          searchParams: searchParams,
-          productsCompilationType: productsCompilationType,
-      )
-        ..add(LoadProductsEvent()),
+        getCategoryProductsUC: sl(),
+        getSortCategoryProductsUC: sl(),
+        getSubCategoriesUC: sl(),
+        searchUC: sl(),
+        productsCompilationUC: sl(),
+        products: products,
+        categoryParams: categoryParams,
+        searchParams: searchParams,
+        productsCompilationType: productsCompilationType,
+      )..add(LoadProductsEvent()),
       child: BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
         builder: (context, state) {
           final bloc = context.read<ProductsScreenBloc>();
@@ -85,35 +86,38 @@ class ProductsScreen extends StatelessWidget {
                           controller: bloc.productsController,
                           child: Column(
                             children: [
-                              if(showSortAndFilter)Padding(
-                                padding:
-                                    getMarginOrPadding(left: 20, right: 20),
-                                child: FilterSortContainer(
-                                  isFromFav: false,
-                                  sortTypes: ProductSortType.values,
-                                  selectedSortType: state.selectedSortType,
-                                  onSortSelected: (sortType) {
-                                    bloc.add(SelectSortProductsType(
-                                        productSortType: sortType));
-                                  },
-                                  filterOrSortType:
-                                      state.selectedFilterOrSortType,
-                                  onConfirmFilter: () =>
-                                      bloc.add(ShowFilterProductsTypes()),
+                              if (showSortAndFilter)
+                                Padding(
+                                  padding:
+                                      getMarginOrPadding(left: 20, right: 20),
+                                  child: FilterSortContainer(
+                                    isFromFav: false,
+                                    sortTypes: ProductSortType.values,
+                                    selectedSortType: state.selectedSortType,
+                                    onSortSelected: (sortType) {
+                                      bloc.add(SelectSortProductsType(
+                                          productSortType: sortType));
+                                    },
+                                    filterOrSortType:
+                                        state.selectedFilterOrSortType,
+                                    onConfirmFilter: () =>
+                                        bloc.add(ShowFilterProductsTypes()),
+                                  ),
                                 ),
-                              ),
                               if (categoryParams?.categoryId != null)
                                 Container(
                                   margin: getMarginOrPadding(top: 16),
                                   height: 33.h,
                                   child: FilterChips(
-                                    categories: state.subCategories,
-                                    selectedCategory: state.selectedSubCategory,
-                                    onSelected: (category) {
-                                      bloc.add(SelectSubCategoryEvent(
-                                          subCategory: category));
-                                    },
-                                  ),
+                                      categories: state.subCategories,
+                                      selectedCategory:
+                                          state.selectedSubCategory,
+                                      onSelected: (category) {
+                                        bloc.add(SelectSubCategoryEvent(
+                                            subCategory: category));
+                                      },
+                                      scrollController:
+                                          bloc.subCategoriesController),
                                 ),
                               SizedBox(height: 16.h),
                               // Ваш контент
@@ -159,7 +163,7 @@ class ProductsScreen extends StatelessWidget {
 }
 
 class FilterChips extends StatelessWidget {
-  final List<CategoryEntity> categories;
+  final SubcategoryEntity? categories;
   final CategoryEntity? selectedCategory;
   final Function(CategoryEntity category) onSelected;
 
@@ -172,8 +176,6 @@ class FilterChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
-
     return SingleChildScrollView(
       controller: scrollController,
       scrollDirection: Axis.horizontal,
