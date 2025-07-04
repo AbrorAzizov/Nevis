@@ -8,7 +8,6 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/search_param.dart';
-import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/subcategory_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart'
@@ -164,14 +163,16 @@ class ProductsScreen extends StatelessWidget {
 
 class FilterChips extends StatelessWidget {
   final SubcategoryEntity? categories;
-  final CategoryEntity? selectedCategory;
-  final Function(CategoryEntity category) onSelected;
+  final GroupEntity? selectedCategory;
+  final Function(GroupEntity category) onSelected;
+  final ScrollController? scrollController;
 
   const FilterChips({
     super.key,
     required this.categories,
     required this.selectedCategory,
     required this.onSelected,
+    this.scrollController,
   });
 
   @override
@@ -191,9 +192,8 @@ class FilterChips extends StatelessWidget {
         child: Padding(
           padding: getMarginOrPadding(left: 20),
           child: Row(
-            children: categories.map((category) {
-              final bool isSelected =
-                  selectedCategory?.categoryId == category.categoryId;
+            children: (categories?.groups ?? []).map((category) {
+              final bool isSelected = selectedCategory?.id == category.id;
               return Padding(
                 padding: EdgeInsets.only(right: 12),
                 child: Container(
@@ -209,7 +209,7 @@ class FilterChips extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16.r),
                         side: BorderSide(color: Colors.transparent)),
                     showCheckmark: false,
-                    label: Text(category.pageTitle ?? ''),
+                    label: Text(category.name ?? ''),
                     selected: isSelected,
                     onSelected: (bool selected) {
                       if (selected) {
