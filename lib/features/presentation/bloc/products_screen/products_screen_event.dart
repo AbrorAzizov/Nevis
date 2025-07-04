@@ -23,10 +23,19 @@ class SelectSortProductsType extends ProductsScreenEvent {
 }
 
 class LoadSubCategoriesEvent extends ProductsScreenEvent {
-  const LoadSubCategoriesEvent();
+  final SubcategoryParams params;
+  const LoadSubCategoriesEvent(this.params);
 }
 
 class SelectSubCategoryEvent extends ProductsScreenEvent {
   final CategoryEntity subCategory;
   const SelectSubCategoryEvent({required this.subCategory});
+}
+
+class LoadNextSubCategoriesPageEvent extends ProductsScreenEvent {
+  final int page;
+  const LoadNextSubCategoriesPageEvent({required this.page});
+
+  @override
+  List<Object?> get props => [page];
 }
