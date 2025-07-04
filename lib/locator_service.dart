@@ -344,6 +344,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateSeveralFavoriteProductsUC(sl()));
   sl.registerLazySingleton(() => GetBargainProductUC(sl()));
   sl.registerLazySingleton(() => BookBargainProductUC(sl()));
+  sl.registerLazySingleton(() => ProductsCompilationUC(sl()));
 
   // Category
   sl.registerLazySingleton(() => GetCategoriesUC(sl()));
