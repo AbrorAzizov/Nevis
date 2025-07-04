@@ -7,6 +7,7 @@ import 'package:nevis/constants/extensions.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/search_param.dart';
+import 'package:nevis/core/params/subcategory_params.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/search_products_entity.dart';
@@ -133,7 +134,8 @@ class ProductsScreenBloc
               page: currentPage,
             ),
           ),
-          getSubCategoriesUC(categoryParams?.categoryId ?? state.categoryId!),
+          getSubCategoriesUC(SubcategoryParams(
+              categoryId: categoryParams?.categoryId ?? state.categoryId!)),
         ]);
 
         final failureOrProducts =
@@ -204,8 +206,8 @@ class ProductsScreenBloc
       LoadSubCategoriesEvent event, Emitter<ProductsScreenState> emit) async {
     emit(state.copyWith(isLoading: true));
     try {
-      final failureOrLoads =
-          await getSubCategoriesUC(categoryParams!.categoryId!);
+      final failureOrLoads = await getSubCategoriesUC(SubcategoryParams(
+          categoryId: categoryParams?.categoryId ?? state.categoryId!));
       failureOrLoads.fold(
           (_) => emit(
               state.copyWith(isLoading: false, error: 'Something went wrong')),
