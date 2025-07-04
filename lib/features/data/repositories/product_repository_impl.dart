@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/bargain_product_params.dart';
 import 'package:nevis/core/params/book_bargain_product_params.dart';
@@ -161,4 +162,12 @@ class ProductRepositoryImpl implements ProductRepository {
           BookBargainProductParams params) async =>
       await errorHandler.handle(
           () async => await productRemoteDataSource.bookBargainProduct(params));
+
+  @override
+  Future<Either<Failure, (List<ProductEntity>, int lastPage)>>
+      productsCompilation(
+              {required ProductsCompilationType productsCompilationType,
+              int? page}) async =>
+          await errorHandler.handle(() async => await productRemoteDataSource
+              .getProductsCompilation(productsCompilationType, page));
 }

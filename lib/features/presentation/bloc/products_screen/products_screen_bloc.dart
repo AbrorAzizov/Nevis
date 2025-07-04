@@ -35,17 +35,17 @@ class ProductsScreenBloc
 
   ScrollController productsController = ScrollController();
 
-  ProductsScreenBloc({
-    required this.getSubCategoriesUC,
-    required this.getCategoryProductsUC,
-    required this.getSortCategoryProductsUC,
-    required this.searchUC,
-    required this.productsCompilationUC,
-    this.products,
-    this.categoryParams,
-    this.searchParams,
-    this.productsCompilationType
-  }) : super(ProductsScreenState()) {
+  ProductsScreenBloc(
+      {required this.getSubCategoriesUC,
+      required this.getCategoryProductsUC,
+      required this.getSortCategoryProductsUC,
+      required this.searchUC,
+      required this.productsCompilationUC,
+      this.products,
+      this.categoryParams,
+      this.searchParams,
+      this.productsCompilationType})
+      : super(ProductsScreenState()) {
     on<LoadProductsEvent>(_onLoadProducts);
     on<ShowSortProductsTypes>(_onShowSortProductsTypes);
     on<ShowFilterProductsTypes>(_onShowFilterProductsTypes);
@@ -61,7 +61,8 @@ class ProductsScreenBloc
     // Если скроллинг достиг нижней границы, загружаем следующую страницу
     if (productsController.position.pixels ==
         productsController.position.maxScrollExtent) {
-      if (state.searchProducts!.currentPage < state.searchProducts!.lastPage && state.isLoadingProducts != true) {
+      if (state.searchProducts!.currentPage < state.searchProducts!.lastPage &&
+          state.isLoadingProducts != true) {
         // Загружаем следующую страницу
         add(LoadProductsEvent(page: state.searchProducts!.currentPage + 1));
       }
@@ -157,8 +158,7 @@ class ProductsScreenBloc
           (l) => error = 'Ошибка загрузки подкатегорий',
           (r) => subCategories = r,
         );
-      }
-      else if (productsCompilationType != null) {
+      } else if (productsCompilationType != null) {
         final currentPage =
             event.page ?? (state.searchProducts?.currentPage ?? 1);
         List<ProductEntity> oldProducts = [];
@@ -170,10 +170,13 @@ class ProductsScreenBloc
         //   searchParams!.copyWith(
         //       page: currentPage, sort: state.selectedSortType?.searchParamName),
         // );
-        final failureOrProducts = await productsCompilationUC.productRepository.productsCompilation(productsCompilationType: productsCompilationType!,page: event.page);
+        final failureOrProducts = await productsCompilationUC.productRepository
+            .productsCompilation(
+                productsCompilationType: productsCompilationType!,
+                page: event.page);
         failureOrProducts.fold(
-              (l) => error = 'Ошибка поиска товаров',
-              (r) {
+          (l) => error = 'Ошибка поиска товаров',
+          (r) {
             searchProducts = searchProducts.copyWith(
                 products: [...oldProducts, ...r.$1],
                 totalPage: r.$2,

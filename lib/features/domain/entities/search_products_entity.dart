@@ -5,12 +5,14 @@ class SearchProductsEntity extends Equatable {
   final int currentPage;
   final int totalPage;
   final int totalCount;
+  final int lastPage;
   final List<ProductEntity> products;
 
   const SearchProductsEntity({
     required this.currentPage,
     required this.totalPage,
     required this.totalCount,
+    required this.lastPage,
     required this.products,
   });
 
@@ -18,13 +20,15 @@ class SearchProductsEntity extends Equatable {
   SearchProductsEntity copyWith({
     int? currentPage,
     int? totalPage,
-    int? total,
+    int? totalCount,
+    int? lastPage,
     List<ProductEntity>? products,
   }) {
     return SearchProductsEntity(
       currentPage: currentPage ?? this.currentPage,
       totalPage: totalPage ?? this.totalPage,
-      totalCount: totalCount ?? totalCount,
+      totalCount: totalCount ?? this.totalCount,
+      lastPage: lastPage ?? this.lastPage,
       products: products ?? this.products,
     );
   }
@@ -35,5 +39,6 @@ class SearchProductsEntity extends Equatable {
         totalPage,
         totalCount,
         products,
+        lastPage,
       ];
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/services.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/params/bargain_product_params.dart';
@@ -32,6 +33,8 @@ abstract class ProductRemoteDataSource {
   Future<BargainProductModel> getBargainProduct(BargainProductParams params);
   Future<BookBargainProductResponse> bookBargainProduct(
       BookBargainProductParams params);
+  Future<(List<ProductModel>, int lastPage)> getProductsCompilation(
+      ProductsCompilationType productsCompilationType, int? page);
 }
 
 class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
@@ -283,5 +286,31 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
       callPathNameForLog: '${runtimeType.toString()}.bookBargainProduct',
     );
     return BookBargainProductResponse.fromJson(data);
+  }
+
+  @override
+  Future<(List<ProductModel>, int lastPage)> getProductsCompilation(
+      ProductsCompilationType productCompilationType, int? page) async {
+    try {
+      final data = await apiClient.get(
+          endpoint: productCompilationType == ProductsCompilationType.news
+              ? 'new-products'
+              : productCompilationType == ProductsCompilationType.populars
+                  ? 'popular-products'
+                  : 'recommended-products',
+          callPathNameForLog:
+              '${runtimeType.toString()}.getProductsCompilation',
+          queryParameters: {
+            if (page != null) 'page': page.toString(),
+          });
+      List<dynamic> dataList = data['data'];
+      return (
+        dataList.map((e) => ProductModel.fromJson(e)).toList(),
+        data['meta']['last_page'] as int
+      );
+    } catch (e) {
+      log('Error during getProductsCompilation: $e', level: 1000);
+      rethrow;
+    }
   }
 }

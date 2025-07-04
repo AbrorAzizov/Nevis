@@ -7,18 +7,20 @@ class SearchProductsModel extends SearchProductsEntity {
     required super.lastPage,
     required super.totalCount,
     required super.products,
+    required super.totalPage,
   });
 
   factory SearchProductsModel.fromJson(Map<String, dynamic> json) {
     return SearchProductsModel(
       currentPage: json['currentPage'],
-      lastPage: json['totalPage'],
+      lastPage: json['lastPage'],
       totalCount: json['totalCount'],
       products: json['products'] != null
           ? (json['products'] as List)
               .map((e) => ProductModel.fromJson(e))
               .toList()
           : [],
+      totalPage: json['totalPage'],
     );
   }
 }

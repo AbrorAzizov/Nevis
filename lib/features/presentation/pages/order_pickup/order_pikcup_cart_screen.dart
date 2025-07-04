@@ -257,6 +257,7 @@ class _OrderPickupCartScreenState extends State<OrderPickupCartScreen> {
                               totalDiscounts: state.totalDiscounts ?? 0,
                               totalBonuses: state.totalBonuses ?? 0,
                               productsTotalCount: state.cartProducts.length,
+                              price: state.totalPrice ?? 0,
                             ),
                             SizedBox(height: 16.h),
                           ],

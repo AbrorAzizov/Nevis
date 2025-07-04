@@ -88,3 +88,9 @@ enum PhoneNumberFormat {
 }
 
 enum PaymentMethod { sbp, card }
+
+enum ProductsCompilationType {
+  news,
+  populars,
+  recommends,
+}

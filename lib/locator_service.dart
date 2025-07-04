@@ -73,6 +73,10 @@ import 'package:nevis/features/domain/usecases/content/get_pharmacies.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/get_card_info.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/get_qr_code.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/register_card.dart';
+import 'package:nevis/features/domain/usecases/main/get_new_products.dart';
+import 'package:nevis/features/domain/usecases/main/get_popular_products.dart';
+import 'package:nevis/features/domain/usecases/main/get_promotions.dart';
+import 'package:nevis/features/domain/usecases/main/get_recommended_products.dart';
 import 'package:nevis/features/domain/usecases/order/create_order_for_delivery.dart';
 import 'package:nevis/features/domain/usecases/order/create_order_for_pickup.dart';
 import 'package:nevis/features/domain/usecases/order/get_pharmacies_by_cart.dart';
@@ -90,6 +94,7 @@ import 'package:nevis/features/domain/usecases/products/get_product_pharmacies.d
 import 'package:nevis/features/domain/usecases/products/get_recomendation_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_sort_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_subcategories_products.dart';
+import 'package:nevis/features/domain/usecases/products/products_compilation.dart';
 import 'package:nevis/features/domain/usecases/products/search_products.dart';
 import 'package:nevis/features/domain/usecases/products/update_favorite_products.dart';
 import 'package:nevis/features/domain/usecases/profile/delete_me.dart';
@@ -198,6 +203,10 @@ Future<void> init() async {
     () => MainScreenBloc(
       getStoriesUC: sl<GetStoriesUC>(),
       getQRCodeUC: sl<GetQRCodeUC>(),
+      getNewProductsUC: sl<GetNewProductsUC>(),
+      getPopularProductsUC: sl<GetPopularProductsUC>(),
+      getPromotionsUC: sl<GetPromotionsUC>(),
+      getRecommendedProductsUC: sl<GetRecommendedProductsUC>(),
     ),
   );
   sl.registerFactory(
@@ -206,6 +215,7 @@ Future<void> init() async {
       getCategoryProductsUC: sl<GetCategoryProductsUC>(),
       getSortCategoryProductsUC: sl<GetSortCategoryProductsUC>(),
       searchUC: sl<SearchUC>(),
+      productsCompilationUC: sl<ProductsCompilationUC>(),
     ),
   );
   sl.registerFactory(
@@ -321,6 +331,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateSeveralFavoriteProductsUC(sl()));
   sl.registerLazySingleton(() => GetBargainProductUC(sl()));
   sl.registerLazySingleton(() => BookBargainProductUC(sl()));
+
   // Category
   sl.registerLazySingleton(() => GetCategoriesUC(sl()));
   sl.registerLazySingleton(() => GetSubcategoriesUC(sl()));
@@ -356,6 +367,12 @@ Future<void> init() async {
   // Search
   sl.registerLazySingleton(() => AutocompleteSearchUC(sl()));
   sl.registerLazySingleton(() => SearchUC(sl()));
+
+  // Main
+  sl.registerLazySingleton(() => GetNewProductsUC(sl()));
+  sl.registerLazySingleton(() => GetPopularProductsUC(sl()));
+  sl.registerLazySingleton(() => GetPromotionsUC(sl()));
+  sl.registerLazySingleton(() => GetRecommendedProductsUC(sl()));
 
   //// Repository
   sl.registerLazySingleton<AuthRepository>(
