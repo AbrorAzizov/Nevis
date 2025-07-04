@@ -59,6 +59,7 @@ class ProductsScreenBloc
 
     // Добавляем слушатель для скролла
     if (products == null) productsController.addListener(_scrollListener);
+    subCategoriesController.addListener(_subCategoriesScrollListener);
   }
 
   void _scrollListener() {
@@ -119,7 +120,8 @@ class ProductsScreenBloc
                 products: [...oldProducts, ...r.products],
                 totalPage: r.lastPage,
                 totalCount: r.total,
-                currentPage: currentPage);
+                currentPage: currentPage,
+                lastPage: r.lastPage);
           },
         );
         // subCategories можно не трогать или загрузить отдельно, если нужно

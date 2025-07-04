@@ -3,7 +3,7 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/domain/entities/order_entity.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
 
 class OrderPickupSuccessScreen extends StatelessWidget {
   const OrderPickupSuccessScreen({

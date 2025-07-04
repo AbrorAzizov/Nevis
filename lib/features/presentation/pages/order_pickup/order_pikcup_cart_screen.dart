@@ -16,7 +16,7 @@ import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/cart_product_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_status_widget.dart';
 import 'package:nevis/features/presentation/widgets/favourite_products_screen/selected_products_price_info_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class OrderPickupCartScreen extends StatefulWidget {

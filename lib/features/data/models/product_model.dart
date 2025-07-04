@@ -56,7 +56,7 @@ class ProductModel extends ProductEntity {
     final int? parsedProductId = _parseToInt(productIdField) ??
         (idField is int ? idField : _parseToInt(idField));
 
-    List<dynamic>? images = json["images"];
+    List<dynamic>? images = json["images"] ?? json['image_urls'];
 
     String? image = json["image_url"] ??
         json["picture"] ??

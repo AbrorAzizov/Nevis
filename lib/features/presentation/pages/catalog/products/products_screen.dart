@@ -15,7 +15,7 @@ import 'package:nevis/features/presentation/bloc/favorite_products_screen/favori
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/filter_and_sort_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
 
 class ProductsScreen extends StatelessWidget {

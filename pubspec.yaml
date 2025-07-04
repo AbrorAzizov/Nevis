@@ -61,7 +61,8 @@ dependencies:
   flutter_local_notifications: ^19.3.0
   yandex_geocoder: ^2.3.1
   dropdown_search: ^6.0.2
-  searchfield: ^1.2.2
+  searchfield:
+    path: ./packages/searchfield
 
 dev_dependencies:
   flutter_test:

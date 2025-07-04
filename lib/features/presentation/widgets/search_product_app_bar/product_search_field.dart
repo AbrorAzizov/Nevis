@@ -48,6 +48,7 @@ class ProductSearchField extends StatelessWidget {
                 maxSuggestionBoxHeight: 124.h,
                 hint: 'Поиск товаров',
                 suggestions: [],
+                textInputAction: TextInputAction.search,
                 searchInputDecoration: SearchInputDecoration(
                     fillColor: UiConstants.whiteColor,
                     filled: true,
@@ -100,6 +101,7 @@ class ProductSearchField extends StatelessWidget {
                     bottom: Radius.circular(16.r),
                   ),
                 ),
+                keepSearchOnSelection: false,
                 onSearchTextChanged: (String query) async {
                   if (query.length < 3) return [];
                   List<ProductEntity> products =
