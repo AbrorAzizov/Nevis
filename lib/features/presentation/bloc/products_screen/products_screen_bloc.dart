@@ -8,7 +8,6 @@ import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/search_param.dart';
 import 'package:nevis/core/params/subcategory_params.dart';
-import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/search_products_entity.dart';
 import 'package:nevis/features/domain/entities/subcategory_entity.dart';
@@ -139,7 +138,7 @@ class ProductsScreenBloc
           getSortCategoryProductsUC(
             categoryParams!.copyWith(
               categoryId: int.tryParse(
-                    state.selectedSubCategory?.categoryId ?? '',
+                    state.selectedSubCategory?.id ?? '',
                   ) ??
                   state.categoryId,
               sortBy: state.selectedSortType == ProductSortType.priceDecrease
@@ -273,9 +272,8 @@ class ProductsScreenBloc
       try {
         final failureOrProducts = await getSortCategoryProductsUC(
           categoryParams!.copyWith(
-              categoryId:
-                  int.tryParse(state.selectedSubCategory?.categoryId ?? '') ??
-                      state.categoryId!,
+              categoryId: int.tryParse(state.selectedSubCategory?.id ?? '') ??
+                  state.categoryId!,
               sortBy: state.selectedSortType == ProductSortType.priceDecrease
                   ? 'desc'
                   : 'asc',

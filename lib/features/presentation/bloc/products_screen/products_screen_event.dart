@@ -28,7 +28,7 @@ class LoadSubCategoriesEvent extends ProductsScreenEvent {
 }
 
 class SelectSubCategoryEvent extends ProductsScreenEvent {
-  final CategoryEntity subCategory;
+  final GroupEntity subCategory;
   const SelectSubCategoryEvent({required this.subCategory});
 }
 
