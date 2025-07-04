@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
@@ -22,7 +23,7 @@ class NewProductsWidget extends StatelessWidget {
             ProductsScreen(),
             settings: RouteSettings(
               name: Routes.productsScreen,
-              arguments: {'title': 'Новинки', 'products': products},
+              arguments: {'title': 'Новинки', 'productsCompilationType': ProductsCompilationType.news, 'showSortAndFilter': false},
             ),
           ),
         );

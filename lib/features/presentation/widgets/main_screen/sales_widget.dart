@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/core/routes.dart';
+import 'package:nevis/features/domain/entities/promotion_entity.dart';
 import 'package:nevis/features/presentation/pages/profile/sales/sales_screen.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget2.dart';
 import 'package:nevis/features/presentation/widgets/sales_screen/sales_horizontal_list_widget.dart';
 
 class SalesWidget extends StatelessWidget {
-  const SalesWidget({super.key});
+  const SalesWidget({super.key, required this.promotions});
+  final List<PromotionEntity> promotions;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class SalesWidget extends StatelessWidget {
           ),
         );
       },
-      child: SalesHorizontalListWidget(),
+      child: SalesHorizontalListWidget(promotions: promotions,),
     );
   }
 }

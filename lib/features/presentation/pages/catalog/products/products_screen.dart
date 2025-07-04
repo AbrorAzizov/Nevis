@@ -8,14 +8,14 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/params/category_params.dart';
 import 'package:nevis/core/params/search_param.dart';
+import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
-import 'package:nevis/features/domain/entities/subcategory_entity.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart'
     as fv;
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/filter_and_sort_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -29,6 +29,8 @@ class ProductsScreen extends StatelessWidget {
     final categoryParams = args?['categoryParams'] as CategoryParams?;
     final products = args?['products'] as List<ProductEntity>?;
     final searchParams = args?['searchParams'] as SearchParams?;
+    final productsCompilationType = args?['productsCompilationType'] as ProductsCompilationType?;
+    final showSortAndFilter = args?['showSortAndFilter'] as bool? ?? true;
 
     return BlocProvider(
       create: (context) => ProductsScreenBloc(
@@ -36,9 +38,12 @@ class ProductsScreen extends StatelessWidget {
           getSortCategoryProductsUC: sl(),
           getSubCategoriesUC: sl(),
           searchUC: sl(),
+          productsCompilationUC: sl(),
           products: products,
           categoryParams: categoryParams,
-          searchParams: searchParams)
+          searchParams: searchParams,
+          productsCompilationType: productsCompilationType,
+      )
         ..add(LoadProductsEvent()),
       child: BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
         builder: (context, state) {
@@ -80,7 +85,7 @@ class ProductsScreen extends StatelessWidget {
                           controller: bloc.productsController,
                           child: Column(
                             children: [
-                              Padding(
+                              if(showSortAndFilter)Padding(
                                 padding:
                                     getMarginOrPadding(left: 20, right: 20),
                                 child: FilterSortContainer(
@@ -102,15 +107,13 @@ class ProductsScreen extends StatelessWidget {
                                   margin: getMarginOrPadding(top: 16),
                                   height: 33.h,
                                   child: FilterChips(
-                                      categories: state.subCategories,
-                                      selectedCategory:
-                                          state.selectedSubCategory,
-                                      onSelected: (category) {
-                                        bloc.add(SelectSubCategoryEvent(
-                                            subCategory: category));
-                                      },
-                                      scrollController:
-                                          bloc.subCategoriesController),
+                                    categories: state.subCategories,
+                                    selectedCategory: state.selectedSubCategory,
+                                    onSelected: (category) {
+                                      bloc.add(SelectSubCategoryEvent(
+                                          subCategory: category));
+                                    },
+                                  ),
                                 ),
                               SizedBox(height: 16.h),
                               // Ваш контент
@@ -156,21 +159,21 @@ class ProductsScreen extends StatelessWidget {
 }
 
 class FilterChips extends StatelessWidget {
-  final SubcategoryEntity? categories;
-  final GroupEntity? selectedCategory;
-  final Function(GroupEntity category) onSelected;
-  final ScrollController? scrollController;
+  final List<CategoryEntity> categories;
+  final CategoryEntity? selectedCategory;
+  final Function(CategoryEntity category) onSelected;
 
   const FilterChips({
     super.key,
     required this.categories,
     required this.selectedCategory,
     required this.onSelected,
-    this.scrollController,
   });
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController();
+
     return SingleChildScrollView(
       controller: scrollController,
       scrollDirection: Axis.horizontal,
@@ -186,8 +189,9 @@ class FilterChips extends StatelessWidget {
         child: Padding(
           padding: getMarginOrPadding(left: 20),
           child: Row(
-            children: (categories?.groups ?? []).map((category) {
-              final bool isSelected = selectedCategory?.id == category.id;
+            children: categories.map((category) {
+              final bool isSelected =
+                  selectedCategory?.categoryId == category.categoryId;
               return Padding(
                 padding: EdgeInsets.only(right: 12),
                 child: Container(
@@ -203,7 +207,7 @@ class FilterChips extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16.r),
                         side: BorderSide(color: Colors.transparent)),
                     showCheckmark: false,
-                    label: Text(category.name ?? ''),
+                    label: Text(category.pageTitle ?? ''),
                     selected: isSelected,
                     onSelected: (bool selected) {
                       if (selected) {

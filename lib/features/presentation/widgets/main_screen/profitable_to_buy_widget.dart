@@ -6,6 +6,8 @@ import 'package:nevis/features/presentation/pages/catalog/products/products_scre
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget2.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/daily_products_list_widget.dart';
 
+import '../../../../constants/enums.dart';
+
 class ProfitableToBuyWidget extends StatelessWidget {
   const ProfitableToBuyWidget({super.key, required this.products});
 
@@ -22,7 +24,7 @@ class ProfitableToBuyWidget extends StatelessWidget {
             ProductsScreen(),
             settings: RouteSettings(
               name: Routes.productsScreen,
-              arguments: {'title': 'Купить выгодно', 'products': products},
+              arguments: {'title': 'Купить выгодно', 'productsCompilationType': ProductsCompilationType.recommends, 'showSortAndFilter': false},
             ),
           ),
         );

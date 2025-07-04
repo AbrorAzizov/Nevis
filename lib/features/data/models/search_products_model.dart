@@ -4,7 +4,7 @@ import 'package:nevis/features/domain/entities/search_products_entity.dart';
 class SearchProductsModel extends SearchProductsEntity {
   const SearchProductsModel({
     required super.currentPage,
-    required super.totalPage,
+    required super.lastPage,
     required super.totalCount,
     required super.products,
   });
@@ -12,7 +12,7 @@ class SearchProductsModel extends SearchProductsEntity {
   factory SearchProductsModel.fromJson(Map<String, dynamic> json) {
     return SearchProductsModel(
       currentPage: json['currentPage'],
-      totalPage: json['totalPage'],
+      lastPage: json['totalPage'],
       totalCount: json['totalCount'],
       products: json['products'] != null
           ? (json['products'] as List)

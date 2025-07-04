@@ -14,34 +14,37 @@ class SalesCategoriesList extends StatelessWidget {
     return BlocBuilder<SalesScreenBloc, SalesScreenState>(
       builder: (context, state) {
         SalesScreenBloc salesBloc = context.read<SalesScreenBloc>();
-        List<String> categories = state.categories;
+        // List<String> categories = state.categories;
         return SizedBox(
           height: 32.h,
           child: ListView.separated(
               padding: getMarginOrPadding(left: 20, right: 20),
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                String currentCategory = categories[index];
-                return ChipWithTextWidget(
-                  title: currentCategory,
-                  textStyle: UiConstants.textStyle8,
-                  onTap: () => salesBloc.add(
-                    ChangeCategoryEvent(index),
-                  ),
-                  textColor:
-                      currentCategory == categories[state.currentCategoryIndex]
-                          ? UiConstants.whiteColor
-                          : UiConstants.darkBlue2Color,
-                  backgroundColor:
-                      currentCategory == categories[state.currentCategoryIndex]
-                          ? UiConstants.purpleColor
-                          : UiConstants.whiteColor,
-                  padding: getMarginOrPadding(
-                      top: 8, bottom: 8, right: 16, left: 16),
-                );
+                return SizedBox();
+                // String currentCategory = categories[index];
+                // return ChipWithTextWidget(
+                //   title: currentCategory,
+                //   textStyle: UiConstants.textStyle8,
+                  // onTap: () => salesBloc.add(
+                  //   ChangeCategoryEvent(index),
+                  // ),
+                  // textColor:
+                  //     currentCategory == categories[state.currentCategoryIndex]
+                  //         ? UiConstants.whiteColor
+                  //         : UiConstants.darkBlue2Color,
+                  // backgroundColor:
+                  //     currentCategory == categories[state.currentCategoryIndex]
+                  //         ? UiConstants.purpleColor
+                  //         : UiConstants.whiteColor,
+                  // padding: getMarginOrPadding(
+                  //     top: 8, bottom: 8, right: 16, left: 16),
+                // );
               },
               separatorBuilder: (context, index) => SizedBox(width: 4.w),
-              itemCount: categories.length),
+              // itemCount: categories.length,
+            itemCount: 0,
+          ),
         );
       },
     );

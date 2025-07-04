@@ -83,8 +83,7 @@ class CardWidget extends StatelessWidget {
                               ),
                             );
                           } else {
-                            Navigator.of(
-                                    context.read<HomeScreenBloc>().context!)
+                            Navigator.of(context.read<HomeScreenBloc>().context)
                                 .push(
                               Routes.createRoute(
                                 const LoginScreenWithPhoneCall(

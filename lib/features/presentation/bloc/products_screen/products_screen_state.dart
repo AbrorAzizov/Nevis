@@ -2,19 +2,19 @@ part of 'products_screen_bloc.dart';
 
 class ProductsScreenState extends Equatable {
   final SearchProductsEntity? searchProducts;
-  final SubcategoryEntity? subCategories;
+  final List<CategoryEntity> subCategories;
   final ProductSortType? selectedSortType;
   final ProductFilterOrSortType? selectedFilterOrSortType;
   final bool isLoading;
   final bool isLoadingProducts;
   final String error;
-  final GroupEntity? selectedSubCategory;
+  final CategoryEntity? selectedSubCategory;
   final int? categoryId;
 
   const ProductsScreenState({
     this.error = '',
     this.selectedSubCategory,
-    this.subCategories,
+    this.subCategories = const [],
     this.searchProducts,
     this.selectedFilterOrSortType,
     this.selectedSortType = ProductSortType.popularity,
@@ -25,12 +25,12 @@ class ProductsScreenState extends Equatable {
 
   ProductsScreenState copyWith({
     SearchProductsEntity? searchProducts,
-    SubcategoryEntity? subCategories,
+    List<CategoryEntity>? subCategories,
     ProductSortType? selectedSortType,
     ProductFilterOrSortType? selectedFilterOrSortType,
     bool? isLoading,
     bool? isLoadingProducts,
-    GroupEntity? selectedSubCategory,
+    CategoryEntity? selectedSubCategory,
     String? error,
     int? categoryId,
   }) {
