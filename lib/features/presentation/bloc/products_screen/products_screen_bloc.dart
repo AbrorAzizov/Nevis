@@ -11,6 +11,7 @@ import 'package:nevis/core/params/subcategory_params.dart';
 import 'package:nevis/features/domain/entities/category_entity.dart';
 import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/search_products_entity.dart';
+import 'package:nevis/features/domain/entities/subcategory_entity.dart';
 import 'package:nevis/features/domain/usecases/products/get_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_sort_category_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_subcategories_products.dart';
@@ -83,7 +84,7 @@ class ProductsScreenBloc
               totalPage: 1,
               lastPage: 1);
       String? error;
-      List<CategoryEntity> subCategories = [];
+      SubcategoryEntity? subCategories;
 
       if (searchParams != null) {
         // Новый алгоритм поиска по searchParams
@@ -141,7 +142,7 @@ class ProductsScreenBloc
         final failureOrProducts =
             results[0] as Either<Failure, SearchProductsEntity?>;
         final failureOrSubCategories =
-            results[1] as Either<Failure, List<CategoryEntity>>;
+            results[1] as Either<Failure, SubcategoryEntity>;
 
         failureOrProducts.fold(
           (l) => error = 'Ошибка загрузки продуктов',
