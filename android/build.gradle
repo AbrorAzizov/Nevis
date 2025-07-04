@@ -7,8 +7,8 @@ buildscript {
     }
     dependencies {
         // Обновление AGP
-        classpath 'com.android.tools.build:gradle:8.1.0'  // Обновить до версии 8.1.0 или выше
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0'  // Проверьте актуальность Kotlin
+        classpath 'com.android.tools.build:gradle:8.11.0'  // Обновить до версии 8.1.0 или выше
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0'  // Проверьте актуальность Kotlin
     }
 }
 

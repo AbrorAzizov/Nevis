@@ -18,7 +18,6 @@ import 'package:nevis/features/presentation/bloc/route_observer/route_observer_b
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/bottom_navigation_bar_tile.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/internet_no_internet_connection_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_screen/search_screen.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -148,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ],
                                   ),
-                                  if (searchState.isExpanded)
+                                  /*if (searchState.isExpanded)
                                     Positioned(
                                       top: 50.h,
                                       child: SearchScreen(
@@ -162,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           FocusNode(),
                                         ),
                                       ),
-                                    ),
+                                    ),*/
                                   Positioned(
                                     child: Container(
                                       padding: getMarginOrPadding(

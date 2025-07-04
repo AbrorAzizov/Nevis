@@ -19,7 +19,7 @@ import 'package:nevis/features/presentation/widgets/main_screen/qr_code_widget.d
 import 'package:nevis/features/presentation/widgets/main_screen/recommended/recommended_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/sales_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/stories/story_list_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
