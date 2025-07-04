@@ -296,4 +296,34 @@ class ProductsScreenBloc
       emit(state.copyWith(isLoading: true));
     }
   }
+
+  Future<void> _onLoadNextSubCategoriesPage(
+    LoadNextSubCategoriesPageEvent event,
+    Emitter<ProductsScreenState> emit,
+  ) async {
+    try {
+      final currentSubCategories = state.subCategories;
+      final failureOrLoads = await getSubCategoriesUC(
+        SubcategoryParams(
+            categoryId: categoryParams?.categoryId ?? state.categoryId!,
+            page: event.page),
+      );
+      failureOrLoads.fold(
+        (_) => emit(state.copyWith(
+            isLoading: false, error: 'Ошибка загрузки подкатегорий')),
+        (newSubCategories) {
+          final mergedGroups = [
+            ...?currentSubCategories?.groups,
+            ...?newSubCategories.groups,
+          ];
+          emit(state.copyWith(
+            subCategories: newSubCategories.copyWith(groups: mergedGroups),
+            isLoading: false,
+          ));
+        },
+      );
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: e.toString()));
+    }
+  }
 }
