@@ -8,7 +8,7 @@ class ProductsScreenState extends Equatable {
   final bool isLoading;
   final bool isLoadingProducts;
   final String error;
-  final CategoryEntity? selectedSubCategory;
+  final GroupEntity? selectedSubCategory;
   final int? categoryId;
 
   const ProductsScreenState({
@@ -30,7 +30,7 @@ class ProductsScreenState extends Equatable {
     ProductFilterOrSortType? selectedFilterOrSortType,
     bool? isLoading,
     bool? isLoadingProducts,
-    CategoryEntity? selectedSubCategory,
+    GroupEntity? selectedSubCategory,
     String? error,
     int? categoryId,
   }) {
