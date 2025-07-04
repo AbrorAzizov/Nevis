@@ -51,11 +51,8 @@ class _SplashScreenState extends State<SplashScreen> {
           }
         },
         child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 0,
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-          ),
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.transparent),
           body: Container(
             width: double.infinity,
             decoration: BoxDecoration(

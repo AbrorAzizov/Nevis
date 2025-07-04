@@ -14,12 +14,14 @@ import 'package:nevis/features/data/datasources/category_remote_data_source_impl
 import 'package:nevis/features/data/datasources/content_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/loyalty_card_local_source.dart';
 import 'package:nevis/features/data/datasources/loyalty_card_remote_source.dart';
+import 'package:nevis/features/data/datasources/main_remote_data_source.dart';
 import 'package:nevis/features/data/datasources/order_local_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/order_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/pharmacy_remote_data_soruce_impl.dart';
 import 'package:nevis/features/data/datasources/product_local_data_soruce.dart';
 import 'package:nevis/features/data/datasources/product_remote_data_source_impl.dart';
 import 'package:nevis/features/data/datasources/profile_remote_data_source_impl.dart';
+import 'package:nevis/features/data/datasources/promotion_remote_data_source.dart';
 import 'package:nevis/features/data/datasources/region_remote_soruce.dart';
 import 'package:nevis/features/data/datasources/search_remote_data_source.dart';
 import 'package:nevis/features/data/datasources/story_remote_data_source_impl.dart';
@@ -28,10 +30,12 @@ import 'package:nevis/features/data/repositories/cart_repository_impl.dart';
 import 'package:nevis/features/data/repositories/category_repository_impl.dart';
 import 'package:nevis/features/data/repositories/content_repository_impl.dart';
 import 'package:nevis/features/data/repositories/loyalty_card_repository_impl.dart';
+import 'package:nevis/features/data/repositories/main_repository_impl.dart';
 import 'package:nevis/features/data/repositories/order_repository_impl.dart';
 import 'package:nevis/features/data/repositories/pharmacy_repository_impl.dart';
 import 'package:nevis/features/data/repositories/product_repository_impl.dart';
 import 'package:nevis/features/data/repositories/profile_repository_impl.dart';
+import 'package:nevis/features/data/repositories/promotion_repository_impl.dart';
 import 'package:nevis/features/data/repositories/region_respository_impl.dart';
 import 'package:nevis/features/data/repositories/search_repository_impl.dart';
 import 'package:nevis/features/data/repositories/story_repository_impl.dart';
@@ -40,10 +44,12 @@ import 'package:nevis/features/domain/repositories/cart_repository.dart';
 import 'package:nevis/features/domain/repositories/category_repository.dart';
 import 'package:nevis/features/domain/repositories/content_repository.dart';
 import 'package:nevis/features/domain/repositories/loyalty_card_repository.dart';
+import 'package:nevis/features/domain/repositories/main_repository.dart';
 import 'package:nevis/features/domain/repositories/order_repository.dart';
 import 'package:nevis/features/domain/repositories/pharmacy_repository.dart';
 import 'package:nevis/features/domain/repositories/product_repository.dart';
 import 'package:nevis/features/domain/repositories/profile_repository.dart';
+import 'package:nevis/features/domain/repositories/promotion_repository.dart';
 import 'package:nevis/features/domain/repositories/region_repository.dart';
 import 'package:nevis/features/domain/repositories/search_repository.dart';
 import 'package:nevis/features/domain/repositories/story_repository.dart';
@@ -100,6 +106,7 @@ import 'package:nevis/features/domain/usecases/products/update_favorite_products
 import 'package:nevis/features/domain/usecases/profile/delete_me.dart';
 import 'package:nevis/features/domain/usecases/profile/get_me.dart';
 import 'package:nevis/features/domain/usecases/profile/update_me.dart';
+import 'package:nevis/features/domain/usecases/promotion/get_promotion.dart';
 import 'package:nevis/features/domain/usecases/regions/get_regions.dart';
 import 'package:nevis/features/domain/usecases/regions/select_region.dart';
 import 'package:nevis/features/domain/usecases/search/autocomplete_search.dart';
@@ -127,6 +134,7 @@ import 'package:nevis/features/presentation/bloc/product_screen/product_screen_b
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/profile_screen/profile_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/register_bonus_card_screen/register_bonus_card_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/sale_screen/sale_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/search_screen/search_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/sign_up_screen/sign_up_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/splash_screen/splash_screen_bloc.dart';
@@ -286,6 +294,11 @@ Future<void> init() async {
     () => OrderDeliveryPersonalDataBloc(
         getMeUC: sl(), createOrderForDeliveryUC: sl()),
   );
+  sl.registerLazySingleton(
+    () => SaleScreenBloc(
+      getPromotionUC: sl(),
+    ),
+  );
 
   //// UseCases
 
@@ -374,6 +387,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPromotionsUC(sl()));
   sl.registerLazySingleton(() => GetRecommendedProductsUC(sl()));
 
+  // Promotion
+  sl.registerLazySingleton(() => GetPromotionUC(sl()));
+
   //// Repository
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
@@ -461,6 +477,22 @@ Future<void> init() async {
   sl.registerLazySingleton<SearchRepository>(
     () => SearchRepositoryImpl(
       remoteDataSource: sl(),
+      networkInfo: sl(),
+      errorHandler: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<PromotionRepository>(
+    () => PromotionRepositoryImpl(
+      promotionRemoteDataSource: sl(),
+      networkInfo: sl(),
+      errorHandler: sl(),
+    ),
+  );
+
+  sl.registerLazySingleton<MainRepository>(
+    () => MainRepositoryImpl(
+      mainRemoteDataSource: sl(),
       networkInfo: sl(),
       errorHandler: sl(),
     ),
@@ -559,8 +591,17 @@ Future<void> init() async {
       apiClient: sl(),
     ),
   );
+
   sl.registerLazySingleton<CartLocalDataSource>(
     () => CartLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
+  sl.registerLazySingleton<PromotionRemoteDataSource>(
+    () => PromotionRemoteDataSourceImpl(apiClient: sl()),
+  );
+
+  sl.registerLazySingleton<MainRemoteDataSource>(
+    () => MainRemoteDataSourceImpl(apiClient: sl()),
   );
 
   //// Core

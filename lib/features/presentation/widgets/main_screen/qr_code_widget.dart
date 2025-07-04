@@ -8,6 +8,7 @@ import 'package:nevis/constants/paths.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/features/domain/entities/loyalty_card_entity.dart';
+import 'package:nevis/features/presentation/widgets/main_screen/qr_code_zoom_widget.dart';
 
 class QrCodeWidget extends StatelessWidget {
   const QrCodeWidget({super.key, required this.loyaltyCardQREntity});
@@ -97,13 +98,23 @@ class QrCodeWidget extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16.h),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4.r),
-                border: Border.all(width: 4, color: UiConstants.purpleColor),
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => QrCodeZoomWidget(bytes: bytes));
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.r),
+                  border: Border.all(width: 4, color: UiConstants.purpleColor),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Image.memory(
+                      width: double.infinity, fit: BoxFit.fill, bytes),
+                ),
               ),
-              child:
-                  Image.memory(width: double.infinity, fit: BoxFit.fill, bytes),
             ),
           ],
         ),
