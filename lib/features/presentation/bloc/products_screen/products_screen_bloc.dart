@@ -37,6 +37,8 @@ class ProductsScreenBloc
 
   ScrollController productsController = ScrollController();
 
+  ScrollController subCategoriesController = ScrollController();
+
   ProductsScreenBloc(
       {required this.getSubCategoriesUC,
       required this.getCategoryProductsUC,
@@ -54,6 +56,7 @@ class ProductsScreenBloc
     on<SelectSortProductsType>(_onSelectSortProductsType);
     on<LoadSubCategoriesEvent>(_onLoadSubCategories);
     on<SelectSubCategoryEvent>(_onSelectSubCategory);
+    on<LoadNextSubCategoriesPageEvent>(_onLoadNextSubCategoriesPage);
 
     // Добавляем слушатель для скролла
     if (products == null) productsController.addListener(_scrollListener);
@@ -68,6 +71,17 @@ class ProductsScreenBloc
         // Загружаем следующую страницу
         add(LoadProductsEvent(page: state.searchProducts!.currentPage + 1));
       }
+    }
+  }
+
+  void _subCategoriesScrollListener() {
+    final subCategories = state.subCategories;
+    if (subCategories != null &&
+        subCategoriesController.position.pixels ==
+            subCategoriesController.position.maxScrollExtent &&
+        (subCategories.currentPage ?? 1) < (subCategories.totalPage ?? 1)) {
+      add(LoadNextSubCategoriesPageEvent(
+          page: (subCategories.currentPage ?? 1) + 1));
     }
   }
 
