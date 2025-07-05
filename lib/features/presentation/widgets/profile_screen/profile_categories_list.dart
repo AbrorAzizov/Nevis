@@ -8,7 +8,8 @@ import 'package:nevis/core/routes.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/pages/profile/docs_and_instructions_screen.dart';
-import 'package:nevis/features/presentation/pages/profile/favorite_pharmacy_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/favorite_pharmacies_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/how_place_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/orders/orders_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/personal_data_screen.dart';
@@ -112,6 +113,36 @@ class ProfileCategoriesList extends StatelessWidget {
                     RouteSettings(name: Routes.docsAndInsctructionsScreen),
               ),
             ),
+          ),
+          SizedBox(height: 8.h),
+          SubcategoryItem(
+            title: 'Любимые товары',
+            titleStyle: UiConstants.textStyle3,
+            imagePath: Paths.favouriteProductsIconPath,
+            onTap: () {
+              String? token = sl<SharedPreferences>()
+                  .getString(SharedPreferencesKeys.accessToken);
+              if (token != null) {
+                Navigator.of(context).push(
+                  Routes.createRoute(
+                    const FavoriteProductsScreen(),
+                    settings: RouteSettings(name: Routes.favouriteProducts),
+                  ),
+                );
+              } else {
+                Navigator.of(context.read<HomeScreenBloc>().context!).push(
+                  Routes.createRoute(
+                    const LoginScreenWithPhoneCall(
+                      canBack: true,
+                    ),
+                    settings: RouteSettings(
+                      name: Routes.loginScreenPhoneCall,
+                      arguments: {'redirect_type': LoginScreenType.login},
+                    ),
+                  ),
+                );
+              }
+            },
           ),
           SizedBox(height: 8.h),
           SubcategoryItem(

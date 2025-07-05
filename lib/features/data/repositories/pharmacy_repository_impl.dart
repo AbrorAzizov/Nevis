@@ -20,4 +20,19 @@ class PharmacyRepositoryImpl extends PharmacyRepository {
   Future<Either<Failure, List<PharmacyEntity>>> getFavoritePharmacies() async =>
       await errorHandler.handle(
           () async => await pharmacyRemoteDataSource.getFavoritePharmacies());
+
+  @override
+  Future<Either<Failure, List<PharmacyEntity>>> getPharmacies() async =>
+      await errorHandler
+          .handle(() async => await pharmacyRemoteDataSource.getPharmacies());
+
+  @override
+  Future<Either<Failure, void>> addToFavoritesPharmacy(int id) async =>
+      await errorHandler.handle(() async =>
+          await pharmacyRemoteDataSource.addToFavoritesPharmacy(id));
+
+  @override
+  Future<Either<Failure, void>> removeFromFavoritesPharmacy(int id) async =>
+      await errorHandler.handle(() async =>
+          await pharmacyRemoteDataSource.removeFromFavoritesPharmacy(id));
 }

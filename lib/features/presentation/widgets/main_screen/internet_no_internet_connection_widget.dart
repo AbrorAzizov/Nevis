@@ -9,7 +9,7 @@ import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/presentation/bloc/no_internet_connection/no_internet_connection_bloc.dart';
 import 'package:nevis/features/presentation/bloc/orders_screen/orders_screen_bloc.dart';
-import 'package:nevis/features/presentation/pages/profile/favorite_pharmacy_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/favorite_pharmacies_screen.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/qr_code_widget.dart';
 import 'package:nevis/features/presentation/widgets/orders_screen/order_item.dart';
 import 'package:nevis/locator_service.dart';

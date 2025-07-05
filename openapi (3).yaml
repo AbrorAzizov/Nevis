@@ -63,10 +63,12 @@ paths:
             schema:
               oneOf:
                 -
-                  properties: { phone_number: { type: string, example: '+7 999 123 45 67' }, verification_code: { type: string, example: '1234' } }
+                  required: [phone_number, verification_code, fcm_token]
+                  properties: { phone_number: { type: string, example: '+7 999 123 45 67' }, verification_code: { type: string, example: '1234' }, fcm_token: { type: string, example: dfgsfser4345retfsgvsfg } }
                   type: object
                 -
-                  properties: { service: { type: string, enum: [yandex, vk], example: yandex }, access_token: { type: string, example: y0_AgAAAABPkdsfkjdfkndsgk98Ht7e3pAArAqmXNYtcMGjYLHcX4Eo92h5tgj4S6LnMdYHFbhXg7b1_KPSMtXu8TYC5hA } }
+                  required: [service, access_token, fcm_token]
+                  properties: { service: { type: string, enum: [yandex, vk], example: yandex }, access_token: { type: string, example: y0_AgAAAABPkdsfkjdfkndsgk98Ht7e3pAArAqmXNYtcMGjYLHcX4Eo92h5tgj4S6LnMdYHFbhXg7b1_KPSMtXu8TYC5hA }, fcm_token: { type: string, example: dfgsfser4345retfsgvsfg } }
                   type: object
       responses:
         '200':
@@ -219,6 +221,126 @@ paths:
                 type: object
         '404':
           description: 'Баннер не найден'
+  '/api/app/bargain/items/{item_id}':
+    get:
+      tags:
+        - 'Купить выгодно'
+      summary: "Получение информации о товаре из категории 'Купить выгодно'"
+      description: 'Возвращает подробную информацию о товаре и список аптек, где он доступен по сниженной цене'
+      operationId: 26c56a4c862689c784e7c6f3c7f9d1d2
+      parameters:
+        -
+          name: item_id
+          in: path
+          description: 'Уникальный идентификатор товара'
+          required: true
+          schema:
+            type: string
+        -
+          name: view_mode
+          in: query
+          description: 'Режим отображения аптек (list или map)'
+          required: false
+          schema:
+            type: string
+            enum:
+              - list
+              - map
+        -
+          name: region_id
+          in: query
+          description: 'ID региона для режима списка'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  item: { properties: { id: { type: string }, name: { type: string }, image_url: { type: string }, discounted_price: { type: number }, original_price: { type: number }, expiration_date: { type: string } }, type: object }
+                  pharmacies: { type: array, items: { properties: { id: { type: string }, name: { type: string }, address: { type: string }, phone: { type: string }, working_hours: { properties: { open: { type: string }, close: { type: string } }, type: object }, time_to_open_close: { type: string }, availability: { type: boolean }, coordinates: { properties: { longitude: { type: string }, latitude: { type: string } }, type: object } }, type: object } }
+                type: object
+        '400':
+          description: 'Некорректные параметры запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '404':
+          description: 'Товар не найден'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
+  /api/app/bargain/discounts/book:
+    post:
+      tags:
+        - 'Купить выгодно'
+      summary: "Бронирование товара из категории 'Купить выгодно'"
+      description: 'Бронирует товар с истекающим сроком годности в выбранной аптеке'
+      operationId: 38da59248ad9c18a66fd74ae9781f534
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - product_id
+                - pharmacy_id
+                - quantity
+              properties:
+                product_id:
+                  description: 'Уникальный идентификатор товара'
+                  type: string
+                pharmacy_id:
+                  description: 'Уникальный идентификатор выбранной аптеки'
+                  type: string
+                quantity:
+                  description: 'Количество товара'
+                  type: integer
+              type: object
+      responses:
+        '200':
+          description: 'Успешное бронирование'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string }
+                  order_id: { type: integer }
+                  total_price: { type: number }
+                type: object
+        '400':
+          description: 'Ошибка бронирования'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '401':
+          description: 'Пользователь не авторизован'
+        '404':
+          description: 'Товар или аптека не найдены'
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
   /api/app/cart:
     get:
       tags:
@@ -560,7 +682,7 @@ paths:
       tags:
         - Каталог
       summary: 'Получение всех продуктов для конкретной категории'
-      description: 'Возвращает список всех продуктов для указанной категории'
+      description: 'Возвращает список всех продуктов для указанной категории с возможностью фильтрации'
       operationId: 198bd52951129492396a81ec1a46a702
       parameters:
         -
@@ -591,6 +713,23 @@ paths:
             enum:
               - asc
               - desc
+        -
+          name: filters
+          in: query
+          description: "JSON строка с фильтрами. Ключи - ID фильтров, значения - ID выбранных опций. Доступные фильтры:\n\n    **133 - Группа:**\n    - 8261: УХОД ЗА БОЛЬНЫМИ\n    - 8263: ПЕРВАЯ ПОМОЩЬ\n    - 19679: ЗАЩИТА ОТ ВИРУСОВ И БАКТЕРИЙ\n    - 8253: ИНТИМНАЯ ЖИЗНЬ\n\n    **168 - Вид замены:**\n    - 16090: САЛФЕТКА СПИРТОВАЯ\n    - 3390: БАКТЕРИЦИДНЫЙ ПЛАСТЫРЬ\n    - 3173: МАСКИ ОДНОРАЗОВЫЕ\n\n    **234 - Продаётся на сайте:**\n    - 19576: Да\n\n    **316 - Производитель (по эталону):**\n    - 22846: Новамед ООО\n    - 22689: Верофарм\n    - 20215: росс\n    - 22930: Спектрум\n\n    **162 - Подгруппа замены:**\n    - 9539: ПЕРЕВЯЗОЧНЫЕ СРЕДСТВА\n    - 9484: ПРЕЗЕРВАТИВЫ\n\n    **315 - Бренд:**\n    - 20718: Верофарм\n\n    **309 - Не обновлять цены из 1С:**\n    - 20144: Да\n\n    **142 - Форма для проблемы:**\n    - 19477: ПЛАСТЫРИ"
+          required: false
+          schema:
+            type: string
+          examples:
+            single_filter:
+              summary: 'Один фильтр - группа'
+              value: '{"133":"8261"}'
+            multiple_filters:
+              summary: 'Несколько фильтров'
+              value: '{"133":"8261","234":"19576"}'
+            complex_filters:
+              summary: 'Комплексная фильтрация'
+              value: '{"133":"19679","168":"3173","234":"19576","316":"22689"}'
       responses:
         '200':
           description: 'Успешный ответ'
@@ -1009,13 +1148,13 @@ paths:
       security:
         -
           bearer: []
-  '/api/app/loyalty-card/{card_id}/qr-code':
+  /api/app/loyalty-card/qr-code:
     get:
       tags:
         - 'Карты лояльности'
       summary: 'Получение QR-кода карты лояльности'
       description: 'Генерирует QR-код для зарегистрированной карты лояльности'
-      operationId: 7f0975acfb9809aaba40f426f6bda7a1
+      operationId: 75e7a7a61b84a8b9070a3818569e1f50
       parameters:
         -
           name: card_id
@@ -1052,13 +1191,13 @@ paths:
       security:
         -
           bearer: []
-  '/api/app/loyalty-card/{card_id}':
+  /api/app/loyalty-card:
     get:
       tags:
         - 'Карты лояльности'
       summary: 'Получение информации о карте лояльности'
       description: 'Возвращает данные о карте лояльности'
-      operationId: 7c153788bf83b0bdb492b7abf351ba9c
+      operationId: 0284ab43a7a9a0e47965c2f94dc59187
       parameters:
         -
           name: card_id
@@ -1095,6 +1234,75 @@ paths:
       security:
         -
           bearer: []
+  /api/app/new-products:
+    get:
+      tags:
+        - 'Новые продукты'
+      summary: 'Получить список новых продуктов'
+      operationId: 420a947c531b4c46f8b13f4812c9e726
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество элементов на странице'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        -
+          name: include_details
+          in: query
+          description: 'Включить детали продукта'
+          required: false
+          schema:
+            type: boolean
+            default: true
+        -
+          name: all
+          in: query
+          description: 'Получить все новые продукты без пагинации'
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 'Список новых продуктов'
+  '/api/app/new-products/{id}':
+    get:
+      tags:
+        - 'Новые продукты'
+      summary: 'Получить новый продукт по ID'
+      operationId: adc348ad67687203f8a9d3719e38e16c
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID нового продукта'
+          required: true
+          schema:
+            type: integer
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продукта'
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Информация о новом продукте'
+        '404':
+          description: 'Новый продукт не найден'
   /api/app/orders:
     get:
       tags:
@@ -1230,29 +1438,33 @@ paths:
     post:
       tags:
         - Заказы
-      summary: 'Создание заказа'
-      description: 'Создание нового заказа с выбором типа доставки'
+      summary: 'Создание заказа или оформление доставки'
+      description: 'Создание нового заказа с товарами или оформление доставки существующего заказа'
       operationId: 5496f886be8f6757bc24ff229f7df9f6
       requestBody:
         content:
           application/json:
             schema:
-              required:
-                - items
-              properties:
-                items:
-                  type: array
-                  items: { properties: { product_id: { type: string }, quantity: { type: string }, type: { type: string, enum: [available, available_on_request, not_available] } }, type: object }
-              type: object
+              oneOf:
+                -
+                  title: 'Создание заказа с товарами'
+                  required: [items]
+                  properties: { items: { type: array, items: { properties: { product_id: { type: string }, quantity: { type: string }, type: { type: string, enum: [available, available_on_request, not_available] } }, type: object } } }
+                  type: object
+                -
+                  title: 'Оформление доставки'
+                  required: [address, date_delivery, time_delivery, order_type]
+                  properties: { address: { type: string, example: 'Санкт-Петербург, улица Дыбенко, 23к1' }, date_delivery: { type: string, example: 19.05.2025 }, time_delivery: { type: string, example: '21:37' }, order_type: { type: string, enum: [delivery, pickup] }, LON: { type: string, example: '59.904193' }, LAT: { type: string, example: '30.474088' } }
+                  type: object
       responses:
         '200':
           description: 'Успешный ответ'
           content:
             application/json:
               schema:
-                properties:
-                  success: { properties: { orders: { properties: { available_on_request: { type: array, items: { properties: { price: { type: integer }, discountPrice: { type: integer }, sumPrice: { type: integer }, sumDiscountPrice: { type: integer }, price_nevis: { type: integer }, price_nevis_discount: { type: integer }, name: { type: string }, link: { type: string }, image: { type: string, nullable: true }, recipe: { type: string, nullable: true }, isDelivery: { type: boolean }, amount: { type: string }, maxAmount: { type: integer }, id: { type: string }, expires: { type: string }, discounts: { properties: { QUANTITY: { type: string }, PRICE: { type: integer }, CURRENCY: { type: string }, PRICE_TYPE_ID: { type: string }, PROPERTIES: { type: object }, HOME_DELIVERY_IS_RECIPE: { type: boolean }, HOME_DELIVERY: { type: boolean }, PAY_QUANTITY: { type: string }, SUM_FULL_PRICE: { type: integer }, SUM_FULL_PRICE_WITHOUT_DISCOUNT: { type: integer }, SUM_PRICE: { type: integer }, SUM_DISCOUNT_PRICE: { type: integer }, SUM_FULL_PRICE_FORMATED: { type: string }, SUM_FULL_PRICE_WITHOUT_DISCOUNT_FORMATED: { type: string }, SUM_DISCOUNT_PRICE_FORMATED: { type: string }, DISCOUNT_PRICE_PERCENT: { type: integer }, DISCOUNT_PRICE_PERCENT_FORMATED: { type: string }, PROPS: { type: object } }, type: object }, productId: { type: string }, externalId: { type: string } }, type: object } } }, type: object } }, type: object }
-                type: object
+                oneOf:
+                  - { title: 'Ответ при создании заказа с товарами', properties: { success: { properties: { orders: { properties: { available_on_request: { type: array, items: { properties: { price: { type: integer }, discountPrice: { type: integer }, sumPrice: { type: integer }, sumDiscountPrice: { type: integer }, name: { type: string }, link: { type: string }, image: { type: string, nullable: true }, id: { type: string }, amount: { type: string } }, type: object } } }, type: object } }, type: object } }, type: object }
+                  - { title: 'Ответ при оформлении доставки', properties: { address: { type: string, example: 'Санкт-Петербург, улица Дыбенко, 23к1' }, time_delivery: { type: string, example: '21:37 - 22:37' }, sum: { type: number, example: 242 }, economy: { type: number, example: 0 }, delivery_price: { type: number, example: 167 }, sum_with_delivery: { type: number, example: 409 }, bonuses: { type: number, example: 0 }, items: { type: array, items: { properties: { sumPrice: { type: number }, sumDiscountPrice: { type: number }, price: { type: number }, discountPrice: { type: number }, amount: { type: integer }, id: { type: string }, name: { type: string }, link: { type: string }, image: { type: string } }, type: object } }, orderId: { type: string, example: '436108' }, redirect_url: { type: string, example: 'https://sbox.payecom.ru/pay_ru?orderId=fd58479f-32a4-590d-1a23-40e70d053ab8' } }, type: object }
         '400':
           description: 'Нарушены правила оформления заказа'
           content:
@@ -1568,6 +1780,75 @@ paths:
                 properties:
                   error: { type: string }
                 type: object
+  /api/app/popular-products:
+    get:
+      tags:
+        - 'Популярные продукты'
+      summary: 'Получить список популярных продуктов'
+      operationId: 7ae75b071587d5c8ed286cef740d3b56
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество элементов на странице'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        -
+          name: include_details
+          in: query
+          description: 'Включить детали продукта'
+          required: false
+          schema:
+            type: boolean
+            default: true
+        -
+          name: all
+          in: query
+          description: 'Получить все популярные продукты без пагинации'
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 'Список популярных продуктов'
+  '/api/app/popular-products/{id}':
+    get:
+      tags:
+        - 'Популярные продукты'
+      summary: 'Получить популярный продукт по ID'
+      operationId: 1d7b152e7e020cc6e8e4af02d09024c3
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID популярного продукта'
+          required: true
+          schema:
+            type: integer
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продукта'
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Информация о популярном продукте'
+        '404':
+          description: 'Популярный продукт не найден'
   /api/app/promotions:
     get:
       tags:
@@ -1591,6 +1872,22 @@ paths:
           schema:
             type: integer
             default: 10
+        -
+          name: include_products
+          in: query
+          description: 'Включить информацию о продуктах'
+          required: false
+          schema:
+            type: boolean
+            default: false
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продуктов из API'
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: 'Список акций'
@@ -1598,7 +1895,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  data: { type: array, items: { properties: { id: { type: integer }, title: { type: string }, image_url: { type: string }, link: { type: string }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object } }
+                  data: { type: array, items: { properties: { id: { type: integer }, title: { type: string }, description: { type: string }, image_url: { type: string }, link: { type: string }, products: { type: array, items: { properties: { id: { type: integer }, name: { type: string }, original_price: { type: number }, promotional_price: { type: number }, discount_percent: { type: number }, image_url: { type: string } }, type: object } }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object } }
                   meta: { properties: { current_page: { type: integer }, per_page: { type: integer }, total: { type: integer }, last_page: { type: integer } }, type: object }
                 type: object
   '/api/app/promotions/{id}':
@@ -1615,6 +1912,22 @@ paths:
           required: true
           schema:
             type: integer
+        -
+          name: include_products
+          in: query
+          description: 'Включить информацию о продуктах'
+          required: false
+          schema:
+            type: boolean
+            default: true
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продуктов из API'
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: 'Информация об акции'
@@ -1622,16 +1935,102 @@ paths:
             application/json:
               schema:
                 properties:
-                  data: { properties: { id: { type: integer }, title: { type: string }, image_url: { type: string }, link: { type: string }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }
+                  data: { properties: { id: { type: integer }, title: { type: string }, description: { type: string }, image_url: { type: string }, link: { type: string }, products: { type: array, items: { type: object } }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }
                 type: object
         '404':
           description: 'Акция не найдена'
+  '/api/app/promotions/products/{ids}/promotions':
+    get:
+      tags:
+        - Акции
+      summary: 'Получить акции для списка продуктов'
+      operationId: 4b68ba4d8a93d006a6be96e58b26af25
+      parameters:
+        -
+          name: ids
+          in: path
+          description: 'ID продуктов через запятую'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Акции для продуктов'
+  /api/app/recommended-products:
+    get:
+      tags:
+        - 'Рекомендованные продукты'
+      summary: 'Получить список рекомендованных продуктов'
+      operationId: accec2f9453771aa78324022ce44aaaf
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество элементов на странице'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        -
+          name: include_details
+          in: query
+          description: 'Включить детали продукта'
+          required: false
+          schema:
+            type: boolean
+            default: true
+        -
+          name: all
+          in: query
+          description: 'Получить все рекомендованные продукты без пагинации'
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 'Список популярных продуктов'
+  '/api/app/recommended-products/{id}':
+    get:
+      tags:
+        - 'Рекомендованные продукты'
+      summary: 'Получить рекомендованный продукт по ID'
+      operationId: 5de5d65ce894034f5d0b68f1a00a9e5b
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID рекомендованного продукта'
+          required: true
+          schema:
+            type: integer
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продукта'
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Информация о рекомендованном продукте'
+        '404':
+          description: 'Рекомендованный продукт не найден'
   /api/app/regions:
     get:
       tags:
         - Регионы
       summary: 'Получение списка регионов'
-      description: 'Возвращает список доступных регионов для выбора пользователем'
+      description: 'Возвращает список доступных регионов для выбора пользователем с указанием выбранного региона'
       operationId: ab6d6ee59707b6dee0136e037a950f89
       responses:
         '200':
@@ -1651,6 +2050,9 @@ paths:
                   error: { type: string }
                   reasons: { type: array, items: { type: string } }
                 type: object
+      security:
+        -
+          bearerAuth: []
   /api/app/region:
     post:
       tags:
@@ -1707,6 +2109,174 @@ paths:
       security:
         -
           bearerAuth: []
+  /api/search:
+    get:
+      tags:
+        - Поиск
+      summary: 'Поиск товаров'
+      description: 'Выполняет поиск товаров с возможностью фильтрации и сортировки'
+      operationId: 7855e4d9c1b0f780c252f753ad07e41e
+      parameters:
+        -
+          name: query
+          in: query
+          description: 'Поисковый запрос'
+          required: true
+          schema:
+            type: string
+            maxLength: 255
+        -
+          name: page
+          in: query
+          description: 'Номер страницы (начиная с 1)'
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество товаров на странице'
+          required: false
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+            minimum: 1
+        -
+          name: sort
+          in: query
+          description: 'Тип сортировки'
+          required: false
+          schema:
+            type: string
+            default: DEFAULT
+            enum:
+              - DEFAULT
+              - PRICE_ASC
+              - PRICE_DESC
+              - POPULAR
+              - NEW
+        -
+          name: 'filters[categories][]'
+          in: query
+          description: 'Фильтр по категориям'
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        -
+          name: 'filters[brands][]'
+          in: query
+          description: 'Фильтр по брендам'
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        -
+          name: 'filters[price_min]'
+          in: query
+          description: 'Минимальная цена'
+          required: false
+          schema:
+            type: number
+            minimum: 0
+        -
+          name: 'filters[price_max]'
+          in: query
+          description: 'Максимальная цена'
+          required: false
+          schema:
+            type: number
+            minimum: 0
+        -
+          name: 'filters[attributes]'
+          in: query
+          description: 'Дополнительные атрибуты для фильтрации (цвет, размер и т.д.)'
+          required: false
+          schema:
+            type: object
+      responses:
+        '200':
+          description: 'Успешный поиск'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  data: { properties: { totalHits: { description: 'Общее количество найденных товаров', type: integer }, products: { type: array, items: { properties: { id: { type: string }, name: { type: string }, price: { type: number }, brand: { type: string }, category: { type: string }, image: { type: string }, url: { type: string }, available: { type: boolean } }, type: object } }, pagination: { properties: { current_page: { description: 'Текущая страница', type: integer }, per_page: { description: 'Количество элементов на странице', type: integer }, total: { description: 'Общее количество товаров', type: integer }, last_page: { description: 'Номер последней страницы', type: integer }, from: { description: 'Номер первого элемента на странице', type: integer }, to: { description: 'Номер последнего элемента на странице', type: integer }, has_more_pages: { description: 'Есть ли еще страницы', type: boolean } }, type: object }, facets: { description: 'Доступные фильтры для уточнения поиска', type: object }, correction: { description: 'Предложение исправления запроса', type: string } }, type: object }
+                type: object
+        '422':
+          description: 'Ошибка валидации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  message: { type: string, example: 'Ошибка валидации' }
+                  errors: { description: 'Детали ошибок валидации', type: object }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  message: { type: string, example: 'Ошибка при выполнении поиска' }
+                type: object
+  /api/search/autocomplete:
+    get:
+      tags:
+        - Поиск
+      summary: 'Автодополнение для поиска'
+      description: 'Возвращает подсказки для поискового запроса и релевантные товары'
+      operationId: 80fe69652be780efcc4e01c03873cf8f
+      parameters:
+        -
+          name: query
+          in: query
+          description: 'Частичный поисковый запрос для автодополнения'
+          required: true
+          schema:
+            type: string
+            maxLength: 255
+      responses:
+        '200':
+          description: 'Успешное получение подсказок'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  data: { properties: { queries: { description: 'Список подсказок для запроса', type: array, items: { type: string } }, products: { description: 'Список релевантных товаров (до 20 шт.)', type: array, items: { properties: { id: { type: string }, name: { type: string }, price: { type: number }, brand: { type: string }, image: { type: string }, url: { type: string } }, type: object } }, totalHits: { description: 'Общее количество найденных товаров', type: integer } }, type: object }
+                type: object
+        '422':
+          description: 'Ошибка валидации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  message: { type: string, example: 'Ошибка валидации' }
+                  errors: { description: 'Детали ошибок валидации', type: object }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  message: { type: string, example: 'Ошибка при получении автодополнения' }
+                type: object
   /api/app/stories:
     get:
       tags:
@@ -1831,13 +2401,32 @@ paths:
         content:
           application/json:
             schema:
+              required:
+                - first_name
+                - last_name
+                - date_of_birth
+                - gender
+                - email
+                - subscribe_to_marketing
               properties:
-                personal_info:
-                  properties: { first_name: { type: string, example: Иван }, last_name: { type: string, example: Иванов }, date_of_birth: { type: string, example: '1990-01-01' }, gender: { type: string, example: male }, email: { type: string, example: email@example.com }, subscribe_to_marketing: { type: boolean, example: true } }
-                  type: object
-                delivery_address:
-                  properties: { city: { type: string, example: Москва }, street: { type: string, example: Ленина }, building: { type: string, example: '10' }, apartment: { type: string, example: '42' } }
-                  type: object
+                first_name:
+                  type: string
+                  example: Иван
+                last_name:
+                  type: string
+                  example: Иванов
+                date_of_birth:
+                  type: string
+                  example: 01.01.1990
+                gender:
+                  type: string
+                  example: M
+                email:
+                  type: string
+                  example: email@example.com
+                subscribe_to_marketing:
+                  type: string
+                  example: 'true'
               type: object
       responses:
         '200':
@@ -1878,6 +2467,284 @@ paths:
       security:
         -
           bearerAuth: []
+  /api/webhook/dilivery/status-update:
+    post:
+      tags:
+        - Доставка
+      summary: 'Вебхук для обновления статуса доставки'
+      description: 'Принимает уведомления от службы доставки о смене статуса заказа и отправляет push-уведомления'
+      operationId: 45d77681e0c81cad2333f9a48a75c289
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - order_id
+                - status
+                - user_id
+                - fcm_tokens
+              properties:
+                order_id:
+                  description: 'ID заказа'
+                  type: string
+                  example: '436108'
+                user_id:
+                  description: 'ID пользователя'
+                  type: string
+                  example: '12345'
+                fcm_tokens:
+                  description: 'Массив FCM токенов устройств пользователя'
+                  type: array
+                  items: { type: string }
+                  example: [token1, token2]
+                status:
+                  description: 'Новый статус заказа'
+                  type: string
+                  enum: [created, confirmed, preparing, ready_for_pickup, in_delivery, delivered, canceled]
+                  example: in_delivery
+                delivery_date:
+                  description: 'Дата и время доставки'
+                  type: string
+                  format: date-time
+                  example: '2025-06-02T15:30:00Z'
+                courier_name:
+                  description: 'Имя курьера'
+                  type: string
+                  example: 'Иван Петров'
+                courier_phone:
+                  description: 'Телефон курьера'
+                  type: string
+                  example: '+7 (999) 123-45-67'
+                tracking_number:
+                  description: 'Трек-номер доставки'
+                  type: string
+                  example: TR123456789
+                estimated_delivery_time:
+                  description: 'Ориентировочное время доставки'
+                  type: string
+                  example: '30-45 минут'
+                comment:
+                  description: 'Комментарий к изменению статуса'
+                  type: string
+                  example: 'Заказ передан курьеру'
+              type: object
+      responses:
+        '200':
+          description: 'Статус успешно обновлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Push-уведомления успешно отправлены' }
+                  order_id: { type: string, example: '436108' }
+                  user_id: { type: string, example: '12345' }
+                  status: { type: string, example: in_delivery }
+                  push_sent: { type: boolean, example: true }
+                  sent_count: { type: integer, example: 2 }
+                  invalid_tokens_removed: { type: integer, example: 0 }
+                type: object
+        '400':
+          description: 'Некорректные данные запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  error: { type: string, example: 'Некорректные данные запроса' }
+                  errors: { properties: { order_id: { type: array, items: { type: string } }, status: { type: array, items: { type: string } }, user_id: { type: array, items: { type: string } }, fcm_tokens: { type: array, items: { type: string } } }, type: object }
+                type: object
+        '401':
+          description: 'Неверный API ключ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  error: { type: string, example: 'Неверный API ключ' }
+                type: object
+        '500':
+          description: 'Внутренняя ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  error: { type: string, example: 'Внутренняя ошибка сервера' }
+                  message: { type: string, example: 'Ошибка при отправке push-уведомлений' }
+                type: object
+      security:
+        -
+          apiKeyAuth: []
+  /api/webhook/order/status-update:
+    post:
+      tags:
+        - Заказы
+      summary: 'Вебхук для обновления статуса заказа'
+      description: 'Принимает уведомления о смене статуса заказа и отправляет push-уведомления'
+      operationId: df5b780c9fdc7e1f9174b981ca0d7810
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - order_id
+                - status
+                - user_id
+                - fcm_tokens
+              properties:
+                order_id:
+                  description: 'ID заказа'
+                  type: string
+                  example: '436108'
+                user_id:
+                  description: 'ID пользователя'
+                  type: string
+                  example: '12345'
+                fcm_tokens:
+                  description: 'Массив FCM токенов устройств пользователя'
+                  type: array
+                  items: { type: string }
+                  example: [token1, token2]
+                status:
+                  description: 'Новый статус заказа'
+                  type: string
+                  enum: [pending, confirmed, processing, ready, completed, canceled, refunded]
+                  example: confirmed
+                order_date:
+                  description: 'Дата и время заказа'
+                  type: string
+                  format: date-time
+                  example: '2025-06-02T15:30:00Z'
+                total_amount:
+                  description: 'Общая сумма заказа'
+                  type: number
+                  format: float
+                  example: 1250.5
+                items_count:
+                  description: 'Количество товаров в заказе'
+                  type: integer
+                  example: 3
+                expected_completion:
+                  description: 'Ожидаемое время выполнения'
+                  type: string
+                  example: '2025-06-03T12:00:00Z'
+                comment:
+                  description: 'Комментарий к изменению статуса'
+                  type: string
+                  example: 'Заказ принят в обработку'
+              type: object
+      responses:
+        '200':
+          description: 'Статус заказа успешно обновлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Push-уведомления о статусе заказа успешно отправлены' }
+                  order_id: { type: string, example: '436108' }
+                  user_id: { type: string, example: '12345' }
+                  status: { type: string, example: confirmed }
+                  push_sent: { type: boolean, example: true }
+                  sent_count: { type: integer, example: 2 }
+                  invalid_tokens_removed: { type: integer, example: 0 }
+                type: object
+      security:
+        -
+          apiKeyAuth: []
+  /api/webhook/payment/status-update:
+    post:
+      tags:
+        - Платежи
+      summary: 'Вебхук для обновления статуса оплаты'
+      description: 'Принимает уведомления о смене статуса оплаты и отправляет push-уведомления'
+      operationId: d0f38d715efea007387e29135bf7b54c
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - payment_id
+                - order_id
+                - status
+                - user_id
+                - fcm_tokens
+              properties:
+                payment_id:
+                  description: 'ID платежа'
+                  type: string
+                  example: pay_123456
+                order_id:
+                  description: 'ID заказа'
+                  type: string
+                  example: '436108'
+                user_id:
+                  description: 'ID пользователя'
+                  type: string
+                  example: '12345'
+                fcm_tokens:
+                  description: 'Массив FCM токенов устройств пользователя'
+                  type: array
+                  items: { type: string }
+                  example: [token1, token2]
+                status:
+                  description: 'Статус оплаты'
+                  type: string
+                  enum: [pending, processing, success, failed, canceled, refunded, partial_refund]
+                  example: success
+                amount:
+                  description: 'Сумма платежа'
+                  type: number
+                  format: float
+                  example: 1250.5
+                currency:
+                  description: Валюта
+                  type: string
+                  example: RUB
+                payment_method:
+                  description: 'Способ оплаты'
+                  type: string
+                  example: card
+                transaction_id:
+                  description: 'ID транзакции'
+                  type: string
+                  example: txn_789012
+                payment_date:
+                  description: 'Дата и время платежа'
+                  type: string
+                  format: date-time
+                  example: '2025-06-02T15:30:00Z'
+                refund_amount:
+                  description: 'Сумма возврата (для частичных возвратов)'
+                  type: number
+                  format: float
+                  example: 500
+                comment:
+                  description: 'Комментарий к изменению статуса'
+                  type: string
+                  example: 'Оплата успешно проведена'
+              type: object
+      responses:
+        '200':
+          description: 'Статус оплаты успешно обновлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Push-уведомления о статусе оплаты успешно отправлены' }
+                  payment_id: { type: string, example: pay_123456 }
+                  order_id: { type: string, example: '436108' }
+                  user_id: { type: string, example: '12345' }
+                  status: { type: string, example: success }
+                  push_sent: { type: boolean, example: true }
+                  sent_count: { type: integer, example: 2 }
+                  invalid_tokens_removed: { type: integer, example: 0 }
+                type: object
+      security:
+        -
+          apiKeyAuth: []
   /api/app/auth/yandex:
     get:
       tags:
@@ -2040,6 +2907,9 @@ tags:
     name: Баннеры
     description: Баннеры
   -
+    name: 'Купить выгодно'
+    description: 'Купить выгодно'
+  -
     name: Корзина
     description: Корзина
   -
@@ -2052,20 +2922,38 @@ tags:
     name: 'Карты лояльности'
     description: 'Карты лояльности'
   -
+    name: 'Новые продукты'
+    description: 'Новые продукты'
+  -
     name: Заказы
     description: Заказы
   -
     name: Аптеки
     description: Аптеки
   -
+    name: 'Популярные продукты'
+    description: 'Популярные продукты'
+  -
     name: Акции
     description: Акции
   -
+    name: 'Рекомендованные продукты'
+    description: 'Рекомендованные продукты'
+  -
     name: Регионы
     description: Регионы
+  -
+    name: Поиск
+    description: Поиск
   -
     name: Сториз
     description: Сториз
   -
     name: Пользователи
     description: Пользователи
+  -
+    name: Доставка
+    description: Доставка
+  -
+    name: Платежи
+    description: Платежи

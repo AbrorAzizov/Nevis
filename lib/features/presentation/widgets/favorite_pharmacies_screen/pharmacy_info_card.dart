@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nevis/constants/enums.dart';
@@ -7,6 +8,7 @@ import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/domain/entities/pharmacy_entity.dart';
+import 'package:nevis/features/presentation/bloc/favorite_pharmacies_screen/favorite_pharmacies_bloc.dart';
 import 'package:nevis/features/presentation/pages/order/order_pickup/order_pikcup_cart_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/cart_status_widget.dart';
@@ -40,11 +42,31 @@ class PharmacyInfoCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CartStatusLabel(
-                      pharmacy: pharmacy,
-                    ),
+                    pharmacyMapType != PharmacyMapType.defaultMap
+                        ? CartStatusLabel(
+                            pharmacy: pharmacy,
+                          )
+                        : SizedBox.shrink(),
                     FavoriteButton(
-                      onPressed: () {},
+                      isFav: context
+                          .read<FavoritePharmaciesBloc>()
+                          .state
+                          .favoritePharmacies
+                          .any((fav) => fav.pharmacyId == pharmacy.pharmacyId),
+                      onPressed: () {
+                        final bloc = context.read<FavoritePharmaciesBloc>();
+                        final isFavorite = bloc.state.favoritePharmacies.any(
+                            (fav) => fav.pharmacyId == pharmacy.pharmacyId);
+
+                        if (pharmacy.pharmacyId != null) {
+                          final id = pharmacy.pharmacyId!;
+                          if (isFavorite) {
+                            bloc.add(RemoveFromFavoritesPharmacyEvent(id));
+                          } else {
+                            bloc.add(AddToFavoritesPharmacyEvent(id));
+                          }
+                        }
+                      },
                     )
                   ],
                 ),

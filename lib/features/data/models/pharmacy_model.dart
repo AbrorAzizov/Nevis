@@ -36,6 +36,7 @@ class PharmacyModel extends PharmacyEntity {
       PharmacyModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
+
   factory PharmacyModel.fromJson(Map<String, dynamic> json) {
     double? parseDouble(dynamic value) {
       if (value == null) return null;
@@ -51,12 +52,13 @@ class PharmacyModel extends PharmacyEntity {
 
     return PharmacyModel(
       pharmacyId: int.tryParse(json["storeId"]?.toString() ?? '') ??
-          int.tryParse(json['ID']?.toString() ?? ''),
+          int.tryParse(json["ID"]?.toString() ?? '') ??
+          int.tryParse(json["id"]?.toString() ?? ''),
       title: json["TITLE"],
       alias: json["alias"],
       address: json["address"] ?? json["ADDRESS"],
       coordinates: json["coordinates"]?.toString(),
-      schedule: json["workTime"] ?? json['SCHEDULE'],
+      schedule: json["workTime"] ?? json['SCHEDULE'] ?? json["working_hours"],
       metro: json["metro"],
       optics: json["optics"] is int
           ? json["optics"]
@@ -70,12 +72,12 @@ class PharmacyModel extends PharmacyEntity {
       iconHref: json["iconHref"],
       phone: json["phone"] ?? json["PHONE"],
       brand: json["brand"],
-      textCloseTime: json["textCloseTime"],
+      textCloseTime: json["textCloseTime"] ?? json['time_to_open_close'],
       classCloseTime: json["classCloseTime"],
       storeId: int.tryParse(json["storeId"]?.toString() ?? ''),
       storeXmlId: json["storeXmlId"],
-      gpsN: parseDouble(json["GPS_N"]),
-      gpsS: parseDouble(json["GPS_S"]),
+      gpsN: parseDouble(json["GPS_N"] ?? json["latitude"]),
+      gpsS: parseDouble(json["GPS_S"] ?? json["longitude"]),
       ufRegion: json["UF_REGION"],
       sum: json["SUM"] is Map<String, dynamic> ? json["SUM"] : null,
       raspisanie: (json["raspisanie"] as List<dynamic>?)
@@ -107,12 +109,14 @@ class PharmacyModel extends PharmacyEntity {
         "classCloseTime": classCloseTime,
         "storeXmlId": storeXmlId,
         "GPS_N": gpsN,
+        "latitude": gpsN,
         "GPS_S": gpsS,
+        "longitude": gpsS,
         "amounts": amounts,
         "UF_REGION": ufRegion,
         "sum": sum,
         "raspisanie": raspisanie,
         "cartAvailable": cartAvailableString,
-        "cartStatus": cartStatus?.id
+        "cartStatus": cartStatus?.id,
       };
 }

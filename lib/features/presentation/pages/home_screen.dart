@@ -8,6 +8,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/favorite_pharmacies_screen/favorite_pharmacies_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/order_pickup_cart_screen/order_pickup_cart_screen_bloc.dart';
@@ -56,6 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocProvider.value(
           value: sl<FavoriteProductsScreenBloc>()
             ..add(LoadFavoriteProductsEvent()),
+        ),
+        BlocProvider.value(
+          value: sl<FavoritePharmaciesBloc>()..add(LoadInitialDataEvent()),
         ),
         BlocProvider.value(
           value: HomeScreenBloc(context: context),

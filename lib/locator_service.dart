@@ -69,7 +69,6 @@ import 'package:nevis/features/domain/usecases/content/get_news.dart';
 import 'package:nevis/features/domain/usecases/content/get_one_action.dart';
 import 'package:nevis/features/domain/usecases/content/get_one_article.dart';
 import 'package:nevis/features/domain/usecases/content/get_one_news.dart';
-import 'package:nevis/features/domain/usecases/content/get_pharmacies.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/get_card_info.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/get_qr_code.dart';
 import 'package:nevis/features/domain/usecases/loyalty_card/register_card.dart';
@@ -78,7 +77,10 @@ import 'package:nevis/features/domain/usecases/order/create_order_for_pickup.dar
 import 'package:nevis/features/domain/usecases/order/get_pharmacies_by_cart.dart';
 import 'package:nevis/features/domain/usecases/orders/get_one_order.dart';
 import 'package:nevis/features/domain/usecases/orders/get_order_history.dart';
+import 'package:nevis/features/domain/usecases/pharmacies/add_to_favorites_pharmacy.dart';
 import 'package:nevis/features/domain/usecases/pharmacies/get_favorite_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/pharmacies/get_pharmacies.dart';
+import 'package:nevis/features/domain/usecases/pharmacies/remove_from_favorites_pharmacy.dart';
 import 'package:nevis/features/domain/usecases/products/book_bargain_product.dart';
 import 'package:nevis/features/domain/usecases/products/delete_from_favorite_products.dart';
 import 'package:nevis/features/domain/usecases/products/get_bargain_product.dart';
@@ -107,9 +109,9 @@ import 'package:nevis/features/presentation/bloc/bonus_card_screen/bonus_card_sc
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/catalog_screen/catalog_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/code_screen/code_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/favorite_pharmacies_screen/favorite_pharmacies_bloc.dart';
 import 'package:nevis/features/presentation/bloc/favorite_products_screen/favorite_products_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
-import 'package:nevis/features/presentation/bloc/info_about_order_screen/info_about_order_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/login_screen/login_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/main_screen/main_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/news_internal_screen/news_internal_screen_bloc.dart';
@@ -227,11 +229,6 @@ Future<void> init() async {
       getOneOrderUC: sl<GetOneOrderUC>(),
     ),
   );
-  sl.registerFactory(
-    () => InfoAboutOrderScreenBloc(
-      getPharmaciesUC: sl<GetPharmaciesUC>(),
-    ),
-  );
 
   sl.registerLazySingleton(
     () => FavoriteProductsScreenBloc(
@@ -255,6 +252,14 @@ Future<void> init() async {
         getCartProducts: sl(),
         addProductToCart: sl(),
         deleteProductFromCart: sl()),
+  );
+
+  sl.registerLazySingleton(
+    () => FavoritePharmaciesBloc(
+        getFavoritePharmaciesUC: sl(),
+        getPharmaciesUC: sl(),
+        addToFavoritesPharmacyUC: sl(),
+        removeFromFavoritesPharmacyUC: sl()),
   );
 
   sl.registerLazySingleton(
@@ -304,7 +309,6 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetOneActionUC(sl()));
   sl.registerLazySingleton(() => GetOneArticleUC(sl()));
   sl.registerLazySingleton(() => GetOneNewsUC(sl()));
-  sl.registerLazySingleton(() => GetPharmaciesUC(sl()));
 
   // Product
   sl.registerLazySingleton(() => GetDailyProductsUC(sl()));
@@ -343,6 +347,9 @@ Future<void> init() async {
 
   // Pharmacy
   sl.registerLazySingleton(() => GetFavoritePharmaciesUC(sl()));
+  sl.registerLazySingleton(() => GetPharmaciesUC(sl()));
+  sl.registerLazySingleton(() => AddToFavoritesPharmacyUC(sl()));
+  sl.registerLazySingleton(() => RemoveFromFavoritesPharmacyUC(sl()));
 
   // Story
   sl.registerLazySingleton(() => GetStoriesUC(sl()));

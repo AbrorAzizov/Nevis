@@ -32,10 +32,9 @@ import 'package:nevis/features/presentation/pages/profile/about_us_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/article_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/articles/articles_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/cancel_order_screen.dart';
-import 'package:nevis/features/presentation/pages/profile/favorite_pharmacy_screen.dart';
+import 'package:nevis/features/presentation/pages/profile/favorite_pharmacies_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/how_place_order_screen.dart';
-import 'package:nevis/features/presentation/pages/profile/info_about_order_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/news/news_internal_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/news/news_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/orders/order_screen.dart';
@@ -140,8 +139,6 @@ class MyApp extends StatelessWidget {
               Routes.aboutUsScreen: (context) => const AboutUsScreen(),
               Routes.howPlaceOrderScreen: (context) =>
                   const HowPlaceOrderScreen(),
-              Routes.infoAboutOrderScreen: (context) =>
-                  const InfoAboutOrderScreen(),
               Routes.loginScreenWithMessage: (context) =>
                   const LoginScreenWithMessage(),
               Routes.loginScreenWithYandex: (context) =>
