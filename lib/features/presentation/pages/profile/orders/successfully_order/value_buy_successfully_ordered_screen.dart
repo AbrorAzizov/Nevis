@@ -11,7 +11,7 @@ import 'package:nevis/features/domain/entities/product_pharmacy_entity.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
 import 'package:nevis/features/presentation/bloc/value_buy_successfully_ordered_screen/value_buy_successfully_ordered_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
 
 class ValueBuySuccessfullyOrderedScreen extends StatelessWidget {
   const ValueBuySuccessfullyOrderedScreen({super.key});

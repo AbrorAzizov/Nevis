@@ -15,7 +15,7 @@ import 'package:nevis/features/presentation/bloc/favorite_products_screen/favori
 import 'package:nevis/features/presentation/bloc/products_screen/products_screen_bloc.dart';
 import 'package:nevis/features/presentation/widgets/filter_and_sort_widget.dart';
 import 'package:nevis/features/presentation/widgets/products_screen/products_grid_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -29,17 +29,22 @@ class ProductsScreen extends StatelessWidget {
     final categoryParams = args?['categoryParams'] as CategoryParams?;
     final products = args?['products'] as List<ProductEntity>?;
     final searchParams = args?['searchParams'] as SearchParams?;
+    final productsCompilationType =
+        args?['productsCompilationType'] as ProductsCompilationType?;
+    final showSortAndFilter = args?['showSortAndFilter'] as bool? ?? true;
 
     return BlocProvider(
       create: (context) => ProductsScreenBloc(
-          getCategoryProductsUC: sl(),
-          getSortCategoryProductsUC: sl(),
-          getSubCategoriesUC: sl(),
-          searchUC: sl(),
-          products: products,
-          categoryParams: categoryParams,
-          searchParams: searchParams)
-        ..add(LoadProductsEvent()),
+        getCategoryProductsUC: sl(),
+        getSortCategoryProductsUC: sl(),
+        getSubCategoriesUC: sl(),
+        searchUC: sl(),
+        productsCompilationUC: sl(),
+        products: products,
+        categoryParams: categoryParams,
+        searchParams: searchParams,
+        productsCompilationType: productsCompilationType,
+      )..add(LoadProductsEvent()),
       child: BlocBuilder<ProductsScreenBloc, ProductsScreenState>(
         builder: (context, state) {
           final bloc = context.read<ProductsScreenBloc>();
@@ -80,23 +85,24 @@ class ProductsScreen extends StatelessWidget {
                           controller: bloc.productsController,
                           child: Column(
                             children: [
-                              Padding(
-                                padding:
-                                    getMarginOrPadding(left: 20, right: 20),
-                                child: FilterSortContainer(
-                                  isFromFav: false,
-                                  sortTypes: ProductSortType.values,
-                                  selectedSortType: state.selectedSortType,
-                                  onSortSelected: (sortType) {
-                                    bloc.add(SelectSortProductsType(
-                                        productSortType: sortType));
-                                  },
-                                  filterOrSortType:
-                                      state.selectedFilterOrSortType,
-                                  onConfirmFilter: () =>
-                                      bloc.add(ShowFilterProductsTypes()),
+                              if (showSortAndFilter)
+                                Padding(
+                                  padding:
+                                      getMarginOrPadding(left: 20, right: 20),
+                                  child: FilterSortContainer(
+                                    isFromFav: false,
+                                    sortTypes: ProductSortType.values,
+                                    selectedSortType: state.selectedSortType,
+                                    onSortSelected: (sortType) {
+                                      bloc.add(SelectSortProductsType(
+                                          productSortType: sortType));
+                                    },
+                                    filterOrSortType:
+                                        state.selectedFilterOrSortType,
+                                    onConfirmFilter: () =>
+                                        bloc.add(ShowFilterProductsTypes()),
+                                  ),
                                 ),
-                              ),
                               if (categoryParams?.categoryId != null)
                                 Container(
                                   margin: getMarginOrPadding(top: 16),

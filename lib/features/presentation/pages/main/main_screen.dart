@@ -19,7 +19,7 @@ import 'package:nevis/features/presentation/widgets/main_screen/qr_code_widget.d
 import 'package:nevis/features/presentation/widgets/main_screen/recommended/recommended_list_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/sales_widget.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/stories/story_list_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -34,6 +34,10 @@ class MainScreen extends StatelessWidget {
           create: (context) => MainScreenBloc(
             getStoriesUC: sl(),
             getQRCodeUC: sl(),
+            getNewProductsUC: sl(),
+            getPopularProductsUC: sl(),
+            getRecommendedProductsUC: sl(),
+            getPromotionsUC: sl(),
           )..add(LoadDataEvent()),
           child: BlocBuilder<MainScreenBloc, MainScreenState>(
             builder: (context, state) {
@@ -67,7 +71,9 @@ class MainScreen extends StatelessWidget {
                                         : CardWidget(),
                                   ),
                                   SizedBox(height: 16.h),
-                                  SalesWidget(),
+                                  SalesWidget(
+                                    promotions: state.promotions,
+                                  ),
                                   SizedBox(height: 16.h),
                                   BlockWidget2(
                                     title: 'Актуальное',
@@ -78,7 +84,7 @@ class MainScreen extends StatelessWidget {
                                   ),
                                   SizedBox(height: 16.h),
                                   PopularityProductsWidget(
-                                      products: state.newProducts),
+                                      products: state.popularProducts),
                                   SizedBox(height: 16.h),
                                   BlockWidget2(
                                     title: 'Рекомендуем',
@@ -130,7 +136,7 @@ class MainScreen extends StatelessWidget {
                                       products: state.newProducts),
                                   SizedBox(height: 16.h),
                                   ProfitableToBuyWidget(
-                                      products: state.profitableProducts),
+                                      products: state.recommendedProducts),
                                 ],
                               ),
                             ),

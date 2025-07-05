@@ -6,6 +6,8 @@ import 'package:nevis/features/presentation/pages/catalog/products/products_scre
 import 'package:nevis/features/presentation/widgets/main_screen/block_widget2.dart';
 import 'package:nevis/features/presentation/widgets/main_screen/daily_products_list_widget.dart';
 
+import '../../../../constants/enums.dart';
+
 class PopularityProductsWidget extends StatelessWidget {
   const PopularityProductsWidget({super.key, required this.products});
 
@@ -22,7 +24,7 @@ class PopularityProductsWidget extends StatelessWidget {
             ProductsScreen(),
             settings: RouteSettings(
               name: Routes.productsScreen,
-              arguments: {'title': 'Популярные товары', 'products': products},
+              arguments: {'title': 'Популярные товары', 'productsCompilationType': ProductsCompilationType.populars, 'showSortAndFilter': false},
             ),
           ),
         );

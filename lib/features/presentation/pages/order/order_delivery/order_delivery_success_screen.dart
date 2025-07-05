@@ -11,7 +11,7 @@ import 'package:nevis/features/presentation/widgets/favourite_products_screen/se
 import 'package:nevis/features/presentation/widgets/order_screen/order_delivery/order_delivery_bonuses.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_delivery/order_delivery_payment_methods.dart';
 import 'package:nevis/features/presentation/widgets/order_screen/order_delivery/order_delivery_product_list.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
 
 class OrderDeliverySuccessScreen extends StatelessWidget {
   const OrderDeliverySuccessScreen({super.key});

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:nevis/constants/enums.dart';
 import 'package:nevis/core/error/failure.dart';
 import 'package:nevis/core/params/bargain_product_params.dart';
 import 'package:nevis/core/params/book_bargain_product_params.dart';
@@ -34,4 +35,8 @@ abstract class ProductRepository {
       BargainProductParams params);
   Future<Either<Failure, BookBargainProductResponse>> bookBargainProduct(
       BookBargainProductParams params);
+  Future<Either<Failure, (List<ProductEntity>, int lastPage)>>
+      productsCompilation(
+          {required ProductsCompilationType productsCompilationType,
+          int? page});
 }

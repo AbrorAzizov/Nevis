@@ -6,7 +6,9 @@ class MainScreenState extends Equatable {
   final PaginatedStoriesEntity? stories;
   final LoyaltyCardQREntity? loyalCard;
   final List<ProductEntity> newProducts;
-  final List<ProductEntity> profitableProducts;
+  final List<ProductEntity> recommendedProducts;
+  final List<ProductEntity> popularProducts;
+  final List<PromotionEntity> promotions;
 
   const MainScreenState({
     this.isLoading = true,
@@ -14,7 +16,9 @@ class MainScreenState extends Equatable {
     this.stories,
     this.loyalCard,
     this.newProducts = const [],
-    this.profitableProducts = const [],
+    this.recommendedProducts = const [],
+    this.popularProducts = const [],
+    this.promotions = const [],
   });
 
   MainScreenState copyWith({
@@ -23,7 +27,9 @@ class MainScreenState extends Equatable {
     PaginatedStoriesEntity? stories,
     LoyaltyCardQREntity? loyalCard,
     List<ProductEntity>? newProducts,
-    List<ProductEntity>? profitableProducts,
+    List<ProductEntity>? recommendedProducts,
+    List<ProductEntity>? popularProducts,
+    List<PromotionEntity>? promotions,
   }) {
     return MainScreenState(
       isLoading: isLoading ?? this.isLoading,
@@ -31,7 +37,9 @@ class MainScreenState extends Equatable {
       stories: stories ?? this.stories,
       loyalCard: loyalCard ?? this.loyalCard,
       newProducts: newProducts ?? this.newProducts,
-      profitableProducts: profitableProducts ?? this.profitableProducts,
+      recommendedProducts: recommendedProducts ?? this.recommendedProducts,
+      popularProducts: popularProducts ?? this.popularProducts,
+      promotions: promotions ?? this.promotions,
     );
   }
 
@@ -42,6 +50,8 @@ class MainScreenState extends Equatable {
         stories,
         loyalCard,
         newProducts,
-        profitableProducts,
+        recommendedProducts,
+        popularProducts,
+        promotions
       ];
 }

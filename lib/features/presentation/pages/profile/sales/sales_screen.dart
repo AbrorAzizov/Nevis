@@ -11,70 +11,61 @@ import 'package:nevis/features/presentation/widgets/custom_app_bar.dart';
 import 'package:nevis/features/presentation/widgets/sales_screen/sales_list_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class SalesScreen extends StatefulWidget {
+import '../../../../../locator_service.dart';
+
+class SalesScreen extends StatelessWidget {
   const SalesScreen({super.key});
 
   @override
-  State<SalesScreen> createState() => _SalesScreenState();
-}
-
-class _SalesScreenState extends State<SalesScreen> {
-  bool isLoading = true;
-  late Timer _timer;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _timer = Timer(Duration(seconds: 5), () {
-      _timer.cancel();
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final ScrollController scrollController = ScrollController();
     return BlocBuilder<HomeScreenBloc, HomeScreenState>(
       builder: (context, homeState) {
         return BlocProvider(
-          create: (context) => SalesScreenBloc(),
-          child: BlocBuilder<SalesScreenBloc, SalesScreenState>(
-            builder: (context, state) {
-              return Scaffold(
-                backgroundColor: UiConstants.backgroundColor,
-                body: SafeArea(
-                  child: Skeletonizer(
-                    ignorePointers: false,
-                    justifyMultiLineText: false,
-                    textBoneBorderRadius:
-                        TextBoneBorderRadius.fromHeightFactor(.5),
-                    enabled: isLoading,
-                    child: Builder(
-                      builder: (context) {
-                        return Column(
-                          children: [
-                            CustomAppBar(
-                              title: 'Акции',
-                              showBack: true,
-                              action: SvgPicture.asset(Paths.shareIconPath),
+          create: (context) =>
+              SalesScreenBloc(getPromotionsUC: sl())..add(GetPromotionsEvent()),
+          child: Builder(
+            builder: (context) {
+              scrollController.addListener(
+                () {
+                  if (scrollController.position.pixels ==
+                      scrollController.position.maxScrollExtent) {
+                    context
+                        .read<SalesScreenBloc>()
+                        .add(GetPromotionsEventFromNextPage());
+                  }
+                },
+              );
+              return BlocBuilder<SalesScreenBloc, SalesScreenState>(
+                builder: (context, state) {
+                  return Scaffold(
+                    backgroundColor: UiConstants.backgroundColor,
+                    body: SafeArea(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CustomAppBar(
+                            title: 'Акции',
+                            showBack: true,
+                            action: SvgPicture.asset(Paths.shareIconPath),
+                          ),
+                          state.isLoading ? Center(child: CircularProgressIndicator(),) : Expanded(
+                            child: SalesListWidget(
+                              promotions: state.promotions,
+                              scrollController: scrollController,
                             ),
-                            Expanded(child: SalesListWidget()),
-                          ],
-                        );
-                      },
+                          ),
+                          if (state.isLoadingFromNextPage == true) Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 80),
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               );
             },
           ),

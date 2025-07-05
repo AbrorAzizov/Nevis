@@ -7,7 +7,10 @@ abstract class SalesScreenEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ChangeCategoryEvent extends SalesScreenEvent {
-  final int categoryId;
-  const ChangeCategoryEvent(this.categoryId);
+class GetPromotionsEvent extends SalesScreenEvent {
+  const GetPromotionsEvent();
+}
+
+class GetPromotionsEventFromNextPage extends SalesScreenEvent {
+  const GetPromotionsEventFromNextPage();
 }

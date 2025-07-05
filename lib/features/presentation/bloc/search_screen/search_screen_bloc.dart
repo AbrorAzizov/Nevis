@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nevis/core/params/search_param.dart';
+import 'package:nevis/features/domain/entities/product_entity.dart';
 import 'package:nevis/features/domain/entities/region_entity.dart';
 import 'package:nevis/features/domain/entities/search_autocomplete_entity.dart';
 import 'package:nevis/features/domain/entities/search_results_entity.dart';
@@ -93,9 +94,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
 
   void _onToggleExpandCollapse(
       ToggleExpandCollapseEvent event, Emitter<SearchScreenState> emit) {
-    emit(state.copyWith(
-      isExpanded: event.isExpanded,
-    ));
+    emit(state.copyWith(isExpanded: event.isExpanded));
   }
 
   void _getRegions(
@@ -122,7 +121,7 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
   void _changeController(
       ChangeControllerEvent event, Emitter<SearchScreenState> emit) {
     final bool pressed = !state.regionSelectionPressed;
-    emit(state.copyWith(regionSelectionPressed: pressed, isExpanded: pressed));
+    emit(state.copyWith(regionSelectionPressed: pressed));
   }
 
   void _onGetAutocomplete(
@@ -150,6 +149,18 @@ class SearchScreenBloc extends Bloc<SearchScreenEvent, SearchScreenState> {
         errorMessage: null,
       )),
     );
+  }
+
+  Future<List<ProductEntity>> getProductSuggestions(String query) async {
+    final result = await autocompleteSearchUC(query);
+
+    return result.fold((failure) => [], (suggestions) => suggestions.products);
+  }
+
+  Future<List<RegionEntity>> getRegions(String query) async {
+    final result = await getRegionsUC();
+
+    return result.fold((failure) => [], (suggestions) => suggestions);
   }
 
   void _onPerformSearch(

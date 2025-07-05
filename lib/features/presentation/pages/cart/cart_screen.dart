@@ -18,7 +18,7 @@ import 'package:nevis/features/presentation/widgets/cart_screen/empty_cart_widge
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/cubit/selector_cubit.dart';
 import 'package:nevis/features/presentation/widgets/cart_screen/selector_widget.dart/selector/selector.dart';
 import 'package:nevis/features/presentation/widgets/favourite_products_screen/selected_products_price_info_widget.dart';
-import 'package:nevis/features/presentation/widgets/search_product_app_bar.dart';
+import 'package:nevis/features/presentation/widgets/search_product_app_bar/search_product_app_bar.dart';
 import 'package:nevis/locator_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeletonizer/skeletonizer.dart';
