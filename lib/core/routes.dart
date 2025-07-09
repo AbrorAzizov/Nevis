@@ -52,6 +52,8 @@ class Routes {
   static const String pickAddressMapScreen = '/pick_address_map_screen';
   static const String orderDeliverySuccessScreen =
       '/order_delivery_success_screen';
+  static const String deliveryPersonalDataScreen =
+      '/delivery_personal_data_screen';    
 
   static List<String> get allRoutes => [
         splashScreen,

@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:nevis/constants/enums.dart';
 import 'package:nevis/constants/utils.dart';
 import 'package:nevis/core/params/delivery_order_params.dart';
+import 'package:nevis/features/data/models/adress_model.dart';
 import 'package:nevis/features/domain/entities/delivery_order_entity.dart';
+import 'package:nevis/features/domain/usecases/adress/get_delivery_adress.dart';
+import 'package:nevis/features/domain/usecases/adress/update_delivery_adress.dart';
 import 'package:nevis/features/domain/usecases/order/create_order_for_delivery.dart';
 import 'package:nevis/features/domain/usecases/profile/get_me.dart';
 import 'package:yandex_geocoder/yandex_geocoder.dart';
@@ -29,12 +32,17 @@ class OrderDeliveryPersonalDataBloc extends Bloc<OrderDeliveryPersonalDataEvent,
       TextEditingController();
 
   final GetMeUC getMeUC;
+  final GetDeliveryAdressUC getDeliveryAdressUC;
+    final UpdateDeliveryAdressUC updateDeliveryAdressUC;
   final CreateOrderForDeliveryUC createOrderForDeliveryUC;
 
   GeoObject? initialGeoObject;
 
   OrderDeliveryPersonalDataBloc(
-      {required this.getMeUC, required this.createOrderForDeliveryUC})
+      {required this.getMeUC,
+      required this.updateDeliveryAdressUC,
+
+      required this.getDeliveryAdressUC, required this.createOrderForDeliveryUC})
       : super(OrderDeliveryPersonalDataInitial()) {
     on<GetPersonalDataEvent>((event, emit) async {
       emit(OrderDeliveryPersonalDataLoading());
@@ -55,6 +63,43 @@ class OrderDeliveryPersonalDataBloc extends Bloc<OrderDeliveryPersonalDataEvent,
             profile.deliveryAddress?.building ?? '';
 
         emit(OrderDeliveryPersonalDataLoaded());
+      });
+    });
+
+    on<GetDeliveryAdressEvent>((event, emit) async {
+      emit(OrderDeliveryPersonalDataLoading());
+      final failureOrLoads = await getDeliveryAdressUC();
+
+      failureOrLoads.fold((_) => emit(OrderDeliveryPersonalDataLoadingFailed()),
+          (adress) {
+        cityController.text =adress.city ?? '';
+        entranceController.text = adress.entrance ?? '';
+        floorController.text =adress.floor ?? '';
+        apartmentController.text = adress.apartment ?? '';
+        intercomController.text =adress.intercom ?? '';
+        districtAndBuildingController.text =
+            adress.street ?? '';
+
+        emit(OrderDeliveryPersonalDataLoaded());
+      });
+    });
+     on<UpdateDeliveryAdressEvent>((event, emit) async {
+      emit(OrderDeliveryPersonalDataLoading());
+      final failureOrLoads = await updateDeliveryAdressUC(AdressModel(
+        city: cityController.text,
+        street: districtAndBuildingController.text,
+        apartment: apartmentController.text,
+        entrance: entranceController.text,
+        floor: floorController.text,
+        intercom: intercomController.text,
+      ));
+
+      failureOrLoads.fold((_) => emit(OrderDeliveryPersonalDataLoadingFailed()),
+          (_) {
+            
+          add(GetDeliveryAdressEvent());
+
+       
       });
     });
 

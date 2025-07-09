@@ -3,12 +3,15 @@ import 'dart:developer';
 import 'package:nevis/core/api_client.dart';
 import 'package:nevis/core/error/exception.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
+import 'package:nevis/features/data/models/adress_model.dart';
 import 'package:nevis/features/data/models/profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<ProfileModel> getMe();
+  Future<AdressModel> getDeliveryAdress();
   Future<void> updateMe(ProfileModel profile);
+  Future<void> updateDeliveryAdress(AdressModel adress);
   Future<void> deleteMe();
 }
 
@@ -70,6 +73,38 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       }
     } catch (e) {
       log('Error during deleteMe: $e', level: 1000);
+      rethrow;
+    }
+  }
+   @override
+  Future<AdressModel> getDeliveryAdress() async {
+    try {
+      final data = await apiClient.get(
+        endpoint: 'users/profile/delivery',
+        callPathNameForLog: '${runtimeType.toString()}.getDeliveryAdress',
+      );
+      final person = data;
+      return AdressModel.fromJson(person);
+    } catch (e) {
+      log('Error during getDeliveryAdress: $e', level: 1000);
+      rethrow;
+    }
+  }
+
+   @override
+  Future<void> updateDeliveryAdress(AdressModel adress) async {
+    try {
+      Map<String, dynamic> body = Map.from(adress.toJson())
+        ..removeWhere((key, value) => value == null);
+
+      await apiClient.put(
+        endpoint: 'users/profile/delivery',
+        exceptions: {500: ServerException()},
+        body: body,
+        callPathNameForLog: '${runtimeType.toString()}.updateDeliveryAdress',
+      );
+    } catch (e) {
+      log('Error during updateDeliveryAdress: $e', level: 1000);
       rethrow;
     }
   }

@@ -41,7 +41,7 @@ class AdressModel extends AddressEntity {
   factory AdressModel.fromJson(Map<String, dynamic> json) {
     return AdressModel(
       city: json["city"],
-      street: json["street"],
+      street: json["street"] ?? json['street_and_house'],
       building: json["building"],
       apartment: json["apartment"],
       entrance: json["entrance"],
@@ -51,16 +51,15 @@ class AdressModel extends AddressEntity {
     );
   }
 
+
   Map<String, dynamic> toJson() {
     return {
       "city": city,
-      "street": street,
-      "building": building,
-      "apartment": apartment,
+      "street_and_house": street,
       "entrance": entrance,
       "floor": floor,
+      "apartment": apartment,
       "intercom": intercom,
-      "comment": comment,
     };
   }
 }

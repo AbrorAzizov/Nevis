@@ -1,8 +1,7 @@
 part of 'order_delivery_personal_data_bloc.dart';
 
-class OrderDeliveryPersonalDataState extends Equatable {
-  @override
-  List<Object?> get props => throw UnimplementedError();
+class OrderDeliveryPersonalDataState  {
+
 }
 
 class OrderDeliveryPersonalDataInitial extends OrderDeliveryPersonalDataState {}

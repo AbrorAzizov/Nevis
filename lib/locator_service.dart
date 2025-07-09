@@ -53,6 +53,8 @@ import 'package:nevis/features/domain/repositories/promotion_repository.dart';
 import 'package:nevis/features/domain/repositories/region_repository.dart';
 import 'package:nevis/features/domain/repositories/search_repository.dart';
 import 'package:nevis/features/domain/repositories/story_repository.dart';
+import 'package:nevis/features/domain/usecases/adress/get_delivery_adress.dart';
+import 'package:nevis/features/domain/usecases/adress/update_delivery_adress.dart';
 import 'package:nevis/features/domain/usecases/auth/is_phone_exists.dart';
 import 'package:nevis/features/domain/usecases/auth/login.dart';
 import 'package:nevis/features/domain/usecases/auth/login_by_service.dart';
@@ -297,7 +299,9 @@ Future<void> init() async {
   );
   sl.registerLazySingleton(
     () => OrderDeliveryPersonalDataBloc(
-        getMeUC: sl(), createOrderForDeliveryUC: sl()),
+      
+      
+        getMeUC: sl(), createOrderForDeliveryUC: sl(), getDeliveryAdressUC: sl(), updateDeliveryAdressUC: sl()),
   );
   sl.registerLazySingleton(
     () => SaleScreenBloc(
@@ -385,6 +389,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetQRCodeUC(sl()));
   sl.registerLazySingleton(() => GetCardInfoUC(sl()));
 
+  // Adress 
+
+   sl.registerLazySingleton(() => GetDeliveryAdressUC(sl()));
+   sl.registerLazySingleton(() => UpdateDeliveryAdressUC(sl()));
+   
   // Search
   sl.registerLazySingleton(() => AutocompleteSearchUC(sl()));
   sl.registerLazySingleton(() => SearchUC(sl()));
@@ -406,6 +415,8 @@ Future<void> init() async {
       errorHandler: sl(),
     ),
   );
+
+
 
   sl.registerLazySingleton<RegionRepository>(
     () => RegionRespositoryImpl(

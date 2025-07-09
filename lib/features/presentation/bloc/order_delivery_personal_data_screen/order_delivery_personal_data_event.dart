@@ -9,10 +9,14 @@ abstract class OrderDeliveryPersonalDataEvent extends Equatable {
 
 class GetPersonalDataEvent extends OrderDeliveryPersonalDataEvent {}
 
+class GetDeliveryAdressEvent extends OrderDeliveryPersonalDataEvent {}
+
 class UpdateAddressEvent extends OrderDeliveryPersonalDataEvent {
   final GeoObject geoObject;
   const UpdateAddressEvent({required this.geoObject});
 }
+
+class UpdateDeliveryAdressEvent extends OrderDeliveryPersonalDataEvent {}
 
 class CreateOrderForDeliveryEvent extends OrderDeliveryPersonalDataEvent {
   final String dateDelivery;

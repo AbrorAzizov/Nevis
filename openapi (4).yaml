@@ -1,0 +1,3080 @@
+openapi: 3.0.0
+info:
+  title: 'API документация Nevis'
+  description: 'API документация для мобильного приложения сети аптек Nevis'
+  version: 1.0.0
+paths:
+  /api/app/auth/verification-code:
+    post:
+      tags:
+        - Авторизация
+      summary: 'Запрос кода подтверждения'
+      description: 'Запрос на отправку кода подтверждения на указанный номер телефона'
+      operationId: a2cd30bc2b096c6dc7d81ae9a0cea5c2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                phone_number:
+                  type: string
+                  example: '+7 999 123 45 67'
+              type: object
+      responses:
+        '200':
+          description: 'Код подтверждения отправлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Код успешно отправлен' }
+                  wait_time: { type: integer, example: 60 }
+                type: object
+        '400':
+          description: 'Неверный номер телефона'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Неверный номер телефона' }
+                  reasons: { type: array, items: { type: string, example: 'Формат номера не соответствует требованиям' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка сервера' }
+                  message: { type: string, example: 'Произошла внутренняя ошибка сервера' }
+                type: object
+  /api/app/auth/login:
+    post:
+      tags:
+        - Авторизация
+      summary: 'Авторизация пользователя'
+      description: 'Авторизация пользователя через номер телефона и код подтверждения или через сторонние сервисы'
+      operationId: 6c6a0bcc7c44c3af91f17da315d3e6c8
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                -
+                  required: [phone_number, verification_code, fcm_token]
+                  properties: { phone_number: { type: string, example: '+7 999 123 45 67' }, verification_code: { type: string, example: '1234' }, fcm_token: { type: string, example: dfgsfser4345retfsgvsfg } }
+                  type: object
+                -
+                  required: [service, access_token, fcm_token]
+                  properties: { service: { type: string, enum: [yandex, vk], example: yandex }, access_token: { type: string, example: y0_AgAAAABPkdsfkjdfkndsgk98Ht7e3pAArAqmXNYtcMGjYLHcX4Eo92h5tgj4S6LnMdYHFbhXg7b1_KPSMtXu8TYC5hA }, fcm_token: { type: string, example: dfgsfser4345retfsgvsfg } }
+                  type: object
+      responses:
+        '200':
+          description: 'Успешная авторизация'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Успешная авторизация' }
+                  access_token: { properties: { expIn: { type: integer, example: 1745266126 }, iat: { type: integer, example: 1742587726 }, token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... } }, type: object }
+                  refresh_token: { properties: { expIn: { type: integer, example: 1745266126 }, iat: { type: integer, example: 1742587726 }, token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... } }, type: object }
+                type: object
+        '400':
+          description: 'Ошибка авторизации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка авторизации' }
+                  reasons: { type: array, items: { type: string, example: 'Некорректный номер телефона или код подтверждения' } }
+                type: object
+        '401':
+          description: 'Неверный код подтверждения или токен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Неверный код подтверждения' }
+                  message: { type: string, example: 'Введенный код неверный или устарел' }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка сервера' }
+                  message: { type: string, example: 'Произошла внутренняя ошибка сервера' }
+                type: object
+  /api/app/auth/refresh-token:
+    post:
+      tags:
+        - Авторизация
+      summary: 'Обновление токена доступа'
+      description: 'Обновление токена доступа по refresh-токену'
+      operationId: 03f986054a4739cdad0fdec7f254eefe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                refresh_token:
+                  type: string
+                  example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+              type: object
+      responses:
+        '200':
+          description: 'Токены успешно обновлены'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Успешная авторизация' }
+                  access_token: { properties: { expIn: { type: integer, example: 1746249483 }, iat: { type: integer, example: 1743571083 }, token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... } }, type: object }
+                  refresh_token: { properties: { expIn: { type: integer, example: 1746249483 }, iat: { type: integer, example: 1743571083 }, token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... } }, type: object }
+                type: object
+        '400':
+          description: 'Ошибка обновления токена'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обновления токена' }
+                  reasons: { type: array, items: { type: string, example: 'Отсутствует refresh токен' } }
+                type: object
+        '401':
+          description: 'Неверный refresh токен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Неверный refresh токен' }
+                  message: { type: string, example: 'Токен неверный или устарел' }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка сервера' }
+                  message: { type: string, example: 'Произошла внутренняя ошибка сервера' }
+                type: object
+  /api/app/banners:
+    get:
+      tags:
+        - Баннеры
+      summary: 'Получить список всех баннеров'
+      operationId: 5e6a7e5ec1e60e539d520767aac1a5d5
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество элементов на странице'
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: 'Список баннеров'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data: { type: array, items: { properties: { id: { type: integer }, title: { type: string }, image_url: { type: string }, link: { type: string, nullable: true }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object } }
+                  meta: { properties: { current_page: { type: integer }, per_page: { type: integer }, total: { type: integer }, last_page: { type: integer } }, type: object }
+                type: object
+  '/api/app/banners/{id}':
+    get:
+      tags:
+        - Баннеры
+      summary: 'Получить баннер по ID'
+      operationId: 1194b9b2b8e6ebc01116b23b32d0181d
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID баннера'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Информация о баннере'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data: { properties: { id: { type: integer }, title: { type: string }, image_url: { type: string }, link: { type: string }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }
+                type: object
+        '404':
+          description: 'Баннер не найден'
+  '/api/app/bargain/items/{item_id}':
+    get:
+      tags:
+        - 'Купить выгодно'
+      summary: "Получение информации о товаре из категории 'Купить выгодно'"
+      description: 'Возвращает подробную информацию о товаре и список аптек, где он доступен по сниженной цене'
+      operationId: 26c56a4c862689c784e7c6f3c7f9d1d2
+      parameters:
+        -
+          name: item_id
+          in: path
+          description: 'Уникальный идентификатор товара'
+          required: true
+          schema:
+            type: string
+        -
+          name: view_mode
+          in: query
+          description: 'Режим отображения аптек (list или map)'
+          required: false
+          schema:
+            type: string
+            enum:
+              - list
+              - map
+        -
+          name: region_id
+          in: query
+          description: 'ID региона для режима списка'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  item: { properties: { id: { type: string }, name: { type: string }, image_url: { type: string }, discounted_price: { type: number }, original_price: { type: number }, expiration_date: { type: string } }, type: object }
+                  pharmacies: { type: array, items: { properties: { id: { type: string }, name: { type: string }, address: { type: string }, phone: { type: string }, working_hours: { properties: { open: { type: string }, close: { type: string } }, type: object }, time_to_open_close: { type: string }, availability: { type: boolean }, coordinates: { properties: { longitude: { type: string }, latitude: { type: string } }, type: object } }, type: object } }
+                type: object
+        '400':
+          description: 'Некорректные параметры запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '404':
+          description: 'Товар не найден'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
+  /api/app/bargain/discounts/book:
+    post:
+      tags:
+        - 'Купить выгодно'
+      summary: "Бронирование товара из категории 'Купить выгодно'"
+      description: 'Бронирует товар с истекающим сроком годности в выбранной аптеке'
+      operationId: 38da59248ad9c18a66fd74ae9781f534
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - product_id
+                - pharmacy_id
+                - quantity
+              properties:
+                product_id:
+                  description: 'Уникальный идентификатор товара'
+                  type: string
+                pharmacy_id:
+                  description: 'Уникальный идентификатор выбранной аптеки'
+                  type: string
+                quantity:
+                  description: 'Количество товара'
+                  type: integer
+              type: object
+      responses:
+        '200':
+          description: 'Успешное бронирование'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string }
+                  order_id: { type: integer }
+                  total_price: { type: number }
+                type: object
+        '400':
+          description: 'Ошибка бронирования'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '401':
+          description: 'Пользователь не авторизован'
+        '404':
+          description: 'Товар или аптека не найдены'
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
+  /api/app/cart:
+    get:
+      tags:
+        - Корзина
+      summary: 'Получение содержимого корзины'
+      description: 'Возвращает текущий состав корзины пользователя'
+      operationId: 70381224c6821f5cacf86af89c367d04
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  cart_items: { type: array, items: { properties: { product_id: { type: string, example: '67507' }, name: { type: string, example: 'Сени Супер(Super Seni) 2 подгузники д/взр. M №30 средние талия 75-110' }, manufacturer: { type: string, example: 'TZMO S.A.' }, price: { type: number, format: float, example: 1688 }, discounted_price: { type: number, format: float, example: 1519.2 }, quantity: { type: integer, example: 2 }, bonuses_earned: { type: integer, example: 75 }, is_available_for_delivery: { type: boolean, example: true }, stickers: { type: array, items: { type: string, example: 'Хит продаж' } } }, type: object } }
+                  total_price: { type: number, format: float, example: 3038.4 }
+                  total_discounts: { type: number, format: float, example: 337.6 }
+                  total_bonuses: { type: integer, example: 150 }
+                  delivery_available: { type: boolean, example: true }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения корзины' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '401':
+          description: 'Ошибка авторизации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения корзины' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения корзины' }
+                  message: { type: string, example: 'Ошибка получения данных из базы' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+    put:
+      tags:
+        - Корзина
+      summary: 'Изменение количества товара в корзине'
+      description: 'Изменяет количество товара в корзине пользователя'
+      operationId: 28752e330bd5c21da6cd0f1614a0f9ec
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - product_id
+                - quantity
+              properties:
+                product_id:
+                  type: integer
+                  example: 67507
+                quantity:
+                  type: integer
+                  example: 3
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Количество товара успешно изменено' }
+                  cart_id: { type: integer, example: 12345 }
+                  total_items: { type: integer, example: 5 }
+                  total_price: { type: number, format: float, example: 5550.75 }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно изменить количество товара' }
+                  reasons: { type: array, items: { type: string, example: 'Превышено максимальное количество упаковок' } }
+                type: object
+        '401':
+          description: 'Ошибка авторизации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно изменить количество товара' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '404':
+          description: 'Товар не найден'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно изменить количество товара' }
+                  reasons: { type: array, items: { type: string, example: 'Товар не найден' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно изменить количество товара' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+    post:
+      tags:
+        - Корзина
+      summary: 'Добавление товара в корзину'
+      description: 'Добавляет товар в корзину пользователя'
+      operationId: 3e1333a122ccfc47a580d6b4482c2116
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - product_id
+                - quantity
+              properties:
+                product_id:
+                  type: integer
+                  example: 67507
+                quantity:
+                  type: integer
+                  example: 2
+                options:
+                  properties: { color: { type: string, example: белый }, size: { type: string, example: M } }
+                  type: object
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Товар успешно добавлен в корзину' }
+                  cart_id: { type: integer, example: 12345 }
+                  total_items: { type: integer, example: 3 }
+                  total_price: { type: number, format: float, example: 4550.5 }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно добавить товар' }
+                  reasons: { type: array, items: { type: string, example: 'Превышено максимальное количество упаковок' } }
+                type: object
+        '401':
+          description: 'Ошибка авторизации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно добавить товар' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '404':
+          description: 'Товар не найден'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно добавить товар' }
+                  reasons: { type: array, items: { type: string, example: 'Товар не найден' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно добавить товар' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/cart/delete:
+    post:
+      tags:
+        - Корзина
+      summary: 'Удаление товара из корзины'
+      description: 'Удаляет товар из корзины пользователя'
+      operationId: 7ee064a1d2bee8ef9694f3bdfd2d9da6
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - product_id
+              properties:
+                product_id:
+                  type: integer
+                  example: 3195741
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Товар успешно удален из корзины' }
+                  cart_id: { type: integer, example: 4 }
+                  total_items: { type: integer, example: 2 }
+                  total_price: { type: number, format: float, example: 306 }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно удалить товар' }
+                  reasons: { type: array, items: { type: string, example: 'Товар не найден в корзине' } }
+                type: object
+        '401':
+          description: 'Ошибка авторизации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно удалить товар' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '404':
+          description: 'Товар не найден'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно удалить товар' }
+                  reasons: { type: array, items: { type: string, example: 'Товар не найден' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно удалить товар' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/catalog:
+    get:
+      tags:
+        - Каталог
+      summary: 'Получение списка категорий'
+      description: 'Возвращает список всех категорий каталога'
+      operationId: bd7003fa43f059960e7c7b11f2a09aa3
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  categories: { type: array, items: { properties: { id: { type: string }, name: { type: string }, image: { type: string } }, type: object } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+  '/api/app/catalog/categories/{id}':
+    get:
+      tags:
+        - Каталог
+      summary: 'Получение групп для конкретной категории'
+      description: 'Возвращает список групп для указанной категории'
+      operationId: 53f8bd239b8102f4f14dcf2247e71c2e
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        -
+          name: sort
+          in: query
+          description: 'Параметр сортировки (только name)'
+          required: false
+          schema:
+            type: string
+            default: name
+            enum:
+              - name
+        -
+          name: order
+          in: query
+          description: 'Порядок сортировки (asc, desc)'
+          required: false
+          schema:
+            type: string
+            default: asc
+            enum:
+              - asc
+              - desc
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  totalCount: { type: integer }
+                  totalPage: { type: integer }
+                  currentPage: { type: integer }
+                  categories: { type: array, items: { properties: { id: { type: string }, name: { type: string }, image: { type: string }, groups: { type: array, items: { properties: { id: { type: string }, name: { type: string }, iblock_section_id: { type: string } }, type: object } } }, type: object } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+  '/api/app/catalog/categories/{id}/allProducts':
+    get:
+      tags:
+        - Каталог
+      summary: 'Получение всех продуктов для конкретной категории'
+      description: 'Возвращает список всех продуктов для указанной категории с возможностью фильтрации'
+      operationId: 198bd52951129492396a81ec1a46a702
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        -
+          name: sort
+          in: query
+          description: 'Параметр сортировки (name, price)'
+          required: false
+          schema:
+            type: string
+            default: name
+            enum:
+              - name
+              - price
+        -
+          name: order
+          in: query
+          description: 'Порядок сортировки (asc, desc)'
+          required: false
+          schema:
+            type: string
+            default: asc
+            enum:
+              - asc
+              - desc
+        -
+          name: filters
+          in: query
+          description: "JSON строка с фильтрами. Ключи - ID фильтров, значения - ID выбранных опций. Доступные фильтры:\n\n    **133 - Группа:**\n    - 8261: УХОД ЗА БОЛЬНЫМИ\n    - 8263: ПЕРВАЯ ПОМОЩЬ\n    - 19679: ЗАЩИТА ОТ ВИРУСОВ И БАКТЕРИЙ\n    - 8253: ИНТИМНАЯ ЖИЗНЬ\n\n    **168 - Вид замены:**\n    - 16090: САЛФЕТКА СПИРТОВАЯ\n    - 3390: БАКТЕРИЦИДНЫЙ ПЛАСТЫРЬ\n    - 3173: МАСКИ ОДНОРАЗОВЫЕ\n\n    **234 - Продаётся на сайте:**\n    - 19576: Да\n\n    **316 - Производитель (по эталону):**\n    - 22846: Новамед ООО\n    - 22689: Верофарм\n    - 20215: росс\n    - 22930: Спектрум\n\n    **162 - Подгруппа замены:**\n    - 9539: ПЕРЕВЯЗОЧНЫЕ СРЕДСТВА\n    - 9484: ПРЕЗЕРВАТИВЫ\n\n    **315 - Бренд:**\n    - 20718: Верофарм\n\n    **309 - Не обновлять цены из 1С:**\n    - 20144: Да\n\n    **142 - Форма для проблемы:**\n    - 19477: ПЛАСТЫРИ"
+          required: false
+          schema:
+            type: string
+          examples:
+            single_filter:
+              summary: 'Один фильтр - группа'
+              value: '{"133":"8261"}'
+            multiple_filters:
+              summary: 'Несколько фильтров'
+              value: '{"133":"8261","234":"19576"}'
+            complex_filters:
+              summary: 'Комплексная фильтрация'
+              value: '{"133":"19679","168":"3173","234":"19576","316":"22689"}'
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  products: { type: array, items: { properties: { id: { type: integer }, name: { type: string }, price: { type: number }, image_url: { type: string } }, type: object } }
+                  totalCount: { type: integer }
+                  totalPage: { type: integer }
+                  currentPage: { type: integer }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+  '/api/app/catalog/products/{id}':
+    get:
+      tags:
+        - Каталог
+      summary: 'Получение информации о продукте'
+      description: 'Возвращает детальную информацию о продукте по его ID'
+      operationId: feb27be301717e34916b8c38cc4fdde3
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  product_id: { type: integer }
+                  name: { type: string }
+                  description: { type: string }
+                  manufacturer: { type: string }
+                  price: { type: number }
+                  discounted_price: { type: number, nullable: true }
+                  availability: { properties: { pharmacy_id: { type: integer, nullable: true }, in_stock: { type: boolean }, stock_count: { type: string } }, type: object }
+                  images: { type: array, items: { type: string } }
+                  categories: { type: string }
+                  attributes: { type: object }
+                  bonuses: { type: integer }
+                  stickers: { type: array, items: { type: string } }
+                type: object
+        '404':
+          description: 'Продукт не найден'
+        '500':
+          description: 'Ошибка сервера'
+  /api/app/favorites/products:
+    get:
+      tags:
+        - Избранное
+      summary: 'Получение списка избранных товаров'
+      description: 'Возвращает список избранных товаров для авторизованного пользователя'
+      operationId: 1ff35f1a15ebf5d55b93a1e50c6a260e
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  favorites: { type: array, items: { properties: { product_id: { type: integer, example: 67507 }, name: { type: string, example: 'Сени Супер(Super Seni) 2 подгузники д/взр. M №30 средние талия 75-110' }, category: { type: string, example: 'подгузники для взрослых' }, price: { type: string, format: decimal, example: '1688.00' }, is_available: { type: boolean, example: true } }, type: object } }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения избранных товаров' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения избранных товаров' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+    post:
+      tags:
+        - Избранное
+      summary: 'Добавление товаров в избранное'
+      description: 'Добавляет товары в список избранных для авторизованного пользователя'
+      operationId: 63eab9a31d2bd235094772e91960194c
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - product_id
+              properties:
+                product_id:
+                  type: array
+                  items: { type: integer }
+                  example: [67505, 67507]
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Товары добавлены в избранное' }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка добавления товаров в избранное' }
+                  reasons: { type: array, items: { type: string, example: 'Не указан ID товара' } }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка добавления товаров в избранное' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка добавления товаров в избранное' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+    delete:
+      tags:
+        - Избранное
+      summary: 'Удаление товара из избранного'
+      description: 'Удаляет товар из списка избранных для авторизованного пользователя'
+      operationId: b0cc1781628386ef98895d6bd9a30d6b
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - product_id
+              properties:
+                product_id:
+                  type: integer
+                  example: 67505
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Товар удален из избранного' }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка удаления товара из избранного' }
+                  reasons: { type: array, items: { type: string, example: 'Не указан ID товара' } }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка удаления товара из избранного' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка удаления товара из избранного' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/favorites/pharmacies:
+    get:
+      tags:
+        - Избранное
+      summary: 'Получение списка избранных аптек'
+      description: 'Возвращает список избранных аптек для авторизованного пользователя'
+      operationId: 36d1259e2ee1a06318fa496ba5b85175
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  pharmacies: { type: array, items: { properties: { id: { type: integer, example: 45 }, name: { type: string, example: 'Аптека №1' }, address: { type: string, example: 'ул. Ленина, 10' }, phone: { type: string, example: '+7 (999) 123-45-67' }, working_hours: { type: string, example: '08:00-22:00' } }, type: object } }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения избранных аптек' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения избранных аптек' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+    post:
+      tags:
+        - Избранное
+      summary: 'Добавление аптеки в избранное'
+      description: 'Добавляет аптеку в список избранных для авторизованного пользователя'
+      operationId: dd4bd045933ec2018bfbfa13f8792889
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - pharmacy_id
+              properties:
+                pharmacy_id:
+                  type: integer
+                  example: 3319
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Аптека добавлена в избранное' }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка добавления аптеки в избранное' }
+                  reasons: { type: array, items: { type: string, example: 'Не указан ID аптеки' } }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка добавления аптеки в избранное' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка добавления аптеки в избранное' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+    delete:
+      tags:
+        - Избранное
+      summary: 'Удаление аптеки из избранного'
+      description: 'Удаляет аптеку из списка избранных для авторизованного пользователя'
+      operationId: fcdeea6f24c41333aae99b202bee4379
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - pharmacy_id
+              properties:
+                pharmacy_id:
+                  type: integer
+                  example: 3319
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Аптека удалена из избранного' }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка удаления аптеки из избранного' }
+                  reasons: { type: array, items: { type: string, example: 'Не указан ID аптеки' } }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка удаления аптеки из избранного' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка удаления аптеки из избранного' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/loyalty-card/register:
+    post:
+      tags:
+        - 'Карты лояльности'
+      summary: 'Регистрация карты лояльности'
+      description: 'Регистрирует физическую или виртуальную карту лояльности в системе'
+      operationId: 462c3171b95414672441dc0d2ff1242e
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                card_number:
+                  description: '13 цифр (для физической карты)'
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                phone_number:
+                  description: 'Формат +7 9XX XXX XX XX'
+                  type: string
+                birth_date:
+                  description: 'Формат YYYY-MM-DD'
+                  type: string
+                gender:
+                  description: 'М или Ж'
+                  type: string
+                email:
+                  description: Email
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string }
+                  card_number: { type: string }
+                  type: { description: 'physical или virtual', type: string }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '401':
+          description: 'Не авторизован'
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
+  /api/app/loyalty-card/qr-code:
+    get:
+      tags:
+        - 'Карты лояльности'
+      summary: 'Получение QR-кода карты лояльности'
+      description: 'Генерирует QR-код для зарегистрированной карты лояльности'
+      operationId: 75e7a7a61b84a8b9070a3818569e1f50
+      parameters:
+        -
+          name: card_id
+          in: path
+          description: 'Идентификатор карты лояльности'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string }
+                  qr_code: { description: 'Base64 код', type: string }
+                  card_number: { type: string }
+                  bonus_points: { type: integer }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '404':
+          description: 'Карта не найдена'
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
+  /api/app/loyalty-card:
+    get:
+      tags:
+        - 'Карты лояльности'
+      summary: 'Получение информации о карте лояльности'
+      description: 'Возвращает данные о карте лояльности'
+      operationId: 0284ab43a7a9a0e47965c2f94dc59187
+      parameters:
+        -
+          name: card_id
+          in: path
+          description: 'Идентификатор карты лояльности'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  card_number: { type: string }
+                  card_type: { description: 'physical или virtual', type: string }
+                  bonus_balance: { type: integer }
+                  is_active: { type: boolean }
+                type: object
+        '400':
+          description: 'Ошибка запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '404':
+          description: 'Карта не найдена'
+        '500':
+          description: 'Ошибка сервера'
+      security:
+        -
+          bearer: []
+  /api/app/new-products:
+    get:
+      tags:
+        - 'Новые продукты'
+      summary: 'Получить список новых продуктов'
+      operationId: 420a947c531b4c46f8b13f4812c9e726
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество элементов на странице'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        -
+          name: include_details
+          in: query
+          description: 'Включить детали продукта'
+          required: false
+          schema:
+            type: boolean
+            default: true
+        -
+          name: all
+          in: query
+          description: 'Получить все новые продукты без пагинации'
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 'Список новых продуктов'
+  '/api/app/new-products/{id}':
+    get:
+      tags:
+        - 'Новые продукты'
+      summary: 'Получить новый продукт по ID'
+      operationId: adc348ad67687203f8a9d3719e38e16c
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID нового продукта'
+          required: true
+          schema:
+            type: integer
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продукта'
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Информация о новом продукте'
+        '404':
+          description: 'Новый продукт не найден'
+  /api/app/orders:
+    get:
+      tags:
+        - Заказы
+      summary: 'Получение списка заказов'
+      description: 'Возвращает список заказов для авторизованного пользователя'
+      operationId: da0191f4b82393459c3c2b14693bbd70
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  orders: { type: array, items: { properties: { order_id: { type: string, example: '436031' }, status: { type: string, example: Принят }, total_price: { type: string, example: '319.0000' }, delivery_price: { type: string, example: '0.0000' }, delivery_date: { type: string, example: '' } }, type: object } }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения заказов' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения заказов' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/orders/search:
+    get:
+      tags:
+        - Заказы
+      summary: 'Поиск заказов'
+      description: 'Поиск заказов по различным параметрам'
+      operationId: fb3983f73634919016a2bdef4801f894
+      parameters:
+        -
+          name: order_id
+          in: query
+          description: 'ID заказа'
+          schema:
+            type: string
+        -
+          name: status
+          in: query
+          description: 'Статус заказа'
+          schema:
+            type: string
+            enum:
+              - created
+              - in_progress
+              - delivered
+              - canceled
+        -
+          name: date_from
+          in: query
+          description: 'Начальная дата периода поиска (YYYY-MM-DD)'
+          schema:
+            type: string
+            format: date
+        -
+          name: date_to
+          in: query
+          description: 'Конечная дата периода поиска (YYYY-MM-DD)'
+          schema:
+            type: string
+            format: date
+        -
+          name: min_price
+          in: query
+          description: 'Минимальная сумма заказа'
+          schema:
+            type: number
+            format: float
+        -
+          name: max_price
+          in: query
+          description: 'Максимальная сумма заказа'
+          schema:
+            type: number
+            format: float
+        -
+          name: limit
+          in: query
+          description: 'Количество заказов на страницу'
+          schema:
+            type: integer
+        -
+          name: offset
+          in: query
+          description: 'Смещение для пагинации'
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  orders: { type: array, items: { properties: { order_id: { type: string }, status: { type: string }, total_price: { type: number, format: float }, created_at: { type: string }, items: { type: array, items: { properties: { product_id: { type: string }, name: { type: string }, quantity: { type: integer }, price: { type: number, format: float } }, type: object } } }, type: object } }
+                  pagination: { properties: { limit: { type: integer }, offset: { type: integer }, total: { type: integer } }, type: object }
+                type: object
+        '400':
+          description: 'Некорректные параметры запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Некорректные параметры запроса' }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обработки данных' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/orders/create:
+    post:
+      tags:
+        - Заказы
+      summary: 'Создание заказа или оформление доставки'
+      description: 'Создание нового заказа с товарами или оформление доставки существующего заказа'
+      operationId: 5496f886be8f6757bc24ff229f7df9f6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                -
+                  title: 'Создание заказа с товарами'
+                  required: [items]
+                  properties: { items: { type: array, items: { properties: { product_id: { type: string }, quantity: { type: string }, type: { type: string, enum: [available, available_on_request, not_available] } }, type: object } } }
+                  type: object
+                -
+                  title: 'Оформление доставки'
+                  required: [address, date_delivery, time_delivery, order_type]
+                  properties: { address: { type: string, example: 'Санкт-Петербург, улица Дыбенко, 23к1' }, date_delivery: { type: string, example: 19.05.2025 }, time_delivery: { type: string, example: '21:37' }, order_type: { type: string, enum: [delivery, pickup] }, LON: { type: string, example: '59.904193' }, LAT: { type: string, example: '30.474088' } }
+                  type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - { title: 'Ответ при создании заказа с товарами', properties: { success: { properties: { orders: { properties: { available_on_request: { type: array, items: { properties: { price: { type: integer }, discountPrice: { type: integer }, sumPrice: { type: integer }, sumDiscountPrice: { type: integer }, name: { type: string }, link: { type: string }, image: { type: string, nullable: true }, id: { type: string }, amount: { type: string } }, type: object } } }, type: object } }, type: object } }, type: object }
+                  - { title: 'Ответ при оформлении доставки', properties: { address: { type: string, example: 'Санкт-Петербург, улица Дыбенко, 23к1' }, time_delivery: { type: string, example: '21:37 - 22:37' }, sum: { type: number, example: 242 }, economy: { type: number, example: 0 }, delivery_price: { type: number, example: 167 }, sum_with_delivery: { type: number, example: 409 }, bonuses: { type: number, example: 0 }, items: { type: array, items: { properties: { sumPrice: { type: number }, sumDiscountPrice: { type: number }, price: { type: number }, discountPrice: { type: number }, amount: { type: integer }, id: { type: string }, name: { type: string }, link: { type: string }, image: { type: string } }, type: object } }, orderId: { type: string, example: '436108' }, redirect_url: { type: string, example: 'https://sbox.payecom.ru/pay_ru?orderId=fd58479f-32a4-590d-1a23-40e70d053ab8' } }, type: object }
+        '400':
+          description: 'Нарушены правила оформления заказа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: array, items: { type: string, example: 'К сожалению, предложение уже неактуально.' } }
+                type: object
+        '401':
+          description: 'Пользователь не авторизован'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Пользователь не авторизован' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  '/api/app/orders/{order_id}/cancel':
+    post:
+      tags:
+        - Заказы
+      summary: 'Отмена заказа'
+      description: 'Отмена заказа с возможным указанием причины'
+      operationId: 781fe41d63aaea85ba5d1f898e2ccca9
+      parameters:
+        -
+          name: order_id
+          in: path
+          description: 'ID заказа'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                reason:
+                  description: 'Причина отмены заказа'
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Заказ успешно отменен' }
+                  refund: { properties: { amount: { type: number, format: float }, loyalty_points_restored: { type: integer } }, type: object }
+                type: object
+        '400':
+          description: 'Неверный статус заказа или ошибка данных'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Невозможно отменить заказ' }
+                  reasons: { type: array, items: { type: string, example: 'Заказ уже завершен' } }
+                type: object
+        '401':
+          description: 'Пользователь не авторизован'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Пользователь не авторизован' }
+                type: object
+        '404':
+          description: 'Заказ с указанным ID не найден'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Заказ не найден' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/orders/cart:
+    post:
+      tags:
+        - Заказы
+        - Корзина
+      summary: 'Получение корзины товаров'
+      description: 'Возвращает информацию о доступности товаров в разных аптеках и регионах'
+      operationId: a977028535f131e71a00add325f9b5b9
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                required:
+                  - id
+                  - quantity
+                properties:
+                  id: { type: string, example: '3195741' }
+                  quantity: { type: string, example: '2' }
+                type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  STORES: { type: array, items: { properties: { address: { type: string }, TITLE: { type: string }, metro: { type: string, nullable: true }, optics: { type: string }, discounter: { type: string }, roundtheclock: { type: integer }, iconHref: { type: string }, phone: { type: string }, workTime: { type: string }, brand: { type: string }, coordinates: { type: string }, textCloseTime: { type: string }, classCloseTime: { type: string }, storeId: { type: string }, storeXmlId: { type: string }, GPS_N: { type: string }, GPS_S: { type: string }, AMOUNTS: { properties: { ID: { type: string }, TEXT: { type: string } }, type: object }, UF_REGION: { type: string }, SUM: { properties: { sumPrice: { type: integer }, sumDiscountPrice: { type: integer } }, type: object }, raspisanie: { type: array, items: { type: string } } }, type: object } }
+                  REGIONS: { type: object, additionalProperties: { properties: { NAME: { type: string } }, type: object } }
+                type: object
+        '400':
+          description: 'Некорректные параметры запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Некорректные параметры запроса' }
+                type: object
+        '401':
+          description: 'Пользователь не авторизован'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Пользователь не авторизован' }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обработки данных' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  '/api/app/orders/cart/{pharmacy_id}':
+    post:
+      tags:
+        - Заказы
+        - Корзина
+      summary: 'Получение корзины товаров в конкретной аптеке'
+      description: 'Возвращает информацию о товарах в корзине для выбранной аптеки'
+      operationId: a3adb2da3ec14a8cd74676e328693173
+      parameters:
+        -
+          name: pharmacy_id
+          in: path
+          description: 'ID аптеки'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                required:
+                  - id
+                  - quantity
+                properties:
+                  id: { type: string, example: '3195741' }
+                  quantity: { type: string, example: '2' }
+                type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  ORDER_SUM: { type: integer }
+                  ORDER_DISCOUNT_SUM: { type: integer }
+                  items: { properties: { available_on_request: { type: array, items: { properties: { price: { type: integer }, discountPrice: { type: integer }, sumPrice: { type: integer }, sumDiscountPrice: { type: integer }, price_nevis: { type: integer }, price_nevis_discount: { type: integer }, name: { type: string }, link: { type: string }, image: { type: string, nullable: true }, recipe: { type: string, nullable: true }, isDelivery: { type: boolean }, amount: { type: string }, maxAmount: { type: integer }, id: { type: string }, expires: { type: string }, discounts: { properties: { QUANTITY: { type: string }, PRICE: { type: integer }, CURRENCY: { type: string }, PRICE_TYPE_ID: { type: string }, PROPERTIES: { type: object }, HOME_DELIVERY_IS_RECIPE: { type: boolean }, HOME_DELIVERY: { type: boolean }, PAY_QUANTITY: { type: string }, SUM_FULL_PRICE: { type: integer }, SUM_FULL_PRICE_WITHOUT_DISCOUNT: { type: integer }, SUM_PRICE: { type: integer }, SUM_DISCOUNT_PRICE: { type: integer }, SUM_FULL_PRICE_FORMATED: { type: string }, SUM_FULL_PRICE_WITHOUT_DISCOUNT_FORMATED: { type: string }, SUM_DISCOUNT_PRICE_FORMATED: { type: string }, DISCOUNT_PRICE_PERCENT: { type: integer }, DISCOUNT_PRICE_PERCENT_FORMATED: { type: string }, PROPS: { type: object } }, type: object }, productId: { type: string }, externalId: { type: string } }, type: object } } }, type: object }
+                  isDeliveryPharm: { type: boolean }
+                type: object
+        '400':
+          description: 'Некорректные параметры запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Некорректные параметры запроса' }
+                type: object
+        '401':
+          description: 'Пользователь не авторизован'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Пользователь не авторизован' }
+                type: object
+        '404':
+          description: 'Аптека не найдена'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Аптека не найдена' }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обработки данных' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/pharmacies:
+    get:
+      tags:
+        - Аптеки
+      summary: 'Получение списка аптек'
+      description: 'Возвращает список аптек для отображения в режиме списка или на карте'
+      operationId: 871d2cfb4a7c49eea56c4472fb106a23
+      parameters:
+        -
+          name: view
+          in: query
+          description: 'Режим отображения (list или map)'
+          required: true
+          schema:
+            type: string
+            enum:
+              - list
+              - map
+        -
+          name: region_id
+          in: query
+          description: 'ID региона для фильтрации аптек'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  pharmacies: { type: array, items: { properties: { id: { type: string }, name: { type: string }, address: { type: string }, phone: { type: string }, working_hours: { type: string }, distance: { type: number, format: float }, is_favorite: { type: boolean }, coordinates: { properties: { longitude: { type: string }, latitude: { type: string } }, type: object }, time_to_open_close: { type: string } }, type: object } }
+                  map_focus: { properties: { latitude: { type: number, format: float }, longitude: { type: number, format: float }, zoom: { type: integer } }, type: object }
+                type: object
+        '400':
+          description: 'Некорректный запрос'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                type: object
+  '/api/app/pharmacies/{pharmacy_id}':
+    get:
+      tags:
+        - Аптеки
+      summary: 'Получение информации о конкретной аптеке'
+      description: 'Возвращает детальную информацию об аптеке по её ID'
+      operationId: 8fb0ba9f1b4311a9a51a5380169ba7c6
+      parameters:
+        -
+          name: pharmacy_id
+          in: path
+          description: 'Уникальный идентификатор аптеки'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  pharmacy_id: { type: string }
+                  name: { type: string }
+                  address: { type: string }
+                  phone_number: { type: string }
+                  working_hours: { properties: { open_time: { type: string }, close_time: { type: string } }, type: object }
+                  time_to_open_or_close: { properties: { hours: { type: integer }, minutes: { type: integer } }, type: object }
+                  is_favorite: { type: boolean }
+                type: object
+        '404':
+          description: 'Аптека не найдена'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                type: object
+  /api/app/popular-products:
+    get:
+      tags:
+        - 'Популярные продукты'
+      summary: 'Получить список популярных продуктов'
+      operationId: 7ae75b071587d5c8ed286cef740d3b56
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество элементов на странице'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        -
+          name: include_details
+          in: query
+          description: 'Включить детали продукта'
+          required: false
+          schema:
+            type: boolean
+            default: true
+        -
+          name: all
+          in: query
+          description: 'Получить все популярные продукты без пагинации'
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 'Список популярных продуктов'
+  '/api/app/popular-products/{id}':
+    get:
+      tags:
+        - 'Популярные продукты'
+      summary: 'Получить популярный продукт по ID'
+      operationId: 1d7b152e7e020cc6e8e4af02d09024c3
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID популярного продукта'
+          required: true
+          schema:
+            type: integer
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продукта'
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Информация о популярном продукте'
+        '404':
+          description: 'Популярный продукт не найден'
+  /api/app/promotions:
+    get:
+      tags:
+        - Акции
+      summary: 'Получить список всех акций'
+      operationId: 27853b8dec98f3e05e345988db55f429
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество элементов на странице'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        -
+          name: include_products
+          in: query
+          description: 'Включить информацию о продуктах'
+          required: false
+          schema:
+            type: boolean
+            default: false
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продуктов из API'
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Список акций'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data: { type: array, items: { properties: { id: { type: integer }, title: { type: string }, description: { type: string }, image_url: { type: string }, link: { type: string }, products: { type: array, items: { properties: { id: { type: integer }, name: { type: string }, original_price: { type: number }, promotional_price: { type: number }, discount_percent: { type: number }, image_url: { type: string } }, type: object } }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object } }
+                  meta: { properties: { current_page: { type: integer }, per_page: { type: integer }, total: { type: integer }, last_page: { type: integer } }, type: object }
+                type: object
+  '/api/app/promotions/{id}':
+    get:
+      tags:
+        - Акции
+      summary: 'Получить акцию по ID'
+      operationId: dbdb2b4d139f22d74f08c93a26dc21da
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID акции'
+          required: true
+          schema:
+            type: integer
+        -
+          name: include_products
+          in: query
+          description: 'Включить информацию о продуктах'
+          required: false
+          schema:
+            type: boolean
+            default: true
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продуктов из API'
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Информация об акции'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data: { properties: { id: { type: integer }, title: { type: string }, description: { type: string }, image_url: { type: string }, link: { type: string }, products: { type: array, items: { type: object } }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object }
+                type: object
+        '404':
+          description: 'Акция не найдена'
+  '/api/app/promotions/products/{ids}/promotions':
+    get:
+      tags:
+        - Акции
+      summary: 'Получить акции для списка продуктов'
+      operationId: 4b68ba4d8a93d006a6be96e58b26af25
+      parameters:
+        -
+          name: ids
+          in: path
+          description: 'ID продуктов через запятую'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Акции для продуктов'
+  /api/app/recommended-products:
+    get:
+      tags:
+        - 'Рекомендованные продукты'
+      summary: 'Получить список рекомендованных продуктов'
+      operationId: accec2f9453771aa78324022ce44aaaf
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество элементов на странице'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        -
+          name: include_details
+          in: query
+          description: 'Включить детали продукта'
+          required: false
+          schema:
+            type: boolean
+            default: true
+        -
+          name: all
+          in: query
+          description: 'Получить все рекомендованные продукты без пагинации'
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: 'Список популярных продуктов'
+  '/api/app/recommended-products/{id}':
+    get:
+      tags:
+        - 'Рекомендованные продукты'
+      summary: 'Получить рекомендованный продукт по ID'
+      operationId: 5de5d65ce894034f5d0b68f1a00a9e5b
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID рекомендованного продукта'
+          required: true
+          schema:
+            type: integer
+        -
+          name: refresh_products
+          in: query
+          description: 'Обновить данные продукта'
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Информация о рекомендованном продукте'
+        '404':
+          description: 'Рекомендованный продукт не найден'
+  /api/app/regions:
+    get:
+      tags:
+        - Регионы
+      summary: 'Получение списка регионов'
+      description: 'Возвращает список доступных регионов для выбора пользователем с указанием выбранного региона'
+      operationId: ab6d6ee59707b6dee0136e037a950f89
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  regions: { type: array, items: { properties: { region_id: { type: integer }, region_name: { type: string }, default: { type: boolean } }, type: object } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/region:
+    post:
+      tags:
+        - Регионы
+      summary: 'Выбор региона'
+      description: 'Устанавливает выбранный пользователем регион. Если регион не выбран, то по умолчанию ставит region_id:2 - Санкт-Петербург'
+      operationId: f731d2b1cc9b2358da4fb0e56d451420
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                region_id:
+                  description: 'ID выбранного региона'
+                  type: integer
+              type: object
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string }
+                  region_id: { type: integer }
+                type: object
+        '400':
+          description: 'Некорректный запрос'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '403':
+          description: 'Доступ запрещен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                  reasons: { type: array, items: { type: string } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/search:
+    get:
+      tags:
+        - Поиск
+      summary: 'Поиск товаров'
+      description: 'Выполняет поиск товаров с возможностью фильтрации и сортировки'
+      operationId: 7855e4d9c1b0f780c252f753ad07e41e
+      parameters:
+        -
+          name: query
+          in: query
+          description: 'Поисковый запрос'
+          required: true
+          schema:
+            type: string
+            maxLength: 255
+        -
+          name: page
+          in: query
+          description: 'Номер страницы (начиная с 1)'
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество товаров на странице'
+          required: false
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+            minimum: 1
+        -
+          name: sort
+          in: query
+          description: 'Тип сортировки'
+          required: false
+          schema:
+            type: string
+            default: DEFAULT
+            enum:
+              - DEFAULT
+              - PRICE_ASC
+              - PRICE_DESC
+              - POPULAR
+              - NEW
+        -
+          name: 'filters[categories][]'
+          in: query
+          description: 'Фильтр по категориям'
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        -
+          name: 'filters[brands][]'
+          in: query
+          description: 'Фильтр по брендам'
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        -
+          name: 'filters[price_min]'
+          in: query
+          description: 'Минимальная цена'
+          required: false
+          schema:
+            type: number
+            minimum: 0
+        -
+          name: 'filters[price_max]'
+          in: query
+          description: 'Максимальная цена'
+          required: false
+          schema:
+            type: number
+            minimum: 0
+        -
+          name: 'filters[attributes]'
+          in: query
+          description: 'Дополнительные атрибуты для фильтрации (цвет, размер и т.д.)'
+          required: false
+          schema:
+            type: object
+      responses:
+        '200':
+          description: 'Успешный поиск'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  data: { properties: { totalHits: { description: 'Общее количество найденных товаров', type: integer }, products: { type: array, items: { properties: { id: { type: string }, name: { type: string }, price: { type: number }, brand: { type: string }, category: { type: string }, image: { type: string }, url: { type: string }, available: { type: boolean } }, type: object } }, pagination: { properties: { current_page: { description: 'Текущая страница', type: integer }, per_page: { description: 'Количество элементов на странице', type: integer }, total: { description: 'Общее количество товаров', type: integer }, last_page: { description: 'Номер последней страницы', type: integer }, from: { description: 'Номер первого элемента на странице', type: integer }, to: { description: 'Номер последнего элемента на странице', type: integer }, has_more_pages: { description: 'Есть ли еще страницы', type: boolean } }, type: object }, facets: { description: 'Доступные фильтры для уточнения поиска', type: object }, correction: { description: 'Предложение исправления запроса', type: string } }, type: object }
+                type: object
+        '422':
+          description: 'Ошибка валидации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  message: { type: string, example: 'Ошибка валидации' }
+                  errors: { description: 'Детали ошибок валидации', type: object }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  message: { type: string, example: 'Ошибка при выполнении поиска' }
+                type: object
+  /api/search/autocomplete:
+    get:
+      tags:
+        - Поиск
+      summary: 'Автодополнение для поиска'
+      description: 'Возвращает подсказки для поискового запроса и релевантные товары'
+      operationId: 80fe69652be780efcc4e01c03873cf8f
+      parameters:
+        -
+          name: query
+          in: query
+          description: 'Частичный поисковый запрос для автодополнения'
+          required: true
+          schema:
+            type: string
+            maxLength: 255
+      responses:
+        '200':
+          description: 'Успешное получение подсказок'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  data: { properties: { queries: { description: 'Список подсказок для запроса', type: array, items: { type: string } }, products: { description: 'Список релевантных товаров (до 20 шт.)', type: array, items: { properties: { id: { type: string }, name: { type: string }, price: { type: number }, brand: { type: string }, image: { type: string }, url: { type: string } }, type: object } }, totalHits: { description: 'Общее количество найденных товаров', type: integer } }, type: object }
+                type: object
+        '422':
+          description: 'Ошибка валидации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  message: { type: string, example: 'Ошибка валидации' }
+                  errors: { description: 'Детали ошибок валидации', type: object }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  message: { type: string, example: 'Ошибка при получении автодополнения' }
+                type: object
+  /api/app/stories:
+    get:
+      tags:
+        - Сториз
+      summary: 'Получить список историй'
+      description: 'Получить список историй'
+      operationId: ee30a44da9bd57a8942d85a268f10793
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы'
+          required: false
+          schema:
+            type: integer
+            default: 1
+        -
+          name: per_page
+          in: query
+          description: 'Количество элементов на странице'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        -
+          name: published_only
+          in: query
+          description: 'Только опубликованные истории'
+          required: false
+          schema:
+            type: boolean
+            default: false
+        -
+          name: all
+          in: query
+          description: 'Получить все истории без пагинации'
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: 'Список историй'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data: { type: array, items: { properties: { id: { type: integer }, title: { type: string }, description: { type: string }, image_url: { type: string }, status: { type: string, enum: [draft, published] }, order: { type: integer }, published_at: { type: string, format: date-time }, steps_count: { type: integer }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time } }, type: object } }
+                  meta: { properties: { current_page: { type: integer }, per_page: { type: integer }, total: { type: integer }, last_page: { type: integer } }, type: object }
+                type: object
+  '/api/app/stories/{id}':
+    get:
+      tags:
+        - Сториз
+      summary: 'Получить историю по ID с деталями'
+      operationId: e28c5cf8726b1f1bb3231d01c22066bd
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID истории'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Информация об истории с шагами и кнопками'
+          content:
+            application/json:
+              schema:
+                properties:
+                  data: { properties: { id: { type: integer }, title: { type: string }, description: { type: string }, image_url: { type: string }, status: { type: string, enum: [draft, published] }, order: { type: integer }, published_at: { type: string, format: date-time }, created_at: { type: string, format: date-time }, updated_at: { type: string, format: date-time }, steps: { type: array, items: { properties: { id: { type: integer }, text: { type: string }, image_url: { type: string }, order: { type: integer }, buttons: { type: array, items: { properties: { id: { type: integer }, text: { type: string }, action: { type: string }, url: { type: string } }, type: object } } }, type: object } } }, type: object }
+                type: object
+        '404':
+          description: 'История не найдена'
+  /api/app/users/profile:
+    get:
+      tags:
+        - Пользователи
+      summary: 'Получение профиля пользователя'
+      description: 'Возвращает данные профиля авторизованного пользователя'
+      operationId: c09423aee16ba9579360aca8f0712531
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  personal_info: { properties: { first_name: { type: string, example: null, nullable: true }, last_name: { type: string, example: null, nullable: true }, phone: { type: string, example: '+7 (927) 779-9417' }, date_of_birth: { type: string, example: null, nullable: true }, gender: { type: string, example: '' }, email: { type: string, example: null, nullable: true }, subscribe_to_marketing: { type: boolean, example: true } }, type: object }
+                  delivery_address: { properties: { city: { type: string, example: '' }, street: { type: string, example: '' }, building: { type: string, example: '' }, apartment: { type: string, example: '' } }, type: object }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения данных профиля' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения данных профиля' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+    put:
+      tags:
+        - Пользователи
+      summary: 'Обновление профиля пользователя'
+      description: 'Обновляет данные профиля авторизованного пользователя'
+      operationId: 796c5623f43498ab19fe2d2af866a14f
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - first_name
+                - last_name
+                - date_of_birth
+                - gender
+                - email
+                - subscribe_to_marketing
+              properties:
+                first_name:
+                  type: string
+                  example: Иван
+                last_name:
+                  type: string
+                  example: Иванов
+                date_of_birth:
+                  type: string
+                  example: 01.01.1990
+                gender:
+                  type: string
+                  example: M
+                email:
+                  type: string
+                  example: email@example.com
+                subscribe_to_marketing:
+                  type: string
+                  example: 'true'
+              type: object
+      responses:
+        '200':
+          description: 'Профиль успешно обновлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Профиль успешно обновлен' }
+                type: object
+        '400':
+          description: 'Ошибка валидации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обновления профиля' }
+                  reasons: { type: array, items: { type: string, example: 'Некорректный формат email' } }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обновления профиля' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обновления профиля' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/app/users/profile/delivery:
+    get:
+      tags:
+        - Пользователи
+      summary: 'Получение адреса доставки'
+      description: 'Возвращает данные адреса доставки авторизованного пользователя'
+      operationId: 112596540683431f9bfeaf0cccc34c44
+      responses:
+        '200':
+          description: 'Успешный ответ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  city: { type: string, example: Санкт-Петербург }
+                  street_and_house: { type: string, example: 'ул.Плюшкина Ватрушкина,' }
+                  entrance: { type: string, example: '3' }
+                  floor: { type: string, example: '5' }
+                  apartment: { type: string, example: '666' }
+                  intercom: { type: string, example: Нурик123 }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения данных адреса доставки' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения данных адреса доставки' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+    put:
+      tags:
+        - Пользователи
+      summary: 'Обновление адреса доставки'
+      description: 'Обновляет данные адреса доставки авторизованного пользователя'
+      operationId: 902a63b05ca1dbea2df7ee1fb5573472
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - city
+                - street_and_house
+                - entrance
+                - floor
+                - apartment
+                - intercom
+
+                
+              properties:
+                city:
+                  type: string
+                  example: Санкт-Петербург
+                street_and_house:
+                  type: string
+                  example: 'ул.Плюшкина Ватрушкина, 13'
+                entrance:
+                  type: string
+                  example: '3'
+                floor:
+                  type: string
+                  example: '5'
+                apartment:
+                  type: string
+                  example: '666'
+                intercom:
+                  type: string
+                  example: Нурик123
+              type: object
+      responses:
+        '200':
+          description: 'Адрес доставки успешно обновлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Данные по доставке обновлены успешно' }
+                type: object
+        '400':
+          description: 'Ошибка валидации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обновления адреса доставки' }
+                  reasons: { type: array, items: { type: string, example: 'Поле city обязательно для заполнения' } }
+                type: object
+        '403':
+          description: 'Ошибка доступа'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обновления адреса доставки' }
+                  reasons: { type: array, items: { type: string, example: 'Пользователь не авторизован' } }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обновления адреса доставки' }
+                  message: { type: string, example: 'Внутренняя ошибка сервера' }
+                type: object
+      security:
+        -
+          bearerAuth: []
+  /api/webhook/dilivery/status-update:
+    post:
+      tags:
+        - Доставка
+      summary: 'Вебхук для обновления статуса доставки'
+      description: 'Принимает уведомления от службы доставки о смене статуса заказа и отправляет push-уведомления'
+      operationId: fb40d6ee71a0ca2276d02b4b87ed3826
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - order_id
+                - status
+                - user_id
+                - fcm_tokens
+              properties:
+                order_id:
+                  description: 'ID заказа'
+                  type: string
+                  example: '436108'
+                user_id:
+                  description: 'ID пользователя'
+                  type: string
+                  example: '12345'
+                fcm_tokens:
+                  description: 'Массив FCM токенов устройств пользователя'
+                  type: array
+                  items: { type: string }
+                  example: [token1, token2]
+                status:
+                  description: 'Новый статус заказа'
+                  type: string
+                  enum: [created, collected, payed, confirmed, in_delivery_to_pharm, in_delivery_to_client, delivered, finished, to_disband, canceled]
+                  example: in_delivery
+                delivery_date:
+                  description: 'Дата и время доставки'
+                  type: string
+                  format: date-time
+                  example: '2025-06-02T15:30:00Z'
+                courier_name:
+                  description: 'Имя курьера'
+                  type: string
+                  example: 'Иван Петров'
+                courier_phone:
+                  description: 'Телефон курьера'
+                  type: string
+                  example: '+7 (999) 123-45-67'
+                tracking_number:
+                  description: 'Трек-номер доставки'
+                  type: string
+                  example: TR123456789
+                estimated_delivery_time:
+                  description: 'Ориентировочное время доставки'
+                  type: string
+                  example: '30-45 минут'
+                comment:
+                  description: 'Комментарий к изменению статуса'
+                  type: string
+                  example: 'Заказ передан курьеру'
+              type: object
+      responses:
+        '200':
+          description: 'Статус успешно обновлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Push-уведомления успешно отправлены' }
+                  order_id: { type: string, example: '436108' }
+                  user_id: { type: string, example: '12345' }
+                  status: { type: string, example: in_delivery }
+                  push_sent: { type: boolean, example: true }
+                  sent_count: { type: integer, example: 2 }
+                  invalid_tokens_removed: { type: integer, example: 0 }
+                type: object
+        '400':
+          description: 'Некорректные данные запроса'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  error: { type: string, example: 'Некорректные данные запроса' }
+                  errors: { properties: { order_id: { type: array, items: { type: string } }, status: { type: array, items: { type: string } }, user_id: { type: array, items: { type: string } }, fcm_tokens: { type: array, items: { type: string } } }, type: object }
+                type: object
+        '401':
+          description: 'Неверный API ключ'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  error: { type: string, example: 'Неверный API ключ' }
+                type: object
+        '500':
+          description: 'Внутренняя ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: false }
+                  error: { type: string, example: 'Внутренняя ошибка сервера' }
+                  message: { type: string, example: 'Ошибка при отправке push-уведомлений' }
+                type: object
+      security:
+        -
+          apiKeyAuth: []
+  /api/webhook/order/status-update:
+    post:
+      tags:
+        - Заказы
+      summary: 'Вебхук для обновления статуса заказа'
+      description: 'Принимает уведомления о смене статуса заказа и отправляет push-уведомления'
+      operationId: df5b780c9fdc7e1f9174b981ca0d7810
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - order_id
+                - status
+                - user_id
+                - fcm_tokens
+              properties:
+                order_id:
+                  description: 'ID заказа'
+                  type: string
+                  example: '436108'
+                user_id:
+                  description: 'ID пользователя'
+                  type: string
+                  example: '12345'
+                fcm_tokens:
+                  description: 'Массив FCM токенов устройств пользователя'
+                  type: array
+                  items: { type: string }
+                  example: [token1, token2]
+                status:
+                  description: 'Новый статус заказа'
+                  type: string
+                  enum: [created, collected, payed, finished, to_disband, canceled]
+                  example: confirmed
+                order_date:
+                  description: 'Дата и время заказа'
+                  type: string
+                  format: date-time
+                  example: '2025-06-02T15:30:00Z'
+                total_amount:
+                  description: 'Общая сумма заказа'
+                  type: number
+                  format: float
+                  example: 1250.5
+                items_count:
+                  description: 'Количество товаров в заказе'
+                  type: integer
+                  example: 3
+                expected_completion:
+                  description: 'Ожидаемое время выполнения'
+                  type: string
+                  example: '2025-06-03T12:00:00Z'
+                comment:
+                  description: 'Комментарий к изменению статуса'
+                  type: string
+                  example: 'Заказ принят в обработку'
+              type: object
+      responses:
+        '200':
+          description: 'Статус заказа успешно обновлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Push-уведомления о статусе заказа успешно отправлены' }
+                  order_id: { type: string, example: '436108' }
+                  user_id: { type: string, example: '12345' }
+                  status: { type: string, example: confirmed }
+                  push_sent: { type: boolean, example: true }
+                  sent_count: { type: integer, example: 2 }
+                  invalid_tokens_removed: { type: integer, example: 0 }
+                type: object
+      security:
+        -
+          apiKeyAuth: []
+  /api/webhook/payment/status-update:
+    post:
+      tags:
+        - Платежи
+      summary: 'Вебхук для обновления статуса оплаты'
+      description: 'Принимает уведомления о смене статуса оплаты и отправляет push-уведомления'
+      operationId: d0f38d715efea007387e29135bf7b54c
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - payment_id
+                - order_id
+                - status
+                - user_id
+                - fcm_tokens
+              properties:
+                payment_id:
+                  description: 'ID платежа'
+                  type: string
+                  example: pay_123456
+                order_id:
+                  description: 'ID заказа'
+                  type: string
+                  example: '436108'
+                user_id:
+                  description: 'ID пользователя'
+                  type: string
+                  example: '12345'
+                fcm_tokens:
+                  description: 'Массив FCM токенов устройств пользователя'
+                  type: array
+                  items: { type: string }
+                  example: [token1, token2]
+                status:
+                  description: 'Статус оплаты'
+                  type: string
+                  enum: [pending, processing, success, failed, canceled, refunded, partial_refund]
+                  example: success
+                amount:
+                  description: 'Сумма платежа'
+                  type: number
+                  format: float
+                  example: 1250.5
+                currency:
+                  description: Валюта
+                  type: string
+                  example: RUB
+                payment_method:
+                  description: 'Способ оплаты'
+                  type: string
+                  example: card
+                transaction_id:
+                  description: 'ID транзакции'
+                  type: string
+                  example: txn_789012
+                payment_date:
+                  description: 'Дата и время платежа'
+                  type: string
+                  format: date-time
+                  example: '2025-06-02T15:30:00Z'
+                refund_amount:
+                  description: 'Сумма возврата (для частичных возвратов)'
+                  type: number
+                  format: float
+                  example: 500
+                comment:
+                  description: 'Комментарий к изменению статуса'
+                  type: string
+                  example: 'Оплата успешно проведена'
+              type: object
+      responses:
+        '200':
+          description: 'Статус оплаты успешно обновлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                  message: { type: string, example: 'Push-уведомления о статусе оплаты успешно отправлены' }
+                  payment_id: { type: string, example: pay_123456 }
+                  order_id: { type: string, example: '436108' }
+                  user_id: { type: string, example: '12345' }
+                  status: { type: string, example: success }
+                  push_sent: { type: boolean, example: true }
+                  sent_count: { type: integer, example: 2 }
+                  invalid_tokens_removed: { type: integer, example: 0 }
+                type: object
+      security:
+        -
+          apiKeyAuth: []
+  /api/app/auth/yandex:
+    get:
+      tags:
+        - 'Авторизация через Яндекс (сейчас авторизация реализована на фронте)'
+      summary: 'Получение URL для авторизации через Яндекс'
+      description: 'Возвращает URL для перенаправления пользователя на страницу авторизации Яндекс'
+      operationId: 0c703aa5229d85df09a977613780199e
+      responses:
+        '200':
+          description: 'URL для авторизации через Яндекс'
+          content:
+            application/json:
+              schema:
+                properties:
+                  auth_url: { type: string, example: 'https://oauth.yandex.ru/authorize?response_type=code&client_id=...' }
+                type: object
+  /api/app/auth/yandex/callback:
+    get:
+      tags:
+        - 'Авторизация через Яндекс (сейчас авторизация реализована на фронте)'
+      summary: 'Обработка callback от Яндекс'
+      description: 'Обрабатывает ответ от Яндекс после авторизации пользователя'
+      operationId: 0ed4699570dfd312a6eb8651c12f7f89
+      parameters:
+        -
+          name: code
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешная авторизация'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Успешная авторизация' }
+                  access_token: { properties: { expIn: { type: integer, example: 1745266126 }, iat: { type: integer, example: 1742587726 }, token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... } }, type: object }
+                  refresh_token: { properties: { expIn: { type: integer, example: 1745266126 }, iat: { type: integer, example: 1742587726 }, token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... } }, type: object }
+                type: object
+        '400':
+          description: 'Ошибка получения токена'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка получения токена' }
+                  message: { type: string, example: 'Invalid grant' }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка сервера' }
+                  message: { type: string, example: 'Произошла внутренняя ошибка сервера' }
+                type: object
+  /api/app/auth/yandex/token:
+    post:
+      tags:
+        - 'Авторизация через Яндекс (сейчас авторизация реализована на фронте)'
+      summary: 'Авторизация напрямую через токен Яндекс'
+      description: 'Авторизация пользователя через уже имеющийся токен Яндекс'
+      operationId: 8e8fae66d77c2ec80c68ee1de24fc7de
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                access_token:
+                  type: string
+                  example: y0_AgAAAABPkdsfkjdfkndsgk98Ht7e3pAArAqmXNYtcMGjYLHcX4Eo92h5tgj4S6LnMdYHFbhXg7b1_KPSMtXu8TYC5hA
+              type: object
+      responses:
+        '200':
+          description: 'Успешная авторизация'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Успешная авторизация' }
+                  access_token: { properties: { expIn: { type: integer, example: 1745266126 }, iat: { type: integer, example: 1742587726 }, token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... } }, type: object }
+                  refresh_token: { properties: { expIn: { type: integer, example: 1745266126 }, iat: { type: integer, example: 1742587726 }, token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... } }, type: object }
+                type: object
+        '400':
+          description: 'Ошибка авторизации'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка авторизации' }
+                  message: { type: string, example: 'Недействительный токен' }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка сервера' }
+                  message: { type: string, example: 'Произошла внутренняя ошибка сервера' }
+                type: object
+  /api/app/auth/yandex/refresh-token:
+    post:
+      tags:
+        - 'Авторизация через Яндекс (сейчас авторизация реализована на фронте)'
+      summary: 'Обновление токена доступа'
+      description: 'Обновление токена доступа с помощью refresh_token'
+      operationId: 14099ba7fdcfba2ddaf74c5a433f1c98
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                refresh_token:
+                  type: string
+                  example: '1:PzMzpZZZeeeeeHHHGGGPPZZZaaHHH'
+              type: object
+      responses:
+        '200':
+          description: 'Токен успешно обновлен'
+          content:
+            application/json:
+              schema:
+                properties:
+                  access_token: { type: string }
+                  expires_in: { type: integer }
+                  refresh_token: { type: string }
+                  token_type: { type: string }
+                type: object
+        '400':
+          description: 'Ошибка обновления токена'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка обновления токена' }
+                  message: { type: string, example: 'Invalid refresh token' }
+                type: object
+        '500':
+          description: 'Ошибка сервера'
+          content:
+            application/json:
+              schema:
+                properties:
+                  error: { type: string, example: 'Ошибка сервера' }
+                  message: { type: string, example: 'Произошла внутренняя ошибка сервера' }
+                type: object
+tags:
+  -
+    name: 'Авторизация через Яндекс (сейчас авторизация реализована на фронте)'
+  -
+    name: Авторизация
+    description: Авторизация
+  -
+    name: Баннеры
+    description: Баннеры
+  -
+    name: 'Купить выгодно'
+    description: 'Купить выгодно'
+  -
+    name: Корзина
+    description: Корзина
+  -
+    name: Каталог
+    description: Каталог
+  -
+    name: Избранное
+    description: Избранное
+  -
+    name: 'Карты лояльности'
+    description: 'Карты лояльности'
+  -
+    name: 'Новые продукты'
+    description: 'Новые продукты'
+  -
+    name: Заказы
+    description: Заказы
+  -
+    name: Аптеки
+    description: Аптеки
+  -
+    name: 'Популярные продукты'
+    description: 'Популярные продукты'
+  -
+    name: Акции
+    description: Акции
+  -
+    name: 'Рекомендованные продукты'
+    description: 'Рекомендованные продукты'
+  -
+    name: Регионы
+    description: Регионы
+  -
+    name: Поиск
+    description: Поиск
+  -
+    name: Сториз
+    description: Сториз
+  -
+    name: Пользователи
+    description: Пользователи
+  -
+    name: Доставка
+    description: Доставка
+  -
+    name: Платежи
+    description: Платежи

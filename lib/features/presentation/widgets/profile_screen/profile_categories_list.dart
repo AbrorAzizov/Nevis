@@ -7,6 +7,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/core/shared_preferences_keys.dart';
 import 'package:nevis/features/presentation/bloc/home_screen/home_screen_bloc.dart';
+import 'package:nevis/features/presentation/pages/profile/delivery_adress_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/docs_and_instructions_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/favorite_pharmacies_screen.dart';
 import 'package:nevis/features/presentation/pages/profile/favourite_products_screen.dart';
@@ -91,32 +92,37 @@ class ProfileCategoriesList extends StatelessWidget {
           ),
           SizedBox(height: 8.h),
           SubcategoryItem(
-            title: 'Как сделать заказ?',
+            title: 'Адрес доставки',
             titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.checkOnPaperIconPath,
-            onTap: () => Navigator.of(context).push(
-              Routes.createRoute(
-                const HowPlaceOrderScreen(),
-                settings: RouteSettings(name: Routes.howPlaceOrderScreen),
-              ),
-            ),
+            imagePath: Paths.geoIconPath,
+            onTap: () {
+              String? token = sl<SharedPreferences>()
+                  .getString(SharedPreferencesKeys.accessToken);
+              if (token != null) {
+                Navigator.of(context).push(
+                  Routes.createRoute(
+                    const DeliveryPersonalDataScreen(),
+                  
+                  ),
+                );
+              } else {
+                Navigator.of(context.read<HomeScreenBloc>().context!).push(
+                  Routes.createRoute(
+                    const LoginScreenWithPhoneCall(
+                      canBack: true,
+                    ),
+                    settings: RouteSettings(
+                      name: Routes.loginScreenPhoneCall,
+                      arguments: {'redirect_type': LoginScreenType.login},
+                    ),
+                  ),
+                );
+              }
+            },
           ),
           SizedBox(height: 8.h),
           SubcategoryItem(
-            title: 'Документы и инструкции',
-            titleStyle: UiConstants.textStyle3,
-            imagePath: Paths.documnetsAndInstructionsIconPath,
-            onTap: () => Navigator.of(context).push(
-              Routes.createRoute(
-                const DocumentsAndInstructionsScreen(),
-                settings:
-                    RouteSettings(name: Routes.docsAndInsctructionsScreen),
-              ),
-            ),
-          ),
-          SizedBox(height: 8.h),
-          SubcategoryItem(
-            title: 'Любимые товары',
+            title: 'Избранные товары',
             titleStyle: UiConstants.textStyle3,
             imagePath: Paths.favouriteProductsIconPath,
             onTap: () {
@@ -144,6 +150,7 @@ class ProfileCategoriesList extends StatelessWidget {
               }
             },
           ),
+
           SizedBox(height: 8.h),
           SubcategoryItem(
             title: 'Любимые аптеки',
@@ -174,6 +181,20 @@ class ProfileCategoriesList extends StatelessWidget {
               }
             },
           ),
+          SubcategoryItem(
+            title: 'Документы и инструкции',
+            titleStyle: UiConstants.textStyle3,
+            imagePath: Paths.documnetsAndInstructionsIconPath,
+            onTap: () => Navigator.of(context).push(
+              Routes.createRoute(
+                const DocumentsAndInstructionsScreen(),
+                settings:
+                RouteSettings(name: Routes.docsAndInsctructionsScreen),
+              ),
+            ),
+          ),
+          SizedBox(height: 8.h),
+
         ],
       ),
     );
