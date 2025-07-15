@@ -30,7 +30,9 @@ class OrderDeliveryPersonalDataBloc extends Bloc<OrderDeliveryPersonalDataEvent,
   final TextEditingController commentController = TextEditingController();
   final TextEditingController districtAndBuildingController =
       TextEditingController();
+ bool? _hadInitialAddress;
 
+  bool get hadInitialAddress => _hadInitialAddress ?? true;
   final GetMeUC getMeUC;
   final GetDeliveryAdressUC getDeliveryAdressUC;
     final UpdateDeliveryAdressUC updateDeliveryAdressUC;
@@ -54,35 +56,33 @@ class OrderDeliveryPersonalDataBloc extends Bloc<OrderDeliveryPersonalDataEvent,
         sNameController.text = profile.lastName ?? '';
         phoneController.text = Utils.formatPhoneNumber(profile.phone,
             format: PhoneNumberFormat.client);
-        cityController.text = profile.deliveryAddress?.city ?? '';
-        entranceController.text = profile.deliveryAddress?.entrance ?? '';
-        floorController.text = profile.deliveryAddress?.floor ?? '';
-        apartmentController.text = profile.deliveryAddress?.apartment ?? '';
-        intercomController.text = profile.deliveryAddress?.intercom ?? '';
-        districtAndBuildingController.text =
-            profile.deliveryAddress?.building ?? '';
+      
 
         emit(OrderDeliveryPersonalDataLoaded());
       });
     });
 
-    on<GetDeliveryAdressEvent>((event, emit) async {
-      emit(OrderDeliveryPersonalDataLoading());
-      final failureOrLoads = await getDeliveryAdressUC();
+   on<GetDeliveryAdressEvent>((event, emit) async {
+  emit(OrderDeliveryPersonalDataLoading());
+  final failureOrLoads = await getDeliveryAdressUC();
 
-      failureOrLoads.fold((_) => emit(OrderDeliveryPersonalDataLoadingFailed()),
-          (adress) {
-        cityController.text =adress.city ?? '';
-        entranceController.text = adress.entrance ?? '';
-        floorController.text =adress.floor ?? '';
-        apartmentController.text = adress.apartment ?? '';
-        intercomController.text =adress.intercom ?? '';
-        districtAndBuildingController.text =
-            adress.street ?? '';
-
-        emit(OrderDeliveryPersonalDataLoaded());
-      });
-    });
+  failureOrLoads.fold(
+    (_) {
+      emit(OrderDeliveryPersonalDataLoadingFailed());
+      _hadInitialAddress = false;
+    },
+    (adress) {
+      _hadInitialAddress = true;
+      cityController.text = adress.city ?? '';
+      entranceController.text = adress.entrance ?? '';
+      floorController.text = adress.floor ?? '';
+      apartmentController.text = adress.apartment ?? '';
+      intercomController.text = adress.intercom ?? '';
+      districtAndBuildingController.text = adress.street ?? '';
+      emit(OrderDeliveryPersonalDataLoaded());
+    },
+  );
+});
      on<UpdateDeliveryAdressEvent>((event, emit) async {
       emit(OrderDeliveryPersonalDataLoading());
       final failureOrLoads = await updateDeliveryAdressUC(AdressModel(

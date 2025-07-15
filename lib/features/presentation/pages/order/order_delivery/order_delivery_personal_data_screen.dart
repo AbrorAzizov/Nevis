@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nevis/constants/size_utils.dart';
 import 'package:nevis/constants/ui_constants.dart';
+import 'package:nevis/core/bottom_sheet_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/order_delivery_personal_data_screen/order_delivery_personal_data_bloc.dart';
 import 'package:nevis/features/presentation/pages/order/order_delivery/order_delivery_success_screen.dart';
@@ -32,7 +33,8 @@ class _OrderDeliveryPersonalDataScreenState
     personalDataBloc = OrderDeliveryPersonalDataBloc(
       getDeliveryAdressUC: sl(),
         getMeUC: sl(), createOrderForDeliveryUC: sl(), updateDeliveryAdressUC: sl())
-      ..add(GetPersonalDataEvent());
+      ..add(GetPersonalDataEvent())
+      ..add(GetDeliveryAdressEvent());
     _addListeners();
   }
 
@@ -80,6 +82,9 @@ class _OrderDeliveryPersonalDataScreenState
         (item) => normalizedFromGeo.contains(item),
       );
     }
+    else{
+      validAddress = true;
+    }
 
     Future.delayed(Duration(milliseconds: 100), () {
       bool validForm = formKey.currentState?.validate() ?? false;
@@ -87,7 +92,6 @@ class _OrderDeliveryPersonalDataScreenState
           personalDataBloc.sNameController.text.isNotEmpty &&
           personalDataBloc.cityController.text.isNotEmpty &&
           personalDataBloc.districtAndBuildingController.text.isNotEmpty &&
-          personalDataBloc.initialGeoObject != null &&
           validForm &&
           validAddress;
 
@@ -99,17 +103,29 @@ class _OrderDeliveryPersonalDataScreenState
     });
   }
 
-  void _onCreateOrder() {
-    // Получаем текущую дату и время для демонстрации
-    final now = DateTime.now();
-    final dateDelivery =
-        '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
-    final timeDelivery =
-        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+  void _onCreateOrder() async {
+  final now = DateTime.now();
+  final dateDelivery =
+      '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
+  final timeDelivery =
+      '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+  if (!personalDataBloc.hadInitialAddress) {
+    final wasSaved = await BottomSheetManager.showSaveAdressSheet(context, personalDataBloc);
 
+    if (wasSaved == true) {
+      personalDataBloc.add(CreateOrderForDeliveryEvent(
+        dateDelivery: dateDelivery,
+        timeDelivery: timeDelivery,
+      ));
+    }
+   
+  } else {
     personalDataBloc.add(CreateOrderForDeliveryEvent(
-        dateDelivery: dateDelivery, timeDelivery: timeDelivery));
+      dateDelivery: dateDelivery,
+      timeDelivery: timeDelivery,
+    ));
   }
+}
 
   @override
   void dispose() {

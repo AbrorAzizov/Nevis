@@ -5,6 +5,7 @@ import 'package:nevis/constants/ui_constants.dart';
 import 'package:nevis/core/firebase_manager.dart';
 import 'package:nevis/core/routes.dart';
 import 'package:nevis/features/presentation/bloc/cart_screen/cart_screen_bloc.dart';
+import 'package:nevis/features/presentation/bloc/order_delivery_personal_data_screen/order_delivery_personal_data_bloc.dart';
 import 'package:nevis/features/presentation/pages/order/order_pickup_screen.dart';
 import 'package:nevis/features/presentation/widgets/app_button_widget.dart';
 import 'package:nevis/features/presentation/widgets/custom_bottom_sheet.dart';
@@ -250,4 +251,59 @@ class BottomSheetManager {
       },
     );
   }
+
+static Future<bool?> showSaveAdressSheet(BuildContext context, OrderDeliveryPersonalDataBloc bloc) async {
+  final result = await showModalBottomSheet<bool>(
+    context: context,
+    builder: (sheetContext) {
+      return CustomBottomSheet(
+        height: 250.h,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Сохранить адрес доставки?',
+              style: UiConstants.textStyle5
+                  .copyWith(color: UiConstants.darkBlueColor),
+            ),
+            SizedBox(height: 16.h),
+            Text(
+              '${bloc.cityController.text} ${bloc.districtAndBuildingController.text} ${bloc.entranceController.text} ${bloc.floorController.text} ${bloc.apartmentController.text}',
+              style: UiConstants.textStyle3
+                  .copyWith(color: UiConstants.black3Color.withOpacity(.6)),
+            ),
+            SizedBox(height: 16.h),
+            Row(
+              children: [
+                Expanded(
+                  child: AppButtonWidget(
+                    alignment: Alignment.centerLeft,
+                    onTap: () {
+                      Navigator.pop(sheetContext, false); // <- возвращаем false
+                    },
+                    text: 'Не сохранять',
+                    backgroundColor: UiConstants.whiteColor,
+                    textColor: UiConstants.black3Color.withOpacity(.6),
+                  ),
+                ),
+                Expanded(
+                  child: AppButtonWidget(
+                    onTap: () {
+                      bloc.add(UpdateDeliveryAdressEvent());
+                      Navigator.pop(sheetContext, true);
+                    },
+                    text: 'Сохранить',
+                    backgroundColor: UiConstants.blueColor,
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+    },
+  );
+
+  return result;
+}
 }

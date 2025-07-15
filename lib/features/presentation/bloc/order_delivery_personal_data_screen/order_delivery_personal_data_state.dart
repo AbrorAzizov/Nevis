@@ -6,9 +6,13 @@ class OrderDeliveryPersonalDataState  {
 
 class OrderDeliveryPersonalDataInitial extends OrderDeliveryPersonalDataState {}
 
-class OrderDeliveryPersonalDataLoaded extends OrderDeliveryPersonalDataState {}
+class OrderDeliveryPersonalDataLoaded extends OrderDeliveryPersonalDataState {
+
+}
 
 class OrderDeliveryPersonalDataLoading extends OrderDeliveryPersonalDataState {}
+
+class OrderDeliveryPersonalDataNoInitalAdress extends OrderDeliveryPersonalDataState {}
 
 class OrderDeliveryPersonalDataLoadingFailed
     extends OrderDeliveryPersonalDataState {}
